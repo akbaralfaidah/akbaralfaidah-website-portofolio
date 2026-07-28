@@ -44,19 +44,20 @@ export default function Projects() {
           </>
         }
       >
-        <div className="absolute inset-0 w-full h-full">
+        <div className="absolute inset-0 w-full h-full bg-charcoal">
           <img 
             src="/img/hero-section.png" 
             alt={featuredProject.title}
-            className="w-full h-full object-cover object-top opacity-80 group-hover:opacity-100 transition-opacity duration-500"
+            className="w-full h-full object-cover object-top opacity-50 group-hover:opacity-80 transition-opacity duration-500"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/20 to-transparent pointer-events-none"></div>
-          <div className="absolute bottom-0 left-0 p-8 w-full">
-            <h3 className="text-3xl md:text-4xl font-display font-bold text-paper mb-2">{featuredProject.title}</h3>
-            <p className="text-paper/80 max-w-2xl mb-4 text-sm md:text-base">{featuredProject.description}</p>
-            <div className="flex gap-2">
+          {/* Enhanced gradient for better readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none"></div>
+          <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full">
+            <h3 className="text-3xl md:text-5xl font-display font-bold text-white mb-3">{featuredProject.title}</h3>
+            <p className="text-gray-200 max-w-2xl mb-6 text-sm md:text-base leading-relaxed">{featuredProject.description}</p>
+            <div className="flex flex-wrap gap-2">
               {featuredProject.stack.map(tech => (
-                <span key={tech} className="px-3 py-1 bg-brass text-paper text-xs font-mono rounded-full font-bold">
+                <span key={tech} className="px-4 py-1.5 bg-brass text-white text-xs md:text-sm font-mono rounded-full font-bold shadow-md">
                   {tech}
                 </span>
               ))}

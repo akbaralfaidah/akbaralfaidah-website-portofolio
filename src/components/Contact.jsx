@@ -13,8 +13,10 @@ export default function Contact() {
 
   return (
     <section id="contact" className="py-32 px-6 bg-charcoal text-paper relative overflow-hidden">
-      <div className="absolute -top-20 -left-20 text-[400px] font-display font-bold text-paper/5 select-none pointer-events-none rotate-12">
-        AA
+      <div className="absolute top-1/2 left-0 -translate-y-1/2 opacity-[0.03] pointer-events-none select-none z-0">
+        <span className="font-display font-bold text-[30vw] md:text-[20vw] text-paper">
+          AA
+        </span>
       </div>
       <div className="max-w-4xl mx-auto relative z-10">
         <div className="text-center mb-16">
