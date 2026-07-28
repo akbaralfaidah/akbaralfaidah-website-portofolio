@@ -1,8 +1,13 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
+import { useTheme } from '../hooks/useTheme';
+import { FiSun, FiMoon, FiGlobe } from 'react-icons/fi';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const { t, i18n } = useTranslation();
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -11,6 +16,10 @@ export default function Navbar() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const toggleLanguage = () => {
+    i18n.changeLanguage(i18n.language === 'id' ? 'en' : 'id');
+  };
 
   return (
     <motion.nav
@@ -23,23 +32,39 @@ export default function Navbar() {
       }`}
     >
       <div className={`flex items-center justify-between ${!scrolled ? 'max-w-6xl mx-auto' : ''}`}>
-        <div className="font-display font-bold text-xl tracking-tight">
+        <div className="font-display font-bold text-xl tracking-tight text-charcoal">
           AA.
         </div>
         
-        <div className="hidden md:flex items-center space-x-8 text-sm font-medium">
-          <a href="#about" className="hover:text-brass transition-colors">Tentang Saya</a>
-          <a href="#projects" className="hover:text-brass transition-colors">Projek</a>
-          <a href="#experience" className="hover:text-brass transition-colors">Pengalaman</a>
+        <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-charcoal">
+          <a href="#about" className="hover:text-brass transition-colors">{t('nav.about')}</a>
+          <a href="#projects" className="hover:text-brass transition-colors">{t('nav.projects')}</a>
+          <a href="#experience" className="hover:text-brass transition-colors">{t('nav.experience')}</a>
         </div>
         
-        <div className="flex items-center space-x-4">
-          {/* Theme/Language Toggles will go here in Layer 2 */}
+        <div className="flex items-center space-x-3 md:space-x-4">
+          <button 
+            onClick={toggleLanguage}
+            className="p-2 text-charcoal hover:text-brass hover:bg-mist/50 rounded-full transition-colors flex items-center space-x-1"
+            title="Toggle Language"
+          >
+            <FiGlobe size={18} />
+            <span className="text-xs font-bold uppercase">{i18n.language || 'id'}</span>
+          </button>
+          
+          <button 
+            onClick={toggleTheme}
+            className="p-2 text-charcoal hover:text-brass hover:bg-mist/50 rounded-full transition-colors"
+            title="Toggle Theme"
+          >
+            {theme === 'dark' ? <FiSun size={18} /> : <FiMoon size={18} />}
+          </button>
+
           <a 
             href="#contact" 
-            className="px-5 py-2.5 bg-charcoal text-paper rounded-full text-sm font-medium hover:bg-brass transition-colors"
+            className="hidden sm:inline-block px-5 py-2.5 bg-charcoal text-paper rounded-full text-sm font-medium hover:bg-brass transition-colors"
           >
-            Mari Diskusi
+            {t('nav.contact')}
           </a>
         </div>
       </div>
