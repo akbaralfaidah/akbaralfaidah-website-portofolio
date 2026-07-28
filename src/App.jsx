@@ -1,7 +1,7 @@
-import Sandbox from './pages/Sandbox';
+import HomePage from './pages/HomePage';
 
 function App() {
-  return <Sandbox />;
+  return <HomePage />;
 }
 
 export default App;
