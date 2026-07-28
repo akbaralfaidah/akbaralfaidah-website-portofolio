@@ -7,7 +7,7 @@ export default function Sandbox() {
     <div className="w-full h-screen bg-charcoal text-paper relative">
       <Canvas dpr={[1, 2]} camera={{ position: [0, 0, 5], fov: 50 }}>
         <ambientLight intensity={0.5} />
-        <HeroParticle imagePath="/img/akbar-4.jpg" />
+        <HeroParticle imagePath="/img/hero-section.png" />
         <OrbitControls enableZoom={false} />
       </Canvas>
       <div className="absolute top-4 left-4">

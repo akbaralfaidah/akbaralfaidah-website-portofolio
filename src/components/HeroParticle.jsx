@@ -2,7 +2,7 @@ import { useRef, useMemo, useEffect, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
-export default function HeroParticle({ imagePath = '/img/akbar-4.jpg' }) {
+export default function HeroParticle({ imagePath = '/img/hero-section.png' }) {
   const pointsRef = useRef();
   const [geometryData, setGeometryData] = useState(null);
   
