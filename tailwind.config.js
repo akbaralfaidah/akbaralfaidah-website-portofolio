@@ -14,12 +14,11 @@ export default {
         mist: 'var(--color-mist)',
       },
       fontFamily: {
-        display: ['Fraunces', 'serif'],
-        body: ['"Plus Jakarta Sans"', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'monospace'],
+        sans: ['Inter', 'sans-serif'],
+        display: ['Outfit', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
       },
     },
   },
   plugins: [],
 }
-

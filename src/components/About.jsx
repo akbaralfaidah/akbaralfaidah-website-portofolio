@@ -1,11 +1,6 @@
 export default function About() {
   return (
-    <section id="about" className="py-32 px-6 bg-paper relative overflow-hidden">
-      <div className="absolute top-1/2 right-0 -translate-y-1/2 opacity-[0.03] pointer-events-none select-none z-0">
-        <span className="font-display font-bold text-[30vw] md:text-[20vw] text-charcoal">
-          AA
-        </span>
-      </div>
+    <section id="about" className="py-32 px-6 relative overflow-hidden z-10">
       <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-16 relative z-10">
         <div className="w-full md:w-1/2 relative group">
           <div className="absolute top-6 left-6 w-full h-full bg-charcoal rounded-2xl transition-transform group-hover:translate-x-2 group-hover:translate-y-2"></div>

@@ -12,12 +12,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-32 px-6 bg-charcoal text-paper relative overflow-hidden">
-      <div className="absolute top-1/2 left-0 -translate-y-1/2 opacity-[0.03] pointer-events-none select-none z-0">
-        <span className="font-display font-bold text-[30vw] md:text-[20vw] text-paper">
-          AA
-        </span>
-      </div>
+    <section id="contact" className="py-32 px-6 bg-charcoal/95 backdrop-blur-xl text-paper relative overflow-hidden z-10 border-t border-mist/20">
       <div className="max-w-4xl mx-auto relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">Mari Diskusi</h2>
