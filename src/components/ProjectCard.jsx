@@ -1,7 +1,12 @@
+import { Link } from 'react-router-dom';
+
 export default function ProjectCard({ title, description, stack, link }) {
+  // Generate a simple slug from the title
+  const slug = title.toLowerCase().replace(/\s+/g, '-');
+  
   return (
-    <a 
-      href={link}
+    <Link 
+      to={`/project/${slug}`}
       className="group block bg-paper border border-mist p-6 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-2 hover:border-brass transition-all duration-300"
     >
       <div className="flex flex-col h-full">
@@ -19,6 +24,6 @@ export default function ProjectCard({ title, description, stack, link }) {
           ))}
         </div>
       </div>
-    </a>
+    </Link>
   );
 }

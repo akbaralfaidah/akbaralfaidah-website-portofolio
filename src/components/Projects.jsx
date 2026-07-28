@@ -1,4 +1,6 @@
+import { useTranslation } from 'react-i18next';
 import ProjectCard from './ProjectCard';
+import { ContainerScroll } from './ui/ContainerScroll';
 
 const PROJECTS = [
   {
@@ -22,16 +24,51 @@ const PROJECTS = [
 ];
 
 export default function Projects() {
+  const { t } = useTranslation();
+  const featuredProject = PROJECTS[0];
+  const otherProjects = PROJECTS.slice(1);
+
   return (
-    <section id="projects" className="py-32 px-6 bg-paper relative">
-      <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-display font-bold text-charcoal mb-4">Projek Unggulan</h2>
-          <p className="text-charcoal/70 max-w-2xl mx-auto">Beberapa karya terbaik yang merepresentasikan keahlian saya dalam memecahkan masalah melalui teknologi.</p>
+    <section id="projects" className="py-24 px-6 bg-paper relative overflow-hidden">
+      
+      {/* 3D Scroll Showcase for Featured Project */}
+      <ContainerScroll
+        titleComponent={
+          <>
+            <h2 className="text-4xl md:text-6xl font-display font-bold text-charcoal mb-4">
+              {t('nav.projects')} Unggulan
+            </h2>
+            <p className="text-charcoal/70 max-w-2xl mx-auto text-lg md:text-xl">
+              Sebuah karya inovatif yang mendefinisikan ulang cara UMKM beroperasi.
+            </p>
+          </>
+        }
+      >
+        <div className="absolute inset-0 w-full h-full">
+          <img 
+            src="/img/hero-section.png" 
+            alt={featuredProject.title}
+            className="w-full h-full object-cover object-top opacity-80 group-hover:opacity-100 transition-opacity duration-500"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/20 to-transparent pointer-events-none"></div>
+          <div className="absolute bottom-0 left-0 p-8 w-full">
+            <h3 className="text-3xl md:text-4xl font-display font-bold text-paper mb-2">{featuredProject.title}</h3>
+            <p className="text-paper/80 max-w-2xl mb-4 text-sm md:text-base">{featuredProject.description}</p>
+            <div className="flex gap-2">
+              {featuredProject.stack.map(tech => (
+                <span key={tech} className="px-3 py-1 bg-brass text-paper text-xs font-mono rounded-full font-bold">
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {PROJECTS.map((project, idx) => (
+      </ContainerScroll>
+
+      <div className="max-w-5xl mx-auto mt-10 md:mt-20">
+        <h3 className="text-2xl font-display font-bold text-charcoal mb-8 border-b border-mist pb-4">Projek Lainnya</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {otherProjects.map((project, idx) => (
             <ProjectCard key={idx} {...project} />
           ))}
         </div>
