@@ -6,7 +6,7 @@ export default function AnimatedButton({ children, href, to, onClick, className 
   let hoverBgClass = 'bg-[#A9762E]';
   
   if (variant === 'brass') {
-    bgClass = 'bg-[#A9762E] text-charcoal dark:text-charcoal border-[#A9762E] font-semibold';
+    bgClass = 'bg-[#A9762E] text-white dark:text-white border-[#A9762E] font-semibold';
     hoverBgClass = 'bg-[#2C2E32]';
   } else if (variant === 'outline') {
     bgClass = 'bg-transparent border-charcoal/10 dark:border-paper/10 text-charcoal dark:text-paper';

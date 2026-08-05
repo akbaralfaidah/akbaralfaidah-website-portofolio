@@ -38,9 +38,8 @@ export default function Footer() {
         </div>
 
         {/* Divider */}
-        <div className="border-t border-[#F2F0E8]/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <span className="text-xs font-medium text-[#F2F0E8]/70">© {new Date().getFullYear()} Akbar Alfaidah. All rights reserved.</span>
-          <span className="text-xs text-[#F2F0E8]/60">Built with React & Tailwind CSS</span>
+        <div className="border-t border-[#F2F0E8]/10 pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <span className="text-xs font-medium text-[#F2F0E8]/70">© {new Date().getFullYear()} Akbar Alfaidah. {i18n.language === 'id' ? 'Hak cipta dilindungi.' : 'All rights reserved.'}</span>
         </div>
       </div>
     </footer>

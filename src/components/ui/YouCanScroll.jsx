@@ -94,19 +94,26 @@ export default function YouCanScroll() {
             
             {/* Left side fixed text */}
             <div className="w-[35%] flex justify-end pr-3 md:pr-6">
-              <h2 className="text-[clamp(1.8rem,5vw,5.5rem)] font-display font-extrabold leading-none whitespace-nowrap m-0 p-0">
+              <h2 className="text-[clamp(1.5rem,3.5vw,4rem)] font-display font-extrabold leading-none whitespace-nowrap m-0 p-0">
                 {t('scroll_section.title_1')}
               </h2>
             </div>
             
             {/* Right side scrolling list */}
-            <div className="w-[65%] relative h-[1em] m-0 p-0 text-[clamp(1.8rem,5vw,5.5rem)]">
+            <div className="w-[65%] relative h-[1em] m-0 p-0 text-[clamp(1.5rem,3.5vw,4rem)]">
               <ul 
                 ref={listRef} 
                 className="absolute top-0 left-0 md:left-2 flex flex-col items-start gap-6 md:gap-10 m-0 p-0 font-display font-extrabold leading-[1.1] md:leading-none whitespace-normal md:whitespace-nowrap w-full"
               >
                 {items.map((text, i) => {
-                  const bgColor = 'rgba(158, 122, 60, 0.18)'; // Brass-tinted highlight
+                  const colors = [
+                    'rgba(158, 122, 60, 0.2)',  // Brass
+                    'rgba(59, 130, 246, 0.15)', // Blue
+                    'rgba(16, 185, 129, 0.15)', // Emerald
+                    'rgba(245, 158, 11, 0.15)', // Amber
+                    'rgba(139, 92, 246, 0.15)', // Violet
+                  ];
+                  const bgColor = colors[i % colors.length];
 
                   return (
                     <li 
