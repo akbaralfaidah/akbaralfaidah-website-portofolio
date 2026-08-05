@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 export default function Footer() {
   const { theme } = useTheme();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
     <footer className="bg-charcoal dark:bg-[#111113] text-[#F2F0E8]/70 py-16 px-6 transition-colors duration-300 border-t border-[#F2F0E8]/5">
