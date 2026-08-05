@@ -121,7 +121,7 @@ export default function Experience() {
       key={key} 
       className="relative flex flex-row items-center justify-center w-auto px-4 py-3 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl bg-paper dark:bg-[#3A3C41] border border-mist/50 dark:border-[#F2F0E8]/10 shadow-sm hover:-translate-y-2 transition-all duration-300 group cursor-pointer gap-3 z-10 hover:z-20 overflow-hidden"
       onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = `0 15px 30px -10px ${tech.color}70, 0 0 15px 0 ${tech.color}30 inset`;
+        e.currentTarget.style.boxShadow = `0 4px 12px -2px ${tech.color}40, 0 0 8px 0 ${tech.color}20 inset`;
         e.currentTarget.style.borderColor = tech.color;
         const icon = e.currentTarget.querySelector('.icon-svg');
         if (icon) {
@@ -189,10 +189,9 @@ export default function Experience() {
 
 
 
-              <div className={`w-[calc(100%-3.5rem)] ml-auto md:ml-0 md:w-[calc(50%-2.5rem)] p-5 md:p-6 bg-paper dark:bg-[#3A3C41] border border-mist dark:border-[#FAF8ED]/10 rounded-2xl shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-1 ${idx % 2 === 0 ? 'md:order-2 md:text-left' : 'md:order-1 md:text-right'}`}>
-                {/* Date Badge Inside Card */}
-                <div className={`inline-block mb-3 px-3 py-1 rounded-full shadow-inner border border-mist dark:border-[#FAF8ED]/10 bg-mist/50 dark:bg-[#FAF8ED]/5`}>
-                  <span className="font-mono text-[11px] md:text-xs text-brass font-bold tracking-wider whitespace-nowrap">{exp.period}</span>
+              <div className={`w-[calc(100%-3.5rem)] ml-auto md:ml-0 md:w-[calc(50%-2.5rem)] p-5 md:p-6 bg-paper dark:bg-[#3A3C41] border border-mist dark:border-[#FAF8ED]/10 rounded-2xl shadow-sm hover:shadow-md transition-all duration-500 hover:-translate-y-1 ${idx % 2 === 0 ? 'md:order-2 md:text-left' : 'md:order-1 md:text-right'}`}>
+                <div className={`mb-3`}>
+                  <span className="font-mono text-xs md:text-sm text-brass font-bold whitespace-nowrap">{exp.period}</span>
                 </div>
                 
                 <div className="flex flex-col mb-2.5">
@@ -236,7 +235,7 @@ export default function Experience() {
 
         {/* GitHub Activity Section */}
         <div className="flex justify-center max-w-4xl mx-auto">
-          <div className="w-full max-w-2xl bg-paper dark:bg-[#3A3C41] rounded-[2rem] p-6 sm:p-8 border border-mist dark:border-[#FAF8ED]/10 shadow-xl hover:shadow-2xl transition-all duration-500">
+          <div className="w-full max-w-2xl bg-paper dark:bg-[#3A3C41] rounded-[2rem] p-6 sm:p-8 border border-mist dark:border-[#FAF8ED]/10 shadow-md hover:shadow-lg transition-all duration-500">
             {/* Header */}
             <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
               <div className="flex items-center gap-3">
@@ -255,7 +254,7 @@ export default function Experience() {
               <span className="font-mono text-sm font-semibold text-charcoal/80 dark:text-[#F2F0E8]/80 group-hover:text-brass transition-colors">
                 @akbaralfaidah
               </span>
-              <span className="text-charcoal/40 group-hover:text-brass transition-all opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transform duration-300">
+              <span className="text-charcoal/60 group-hover:text-brass transition-all opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transform duration-300">
                 ↗
               </span>
             </a>

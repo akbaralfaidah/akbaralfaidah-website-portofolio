@@ -253,7 +253,7 @@ export default function Hero() {
   return (
     <section
       ref={heroRef}
-      className="relative flex items-center overflow-hidden"
+      className="relative flex items-center"
       style={{ minHeight: '100dvh', paddingTop: '6rem', paddingBottom: '2rem' }}
       id="home"
     >
@@ -283,7 +283,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.08 }}
-              className="font-display font-extrabold leading-[1.05] tracking-tighter text-charcoal dark:text-[#FAF8ED]"
+              className="font-display font-extrabold leading-[1.05] tracking-tight text-charcoal dark:text-[#FAF8ED]"
               style={{ fontSize: 'clamp(3.2rem, 6.5vw, 5.5rem)' }}
             >
               Akbar Alfaidah
@@ -333,7 +333,7 @@ export default function Hero() {
             </motion.div>
           </div>
 
-          <div className="w-[120%] -ml-[10%] mt-2">
+          <div className="w-full mt-2">
             <TechLogoMarquee reverse={true} />
           </div>
         </motion.div>

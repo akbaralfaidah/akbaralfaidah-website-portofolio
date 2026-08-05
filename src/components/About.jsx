@@ -24,7 +24,7 @@ export default function About() {
   const { t } = useTranslation();
   
   return (
-    <section id="about" className="py-12 md:py-16 lg:py-20 px-6 relative overflow-hidden z-10 dark:bg-[#1A1A1C]">
+    <section id="about" className="py-12 md:py-16 lg:py-20 px-6 relative z-10 dark:bg-[#1A1A1C]">
 
       <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-16 relative z-10">
 
@@ -36,13 +36,13 @@ export default function About() {
           <img
             src="/img/akbar-4.jpg"
             alt="Akbar Alfaidah - Profile"
-            className="relative z-10 w-full aspect-[4/5] object-cover rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.2)] border-2 border-paper dark:border-charcoal"
+            className="relative z-10 w-full aspect-[4/5] object-cover rounded-2xl shadow-lg border-2 border-paper dark:border-charcoal"
           />
 
           {/* Floating Element 1: Verified (Top Left) */}
           <motion.div
             animate={floatAnimation1}
-            className="absolute z-20 top-8 -left-4 md:-left-12 bg-white/95 dark:bg-[#2C2E32]/95 backdrop-blur-md px-5 py-3 rounded-full shadow-[0_15px_35px_rgba(0,0,0,0.15)] border border-charcoal/5 dark:border-white/10 flex items-center gap-3"
+            className="absolute z-20 top-8 -left-4 md:-left-12 bg-white/95 dark:bg-[#2C2E32]/95 backdrop-blur-md px-5 py-3 rounded-full shadow-md flex items-center gap-3"
           >
             <div className="bg-blue-500 text-white rounded-full p-1 shadow-inner">
               <FiCheckCircle className="w-4 h-4" />
@@ -60,35 +60,35 @@ export default function About() {
           {/* Floating Element 2: Full-Stack Dev (Bottom Right) */}
           <motion.div
             animate={floatAnimation2}
-            className="absolute z-20 bottom-24 -right-4 md:-right-10 bg-white/95 dark:bg-[#2C2E32]/95 backdrop-blur-md px-5 py-3.5 rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.15)] border border-charcoal/5 dark:border-white/10 flex items-center gap-3.5"
+            className="absolute z-20 bottom-24 -right-4 md:-right-10 bg-white/95 dark:bg-[#2C2E32]/95 backdrop-blur-md px-5 py-3.5 rounded-2xl shadow-md flex items-center gap-3.5"
           >
             <div className="bg-indigo-500/10 text-indigo-500 p-2.5 rounded-xl">
               <FiLayers className="w-5 h-5" />
             </div>
             <div className="flex flex-col">
               <p className="text-[13px] font-extrabold text-charcoal dark:text-[#F2F0E8] leading-tight">{t('about.trust_full_stack')}</p>
-              <p className="text-[10px] text-charcoal/50 dark:text-[#F2F0E8]/50 font-medium tracking-wide mt-0.5">{t('about.trust_web_mobile')}</p>
+              <p className="text-[10px] text-charcoal/60 dark:text-[#F2F0E8]/60 font-medium tracking-wide mt-0.5">{t('about.trust_web_mobile')}</p>
             </div>
           </motion.div>
 
           {/* Floating Element 3: 10+ Client Card (Bottom Left) */}
           <motion.div
             animate={floatAnimation3}
-            className="absolute z-20 -bottom-4 md:-bottom-8 left-2 md:left-8 bg-white/95 dark:bg-[#2C2E32]/95 backdrop-blur-md px-5 py-3.5 rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.15)] border border-charcoal/5 dark:border-white/10 flex items-center gap-3.5"
+            className="absolute z-20 -bottom-4 md:-bottom-8 left-2 md:left-8 bg-white/95 dark:bg-[#2C2E32]/95 backdrop-blur-md px-5 py-3.5 rounded-2xl shadow-md flex items-center gap-3.5"
           >
             <div className="bg-emerald-500/10 text-emerald-500 p-2.5 rounded-xl">
               <FiUsers className="w-5 h-5" />
             </div>
             <div className="flex flex-col">
               <p className="text-[13px] font-extrabold text-charcoal dark:text-[#F2F0E8] leading-tight">{t('about.trust_clients')}</p>
-              <p className="text-[10px] text-charcoal/50 dark:text-[#F2F0E8]/50 font-medium tracking-wide mt-0.5">⭐⭐⭐⭐⭐</p>
+              <p className="text-[10px] text-charcoal/60 dark:text-[#F2F0E8]/60 font-medium tracking-wide mt-0.5">⭐⭐⭐⭐⭐</p>
             </div>
           </motion.div>
 
           {/* Floating Element 4: AI Integrated (Top Right) */}
           <motion.div
             animate={floatAnimation4}
-            className="absolute z-20 top-40 -right-6 md:-right-12 bg-white/95 dark:bg-[#2C2E32]/95 backdrop-blur-md px-4 py-2.5 rounded-full shadow-[0_15px_35px_rgba(0,0,0,0.15)] border border-charcoal/5 dark:border-white/10 flex items-center gap-3"
+            className="absolute z-20 top-40 -right-6 md:-right-12 bg-white/95 dark:bg-[#2C2E32]/95 backdrop-blur-md px-4 py-2.5 rounded-full shadow-md flex items-center gap-3"
           >
             <div className="bg-amber-500/15 text-amber-600 dark:text-amber-400 p-1.5 rounded-full">
               <FiCpu className="w-4 h-4" />

@@ -14,14 +14,14 @@ export default function Footer() {
           {/* Brand */}
           <div className="flex flex-col gap-4">
             <img src="/img/unbackground.svg" alt="Akbar Alfaidah Logo" className="h-8 w-auto self-start" />
-            <p className="text-sm leading-relaxed text-[#F2F0E8]/50 max-w-xs">
+            <p className="text-sm leading-relaxed text-[#F2F0E8]/70 max-w-xs">
               {t('hero.headline_1')}
             </p>
           </div>
 
           {/* Quick Links */}
           <div className="flex flex-col gap-3">
-            <h4 className="text-xs font-semibold tracking-wide uppercase text-[#F2F0E8]/40 mb-1">Navigasi</h4>
+            <h4 className="text-xs font-semibold tracking-wide uppercase text-[#F2F0E8]/70 mb-1">Navigasi</h4>
             <a href="#about" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">{t('nav.about')}</a>
             <a href="#projects" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">{t('nav.projects')}</a>
             <a href="#experience" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">{t('nav.experience')}</a>
@@ -30,7 +30,7 @@ export default function Footer() {
 
           {/* Social */}
           <div className="flex flex-col gap-3">
-            <h4 className="text-xs font-semibold tracking-wide uppercase text-[#F2F0E8]/40 mb-1">Connect</h4>
+            <h4 className="text-xs font-semibold tracking-wide uppercase text-[#F2F0E8]/70 mb-1">Connect</h4>
             <a href="https://github.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">GitHub</a>
             <a href="https://linkedin.com/in/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">LinkedIn</a>
             <a href="https://instagram.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">Instagram</a>
@@ -39,8 +39,8 @@ export default function Footer() {
 
         {/* Divider */}
         <div className="border-t border-[#F2F0E8]/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <span className="text-xs font-medium text-[#F2F0E8]/40">© {new Date().getFullYear()} Akbar Alfaidah. All rights reserved.</span>
-          <span className="text-xs text-[#F2F0E8]/30">Built with React & Tailwind CSS</span>
+          <span className="text-xs font-medium text-[#F2F0E8]/70">© {new Date().getFullYear()} Akbar Alfaidah. All rights reserved.</span>
+          <span className="text-xs text-[#F2F0E8]/60">Built with React & Tailwind CSS</span>
         </div>
       </div>
     </footer>
