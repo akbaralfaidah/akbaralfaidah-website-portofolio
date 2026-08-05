@@ -81,7 +81,7 @@ export default function YouCanScroll() {
       {/* Native Sticky Container - Zero Jitter */}
       <div 
         ref={stickyRef} 
-        className="sticky top-[35vh] w-full flex flex-col justify-center items-center relative overflow-hidden py-8"
+        className="sticky top-[30vh] h-[40vh] min-h-[250px] max-h-[400px] w-full flex flex-col justify-center items-center relative"
         style={{
           WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
           maskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)'
