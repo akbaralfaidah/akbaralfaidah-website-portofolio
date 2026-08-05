@@ -208,30 +208,6 @@ export default function Experience() {
           ))}
         </div>
 
-        {/* Tech Stack Section */}
-        <div className="mb-32 relative">
-          <h3 className="text-2xl font-display font-bold text-charcoal dark:text-[#FAF8ED] mb-16 text-center">Tech Stack & Tools</h3>
-          
-          <div className="flex flex-col gap-0 max-w-5xl mx-auto">
-            {TECH_CATEGORIES.map((category, catIdx) => (
-              <div key={catIdx} className="relative flex flex-col md:flex-row items-center md:items-stretch w-full border-b border-mist/30 dark:border-[#FAF8ED]/10 py-5 last:border-0 last:pb-0 first:pt-0">
-                <div className="w-full md:w-1/4 flex-shrink-0 text-center md:text-right md:pt-3 md:pr-6 flex items-center md:items-start justify-center md:justify-end">
-                  <h4 className="text-sm font-semibold text-brass/80 dark:text-brass/90 tracking-wide">
-                    {category.title}
-                  </h4>
-                </div>
-                <div className="w-full md:w-3/4 relative md:border-l-[3px] md:border-brass/50 dark:md:border-brass/50 md:pl-6 mt-3 md:mt-0 pt-1 md:pt-1">
-                  {/* Branch connecting left to the vertical border */}
-                  <div className="hidden md:block absolute top-5 -left-6 w-6 h-[3px] bg-brass/50 dark:bg-brass/50"></div>
-                  
-                  <div className={`flex flex-wrap justify-center md:justify-start gap-2.5 md:gap-3 ${category.maxWidth || ''}`}>
-                    {category.skills.map((tech, idx) => renderTechCard(tech, `${catIdx}-${idx}`))}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
 
         {/* GitHub Activity Section */}
         <div className="flex justify-center max-w-4xl mx-auto">

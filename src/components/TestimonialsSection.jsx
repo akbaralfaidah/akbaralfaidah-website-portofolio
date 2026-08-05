@@ -22,7 +22,7 @@ export default function TestimonialsSection() {
   return (
     <section id="testimonials" className="py-12 md:py-16 lg:py-20 px-6 relative z-10 bg-paper dark:bg-[#1A1A1C] text-charcoal dark:text-[#F2F0E8] overflow-hidden">
       <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col items-center text-center mb-16 md:mb-24">
+        <div className="flex flex-col items-center text-center mb-4 md:mb-8">
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-charcoal/5 dark:bg-white/5 border border-charcoal/10 dark:border-white/10 text-charcoal/70 dark:text-[#F2F0E8]/70 text-xs font-medium tracking-wider uppercase mb-6">
             <span>{t('testimonials.eyebrow')}</span>
           </div>
