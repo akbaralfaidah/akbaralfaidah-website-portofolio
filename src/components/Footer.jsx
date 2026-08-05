@@ -6,7 +6,7 @@ export default function Footer() {
   const { t } = useTranslation();
 
   return (
-    <footer className="bg-charcoal dark:bg-[#111113] text-paper/70 py-16 px-6 transition-colors duration-300 border-t border-paper/5">
+    <footer className="bg-charcoal dark:bg-[#111113] text-[#F2F0E8]/70 py-16 px-6 transition-colors duration-300 border-t border-[#F2F0E8]/5">
       <div className="max-w-5xl mx-auto">
         {/* Top Row: 3 columns */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 mb-12">
@@ -14,33 +14,33 @@ export default function Footer() {
           {/* Brand */}
           <div className="flex flex-col gap-4">
             <img src="/img/unbackground.svg" alt="Akbar Alfaidah Logo" className="h-8 w-auto self-start" />
-            <p className="text-sm leading-relaxed text-[#FAF8ED]/50 max-w-xs">
+            <p className="text-sm leading-relaxed text-[#F2F0E8]/50 max-w-xs">
               {t('hero.headline_1')}
             </p>
           </div>
 
           {/* Quick Links */}
           <div className="flex flex-col gap-3">
-            <h4 className="text-xs font-mono font-bold tracking-[0.2em] uppercase text-[#FAF8ED]/40 mb-1">Navigasi</h4>
-            <a href="#about" className="text-sm text-[#FAF8ED]/60 hover:text-brass transition-colors">{t('nav.about')}</a>
-            <a href="#projects" className="text-sm text-[#FAF8ED]/60 hover:text-brass transition-colors">{t('nav.projects')}</a>
-            <a href="#experience" className="text-sm text-[#FAF8ED]/60 hover:text-brass transition-colors">{t('nav.experience')}</a>
-            <a href="#contact" className="text-sm text-[#FAF8ED]/60 hover:text-brass transition-colors">{t('nav.contact')}</a>
+            <h4 className="text-xs font-semibold tracking-wide uppercase text-[#F2F0E8]/40 mb-1">Navigasi</h4>
+            <a href="#about" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">{t('nav.about')}</a>
+            <a href="#projects" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">{t('nav.projects')}</a>
+            <a href="#experience" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">{t('nav.experience')}</a>
+            <a href="#contact" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">{t('nav.contact')}</a>
           </div>
 
           {/* Social */}
           <div className="flex flex-col gap-3">
-            <h4 className="text-xs font-mono font-bold tracking-[0.2em] uppercase text-[#FAF8ED]/40 mb-1">Connect</h4>
-            <a href="https://github.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="text-sm text-[#FAF8ED]/60 hover:text-brass transition-colors">GitHub</a>
-            <a href="https://linkedin.com/in/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="text-sm text-[#FAF8ED]/60 hover:text-brass transition-colors">LinkedIn</a>
-            <a href="https://instagram.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="text-sm text-[#FAF8ED]/60 hover:text-brass transition-colors">Instagram</a>
+            <h4 className="text-xs font-semibold tracking-wide uppercase text-[#F2F0E8]/40 mb-1">Connect</h4>
+            <a href="https://github.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">GitHub</a>
+            <a href="https://linkedin.com/in/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">LinkedIn</a>
+            <a href="https://instagram.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">Instagram</a>
           </div>
         </div>
 
         {/* Divider */}
-        <div className="border-t border-[#FAF8ED]/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <span className="text-xs font-medium text-[#FAF8ED]/40">© {new Date().getFullYear()} Akbar Alfaidah. All rights reserved.</span>
-          <span className="text-xs font-mono text-[#FAF8ED]/30">Built with React & Tailwind CSS</span>
+        <div className="border-t border-[#F2F0E8]/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <span className="text-xs font-medium text-[#F2F0E8]/40">© {new Date().getFullYear()} Akbar Alfaidah. All rights reserved.</span>
+          <span className="text-xs text-[#F2F0E8]/30">Built with React & Tailwind CSS</span>
         </div>
       </div>
     </footer>

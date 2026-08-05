@@ -3,7 +3,7 @@
     "about": "About Me",
     "projects": "Projects",
     "experience": "Experience",
-    "contact": "Let's Talk"
+    "contact": "Contact"
   },
   "hero": {
     "badge": "Available for new projects",
@@ -15,9 +15,9 @@
   },
   "about": {
     "heading": "Digital Solutions, Not Just Code.",
-    "desc_1": "Hi, I'm <0>Akbar Alfaidah</0>. I provide website development, mobile app development, and AI engineering services — based in <1>Jambi City</1>, serving clients across Indonesia.",
-    "desc_2": "Every project follows the same approach: technical precision paired with thoughtful design — resulting in a system that's stable and effortless to use.",
-    "desc_3": "Based in Jambi — happy to meet in person if you're local, or collaborate remotely if you're elsewhere. Let's bring your project to life.",
+    "desc_1": "Hi, I'm <0>Akbar Alfaidah</0>. I provide website development, mobile app development, and AI engineering services, based in <1>Jambi City</1>, serving clients across Indonesia.",
+    "desc_2": "Every project follows the same approach: technical precision paired with thoughtful design, resulting in a system that's stable and effortless to use.",
+    "desc_3": "Based in Jambi. Happy to meet in person if you're local, or collaborate remotely if you're elsewhere. Let's bring your project to life.",
     "trust_highly_trusted": "Highly Trusted",
     "trust_full_stack": "Full-Stack Dev",
     "trust_web_mobile": "Web & Mobile",
@@ -30,7 +30,7 @@
     "subheading": "A collection of digital work where aesthetic design meets high-precision software engineering.",
     "cta": "View Details",
     "bottom_cta": "View More Projects",
-    "bosdepot_desc": "POS and warehouse management app with integrated hardware — barcode scanner, thermal printer, and biometric authentication.",
+    "bosdepot_desc": "POS and warehouse management app with integrated hardware: barcode scanner, thermal printer, and biometric authentication.",
     "siskamling_desc": "Web-based Siskamling Information System with PDF export, Excel export, and QR Code generator features.",
     "peka_desc": "An AI-powered platform (Gemini API) for image exports and dynamic data management.",
     "mpp_desc": "Public Service Mall Website with role & permission system (Spatie), data export, and analytics dashboard.",

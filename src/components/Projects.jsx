@@ -122,12 +122,12 @@ function ProjectCard({ project, index }) {
             {project.platform === 'playstore' ? <FaGooglePlay size={10} /> : <FiGlobe size={11} />}
             {project.category}
           </span>
-          <span className="text-[13px] font-mono font-medium text-charcoal/40 dark:text-[#FAF8ED]/40">
+          <span className="text-[13px] font-mono font-medium text-charcoal/40 dark:text-[#F2F0E8]/40">
             {project.year}
           </span>
         </div>
 
-        <h3 className="text-2xl font-display font-bold text-charcoal dark:text-[#FAF8ED] tracking-tight mb-2 group-hover:text-brass transition-colors duration-300">
+        <h3 className="text-2xl font-display font-bold text-charcoal dark:text-[#F2F0E8] tracking-tight mb-2 group-hover:text-brass transition-colors duration-300">
           {project.title}
         </h3>
 
@@ -137,7 +137,7 @@ function ProjectCard({ project, index }) {
 
         <div className="flex flex-wrap gap-2 mb-8">
           {project.stack.map((tech, i) => (
-            <span key={i} className="text-[12px] font-mono text-charcoal/60 dark:text-[#FAF8ED]/60 border border-charcoal/10 dark:border-[#FAF8ED]/10 bg-mist/50 dark:bg-[#3A3C41]/50 px-2 py-1 rounded-md">
+            <span key={i} className="text-[12px] font-mono text-charcoal/60 dark:text-[#F2F0E8]/60 border border-charcoal/10 dark:border-[#F2F0E8]/10 bg-mist/50 dark:bg-[#3A3C41]/50 px-2 py-1 rounded-md">
               {tech}
             </span>
           ))}
@@ -163,25 +163,16 @@ export default function Projects() {
   const { t } = useTranslation();
 
   return (
-    <section id="projects" className="py-12 md:py-16 lg:py-20 relative z-10 bg-paper text-charcoal overflow-hidden dark:bg-[#1A1A1C] dark:text-[#FAF8ED]">
+    <section id="projects" className="py-12 md:py-16 lg:py-20 relative z-10 bg-paper text-charcoal overflow-hidden dark:bg-[#1A1A1C] dark:text-[#F2F0E8]">
 
       {/* Header - Centered */}
       <div className="max-w-5xl mx-auto px-6 mb-12 md:mb-16 text-center">
-        <motion.span
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="inline-block px-5 py-1.5 rounded-full border border-charcoal/15 dark:border-[#FAF8ED]/15 text-[11px] font-mono font-bold tracking-[0.2em] uppercase text-charcoal/60 dark:text-[#FAF8ED]/60 mb-6"
-        >
-          {t('projects.eyebrow')}
-        </motion.span>
-
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="text-4xl md:text-6xl font-display font-bold text-charcoal dark:text-[#FAF8ED] mb-5 tracking-tight"
+          className="text-4xl md:text-6xl font-display font-bold text-charcoal dark:text-[#F2F0E8] mb-5 tracking-tight"
         >
           {t('projects.heading')}
         </motion.h2>
@@ -191,7 +182,7 @@ export default function Projects() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className="text-charcoal/60 dark:text-[#FAF8ED]/60 text-base md:text-lg max-w-2xl mx-auto"
+          className="text-charcoal/60 dark:text-[#F2F0E8]/60 text-base md:text-lg max-w-2xl mx-auto"
         >
           {t('projects.subheading')}
         </motion.p>

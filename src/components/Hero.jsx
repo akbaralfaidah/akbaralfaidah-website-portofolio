@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FiArrowRight } from 'react-icons/fi';
 import AnimatedButton from './ui/AnimatedButton';
 import { TechLogoMarquee } from './ui/TechLogoMarquee';
 
@@ -273,12 +274,7 @@ export default function Hero() {
               transition={{ duration: 0.5 }}
             >
               <span className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/60 dark:bg-black/40 backdrop-blur-md shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-black/[0.04] dark:border-white/[0.08] text-xs font-semibold text-charcoal/80 dark:text-paper/80 tracking-wide">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-                </span>
                 {t('hero.badge')}
-                <span className="text-charcoal/40 dark:text-paper/40 ml-1">&rarr;</span>
               </span>
             </motion.div>
 
@@ -293,15 +289,7 @@ export default function Hero() {
               Akbar Alfaidah
             </motion.h1>
 
-            {/* Subtitle */}
-            <motion.h2
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.18 }}
-              className="font-display text-xl md:text-2xl font-medium text-charcoal/80 dark:text-paper/80 tracking-tight"
-            >
-              {t('hero.tagline')}
-            </motion.h2>
+
 
             {/* Description */}
             <motion.p
@@ -329,7 +317,7 @@ export default function Hero() {
                   className="px-7 h-12 text-[0.9rem] tracking-wide"
                 >
                   {t('hero.cta_primary')}
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+                  <FiArrowRight size={16} />
                 </AnimatedButton>
                 <AnimatedButton
                   href="#projects"
@@ -338,7 +326,7 @@ export default function Hero() {
                   className="px-7 h-12 text-[0.9rem] tracking-wide"
                 >
                   {t('hero.cta_secondary')}
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+                  <FiArrowRight size={16} />
                 </AnimatedButton>
               </div>
 

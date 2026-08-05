@@ -130,7 +130,7 @@ export default function Navbar() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         className={`fixed top-0 left-0 right-0 z-[999] transition-all duration-300 ${scrolled
-            ? 'py-4 px-6 mx-auto mt-4 max-w-5xl bg-[#FAF8ED]/70 dark:bg-[#1A1A1C]/70 backdrop-blur-lg rounded-full shadow-sm border border-charcoal/10 dark:border-[#FAF8ED]/10'
+            ? 'py-4 px-6 mx-auto mt-4 max-w-5xl bg-[#F7F5EE]/70 dark:bg-[#1A1A1C]/70 backdrop-blur-lg rounded-full shadow-sm border border-charcoal/10 dark:border-[#F2F0E8]/10'
             : 'py-6 px-8 bg-transparent'
           }`}
       >
@@ -141,7 +141,7 @@ export default function Navbar() {
             </button>
           </div>
 
-          <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-charcoal dark:text-[#FAF8ED]">
+          <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-charcoal dark:text-[#F2F0E8]">
             <a href="#about" onClick={(e) => handleNavClick(e, '#about')} className="hover:opacity-70 transition-opacity">{t('nav.about')}</a>
             <a href="#projects" onClick={(e) => handleNavClick(e, '#projects')} className="hover:opacity-70 transition-opacity">{t('nav.projects')}</a>
             <a href="#experience" onClick={(e) => handleNavClick(e, '#experience')} className="hover:opacity-70 transition-opacity">{t('nav.experience')}</a>
@@ -183,21 +183,17 @@ export default function Navbar() {
             className="md:hidden fixed inset-0 z-40 bg-paper dark:bg-[#1A1A1C] flex flex-col justify-center px-10 h-screen w-screen"
           >
             <div className="flex flex-col space-y-8">
-              <div className="flex items-center space-x-6">
-                <span className={`text-sm font-mono opacity-50 ${theme === 'dark' ? 'text-[#FAF8ED]' : 'text-charcoal'}`}>01</span>
-                <a href="#projects" onClick={() => setIsMobileMenuOpen(false)} className={`text-4xl font-sans font-semibold tracking-wide leading-none ${theme === 'dark' ? 'text-[#FAF8ED]' : 'text-charcoal'} hover:text-brass transition-colors`}>{t('nav.projects')}</a>
+              <div className="flex items-center">
+                <a href="#projects" onClick={() => setIsMobileMenuOpen(false)} className={`text-4xl font-sans font-semibold tracking-wide leading-none ${theme === 'dark' ? 'text-[#F2F0E8]' : 'text-charcoal'} hover:text-brass transition-colors`}>{t('nav.projects')}</a>
               </div>
-              <div className="flex items-center space-x-6">
-                <span className={`text-sm font-mono opacity-50 ${theme === 'dark' ? 'text-[#FAF8ED]' : 'text-charcoal'}`}>02</span>
-                <a href="#about" onClick={() => setIsMobileMenuOpen(false)} className={`text-4xl font-sans font-semibold tracking-wide leading-none ${theme === 'dark' ? 'text-[#FAF8ED]' : 'text-charcoal'} hover:text-brass transition-colors`}>{t('nav.about')}</a>
+              <div className="flex items-center">
+                <a href="#about" onClick={() => setIsMobileMenuOpen(false)} className={`text-4xl font-sans font-semibold tracking-wide leading-none ${theme === 'dark' ? 'text-[#F2F0E8]' : 'text-charcoal'} hover:text-brass transition-colors`}>{t('nav.about')}</a>
               </div>
-              <div className="flex items-center space-x-6">
-                <span className={`text-sm font-mono opacity-50 ${theme === 'dark' ? 'text-[#FAF8ED]' : 'text-charcoal'}`}>03</span>
-                <a href="#experience" onClick={() => setIsMobileMenuOpen(false)} className={`text-4xl font-sans font-semibold tracking-wide leading-none ${theme === 'dark' ? 'text-[#FAF8ED]' : 'text-charcoal'} hover:text-brass transition-colors`}>{t('nav.experience')}</a>
+              <div className="flex items-center">
+                <a href="#experience" onClick={() => setIsMobileMenuOpen(false)} className={`text-4xl font-sans font-semibold tracking-wide leading-none ${theme === 'dark' ? 'text-[#F2F0E8]' : 'text-charcoal'} hover:text-brass transition-colors`}>{t('nav.experience')}</a>
               </div>
-              <div className="flex items-center space-x-6">
-                <span className={`text-sm font-mono opacity-50 ${theme === 'dark' ? 'text-[#FAF8ED]' : 'text-charcoal'}`}>04</span>
-                <a href="#contact" onClick={() => setIsMobileMenuOpen(false)} className={`text-4xl font-sans font-semibold tracking-wide leading-none ${theme === 'dark' ? 'text-[#FAF8ED]' : 'text-charcoal'} hover:text-brass transition-colors`}>{t('nav.contact')}</a>
+              <div className="flex items-center">
+                <a href="#contact" onClick={() => setIsMobileMenuOpen(false)} className={`text-4xl font-sans font-semibold tracking-wide leading-none ${theme === 'dark' ? 'text-[#F2F0E8]' : 'text-charcoal'} hover:text-brass transition-colors`}>{t('nav.contact')}</a>
               </div>
             </div>
 
@@ -206,7 +202,7 @@ export default function Navbar() {
               <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
             </div>
 
-            <div className={`absolute bottom-12 left-10 flex space-x-6 text-sm font-medium opacity-60 ${theme === 'dark' ? 'text-[#FAF8ED]' : 'text-charcoal'}`}>
+            <div className={`absolute bottom-12 left-10 flex space-x-6 text-sm font-medium opacity-60 ${theme === 'dark' ? 'text-[#F2F0E8]' : 'text-charcoal'}`}>
               <a href="mailto:hello@akbaralfaidah.com" className="hover:text-brass transition-colors">Email</a>
               <a href="https://github.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="hover:text-brass transition-colors">GitHub</a>
               <a href="https://linkedin.com/in/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="hover:text-brass transition-colors">LinkedIn</a>
@@ -225,7 +221,7 @@ export default function Navbar() {
             onClick={(e) => handleNavClick(e, 'top')}
             className={`fixed bottom-6 right-6 md:bottom-8 md:right-10 z-[990] p-3 md:p-4 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border transition-all duration-300 hover:-translate-y-1 ${
               theme === 'dark' 
-                ? 'bg-[#2F3135]/90 backdrop-blur-md text-[#FAF8ED] border-white/10 hover:bg-[#FAF8ED] hover:text-charcoal' 
+                ? 'bg-[#2C2E32]/90 backdrop-blur-md text-[#F2F0E8] border-white/10 hover:bg-[#F2F0E8] hover:text-charcoal' 
                 : 'bg-white/90 backdrop-blur-md text-charcoal border-black/5 hover:bg-charcoal hover:text-white'
             }`}
             aria-label="Scroll to top"

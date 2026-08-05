@@ -106,17 +106,14 @@ export default function YouCanScroll() {
                 className="absolute top-0 left-0 md:left-2 flex flex-col items-start gap-6 md:gap-10 m-0 p-0 font-display font-extrabold leading-[1.1] md:leading-none tracking-tighter whitespace-normal md:whitespace-nowrap w-full"
               >
                 {items.map((text, i) => {
-                  // Provide extremely vibrant highlighter colors instead of dull grey
-                  const bgColor = i % 3 === 0 ? 'rgba(59, 130, 246, 0.25)' // Bright Blue
-                    : i % 3 === 1 ? 'rgba(245, 158, 11, 0.25)' // Bright Amber
-                    : 'rgba(16, 185, 129, 0.25)'; // Bright Emerald
+                  const bgColor = 'rgba(158, 122, 60, 0.18)'; // Brass-tinted highlight
 
                   return (
                     <li 
                       key={i} 
                       className="ycs-item m-0 p-0 relative w-full"
                       style={{ 
-                        color: i % 3 === 0 ? 'inherit' : i % 3 === 1 ? 'var(--color-brass)' : '#10b981'
+                        color: 'inherit'
                       }}
                     >
                       <div 

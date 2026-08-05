@@ -4,16 +4,16 @@
 
 @layer base {
   :root {
-    --color-paper: #FAF8ED;
-    --color-charcoal: #2F3135;
-    --color-brass: #A9762E;
-    --color-mist: #EFE9D8;
+    --color-paper: #F7F5EE;
+    --color-charcoal: #2C2E32;
+    --color-brass: #9E7A3C;
+    --color-mist: #E8E3D4;
   }
   
   .dark {
     --color-paper: #1A1A1C;
-    --color-charcoal: #FAF8ED;
-    --color-brass: #D4A24C;
+    --color-charcoal: #F2F0E8;
+    --color-brass: #C9983F;
     --color-mist: #3A3C41;
   }
 

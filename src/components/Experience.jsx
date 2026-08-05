@@ -119,7 +119,7 @@ export default function Experience() {
   const renderTechCard = (tech, key) => (
     <div 
       key={key} 
-      className="relative flex flex-row items-center justify-center w-auto px-4 py-3 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl bg-paper dark:bg-[#3A3C41] border border-mist/50 dark:border-[#FAF8ED]/10 shadow-sm hover:-translate-y-2 transition-all duration-300 group cursor-pointer gap-3 z-10 hover:z-20 overflow-hidden"
+      className="relative flex flex-row items-center justify-center w-auto px-4 py-3 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl bg-paper dark:bg-[#3A3C41] border border-mist/50 dark:border-[#F2F0E8]/10 shadow-sm hover:-translate-y-2 transition-all duration-300 group cursor-pointer gap-3 z-10 hover:z-20 overflow-hidden"
       onMouseEnter={(e) => {
         e.currentTarget.style.boxShadow = `0 15px 30px -10px ${tech.color}70, 0 0 15px 0 ${tech.color}30 inset`;
         e.currentTarget.style.borderColor = tech.color;
@@ -157,7 +157,7 @@ export default function Experience() {
       >
         <tech.icon size={20} className="sm:w-7 sm:h-7" />
       </div>
-      <span className="text-xs sm:text-sm font-display font-bold tracking-wide text-charcoal dark:text-[#FAF8ED] relative z-10">
+      <span className="text-xs sm:text-sm font-display font-bold tracking-wide text-charcoal dark:text-[#F2F0E8] relative z-10">
         {tech.name}
       </span>
     </div>
@@ -168,8 +168,8 @@ export default function Experience() {
 
       <div className="max-w-4xl mx-auto relative z-10">
         <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-5xl font-display font-bold text-charcoal dark:text-[#FAF8ED] mb-4">{t('experience.heading')}</h2>
-          <p className="text-charcoal/70 dark:text-[#FAF8ED]/70 max-w-2xl mx-auto">{t('experience.subheading')}</p>
+          <h2 className="text-4xl md:text-5xl font-display font-bold text-charcoal dark:text-[#F2F0E8] mb-4">{t('experience.heading')}</h2>
+          <p className="text-charcoal/70 dark:text-[#F2F0E8]/70 max-w-2xl mx-auto">{t('experience.subheading')}</p>
         </div>
         
         <div ref={containerRef} className="space-y-8 md:space-y-12 relative mb-32">
@@ -192,14 +192,14 @@ export default function Experience() {
               <div className={`w-[calc(100%-3.5rem)] ml-auto md:ml-0 md:w-[calc(50%-2.5rem)] p-5 md:p-6 bg-paper dark:bg-[#3A3C41] border border-mist dark:border-[#FAF8ED]/10 rounded-2xl shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-1 ${idx % 2 === 0 ? 'md:order-2 md:text-left' : 'md:order-1 md:text-right'}`}>
                 {/* Date Badge Inside Card */}
                 <div className={`inline-block mb-3 px-3 py-1 rounded-full shadow-inner border border-mist dark:border-[#FAF8ED]/10 bg-mist/50 dark:bg-[#FAF8ED]/5`}>
-                  <span className="font-mono text-[11px] md:text-xs text-brass font-bold tracking-wider whitespace-nowrap uppercase">{exp.period}</span>
+                  <span className="font-mono text-[11px] md:text-xs text-brass font-bold tracking-wider whitespace-nowrap">{exp.period}</span>
                 </div>
                 
                 <div className="flex flex-col mb-2.5">
-                  <h3 className="font-display font-bold text-lg md:text-xl text-charcoal dark:text-[#FAF8ED] mb-1">{exp.role}</h3>
-                  <span className="text-charcoal/60 dark:text-[#FAF8ED]/70 font-medium text-sm md:text-base">{exp.company}</span>
+                  <h3 className="font-display font-bold text-lg md:text-xl text-charcoal dark:text-[#F2F0E8] mb-1">{exp.role}</h3>
+                  <span className="text-charcoal/60 dark:text-[#F2F0E8]/70 font-medium text-sm md:text-base">{exp.company}</span>
                 </div>
-                <p className="text-charcoal/80 dark:text-[#FAF8ED]/80 leading-relaxed text-sm">{exp.description}</p>
+                <p className="text-charcoal/80 dark:text-[#F2F0E8]/80 leading-relaxed text-sm">{exp.description}</p>
               </div>
 
               <div className={`hidden md:block w-[calc(50%-2.5rem)] ${idx % 2 === 0 ? 'order-1' : 'order-2'}`}>
@@ -217,7 +217,7 @@ export default function Experience() {
             {TECH_CATEGORIES.map((category, catIdx) => (
               <div key={catIdx} className="relative flex flex-col md:flex-row items-center md:items-stretch w-full border-b border-mist/30 dark:border-[#FAF8ED]/10 py-5 last:border-0 last:pb-0 first:pt-0">
                 <div className="w-full md:w-1/4 flex-shrink-0 text-center md:text-right md:pt-3 md:pr-6 flex items-center md:items-start justify-center md:justify-end">
-                  <h4 className="text-sm font-mono font-bold text-brass/80 dark:text-brass/90 tracking-widest uppercase">
+                  <h4 className="text-sm font-semibold text-brass/80 dark:text-brass/90 tracking-wide">
                     {category.title}
                   </h4>
                 </div>
@@ -240,12 +240,8 @@ export default function Experience() {
             {/* Header */}
             <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
               <div className="flex items-center gap-3">
-                <SiGithub size={24} className="text-charcoal dark:text-[#FAF8ED]" />
-                <h3 className="text-xl font-display font-bold text-charcoal dark:text-[#FAF8ED]">GitHub Contributions</h3>
-              </div>
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/20">
-                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                <span className="text-[10px] font-mono font-bold text-green-600 dark:text-green-400 uppercase tracking-widest">Active</span>
+                <SiGithub size={24} className="text-charcoal dark:text-[#F2F0E8]" />
+                <h3 className="text-xl font-display font-bold text-charcoal dark:text-[#F2F0E8]">GitHub Contributions</h3>
               </div>
             </div>
 
@@ -256,7 +252,7 @@ export default function Experience() {
               rel="noreferrer"
               className="group flex items-center justify-center gap-2 w-full py-3 mb-8 rounded-xl bg-mist/20 dark:bg-charcoal/30 hover:bg-mist/50 dark:hover:bg-charcoal/50 border border-mist/50 dark:border-[#FAF8ED]/5 transition-colors"
             >
-              <span className="font-mono text-sm font-semibold text-charcoal/80 dark:text-[#FAF8ED]/80 group-hover:text-brass transition-colors">
+              <span className="font-mono text-sm font-semibold text-charcoal/80 dark:text-[#F2F0E8]/80 group-hover:text-brass transition-colors">
                 @akbaralfaidah
               </span>
               <span className="text-charcoal/40 group-hover:text-brass transition-all opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transform duration-300">
