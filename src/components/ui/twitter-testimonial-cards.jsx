@@ -143,7 +143,7 @@ export function Testimonials({ cards }) {
   ];
 
   return (
-    <div className="grid [grid-template-areas:'stack'] place-items-center opacity-100 w-full min-h-[400px] sm:min-h-[500px]">
+    <div className="grid [grid-template-areas:'stack'] place-items-start justify-items-center opacity-100 w-full min-h-[400px] sm:min-h-[500px] pt-4 sm:pt-8">
       {displayCards.map((cardProps, index) => {
         return (
           <TestimonialCard
