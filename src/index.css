@@ -4,10 +4,10 @@
 
 @layer base {
   :root {
-    --color-paper: #F7F5EE;
+    --color-paper: #FAFAFA;
     --color-charcoal: #2C2E32;
     --color-brass: #9E7A3C;
-    --color-mist: #E8E3D4;
+    --color-mist: #F0F0F0;
   }
   
   .dark {

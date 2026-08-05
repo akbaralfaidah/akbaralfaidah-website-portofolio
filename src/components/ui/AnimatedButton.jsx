@@ -6,7 +6,7 @@ export default function AnimatedButton({ children, href, to, onClick, className 
   let hoverBgClass = 'bg-[#A9762E]';
   
   if (variant === 'brass') {
-    bgClass = 'bg-[#A9762E] text-white border-[#A9762E]';
+    bgClass = 'bg-[#A9762E] text-charcoal dark:text-charcoal border-[#A9762E] font-semibold';
     hoverBgClass = 'bg-[#2C2E32]';
   } else if (variant === 'outline') {
     bgClass = 'bg-transparent border-charcoal/10 dark:border-paper/10 text-charcoal dark:text-paper';
@@ -25,11 +25,12 @@ export default function AnimatedButton({ children, href, to, onClick, className 
     </>
   );
 
-  const baseClass = `group relative inline-flex items-center justify-center overflow-hidden rounded-full border ${bgClass} font-medium transition-all active:scale-[0.98] ${className}`;
+  const baseClass = `group relative inline-flex items-center justify-center rounded-full border ${bgClass} font-medium transition-all active:scale-[0.98] ${className}`;
+  const clipStyle = { clipPath: 'inset(0 round 9999px)' };
 
   if (to) {
     return (
-      <Link to={to} className={baseClass} onClick={onClick} {...props}>
+      <Link to={to} className={baseClass} style={clipStyle} onClick={onClick} {...props}>
         {content}
       </Link>
     );
@@ -37,14 +38,14 @@ export default function AnimatedButton({ children, href, to, onClick, className 
 
   if (href) {
     return (
-      <a href={href} className={baseClass} target={href.startsWith('#') ? undefined : "_blank"} rel={href.startsWith('#') ? undefined : "noopener noreferrer"} onClick={onClick} {...props}>
+      <a href={href} className={baseClass} style={clipStyle} target={href.startsWith('#') ? undefined : "_blank"} rel={href.startsWith('#') ? undefined : "noopener noreferrer"} onClick={onClick} {...props}>
         {content}
       </a>
     );
   }
 
   return (
-    <button className={baseClass} onClick={onClick} {...props}>
+    <button className={baseClass} style={clipStyle} onClick={onClick} {...props}>
       {content}
     </button>
   );

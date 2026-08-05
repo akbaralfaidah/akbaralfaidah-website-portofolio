@@ -94,7 +94,7 @@ export default function YouCanScroll() {
             
             {/* Left side fixed text */}
             <div className="w-[35%] flex justify-end pr-3 md:pr-6">
-              <h2 className="text-[clamp(1.8rem,5vw,5.5rem)] font-display font-extrabold leading-none tracking-tighter whitespace-nowrap m-0 p-0">
+              <h2 className="text-[clamp(1.8rem,5vw,5.5rem)] font-display font-extrabold leading-none whitespace-nowrap m-0 p-0">
                 {t('scroll_section.title_1')}
               </h2>
             </div>
@@ -103,7 +103,7 @@ export default function YouCanScroll() {
             <div className="w-[65%] relative h-[1em] m-0 p-0 text-[clamp(1.8rem,5vw,5.5rem)]">
               <ul 
                 ref={listRef} 
-                className="absolute top-0 left-0 md:left-2 flex flex-col items-start gap-6 md:gap-10 m-0 p-0 font-display font-extrabold leading-[1.1] md:leading-none tracking-tighter whitespace-normal md:whitespace-nowrap w-full"
+                className="absolute top-0 left-0 md:left-2 flex flex-col items-start gap-6 md:gap-10 m-0 p-0 font-display font-extrabold leading-[1.1] md:leading-none whitespace-normal md:whitespace-nowrap w-full"
               >
                 {items.map((text, i) => {
                   const bgColor = 'rgba(158, 122, 60, 0.18)'; // Brass-tinted highlight
@@ -111,7 +111,7 @@ export default function YouCanScroll() {
                   return (
                     <li 
                       key={i} 
-                      className="ycs-item m-0 p-0 relative w-full"
+                      className="ycs-item m-0 p-0 relative w-max"
                       style={{ 
                         color: 'inherit'
                       }}

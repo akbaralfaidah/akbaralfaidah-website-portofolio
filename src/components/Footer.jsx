@@ -21,7 +21,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div className="flex flex-col gap-3">
-            <h4 className="text-xs font-semibold tracking-wide uppercase text-[#F2F0E8]/70 mb-1">Navigasi</h4>
+            <h3 className="text-xs font-semibold tracking-wide uppercase text-[#F2F0E8]/70 mb-1">Navigasi</h3>
             <a href="#about" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">{t('nav.about')}</a>
             <a href="#projects" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">{t('nav.projects')}</a>
             <a href="#experience" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">{t('nav.experience')}</a>
@@ -30,7 +30,7 @@ export default function Footer() {
 
           {/* Social */}
           <div className="flex flex-col gap-3">
-            <h4 className="text-xs font-semibold tracking-wide uppercase text-[#F2F0E8]/70 mb-1">Connect</h4>
+            <h3 className="text-xs font-semibold tracking-wide uppercase text-[#F2F0E8]/70 mb-1">Connect</h3>
             <a href="https://github.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">GitHub</a>
             <a href="https://linkedin.com/in/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">LinkedIn</a>
             <a href="https://instagram.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">Instagram</a>

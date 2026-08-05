@@ -174,7 +174,7 @@ function OrbitColumn() {
             transformOrigin: 'top left',
           }}
         >
-          <div className="w-full h-full rounded-2xl overflow-hidden shadow-2xl border border-charcoal/6 dark:border-paper/6 bg-paper dark:bg-[#3A3C41]">
+          <div className="w-full h-full rounded-2xl overflow-hidden shadow-md border border-charcoal/6 dark:border-paper/6 bg-paper dark:bg-[#3A3C41]">
             <img
               src={p.src}
               alt={p.name}
@@ -221,7 +221,7 @@ function MobileCarousel() {
       <div ref={trackRef} className="flex gap-4" style={{ willChange: 'transform' }}>
         {items.map((p, i) => (
           <div key={`${p.name}-${i}`}
-            className="flex-shrink-0 rounded-2xl overflow-hidden shadow-lg border border-charcoal/6 dark:border-paper/6 bg-paper dark:bg-[#3A3C41]"
+            className="flex-shrink-0 rounded-2xl overflow-hidden shadow-sm border border-charcoal/6 dark:border-paper/6 bg-paper dark:bg-[#3A3C41]"
             style={{ width: '300px', height: '169px' }}>
             <img src={p.src} alt={p.name} loading="lazy" draggable="false"
               className="w-full h-full object-cover object-top block pointer-events-none" />
