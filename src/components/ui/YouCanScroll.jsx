@@ -24,7 +24,7 @@ export default function YouCanScroll() {
       scrollTrigger: {
         trigger: containerRef.current,
         start: 'top 25%',
-        end: 'bottom 80%',
+        end: 'bottom 90%',
         scrub: 1, 
         snap: {
           snapTo: "labelsDirectional", 
@@ -75,7 +75,7 @@ export default function YouCanScroll() {
   return (
     <section 
       ref={containerRef}
-      className="relative w-full bg-paper dark:bg-[#1A1A1C] text-charcoal dark:text-[#FAF8ED] h-[180vh] z-10"
+      className="relative w-full bg-paper dark:bg-[#1A1A1C] text-charcoal dark:text-[#FAF8ED] h-[130vh] z-10"
     >
       
       {/* Native Sticky Container - Zero Jitter */}

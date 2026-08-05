@@ -24,7 +24,7 @@ export default function About() {
   const { t } = useTranslation();
   
   return (
-    <section id="about" className="py-12 md:py-16 lg:py-20 px-6 relative z-10 dark:bg-[#1A1A1C]">
+    <section id="about" className="py-8 md:py-12 lg:py-14 px-6 relative z-10 dark:bg-[#1A1A1C]">
 
       <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-16 relative z-10">
 

@@ -6,7 +6,7 @@ export default function Footer() {
   const { t, i18n } = useTranslation();
 
   return (
-    <footer className="bg-charcoal dark:bg-[#111113] text-[#F2F0E8]/70 py-16 px-6 transition-colors duration-300 border-t border-[#F2F0E8]/5">
+    <footer className="bg-charcoal dark:bg-[#111113] text-[#F2F0E8]/70 py-10 px-6 transition-colors duration-300 border-t border-[#F2F0E8]/5">
       <div className="max-w-5xl mx-auto">
         {/* Top Row: 3 columns */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 mb-12">

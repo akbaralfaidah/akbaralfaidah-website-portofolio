@@ -164,7 +164,7 @@ export default function Experience() {
   );
 
   return (
-    <section id="experience" className="py-12 md:py-16 lg:py-20 px-6 bg-paper dark:bg-[#1A1A1C] relative overflow-hidden">
+    <section id="experience" className="py-8 md:py-12 lg:py-14 px-6 bg-paper dark:bg-[#1A1A1C] relative overflow-hidden">
 
       <div className="max-w-4xl mx-auto relative z-10">
         <div className="text-center mb-20">

@@ -163,7 +163,7 @@ export default function Projects() {
   const { t } = useTranslation();
 
   return (
-    <section id="projects" className="py-12 md:py-16 lg:py-20 relative z-10 bg-paper text-charcoal overflow-hidden dark:bg-[#1A1A1C] dark:text-[#F2F0E8]">
+    <section id="projects" className="py-8 md:py-12 lg:py-14 relative z-10 bg-paper text-charcoal overflow-hidden dark:bg-[#1A1A1C] dark:text-[#F2F0E8]">
 
       {/* Header - Centered */}
       <div className="max-w-5xl mx-auto px-6 mb-12 md:mb-16 text-center">
