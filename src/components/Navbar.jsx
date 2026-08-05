@@ -82,7 +82,6 @@ const ThemeToggle = ({ theme, toggleTheme }) => {
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [hoveredNav, setHoveredNav] = useState(null);
   const { t, i18n } = useTranslation();
   const { theme, toggleTheme } = useTheme();
 
@@ -148,24 +147,15 @@ export default function Navbar() {
             </button>
           </div>
 
-          <div className="hidden md:flex items-center space-x-1 text-base font-medium text-charcoal dark:text-[#F2F0E8] bg-[#FAFAFA]/50 dark:bg-[#1A1A1C]/50 border border-charcoal/10 dark:border-white/10 px-3 py-1.5 rounded-full relative">
+          <div className="hidden md:flex items-center space-x-1 text-base font-medium text-charcoal dark:text-[#F2F0E8] bg-[#FAFAFA]/50 dark:bg-[#1A1A1C]/50 border border-charcoal/10 dark:border-white/10 px-3 py-1.5 rounded-full">
             {navItems.map((item) => (
               <a
                 key={item.id}
                 href={`#${item.id}`}
                 onClick={(e) => handleNavClick(e, `#${item.id}`)}
-                onMouseEnter={() => setHoveredNav(item.id)}
-                onMouseLeave={() => setHoveredNav(null)}
-                className="relative px-4 py-1.5 rounded-full transition-colors z-10 text-charcoal/80 dark:text-[#F2F0E8]/80 hover:text-charcoal dark:hover:text-white"
+                className="px-4 py-1.5 rounded-full transition-all duration-300 text-charcoal/80 dark:text-[#F2F0E8]/80 hover:text-charcoal dark:hover:text-white hover:-translate-y-1 hover:bg-black/5 dark:hover:bg-white/10 hover:shadow-sm"
               >
-                {hoveredNav === item.id && (
-                  <motion.div
-                    layoutId="nav-pill"
-                    className="absolute inset-0 bg-charcoal/5 dark:bg-white/10 rounded-full z-0"
-                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  />
-                )}
-                <span className="relative z-10">{item.label}</span>
+                {item.label}
               </a>
             ))}
           </div>
