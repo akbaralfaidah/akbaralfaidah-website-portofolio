@@ -153,7 +153,7 @@ export default function Navbar() {
                 key={item.id}
                 href={`#${item.id}`}
                 onClick={(e) => handleNavClick(e, `#${item.id}`)}
-                className="px-4 py-1.5 rounded-full transition-all duration-300 text-charcoal/80 dark:text-[#F2F0E8]/80 hover:text-charcoal dark:hover:text-white hover:-translate-y-1 hover:bg-black/5 dark:hover:bg-white/10 hover:shadow-sm"
+                className="px-4 py-1.5 rounded-full transition-all duration-300 text-charcoal/80 dark:text-[#F2F0E8]/80 hover:text-charcoal dark:hover:text-white hover:-translate-y-2 hover:bg-black/5 dark:hover:bg-white/10 hover:shadow-sm"
               >
                 {item.label}
               </a>
