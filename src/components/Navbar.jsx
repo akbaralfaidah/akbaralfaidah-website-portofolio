@@ -141,7 +141,7 @@ export default function Navbar() {
             </button>
           </div>
 
-          <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-charcoal dark:text-[#F2F0E8] bg-[#FAFAFA]/50 dark:bg-[#1A1A1C]/50 border border-charcoal/10 dark:border-white/10 px-8 py-2.5 rounded-full">
+          <div className="hidden md:flex items-center space-x-8 text-base font-medium text-charcoal dark:text-[#F2F0E8] bg-[#FAFAFA]/50 dark:bg-[#1A1A1C]/50 border border-charcoal/10 dark:border-white/10 px-8 py-2.5 rounded-full">
             <a href="#about" onClick={(e) => handleNavClick(e, '#about')} className="hover:opacity-70 transition-opacity">{t('nav.about')}</a>
             <a href="#projects" onClick={(e) => handleNavClick(e, '#projects')} className="hover:opacity-70 transition-opacity">{t('nav.projects')}</a>
             <a href="#experience" onClick={(e) => handleNavClick(e, '#experience')} className="hover:opacity-70 transition-opacity">{t('nav.experience')}</a>
@@ -156,7 +156,7 @@ export default function Navbar() {
             <AnimatedButton
               href="#contact"
               onClick={(e) => handleNavClick(e, '#contact')}
-              className="hidden sm:inline-flex px-5 h-10 text-sm"
+              className="hidden sm:inline-flex px-6 h-11 text-[15px]"
             >
               {t('nav.contact')}
             </AnimatedButton>
