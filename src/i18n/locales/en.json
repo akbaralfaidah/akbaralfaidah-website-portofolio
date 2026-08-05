@@ -1,8 +1,113 @@
 {
   "nav": {
-    "about": "About",
+    "about": "About Me",
     "projects": "Projects",
     "experience": "Experience",
     "contact": "Let's Talk"
+  },
+  "hero": {
+    "badge": "Available for new projects",
+    "tagline": "Web Development, Mobile Apps & AI Engineering",
+    "headline_1": "From idea to product. Precision in every line of code.",
+    "headline_2": "Digital solutions built with precision, polish, and class.",
+    "cta_primary": "Let's Talk",
+    "cta_secondary": "View My Work"
+  },
+  "about": {
+    "heading": "Digital Solutions, Not Just Code.",
+    "desc_1": "Hi, I'm <0>Akbar Alfaidah</0>. I provide website development, mobile app development, and AI engineering services — based in <1>Jambi City</1>, serving clients across Indonesia.",
+    "desc_2": "Every project follows the same approach: technical precision paired with thoughtful design — resulting in a system that's stable and effortless to use.",
+    "desc_3": "Based in Jambi — happy to meet in person if you're local, or collaborate remotely if you're elsewhere. Let's bring your project to life.",
+    "trust_highly_trusted": "Highly Trusted",
+    "trust_full_stack": "Full-Stack Dev",
+    "trust_web_mobile": "Web & Mobile",
+    "trust_clients": "10+ Clients",
+    "trust_ai": "AI Integrated"
+  },
+  "projects": {
+    "eyebrow": "Selected Work",
+    "heading": "Latest Projects.",
+    "subheading": "A collection of digital work where aesthetic design meets high-precision software engineering.",
+    "cta": "View Details",
+    "bottom_cta": "View More Projects",
+    "bosdepot_desc": "POS and warehouse management app with integrated hardware — barcode scanner, thermal printer, and biometric authentication.",
+    "siskamling_desc": "Web-based Siskamling Information System with PDF export, Excel export, and QR Code generator features.",
+    "peka_desc": "An AI-powered platform (Gemini API) for image exports and dynamic data management.",
+    "mpp_desc": "Public Service Mall Website with role & permission system (Spatie), data export, and analytics dashboard.",
+    "simppk_desc": "Employee Performance Appraisal Management Information System optimized with DOMPDF and Excel.",
+    "chattask_desc": "A web-based task management app with built-in chat, powered by modern architecture and containerization.",
+    "jokipro_desc": "Professional boosting platform with high performance, smooth scrolling (Lenis), and modern routing.",
+    "siabsen_desc": "A location-based attendance app (Geolocator) with camera verification and Firebase Cloud integration."
+  },
+  "experience": {
+    "heading": "Career Journey",
+    "subheading": "My professional background and the technologies I work with.",
+    "items": [
+      {
+        "role": "Programmer",
+        "company": "Depot Kayu & Toko Bangunan Esa",
+        "period": "January 2026 – Present",
+        "description": "Building a mobile POS and inventory management system (Flutter/Firebase), including backend logic for stock calculations."
+      },
+      {
+        "role": "Freelance Web & Mobile Developer",
+        "company": "Independent",
+        "period": "January 2024 – Present",
+        "description": "Delivering end-to-end web and mobile app projects for SME clients."
+      },
+      {
+        "role": "IT Operations Intern",
+        "company": "PT Telkomsel Regional Sumbagsel",
+        "period": "May 2025 – June 2025",
+        "description": "Designed a CI/CD pipeline prototype (GitLab) and a Dev-Staging-Production workflow."
+      },
+      {
+        "role": "Full-Stack Web Developer",
+        "company": "Bidik Karier",
+        "period": "August 2024 – November 2024",
+        "description": "Built an end-to-end e-learning platform (LMS) for civil service exam prep (PHP/MySQL)."
+      },
+      {
+        "role": "IT Intern",
+        "company": "PT PLN UBP Indonesia Power",
+        "period": "June 2024 – July 2024",
+        "description": "Developed a digital article portal and company profile site to streamline internal communication."
+      },
+      {
+        "role": "Web Developer",
+        "company": "INOVASITUS",
+        "period": "January 2024 – January 2025",
+        "description": "Built 7+ functional, responsive websites for SME clients (HTML/CSS/JS/Bootstrap)."
+      }
+    ]
+  },
+  "contact": {
+    "heading_1": "Let's Start a",
+    "heading_2": "Project.",
+    "desc": "Tell me about your project - from idea to finished product, I'll help make it happen",
+    "follow_me": "Follow Me",
+    "form_name": "Full Name",
+    "form_email": "Email",
+    "form_message": "Message",
+    "cta": "Send Message",
+    "form_name_placeholder": "Your name...",
+    "form_message_placeholder": "Tell me about your project..."
+  },
+  "scroll_section": {
+    "title_1": "i can",
+    "title_2": "make",
+    "title_3": "your dreams come true.",
+    "items": [
+      "build websites",
+      "build mobile apps",
+      "build AI systems",
+      "design UI/UX",
+      "automate processes",
+      "integrate APIs",
+      "manage databases",
+      "build backends",
+      "deploy to servers",
+      "optimize performance"
+    ]
   }
 }

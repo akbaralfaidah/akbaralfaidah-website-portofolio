@@ -11,14 +11,18 @@
   }
   
   .dark {
-    --color-paper: #2F3135;
+    --color-paper: #1A1A1C;
     --color-charcoal: #FAF8ED;
     --color-brass: #D4A24C;
     --color-mist: #3A3C41;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-paper text-charcoal font-body antialiased transition-colors duration-300;
+    @apply bg-paper text-charcoal font-sans antialiased transition-colors duration-300;
   }
 
   h1, h2, h3, h4, h5, h6 {

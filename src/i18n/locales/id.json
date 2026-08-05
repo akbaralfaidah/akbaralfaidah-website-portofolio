@@ -4,5 +4,110 @@
     "projects": "Projek",
     "experience": "Pengalaman",
     "contact": "Mari Diskusi"
+  },
+  "hero": {
+    "badge": "Terbuka untuk Project Baru",
+    "tagline": "Jasa Pembuatan Website, Aplikasi Mobile & AI Engineer",
+    "headline_1": "Ide jadi produk. Presisi di setiap baris kode.",
+    "headline_2": "Solusi digital yang presisi, rapi, dan berkelas.",
+    "cta_primary": "Mari Diskusi",
+    "cta_secondary": "Lihat Portofolio"
+  },
+  "about": {
+    "heading": "Solusi Digital, Bukan Sekadar Kode.",
+    "desc_1": "Halo, saya <0>Akbar Alfaidah</0> - jasa pembuatan website, aplikasi mobile, dan pengembangan AI di <1>Kota Jambi</1> dan seluruh Indonesia.",
+    "desc_2": "Setiap proyek dikerjakan dengan pendekatan yang sama: presisi teknis dipadukan dengan estetika, menghasilkan sistem yang stabil dan nyaman digunakan.",
+    "desc_3": "Berdomisili di Jambi - bisa diskusi langsung untuk Anda yang satu kota, atau remote untuk klien di luar Jambi. Mari wujudkan proyek Anda.",
+    "trust_highly_trusted": "Terpecaya",
+    "trust_full_stack": "Full-Stack Dev",
+    "trust_web_mobile": "Web & Mobile",
+    "trust_clients": "10+ Klien",
+    "trust_ai": "Kecerdasan Buatan"
+  },
+  "projects": {
+    "eyebrow": "Karya Pilihan",
+    "heading": "Projek Terbaru.",
+    "subheading": "Kumpulan karya digital di mana desain estetika bertemu dengan rekayasa perangkat lunak berpresisi tinggi.",
+    "cta": "Lihat Detail",
+    "bottom_cta": "Lihat Semua Projek",
+    "bosdepot_desc": "Aplikasi POS & Manajemen Gudang terintegrasi hardware (Scanner Barcode, Thermal Printer, Biometrik).",
+    "siskamling_desc": "Sistem Informasi Siskamling berbasis web dengan fitur cetak PDF, export Excel, dan generator QR Code.",
+    "peka_desc": "Platform cerdas dengan integrasi AI (Gemini API) untuk export gambar dan manajemen data dinamis.",
+    "mpp_desc": "Website Mal Pelayanan Publik dengan sistem role & permission (Spatie), export data, dan dashboard analitik.",
+    "simppk_desc": "Sistem Informasi Manajemen Penilaian Prestasi Kerja yang dioptimalkan dengan DOMPDF dan Excel.",
+    "chattask_desc": "Aplikasi web manajemen tugas yang dilengkapi fitur chat, dibangun dengan arsitektur modern dan containerization.",
+    "jokipro_desc": "Platform joki profesional dengan performa tinggi, smooth scrolling (Lenis), dan modern routing.",
+    "siabsen_desc": "Aplikasi absensi berbasis lokasi (Geolocator) yang dilengkapi dengan fitur kamera dan Firebase Cloud."
+  },
+  "experience": {
+    "heading": "Perjalanan Karir",
+    "subheading": "Latar belakang profesional saya dan teknologi yang saya gunakan.",
+    "items": [
+      {
+        "role": "Programmer",
+        "company": "Depot Kayu & Toko Bangunan Esa",
+        "period": "Januari 2026 - Sekarang",
+        "description": "Membangun POS & manajemen inventaris mobile (Flutter/Firebase), serta merancang logika backend kalkulasi stok."
+      },
+      {
+        "role": "Freelance Web & Mobile Developer",
+        "company": "Independent",
+        "period": "Januari 2024 - Sekarang",
+        "description": "Mengerjakan proyek web & aplikasi mobile independen untuk klien UMKM end-to-end."
+      },
+      {
+        "role": "Intern IT Operation",
+        "company": "PT Telkomsel Regional Sumbagsel",
+        "period": "Mei 2025 - Juni 2025",
+        "description": "Merancang prototipe CI/CD Pipeline (GitLab) dan alur kerja Dev-Staging-Production."
+      },
+      {
+        "role": "Full-Stack Web Developer",
+        "company": "Bidik Karier",
+        "period": "Agustus 2024 - November 2024",
+        "description": "Mengembangkan platform E-Learning (LMS) CPNS end-to-end (PHP/MySQL)."
+      },
+      {
+        "role": "Intern IT",
+        "company": "PT PLN UBP Indonesia Power",
+        "period": "Juni 2024 - Juli 2024",
+        "description": "Mengembangkan portal artikel digital dan profil perusahaan untuk efisiensi informasi internal."
+      },
+      {
+        "role": "Web Developer",
+        "company": "INOVASITUS",
+        "period": "Januari 2024 - Januari 2025",
+        "description": "Membangun 7+ website fungsional & responsif untuk klien UMKM (HTML/CSS/JS/Bootstrap)."
+      }
+    ]
+  },
+  "contact": {
+    "heading_1": "Siap Membuat",
+    "heading_2": "Aplikasi mu?",
+    "desc": "Ceritakan project Anda - dari ide sampai jadi produk, saya buat untuk anda.",
+    "follow_me": "Ikuti Saya",
+    "form_name": "Nama Lengkap",
+    "form_email": "Email",
+    "form_message": "Pesan",
+    "cta": "Kirim Pesan",
+    "form_name_placeholder": "Akbar ...",
+    "form_message_placeholder": "Ceritakan tentang proyek Anda..."
+  },
+  "scroll_section": {
+    "title_1": "saya bisa",
+    "title_2": "mewujudkan",
+    "title_3": "impian anda.",
+    "items": [
+      "membuat website",
+      "membuat aplikasi mobile",
+      "membuat kecerdasan buatan",
+      "merancang UI/UX",
+      "mengotomasi proses",
+      "mengintegrasikan API",
+      "mengelola database",
+      "membangun backend",
+      "deploy ke server",
+      "mengoptimalkan performa"
+    ]
   }
 }

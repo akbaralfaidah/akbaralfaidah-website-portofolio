@@ -4,7 +4,7 @@ import Footer from '../components/Footer';
 
 export default function ProjectDetail() {
   const { slug } = useParams();
-  
+
   return (
     <div className="bg-paper min-h-screen text-charcoal">
       <div className="fixed top-6 left-6 z-50">
@@ -14,15 +14,15 @@ export default function ProjectDetail() {
       </div>
 
       <div className="h-[150vh] relative">
-        <ScrollExpandMedia src="/img/hero-section.png" alt="Project detail" />
+        <ScrollExpandMedia src="/img/akbar-2.jpg" alt="Project detail" />
       </div>
 
       <div className="max-w-4xl mx-auto py-24 px-6 relative z-10 bg-paper">
         <h1 className="text-5xl font-display font-bold mb-6">Detail Project: {slug}</h1>
         <div className="prose prose-lg">
           <p>
-            Ini adalah halaman detail untuk project <strong>{slug}</strong>. 
-            Gambar di atas menggunakan efek ScrollExpandMedia di mana saat di-scroll ke bawah, 
+            Ini adalah halaman detail untuk project <strong>{slug}</strong>.
+            Gambar di atas menggunakan efek ScrollExpandMedia di mana saat di-scroll ke bawah,
             gambar akan membesar secara progresif hingga memenuhi layar penuh.
           </p>
         </div>

@@ -1,5 +1,6 @@
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
+import YouCanScroll from '../components/ui/YouCanScroll';
 import About from '../components/About';
 import Projects from '../components/Projects';
 import Experience from '../components/Experience';
@@ -12,6 +13,7 @@ export default function HomePage() {
       <Navbar />
       <main>
         <Hero />
+        <YouCanScroll />
         <About />
         <Projects />
         <Experience />

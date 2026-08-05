@@ -1,93 +1,277 @@
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { 
-  SiReact, SiNodedotjs, SiPython, SiFlutter, SiTailwindcss, SiJavascript, SiTypescript, SiPostgresql 
+  SiReact, SiNodedotjs, SiPython, SiFlutter, SiTailwindcss, SiJavascript, SiTypescript, SiPostgresql,
+  SiNextdotjs, SiVuedotjs, SiExpress, SiNestjs, SiFastapi, SiMongodb, SiDocker, SiKubernetes, SiGitlab, SiGithub, SiGraphql, SiFirebase,
+  SiLaravel, SiCodeigniter, SiSupabase, SiGithubactions
 } from 'react-icons/si';
+import { TbBrain } from 'react-icons/tb';
 
 const EXPERIENCES = [
   {
-    role: "AI Engineer",
-    company: "Tech Startup",
-    period: "2024 - Sekarang",
-    description: "Mengembangkan model machine learning untuk analisis data dan integrasi API AI generatif ke dalam produk inti."
+    role: "Programmer",
+    company: "Depot Kayu & Toko Bangunan Esa",
+    period: "Januari 2026 - Sekarang",
+    description: "Membangun POS & manajemen inventaris mobile (Flutter/Firebase), serta merancang logika backend kalkulasi stok."
   },
   {
-    role: "Mobile Developer",
-    company: "Freelance",
-    period: "2023 - 2024",
-    description: "Membangun berbagai aplikasi mobile cross-platform menggunakan Flutter dan React Native untuk klien UMKM."
+    role: "Freelance Web & Mobile Developer",
+    company: "Independent",
+    period: "Januari 2024 - Sekarang",
+    description: "Mengerjakan proyek web & aplikasi mobile independen untuk klien UMKM end-to-end."
+  },
+  {
+    role: "Intern IT Operation",
+    company: "PT Telkomsel Regional Sumbagsel",
+    period: "Mei 2025 - Juni 2025",
+    description: "Merancang prototipe CI/CD Pipeline (GitLab) dan alur kerja Dev-Staging-Production."
+  },
+  {
+    role: "Full-Stack Web Developer",
+    company: "Bidik Karier",
+    period: "Agustus 2024 - November 2024",
+    description: "Mengembangkan platform E-Learning (LMS) CPNS end-to-end (PHP/MySQL)."
+  },
+  {
+    role: "Intern IT",
+    company: "PT PLN UBP Indonesia Power",
+    period: "Juni 2024 - Juli 2024",
+    description: "Mengembangkan portal artikel digital dan profil perusahaan untuk efisiensi informasi internal."
   },
   {
     role: "Web Developer",
-    company: "Digital Agency",
-    period: "2022 - 2023",
-    description: "Membuat website company profile dan e-commerce dengan performa tinggi dan desain responsif."
+    company: "INOVASITUS",
+    period: "Januari 2024 - Januari 2025",
+    description: "Membangun 7+ website fungsional & responsif untuk klien UMKM (HTML/CSS/JS/Bootstrap)."
   }
 ];
 
-const TECH_STACK = [
-  { name: 'JavaScript', icon: SiJavascript },
-  { name: 'TypeScript', icon: SiTypescript },
-  { name: 'React', icon: SiReact },
-  { name: 'Node.js', icon: SiNodedotjs },
-  { name: 'Tailwind CSS', icon: SiTailwindcss },
-  { name: 'Python', icon: SiPython },
-  { name: 'Flutter', icon: SiFlutter },
-  { name: 'PostgreSQL', icon: SiPostgresql },
+const TECH_CATEGORIES = [
+  {
+    title: "Languages",
+    maxWidth: "max-w-[500px]",
+    skills: [
+      { name: 'JavaScript', icon: SiJavascript, color: '#F7DF1E' },
+      { name: 'TypeScript', icon: SiTypescript, color: '#3178C6' },
+      { name: 'Python', icon: SiPython, color: '#3776AB' },
+    ]
+  },
+  {
+    title: "Frontend & Mobile",
+    maxWidth: "max-w-[500px]", // Forces 3 on top, 2 on bottom
+    skills: [
+      { name: 'React', icon: SiReact, color: '#61DAFB' },
+      { name: 'Next.js', icon: SiNextdotjs, color: '#A0A0A0' },
+      { name: 'Vue.js', icon: SiVuedotjs, color: '#4FC08D' },
+      { name: 'Tailwind CSS', icon: SiTailwindcss, color: '#06B6D4' },
+      { name: 'Flutter', icon: SiFlutter, color: '#02569B' },
+    ]
+  },
+  {
+    title: "Backend & API",
+    maxWidth: "max-w-[650px]", // Forces 4 on top, 3 on bottom
+    skills: [
+      { name: 'Node.js', icon: SiNodedotjs, color: '#339933' },
+      { name: 'Express', icon: SiExpress, color: '#A0A0A0' },
+      { name: 'NestJS', icon: SiNestjs, color: '#E0234E' },
+      { name: 'Laravel', icon: SiLaravel, color: '#FF2D20' },
+      { name: 'CodeIgniter', icon: SiCodeigniter, color: '#EE4323' },
+      { name: 'FastAPI', icon: SiFastapi, color: '#009688' },
+      { name: 'GraphQL', icon: SiGraphql, color: '#E10098' },
+    ]
+  },
+  {
+    title: "Database & Cloud",
+    maxWidth: "max-w-[340px]", // Forces 2 on top, 2 on bottom
+    skills: [
+      { name: 'PostgreSQL', icon: SiPostgresql, color: '#4169E1' },
+      { name: 'MongoDB', icon: SiMongodb, color: '#47A248' },
+      { name: 'Supabase', icon: SiSupabase, color: '#3ECF8E' },
+      { name: 'Firebase', icon: SiFirebase, color: '#FFCA28' },
+    ]
+  },
+  {
+    title: "DevOps & Tools",
+    maxWidth: "max-w-[480px]", // Forces 3 on top, 3 on bottom
+    skills: [
+      { name: 'Docker', icon: SiDocker, color: '#2496ED' },
+      { name: 'Kubernetes', icon: SiKubernetes, color: '#326CE5' },
+      { name: 'GitLab', icon: SiGitlab, color: '#FC6D26' },
+      { name: 'CI/CD', icon: SiGithubactions, color: '#2088FF' },
+      { name: 'GitHub', icon: SiGithub, color: '#A0A0A0' },
+      { name: 'LLMs & AI', icon: TbBrain, color: '#74AA9C' },
+    ]
+  }
 ];
 
 export default function Experience() {
+  const { t } = useTranslation();
+  const experiences = t('experience.items', { returnObjects: true });
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start center", "end center"]
+  });
+  
+  const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
+  const renderTechCard = (tech, key) => (
+    <div 
+      key={key} 
+      className="relative flex flex-row items-center justify-center w-auto px-4 py-3 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl bg-paper dark:bg-[#3A3C41] border border-mist/50 dark:border-[#FAF8ED]/10 shadow-sm hover:-translate-y-2 transition-all duration-300 group cursor-pointer gap-3 z-10 hover:z-20 overflow-hidden"
+      onMouseEnter={(e) => {
+        e.currentTarget.style.boxShadow = `0 15px 30px -10px ${tech.color}70, 0 0 15px 0 ${tech.color}30 inset`;
+        e.currentTarget.style.borderColor = tech.color;
+        const icon = e.currentTarget.querySelector('.icon-svg');
+        if (icon) {
+          icon.style.filter = `drop-shadow(0 0 10px ${tech.color})`;
+          icon.style.transform = 'scale(1.2) rotate(5deg)';
+        }
+        const bg = e.currentTarget.querySelector('.bg-glow');
+        if (bg) {
+          bg.style.opacity = '0.1';
+          bg.style.backgroundColor = tech.color;
+        }
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.boxShadow = '';
+        e.currentTarget.style.borderColor = '';
+        const icon = e.currentTarget.querySelector('.icon-svg');
+        if (icon) {
+          icon.style.filter = '';
+          icon.style.transform = '';
+        }
+        const bg = e.currentTarget.querySelector('.bg-glow');
+        if (bg) {
+          bg.style.opacity = '0';
+          bg.style.backgroundColor = 'transparent';
+        }
+      }}
+    >
+      <div className="bg-glow absolute inset-0 opacity-0 transition-opacity duration-300 pointer-events-none" />
+      
+      <div 
+        className="transition-all duration-300 shrink-0 icon-svg relative z-10"
+        style={{ color: tech.color }}
+      >
+        <tech.icon size={20} className="sm:w-7 sm:h-7" />
+      </div>
+      <span className="text-xs sm:text-sm font-display font-bold tracking-wide text-charcoal dark:text-[#FAF8ED] relative z-10">
+        {tech.name}
+      </span>
+    </div>
+  );
+
   return (
-    <section id="experience" className="py-32 px-6 bg-paper relative overflow-hidden">
+    <section id="experience" className="py-12 md:py-16 lg:py-20 px-6 bg-paper dark:bg-[#1A1A1C] relative overflow-hidden">
+
       <div className="max-w-4xl mx-auto relative z-10">
         <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-5xl font-display font-bold text-charcoal mb-4">Perjalanan Karier</h2>
-          <p className="text-charcoal/70 max-w-2xl mx-auto">Riwayat profesional dan teknologi yang saya kuasai.</p>
+          <h2 className="text-4xl md:text-5xl font-display font-bold text-charcoal dark:text-[#FAF8ED] mb-4">{t('experience.heading')}</h2>
+          <p className="text-charcoal/70 dark:text-[#FAF8ED]/70 max-w-2xl mx-auto">{t('experience.subheading')}</p>
         </div>
         
-        <div className="space-y-12 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-mist before:to-transparent mb-32">
-          {EXPERIENCES.map((exp, idx) => (
-            <div key={idx} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-paper bg-charcoal group-hover:bg-brass transition-colors shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+        <div ref={containerRef} className="space-y-8 md:space-y-12 relative mb-32">
+          <div className="absolute inset-y-0 left-[20px] md:left-1/2 md:-ml-[3px] w-1.5 bg-charcoal/10 dark:bg-[#FAF8ED]/10 rounded-full" />
+          
+          <motion.div 
+            style={{ height: lineHeight }}
+            className="absolute top-0 left-[20px] md:left-1/2 md:-ml-[3px] w-1.5 bg-gradient-to-b from-brass via-brass to-transparent rounded-full origin-top z-0" 
+          />
+
+          {Array.isArray(experiences) && experiences.map((exp, idx) => (
+            <div key={idx} className="relative flex flex-col md:flex-row items-start md:items-center justify-between group is-active">
+              
+              <div className="absolute left-[20px] md:left-1/2 -translate-x-1/2 flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full border-[3px] border-paper bg-charcoal group-hover:bg-brass transition-all duration-500 shadow-xl shrink-0 z-10 group-hover:scale-125">
                 <div className="w-2 h-2 rounded-full bg-paper" />
               </div>
-              <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 bg-paper border border-mist rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex flex-col mb-2">
-                  <span className="font-mono text-sm text-brass mb-1">{exp.period}</span>
-                  <h3 className="font-display font-bold text-xl text-charcoal">{exp.role}</h3>
-                  <span className="text-charcoal/60 font-medium">{exp.company}</span>
+
+
+
+              <div className={`w-[calc(100%-3.5rem)] ml-auto md:ml-0 md:w-[calc(50%-2.5rem)] p-5 md:p-6 bg-paper dark:bg-[#3A3C41] border border-mist dark:border-[#FAF8ED]/10 rounded-2xl shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-1 ${idx % 2 === 0 ? 'md:order-2 md:text-left' : 'md:order-1 md:text-right'}`}>
+                {/* Date Badge Inside Card */}
+                <div className={`inline-block mb-3 px-3 py-1 rounded-full shadow-inner border border-mist dark:border-[#FAF8ED]/10 bg-mist/50 dark:bg-[#FAF8ED]/5`}>
+                  <span className="font-mono text-[11px] md:text-xs text-brass font-bold tracking-wider whitespace-nowrap uppercase">{exp.period}</span>
                 </div>
-                <p className="text-charcoal/80 text-sm leading-relaxed">{exp.description}</p>
+                
+                <div className="flex flex-col mb-2.5">
+                  <h3 className="font-display font-bold text-lg md:text-xl text-charcoal dark:text-[#FAF8ED] mb-1">{exp.role}</h3>
+                  <span className="text-charcoal/60 dark:text-[#FAF8ED]/70 font-medium text-sm md:text-base">{exp.company}</span>
+                </div>
+                <p className="text-charcoal/80 dark:text-[#FAF8ED]/80 leading-relaxed text-sm">{exp.description}</p>
+              </div>
+
+              <div className={`hidden md:block w-[calc(50%-2.5rem)] ${idx % 2 === 0 ? 'order-1' : 'order-2'}`}>
+                {/* Spacer to maintain timeline layout */}
               </div>
             </div>
           ))}
         </div>
 
         {/* Tech Stack Section */}
-        <div className="mb-24">
-          <h3 className="text-2xl font-display font-bold text-charcoal mb-8 text-center">Tech Stack</h3>
-          <div className="flex flex-wrap justify-center gap-6 md:gap-8">
-            {TECH_STACK.map((tech, idx) => (
-              <div key={idx} className="flex flex-col items-center group">
-                <div className="w-16 h-16 rounded-2xl bg-mist/20 flex items-center justify-center text-charcoal/60 group-hover:text-brass group-hover:bg-brass/10 transition-all duration-300 shadow-sm group-hover:shadow-md mb-3 group-hover:-translate-y-2">
-                  <tech.icon size={32} />
+        <div className="mb-32 relative">
+          <h3 className="text-2xl font-display font-bold text-charcoal dark:text-[#FAF8ED] mb-16 text-center">Tech Stack & Tools</h3>
+          
+          <div className="flex flex-col gap-0 max-w-5xl mx-auto">
+            {TECH_CATEGORIES.map((category, catIdx) => (
+              <div key={catIdx} className="relative flex flex-col md:flex-row items-center md:items-stretch w-full border-b border-mist/30 dark:border-[#FAF8ED]/10 py-5 last:border-0 last:pb-0 first:pt-0">
+                <div className="w-full md:w-1/4 flex-shrink-0 text-center md:text-right md:pt-3 md:pr-6 flex items-center md:items-start justify-center md:justify-end">
+                  <h4 className="text-sm font-mono font-bold text-brass/80 dark:text-brass/90 tracking-widest uppercase">
+                    {category.title}
+                  </h4>
                 </div>
-                <span className="text-sm font-mono text-charcoal/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  {tech.name}
-                </span>
+                <div className="w-full md:w-3/4 relative md:border-l-[3px] md:border-brass/50 dark:md:border-brass/50 md:pl-6 mt-3 md:mt-0 pt-1 md:pt-1">
+                  {/* Branch connecting left to the vertical border */}
+                  <div className="hidden md:block absolute top-5 -left-6 w-6 h-[3px] bg-brass/50 dark:bg-brass/50"></div>
+                  
+                  <div className={`flex flex-wrap justify-center md:justify-start gap-2.5 md:gap-3 ${category.maxWidth || ''}`}>
+                    {category.skills.map((tech, idx) => renderTechCard(tech, `${catIdx}-${idx}`))}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
         </div>
 
         {/* GitHub Activity Section */}
-        <div className="bg-charcoal/5 rounded-3xl p-8 border border-mist/50">
-          <h3 className="text-2xl font-display font-bold text-charcoal mb-6 text-center">GitHub Activity</h3>
-          <div className="w-full overflow-x-auto overflow-y-hidden hide-scrollbar flex justify-center">
-            {/* The URL for ghchart. Using a fallback styling to ensure it looks okay in dark/light mode */}
-            <img 
-              src="https://ghchart.rshah.org/akbaralfaidah" 
-              alt="Akbar Alfaidah's GitHub Activity Graph" 
-              className="min-w-[700px] opacity-80 hover:opacity-100 transition-opacity dark:invert dark:hue-rotate-180"
-            />
+        <div className="flex justify-center max-w-4xl mx-auto">
+          <div className="w-full max-w-2xl bg-paper dark:bg-[#3A3C41] rounded-[2rem] p-6 sm:p-8 border border-mist dark:border-[#FAF8ED]/10 shadow-xl hover:shadow-2xl transition-all duration-500">
+            {/* Header */}
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+              <div className="flex items-center gap-3">
+                <SiGithub size={24} className="text-charcoal dark:text-[#FAF8ED]" />
+                <h3 className="text-xl font-display font-bold text-charcoal dark:text-[#FAF8ED]">GitHub Contributions</h3>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/20">
+                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                <span className="text-[10px] font-mono font-bold text-green-600 dark:text-green-400 uppercase tracking-widest">Active</span>
+              </div>
+            </div>
+
+            {/* Username Badge */}
+            <a 
+              href="https://github.com/akbaralfaidah" 
+              target="_blank" 
+              rel="noreferrer"
+              className="group flex items-center justify-center gap-2 w-full py-3 mb-8 rounded-xl bg-mist/20 dark:bg-charcoal/30 hover:bg-mist/50 dark:hover:bg-charcoal/50 border border-mist/50 dark:border-[#FAF8ED]/5 transition-colors"
+            >
+              <span className="font-mono text-sm font-semibold text-charcoal/80 dark:text-[#FAF8ED]/80 group-hover:text-brass transition-colors">
+                @akbaralfaidah
+              </span>
+              <span className="text-charcoal/40 group-hover:text-brass transition-all opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transform duration-300">
+                ↗
+              </span>
+            </a>
+
+            {/* Graph Container */}
+            <div className="w-full overflow-x-auto overflow-y-hidden hide-scrollbar flex justify-center pb-2">
+              <img 
+                src="https://ghchart.rshah.org/akbaralfaidah" 
+                alt="Akbar Alfaidah's GitHub Activity Graph" 
+                className="min-w-[700px] opacity-90 hover:opacity-100 transition-opacity dark:invert dark:hue-rotate-180"
+              />
+            </div>
           </div>
         </div>
       </div>
