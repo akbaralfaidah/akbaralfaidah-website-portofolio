@@ -109,5 +109,52 @@
       "deploy to servers",
       "optimize performance"
     ]
+  },
+  "testimonials": {
+    "eyebrow": "Testimonials",
+    "heading": "What Clients Say.",
+    "subheading": "Real feedback from those who have worked with me on digital projects.",
+    "cards": [
+      {
+        "username": "M*****n N*****h",
+        "handle": "@siabsen_client",
+        "content": "Okay bro,,,, Sorry for the late review,, so for the service and results it's very satisfying,, thanks for your help bro",
+        "date": "May 30, 2026",
+        "likes": 12,
+        "retweets": 2
+      },
+      {
+        "username": "Ahmad",
+        "handle": "@simppk_client",
+        "content": "Alright bro, Joki Pro is awesome, work finished quickly, data is precise and accurate",
+        "date": "May 30, 2026",
+        "likes": 24,
+        "retweets": 5
+      },
+      {
+        "username": "Monika",
+        "handle": "@survey_client",
+        "content": "⭐⭐⭐⭐⭐ 5 stars bro",
+        "date": "May 29, 2026",
+        "likes": 8,
+        "retweets": 0
+      },
+      {
+        "username": "Budi Santoso",
+        "handle": "@pos_client",
+        "content": "The application runs smoothly without any bugs. The thermal printer integration works perfectly as requested. Highly recommended!",
+        "date": "May 15, 2026",
+        "likes": 45,
+        "retweets": 12
+      },
+      {
+        "username": "Siti Aminah",
+        "handle": "@company_client",
+        "content": "The design is incredibly elegant and the development was very fast. Communication was friendly and easy to understand. Exceeded expectations!",
+        "date": "May 10, 2026",
+        "likes": 89,
+        "retweets": 34
+      }
+    ]
   }
 }

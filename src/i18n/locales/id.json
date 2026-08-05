@@ -109,5 +109,52 @@
       "deploy ke server",
       "mengoptimalkan performa"
     ]
+  },
+  "testimonials": {
+    "eyebrow": "Ulasan Klien",
+    "heading": "Apa Kata Mereka.",
+    "subheading": "Umpan balik nyata dari klien yang telah bekerja sama dengan saya.",
+    "cards": [
+      {
+        "username": "M*****n N*****h",
+        "handle": "@klien_siabsen",
+        "content": "Okee kk,,,, Maaf sebelumnya karena telat kasih ulasan,, jadi untuk layanan dan hasilnya sangat memuaskan,, trimakasih atas bantuannya kk",
+        "date": "30 Mei 2026",
+        "likes": 12,
+        "retweets": 2
+      },
+      {
+        "username": "Ahmad",
+        "handle": "@klien_simppk",
+        "content": "Baik kak, Joki Pro Mantap, kerja selesai cepat, data tepat dan akurat",
+        "date": "30 Mei 2026",
+        "likes": 24,
+        "retweets": 5
+      },
+      {
+        "username": "Monika",
+        "handle": "@klien_survey",
+        "content": "⭐⭐⭐⭐⭐ 5 bintang kak",
+        "date": "29 Mei 2026",
+        "likes": 8,
+        "retweets": 0
+      },
+      {
+        "username": "Budi Santoso",
+        "handle": "@klien_pos",
+        "content": "Aplikasinya berjalan lancar tanpa bug, fitur struk kasir juga berfungsi sempurna sesuai permintaan. Sangat direkomendasikan!",
+        "date": "15 Mei 2026",
+        "likes": 45,
+        "retweets": 12
+      },
+      {
+        "username": "Siti Aminah",
+        "handle": "@klien_company",
+        "content": "Desainnya luar biasa elegan dan pengerjaannya sangat cepat. Komunikasi juga ramah dan mudah dipahami. Hasilnya melebihi ekspektasi!",
+        "date": "10 Mei 2026",
+        "likes": 89,
+        "retweets": 34
+      }
+    ]
   }
 }

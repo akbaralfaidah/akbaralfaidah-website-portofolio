@@ -5,7 +5,8 @@ import {
   SiReact, SiNextdotjs, SiVuedotjs, SiTailwindcss, SiFlutter,
   SiNodedotjs, SiExpress, SiNestjs, SiLaravel, SiCodeigniter, SiFastapi, SiGraphql,
   SiPostgresql, SiMongodb, SiSupabase, SiFirebase,
-  SiDocker, SiKubernetes, SiGitlab, SiGithubactions
+  SiDocker, SiKubernetes, SiGitlab, SiGithubactions,
+  SiFigma, SiFramer
 } from 'react-icons/si';
 
 const BASE_LOGOS = [
@@ -32,6 +33,8 @@ const BASE_LOGOS = [
   { icon: SiKubernetes, color: '#326CE5' },
   { icon: SiGitlab, color: '#FC6D26' },
   { icon: SiGithubactions, color: '#2088FF' },
+  { icon: SiFigma, color: '#F24E1E' },
+  { icon: SiFramer, color: 'currentColor' },
 ];
 
 const wrap = (min, max, v) => {
