@@ -82,8 +82,15 @@ const ThemeToggle = ({ theme, toggleTheme }) => {
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [hoveredNav, setHoveredNav] = useState(null);
   const { t, i18n } = useTranslation();
   const { theme, toggleTheme } = useTheme();
+
+  const navItems = [
+    { id: 'about', label: t('nav.about') },
+    { id: 'projects', label: t('nav.projects') },
+    { id: 'experience', label: t('nav.experience') },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -141,10 +148,26 @@ export default function Navbar() {
             </button>
           </div>
 
-          <div className="hidden md:flex items-center space-x-8 text-base font-medium text-charcoal dark:text-[#F2F0E8] bg-[#FAFAFA]/50 dark:bg-[#1A1A1C]/50 border border-charcoal/10 dark:border-white/10 px-8 py-2.5 rounded-full">
-            <a href="#about" onClick={(e) => handleNavClick(e, '#about')} className="hover:opacity-70 transition-opacity">{t('nav.about')}</a>
-            <a href="#projects" onClick={(e) => handleNavClick(e, '#projects')} className="hover:opacity-70 transition-opacity">{t('nav.projects')}</a>
-            <a href="#experience" onClick={(e) => handleNavClick(e, '#experience')} className="hover:opacity-70 transition-opacity">{t('nav.experience')}</a>
+          <div className="hidden md:flex items-center space-x-1 text-base font-medium text-charcoal dark:text-[#F2F0E8] bg-[#FAFAFA]/50 dark:bg-[#1A1A1C]/50 border border-charcoal/10 dark:border-white/10 px-3 py-1.5 rounded-full relative">
+            {navItems.map((item) => (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                onClick={(e) => handleNavClick(e, `#${item.id}`)}
+                onMouseEnter={() => setHoveredNav(item.id)}
+                onMouseLeave={() => setHoveredNav(null)}
+                className="relative px-4 py-1.5 rounded-full transition-colors z-10 text-charcoal/80 dark:text-[#F2F0E8]/80 hover:text-charcoal dark:hover:text-white"
+              >
+                {hoveredNav === item.id && (
+                  <motion.div
+                    layoutId="nav-pill"
+                    className="absolute inset-0 bg-charcoal/5 dark:bg-white/10 rounded-full z-0"
+                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10">{item.label}</span>
+              </a>
+            ))}
           </div>
 
           <div className="flex items-center space-x-3 md:space-x-4">
