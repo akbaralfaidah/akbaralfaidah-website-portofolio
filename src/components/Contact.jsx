@@ -139,7 +139,7 @@ export default function Contact() {
 
   const handleWhatsApp = () => {
     const { name, whatsapp, message, deadline } = formData;
-    const waTarget = '62881080245045';
+    const waTarget = import.meta.env.VITE_WHATSAPP_NUMBER || '62881080245045';
 
     const lines = [
       `Halo Akbar! \uD83D\uDC4B\uD83C\uDFFB `,
@@ -218,7 +218,7 @@ export default function Contact() {
                     </div>
                     <div>
                       <p className="text-sm font-medium text-charcoal/70 dark:text-[#F2F0E8]/70 mb-1">Email</p>
-                      <p className="font-medium text-charcoal dark:text-[#F2F0E8]">akbaralfaidahohs@gmail.com</p>
+                      <p className="font-medium text-charcoal dark:text-[#F2F0E8]">{import.meta.env.VITE_CONTACT_EMAIL}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">

@@ -217,7 +217,7 @@ export default function Navbar() {
             </div>
 
             <div className={`absolute bottom-12 left-10 flex space-x-6 text-sm font-medium opacity-60 ${theme === 'dark' ? 'text-[#F2F0E8]' : 'text-charcoal'}`}>
-              <a href="mailto:akbaralfaidahohs@gmail.com" className="hover:text-brass transition-colors">Email</a>
+              <a href={`mailto:${import.meta.env.VITE_CONTACT_EMAIL || 'akbaralfaidahohs@gmail.com'}`} className="hover:text-brass transition-colors">Email</a>
               <a href="https://github.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="hover:text-brass transition-colors">GitHub</a>
               <a href="https://linkedin.com/in/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="hover:text-brass transition-colors">LinkedIn</a>
             </div>
