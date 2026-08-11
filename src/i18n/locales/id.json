@@ -90,11 +90,24 @@
     "form_whatsapp": "Nomor WhatsApp",
     "form_whatsapp_placeholder": "08xx xxxx xxxx",
     "form_email": "Email",
-    "form_optional": "opsional",
     "form_message": "Pengen Buat Apa?",
     "cta": "Kirim Pesan",
+    "cta_sending": "Mengirim...",
     "form_name_placeholder": "Akbar ...",
-    "form_message_placeholder": "Ceritakan tentang proyek Anda..."
+    "form_message_placeholder": "Ceritakan tentang proyek Anda...",
+    "validation": {
+      "name": "Nama wajib diisi (minimal 2 karakter)",
+      "wa_invalid": "Nomor WhatsApp harus berupa angka saja, tidak boleh huruf",
+      "wa_length": "Nomor WhatsApp harus 10-15 digit",
+      "email_empty": "Email wajib diisi",
+      "email_invalid": "Format email tidak valid",
+      "message": "Pesan wajib diisi (minimal 10 karakter)"
+    },
+    "toast": {
+      "wa_success": "WhatsApp terbuka! Silakan kirim pesan yang sudah terformat 🚀",
+      "email_success": "Pesan berhasil dikirim ke email Akbar! Terima kasih, saya akan segera membalas 🎉",
+      "email_error": "Gagal mengirim email. Silakan coba lagi atau hubungi via WhatsApp."
+    }
   },
   "scroll_section": {
     "title_1": "saya bisa",

@@ -90,11 +90,24 @@
     "form_whatsapp": "WhatsApp Number",
     "form_whatsapp_placeholder": "08xx xxxx xxxx",
     "form_email": "Email",
-    "form_optional": "optional",
     "form_message": "What Do You Want to Build?",
     "cta": "Send Message",
+    "cta_sending": "Sending...",
     "form_name_placeholder": "Your name...",
-    "form_message_placeholder": "Tell me about your project..."
+    "form_message_placeholder": "Tell me about your project...",
+    "validation": {
+      "name": "Name is required (at least 2 characters)",
+      "wa_invalid": "WhatsApp number must contain digits only, no letters",
+      "wa_length": "WhatsApp number must be 10-15 digits",
+      "email_empty": "Email is required",
+      "email_invalid": "Invalid email format",
+      "message": "Message is required (at least 10 characters)"
+    },
+    "toast": {
+      "wa_success": "WhatsApp opened! Please send the pre-formatted message 🚀",
+      "email_success": "Message sent to Akbar's email! Thank you, I'll reply shortly 🎉",
+      "email_error": "Failed to send email. Please try again or reach out via WhatsApp."
+    }
   },
   "scroll_section": {
     "title_1": "i can",
