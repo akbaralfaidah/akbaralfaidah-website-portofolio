@@ -1,20 +1,12 @@
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FiArrowRight } from 'react-icons/fi';
 import AnimatedButton from './ui/AnimatedButton';
 import { TechLogoMarquee } from './ui/TechLogoMarquee';
 
-const projects = [
-  { name: 'BosDepot', src: '/img/Katalog- Proyek/bosdepot.svg' },
-  { name: 'ChatTask', src: '/img/Katalog- Proyek/chattask.svg' },
-  { name: 'JokiPro', src: '/img/Katalog- Proyek/jokipro.svg' },
-  { name: 'MPP', src: '/img/Katalog- Proyek/mpp.svg' },
-  { name: 'PEKA', src: '/img/Katalog- Proyek/peka.svg' },
-  { name: 'SiAbsen', src: '/img/Katalog- Proyek/siabsen.svg' },
-  { name: 'SimPPK', src: '/img/Katalog- Proyek/simppk.svg' },
-  { name: 'Siskamling', src: '/img/Katalog- Proyek/siskamling.svg' },
-];
+import { projects } from '../data/projects';
 
 // --- Helpers ---
 function lerp(a, b, t) { return a + (b - a) * t; }
@@ -174,15 +166,18 @@ function OrbitColumn() {
             transformOrigin: 'top left',
           }}
         >
-          <div className="w-full h-full rounded-2xl overflow-hidden shadow-md border border-charcoal/6 dark:border-paper/6 bg-paper dark:bg-[#3A3C41]">
+          <Link to={`/project/${p.slug}`} className="block w-full h-full rounded-2xl overflow-hidden shadow-md border border-charcoal/6 dark:border-paper/6 bg-paper dark:bg-[#3A3C41] group">
+            <div className="absolute inset-0 bg-charcoal/20 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center">
+              <span className="text-white font-medium px-4 py-2 bg-charcoal/50 rounded-full backdrop-blur-sm">View Project</span>
+            </div>
             <img
               src={p.src}
               alt={p.name}
               loading="eager"
               draggable="false"
-              className="w-full h-full object-cover object-top block pointer-events-none select-none"
+              className="w-full h-full object-cover object-top block pointer-events-none select-none group-hover:scale-105 transition-transform duration-500"
             />
-          </div>
+          </Link>
         </div>
       ))}
     </div>
@@ -220,12 +215,15 @@ function MobileCarousel() {
       onTouchEnd={() => { pausedRef.current = false; }}>
       <div ref={trackRef} className="flex gap-4" style={{ willChange: 'transform' }}>
         {items.map((p, i) => (
-          <div key={`${p.name}-${i}`}
-            className="flex-shrink-0 rounded-2xl overflow-hidden shadow-sm border border-charcoal/6 dark:border-paper/6 bg-paper dark:bg-[#3A3C41]"
+          <Link key={`${p.name}-${i}`} to={`/project/${p.slug}`}
+            className="block flex-shrink-0 rounded-2xl overflow-hidden shadow-sm border border-charcoal/6 dark:border-paper/6 bg-paper dark:bg-[#3A3C41] relative group"
             style={{ width: '300px', height: '169px' }}>
+            <div className="absolute inset-0 bg-charcoal/20 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center">
+              <span className="text-white text-sm font-medium px-4 py-1.5 bg-charcoal/50 rounded-full backdrop-blur-sm">View</span>
+            </div>
             <img src={p.src} alt={p.name} loading="lazy" draggable="false"
-              className="w-full h-full object-cover object-top block pointer-events-none" />
-          </div>
+              className="w-full h-full object-cover object-top block pointer-events-none group-hover:scale-105 transition-transform duration-500" />
+          </Link>
         ))}
       </div>
     </div>
