@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { FiMail, FiMapPin, FiGithub, FiLinkedin, FiInstagram, FiSend, FiChevronDown } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 import emailjs from '@emailjs/browser';
+import { Turnstile } from '@marsidev/react-turnstile';
 import AnimatedButton from './ui/AnimatedButton';
 import Toast from './ui/Toast';
 
@@ -17,6 +18,8 @@ export default function Contact() {
   const [formData, setFormData] = useState({ name: '', whatsapp: '', email: '', message: '', deadline: '' });
   const [toast, setToast] = useState(null);
   const [isSending, setIsSending] = useState(false);
+  const [honeypot, setHoneypot] = useState('');
+  const [turnstileToken, setTurnstileToken] = useState(null);
 
   const showToast = (message, type = 'error') => {
     setToast({ message, type });
@@ -111,6 +114,18 @@ export default function Contact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Honeypot trap: if filled, it's 100% a bot. Fake a success!
+    if (honeypot) {
+      showToast(mode === 'wa' ? t('contact.toast.wa_success') : t('contact.toast.email_success'), 'success');
+      return;
+    }
+
+    if (!turnstileToken) {
+      showToast('Mohon selesaikan verifikasi keamanan (Anti-Spam) terlebih dahulu.', 'error');
+      return;
+    }
+
     if (!validate()) return;
     if (!checkRateLimit()) return;
 
@@ -350,6 +365,32 @@ export default function Contact() {
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     />
+                  </div>
+
+                  {/* Honeypot Field (Invisible to users) */}
+                  <div style={{ display: 'none' }} aria-hidden="true">
+                    <label htmlFor="website_url">Website URL</label>
+                    <input
+                      type="text"
+                      id="website_url"
+                      name="website_url"
+                      tabIndex="-1"
+                      autoComplete="off"
+                      value={honeypot}
+                      onChange={(e) => setHoneypot(e.target.value)}
+                    />
+                  </div>
+
+                  {/* Cloudflare Turnstile Widget */}
+                  <div className="pt-2">
+                    <Turnstile 
+                      siteKey="1x00000000000000000000AA" 
+                      onSuccess={(token) => setTurnstileToken(token)}
+                      options={{ theme: 'auto' }}
+                    />
+                    <p className="text-[10px] text-charcoal/40 dark:text-[#F2F0E8]/40 mt-1">
+                      Dilindungi oleh Cloudflare Turnstile
+                    </p>
                   </div>
 
                   <AnimatedButton
