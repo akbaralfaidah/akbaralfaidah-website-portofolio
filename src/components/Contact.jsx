@@ -81,17 +81,19 @@ export default function Contact() {
     const waTarget = '62881080245045';
 
     const lines = [
-      `*=========================*`,
-      `*PESAN BARU - PORTOFOLIO*`,
-      `*=========================*`,
+      `Halo Mas Akbar! 👋`,
+      `Saya tertarik untuk menggunakan layanan Anda. Boleh minta Estimasi Harga dan waktu pengerjaannya?`,
       ``,
-      `*Nama:* ${name}`,
-      `*WhatsApp:* ${whatsapp}`,
+      `Berikut detail pesanan saya:`,
+      `👤 *Nama:* ${name}`,
+      `📱 *WhatsApp:* ${whatsapp}`,
+      `🏫 *Status:* (SMP / SMA / Mahasiswa / Umum) - isi disini...`,
+      `📝 *Layanan:* (Makalah / Rapihin Dokumen / Project IT / Machine Learning / Skripsi) - isi disini...`,
+      `📌 *Detail Tugas:*`,
+      `${message}`,
+      `⏰ *Deadline (Target Selesai):* - isi disini...`,
       ``,
-      `*Keperluan:*`,
-      `_${message}_`,
-      ``,
-      `~Dikirim otomatis dari akbaralfaidah.com~`,
+      `Ditunggu balasannya ya, terima kasih! 🚀`,
     ];
 
     const text = encodeURIComponent(lines.join('\n'));
