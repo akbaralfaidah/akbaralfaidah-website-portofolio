@@ -260,7 +260,7 @@ export default function Hero() {
       <div className="max-w-[1400px] mx-auto px-6 w-full grid grid-cols-1 md:grid-cols-[1fr_1.1fr] gap-6 items-center">
 
         {/* ===== LEFT: Text & Marquees ===== */}
-        <motion.div 
+        <motion.div
           className="relative flex flex-col gap-6 md:gap-8 z-10 max-w-xl"
         >
 
@@ -343,7 +343,7 @@ export default function Hero() {
         </motion.div>
 
         {/* ===== RIGHT: Orbit Carousel / Mobile Carousel ===== */}
-        <motion.div 
+        <motion.div
           className="relative z-0 w-full"
         >
           <div className="hidden md:block relative" style={{ height: '85vh', maxHeight: '750px', minHeight: '520px' }}>

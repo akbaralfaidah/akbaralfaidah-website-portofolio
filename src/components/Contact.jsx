@@ -71,9 +71,48 @@ export default function Contact() {
     return true;
   };
 
+  const checkRateLimit = () => {
+    const limitData = JSON.parse(localStorage.getItem('contact_limit') || '{"count":0, "lastSent":0}');
+    const now = Date.now();
+    const cooldownMs = 60 * 1000; // 60 seconds
+    const dailyMs = 24 * 60 * 60 * 1000; // 24 hours
+
+    if (now - limitData.lastSent > dailyMs) {
+      limitData.count = 0;
+    }
+
+    if (limitData.count >= 3) {
+      showToast('Batas harian tercapai. Maksimal 3 pesan per hari.', 'error');
+      return false;
+    }
+
+    if (now - limitData.lastSent < cooldownMs) {
+      const waitSecs = Math.ceil((cooldownMs - (now - limitData.lastSent)) / 1000);
+      showToast(`Tunggu ${waitSecs} detik sebelum mengirim lagi.`, 'error');
+      return false;
+    }
+
+    return true;
+  };
+
+  const updateRateLimit = () => {
+    const limitData = JSON.parse(localStorage.getItem('contact_limit') || '{"count":0, "lastSent":0}');
+    const now = Date.now();
+    const dailyMs = 24 * 60 * 60 * 1000;
+    
+    if (now - limitData.lastSent > dailyMs) {
+      limitData.count = 0;
+    }
+    
+    limitData.count += 1;
+    limitData.lastSent = now;
+    localStorage.setItem('contact_limit', JSON.stringify(limitData));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
+    if (!checkRateLimit()) return;
 
     if (mode === 'wa') {
       handleWhatsApp();
@@ -104,6 +143,7 @@ export default function Contact() {
     window.open(`https://wa.me/${waTarget}?text=${text}`, '_blank');
     showToast(t('contact.toast.wa_success'), 'success');
     setFormData({ name: '', whatsapp: '', email: '', message: '', deadline: '' });
+    updateRateLimit();
   };
 
   const handleEmail = async () => {
@@ -123,6 +163,7 @@ export default function Contact() {
       );
       showToast(t('contact.toast.email_success'), 'success');
       setFormData({ name: '', whatsapp: '', email: '', message: '', deadline: '' });
+      updateRateLimit();
     } catch {
       showToast(t('contact.toast.email_error'), 'error');
     } finally {
