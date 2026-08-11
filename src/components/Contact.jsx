@@ -14,7 +14,7 @@ const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY'; // Replace after setup
 export default function Contact() {
   const { t } = useTranslation();
   const [mode, setMode] = useState('wa'); // 'wa' or 'email'
-  const [formData, setFormData] = useState({ name: '', whatsapp: '', email: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', whatsapp: '', email: '', message: '', deadline: '' });
   const [toast, setToast] = useState(null);
   const [isSending, setIsSending] = useState(false);
 
@@ -23,7 +23,7 @@ export default function Contact() {
   };
 
   const validate = () => {
-    const { name, whatsapp, email, message } = formData;
+    const { name, whatsapp, email, message, deadline } = formData;
 
     // Name validation
     if (!name.trim() || name.trim().length < 2) {
@@ -62,6 +62,12 @@ export default function Contact() {
       return false;
     }
 
+    // Deadline validation
+    if (!deadline) {
+      showToast(t('contact.validation.deadline'));
+      return false;
+    }
+
     return true;
   };
 
@@ -77,7 +83,7 @@ export default function Contact() {
   };
 
   const handleWhatsApp = () => {
-    const { name, whatsapp, message } = formData;
+    const { name, whatsapp, message, deadline } = formData;
     const waTarget = '62881080245045';
 
     const lines = [
@@ -87,11 +93,9 @@ export default function Contact() {
       `Berikut detail pesanan saya:`,
       `👤 *Nama:* ${name}`,
       `📱 *WhatsApp:* ${whatsapp}`,
-      `🏫 *Status:* (SMP / SMA / Mahasiswa / Umum) - isi disini...`,
-      `📝 *Layanan:* (Makalah / Rapihin Dokumen / Project IT / Machine Learning / Skripsi) - isi disini...`,
       `📌 *Detail Tugas:*`,
       `${message}`,
-      `⏰ *Deadline (Target Selesai):* - isi disini...`,
+      `⏰ *Deadline (Target Selesai):* ${t(`contact.form_deadline_options.${deadline}`)}`,
       ``,
       `Ditunggu balasannya ya, terima kasih! 🚀`,
     ];
@@ -99,7 +103,7 @@ export default function Contact() {
     const text = encodeURIComponent(lines.join('\n'));
     window.open(`https://wa.me/${waTarget}?text=${text}`, '_blank');
     showToast(t('contact.toast.wa_success'), 'success');
-    setFormData({ name: '', whatsapp: '', email: '', message: '' });
+    setFormData({ name: '', whatsapp: '', email: '', message: '', deadline: '' });
   };
 
   const handleEmail = async () => {
@@ -112,12 +116,13 @@ export default function Contact() {
           from_name: formData.name,
           from_email: formData.email,
           message: formData.message,
+          deadline: t(`contact.form_deadline_options.${formData.deadline}`),
           to_name: 'Akbar Alfaidah',
         },
         EMAILJS_PUBLIC_KEY
       );
       showToast(t('contact.toast.email_success'), 'success');
-      setFormData({ name: '', whatsapp: '', email: '', message: '' });
+      setFormData({ name: '', whatsapp: '', email: '', message: '', deadline: '' });
     } catch {
       showToast(t('contact.toast.email_error'), 'error');
     } finally {
@@ -277,6 +282,27 @@ export default function Contact() {
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     />
+                  </div>
+
+                  {/* Deadline Dropdown */}
+                  <div className="space-y-2">
+                    <label htmlFor="deadline" className="text-sm font-medium text-charcoal/70 dark:text-[#F2F0E8]/70">
+                      {t('contact.form_deadline')}
+                    </label>
+                    <select
+                      id="deadline"
+                      className="w-full bg-transparent border-b-2 border-charcoal/15 dark:border-[#F2F0E8]/15 focus:border-brass py-3 outline-none transition-colors text-charcoal dark:text-[#F2F0E8] font-medium appearance-none"
+                      value={formData.deadline}
+                      onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
+                    >
+                      <option value="" disabled className="text-charcoal/50 bg-paper dark:bg-charcoal dark:text-white">
+                        {t('contact.form_deadline_placeholder')}
+                      </option>
+                      <option value="santai" className="bg-paper dark:bg-charcoal dark:text-white">{t('contact.form_deadline_options.santai')}</option>
+                      <option value="normal" className="bg-paper dark:bg-charcoal dark:text-white">{t('contact.form_deadline_options.normal')}</option>
+                      <option value="cepat" className="bg-paper dark:bg-charcoal dark:text-white">{t('contact.form_deadline_options.cepat')}</option>
+                      <option value="kilat" className="bg-paper dark:bg-charcoal dark:text-white">{t('contact.form_deadline_options.kilat')}</option>
+                    </select>
                   </div>
 
                   <AnimatedButton

@@ -91,6 +91,14 @@
     "form_whatsapp_placeholder": "08xx xxxx xxxx",
     "form_email": "Email",
     "form_message": "Pengen Buat Apa?",
+    "form_deadline": "Deadline (Target Selesai)",
+    "form_deadline_placeholder": "Pilih Deadline",
+    "form_deadline_options": {
+      "santai": "Santai (1-2 Minggu)",
+      "normal": "Normal (3-5 Hari)",
+      "cepat": "Cepat (1-2 Hari)",
+      "kilat": "Kilat (< 24 Jam)"
+    },
     "cta": "Kirim Pesan",
     "cta_sending": "Mengirim...",
     "form_name_placeholder": "Akbar ...",
@@ -101,7 +109,8 @@
       "wa_length": "Nomor WhatsApp harus 10-15 digit",
       "email_empty": "Email wajib diisi",
       "email_invalid": "Format email tidak valid",
-      "message": "Pesan wajib diisi (minimal 10 karakter)"
+      "message": "Pesan wajib diisi (minimal 10 karakter)",
+      "deadline": "Pilih salah satu deadline"
     },
     "toast": {
       "wa_success": "WhatsApp terbuka! Silakan kirim pesan yang sudah terformat 🚀",

@@ -91,6 +91,14 @@
     "form_whatsapp_placeholder": "08xx xxxx xxxx",
     "form_email": "Email",
     "form_message": "What Do You Want to Build?",
+    "form_deadline": "Deadline (Target Completion)",
+    "form_deadline_placeholder": "Select Deadline",
+    "form_deadline_options": {
+      "santai": "Relaxed (1-2 Weeks)",
+      "normal": "Normal (3-5 Days)",
+      "cepat": "Fast (1-2 Days)",
+      "kilat": "Urgent (< 24 Hours)"
+    },
     "cta": "Send Message",
     "cta_sending": "Sending...",
     "form_name_placeholder": "Your name...",
@@ -101,7 +109,8 @@
       "wa_length": "WhatsApp number must be 10-15 digits",
       "email_empty": "Email is required",
       "email_invalid": "Invalid email format",
-      "message": "Message is required (at least 10 characters)"
+      "message": "Message is required (at least 10 characters)",
+      "deadline": "Please select a deadline"
     },
     "toast": {
       "wa_success": "WhatsApp opened! Please send the pre-formatted message 🚀",
