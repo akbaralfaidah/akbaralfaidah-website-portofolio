@@ -7,6 +7,7 @@ export const projects = [
     client: 'PT BosDepot Indonesia',
     year: '2025',
     role: 'Lead Frontend Developer',
+    url: 'https://bosdepot.com',
     techStack: ['React', 'TailwindCSS', 'Redux', 'Framer Motion'],
     challenge: 'Membangun platform supply chain material bangunan yang mampu menangani ribuan transaksi harian tanpa lag. Tantangan utamanya adalah membuat UI yang kompleks menjadi sangat sederhana dan intuitif bagi pengguna lapangan.',
     solution: 'Kami merancang arsitektur micro-frontend dan mengimplementasikan virtualisasi list untuk memastikan performa tetap maksimal meski memuat ribuan baris data katalog. UI dibuat dengan pendekatan "Mobile-First" yang sangat bersahabat untuk layar sentuh.'
@@ -19,6 +20,7 @@ export const projects = [
     client: 'Internal Product',
     year: '2024',
     role: 'Fullstack Developer',
+    url: 'https://chattask.app',
     techStack: ['Next.js', 'Socket.io', 'PostgreSQL', 'Prisma'],
     challenge: 'ChatTask membutuhkan sistem real-time yang bisa mensinkronkan pesan chat sekaligus manajemen tugas (to-do list) antar puluhan anggota tim secara instan tanpa delay atau konflik data.',
     solution: 'Menggunakan WebSockets (Socket.io) untuk sinkronisasi dua arah yang instan, ditambah optimistic UI updates di sisi frontend agar aplikasi terasa sangat cepat.'
@@ -31,6 +33,7 @@ export const projects = [
     client: 'Startup JokiPro',
     year: '2024',
     role: 'UI/UX Designer & Frontend',
+    url: 'https://jokipro.com',
     techStack: ['Vue.js', 'SCSS', 'GSAP'],
     challenge: 'Mendesain ulang platform yang sebelumnya terlihat membosankan menjadi platform yang energik dan disukai oleh target pasar anak muda / Gen Z.',
     solution: 'Memasukkan elemen desain brutalist modern dengan animasi GSAP yang playful, serta skema warna yang berani untuk memikat perhatian langsung dari detik pertama.'
@@ -67,6 +70,7 @@ export const projects = [
     client: 'Universitas Lokal',
     year: '2025',
     role: 'Frontend Developer',
+    url: 'https://siabsen.univ.edu',
     techStack: ['React', 'Vite', 'TailwindCSS'],
     challenge: 'Menggantikan sistem absensi fingerprint lama dengan sistem absensi berbasis lokasi (Geofencing) dan deteksi wajah ringan via browser web.',
     solution: 'Memanfaatkan HTML5 Geolocation API dan library face-api.js versi teringan untuk memverifikasi kehadiran mahasiswa secara real-time langsung dari smartphone mereka tanpa perlu instalasi aplikasi.'
