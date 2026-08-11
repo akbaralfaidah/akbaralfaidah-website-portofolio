@@ -83,7 +83,7 @@ export const projects = [
     url: 'https://siabsen.univ.edu',
     categories: ['Mobile Apps'],
     shortDescription: 'Sistem absensi mahasiswa berbasis Geofencing untuk mencegah kecurangan presensi kelas.',
-    techStack: ['React Native', 'Geolocation API', 'TailwindCSS'],
+    techStack: ['Flutter', 'Firebase', 'Geofencing'],
     challenge: 'Proses absensi mahasiswa di mata kuliah rawan kecurangan (titip absen) jika hanya menggunakan metode konvensional.',
     solution: 'Mengimplementasikan teknologi Geofencing (Radius Lokasi) yang membatasi akses presensi. Mahasiswa mutlak tidak bisa melakukan absen jika mereka berada di luar radius 50 meter dari titik koordinat lokasi kelas yang ditetapkan.'
   },
