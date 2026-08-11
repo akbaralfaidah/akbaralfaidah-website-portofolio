@@ -87,17 +87,17 @@ export default function Contact() {
     const waTarget = '62881080245045';
 
     const lines = [
-      `Halo Akbar! 👋🏻`,
+      `Halo Akbar! \uD83D\uDC4B\uD83C\uDFFB`,
       `Saya tertarik untuk menggunakan layanan Anda. Boleh minta Estimasi Harga dan waktu pengerjaannya?`,
       ``,
       `Berikut detail pesanan saya:`,
-      `👤 *Nama:* ${name}`,
-      `📱 *WhatsApp:* ${whatsapp}`,
-      `⏰ *Deadline (Target Selesai):* ${t(`contact.form_deadline_options.${deadline}`)}`,
-      `📌 *Detail Tugas:*`,
+      `\uD83D\uDC64 *Nama:* ${name}`,
+      `\uD83D\uDCF1 *WhatsApp:* ${whatsapp}`,
+      `\u23F0 *Deadline (Target Selesai):* ${t(`contact.form_deadline_options.${deadline}`)}`,
+      `\uD83D\uDCCC *Detail Tugas:*`,
       `${message}`,
       ``,
-      `Ditunggu balasannya ya, terima kasih! 🚀`,
+      `Ditunggu balasannya ya, terima kasih! \uD83D\uDE80`,
     ];
 
     const text = encodeURIComponent(lines.join('\n'));
