@@ -87,8 +87,11 @@
     "desc": "Ceritakan project Anda - dari ide sampai jadi produk, saya buat untuk anda.",
     "follow_me": "Ikuti Saya",
     "form_name": "Nama Lengkap",
+    "form_whatsapp": "Nomor WhatsApp",
+    "form_whatsapp_placeholder": "08xx xxxx xxxx",
     "form_email": "Email",
-    "form_message": "Pesan",
+    "form_optional": "opsional",
+    "form_message": "Pengen Buat Apa?",
     "cta": "Kirim Pesan",
     "form_name_placeholder": "Akbar ...",
     "form_message_placeholder": "Ceritakan tentang proyek Anda..."

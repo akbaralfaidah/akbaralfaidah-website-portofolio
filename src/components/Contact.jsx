@@ -1,18 +1,32 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FiMail, FiMapPin, FiGithub, FiLinkedin, FiInstagram } from 'react-icons/fi';
+import { FiMail, FiMapPin, FiGithub, FiLinkedin, FiInstagram, FiSend } from 'react-icons/fi';
+import { FaWhatsapp } from 'react-icons/fa';
 import AnimatedButton from './ui/AnimatedButton';
 
 export default function Contact() {
   const { t } = useTranslation();
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', whatsapp: '', email: '', message: '' });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { name, email, message } = formData;
-    const waNumber = "6281234567890"; // Ganti dengan nomor WhatsApp Abay
-    const text = `Halo Akbar, saya ${name} (${email}).%0A%0A${message}`;
-    window.open(`https://wa.me/${waNumber}?text=${text}`, '_blank');
+    const { name, whatsapp, email, message } = formData;
+    const waTarget = '6288108024504'; // Akbar's WhatsApp (removed leading 0, added 62)
+    
+    // Build a clean, readable message
+    const lines = [
+      `Halo Akbar! 👋`,
+      ``,
+      `Nama: ${name}`,
+      `WhatsApp: ${whatsapp}`,
+    ];
+    if (email.trim()) {
+      lines.push(`Email: ${email}`);
+    }
+    lines.push(``, `Keperluan:`, message);
+    
+    const text = encodeURIComponent(lines.join('\n'));
+    window.open(`https://wa.me/${waTarget}?text=${text}`, '_blank');
   };
 
   return (
@@ -37,7 +51,7 @@ export default function Contact() {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-charcoal/70 dark:text-[#F2F0E8]/70 mb-1">Email</p>
-                    <p className="font-medium text-charcoal dark:text-[#F2F0E8]">hello@akbaralfaidah.com</p>
+                    <p className="font-medium text-charcoal dark:text-[#F2F0E8]">akbaralfaidahohs@gmail.com</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
@@ -80,17 +94,36 @@ export default function Contact() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label htmlFor="email" className="text-sm font-medium text-charcoal/70 dark:text-[#F2F0E8]/70">{t('contact.form_email')}</label>
-                    <input
-                      type="email"
-                      id="email"
-                      required
-                      className="w-full bg-transparent border-b-2 border-charcoal/15 dark:border-[#F2F0E8]/15 focus:border-brass py-3 outline-none transition-colors text-charcoal dark:text-[#F2F0E8] placeholder:text-charcoal/50 dark:placeholder:text-[#F2F0E8]/50 font-medium"
-                      placeholder="akbar@example.com"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    />
+                    <label htmlFor="whatsapp" className="text-sm font-medium text-charcoal/70 dark:text-[#F2F0E8]/70">
+                      {t('contact.form_whatsapp')}
+                    </label>
+                    <div className="relative">
+                      <FaWhatsapp size={18} className="absolute left-0 top-1/2 -translate-y-1/2 text-green-500" />
+                      <input
+                        type="tel"
+                        id="whatsapp"
+                        required
+                        className="w-full bg-transparent border-b-2 border-charcoal/15 dark:border-[#F2F0E8]/15 focus:border-brass py-3 pl-7 outline-none transition-colors text-charcoal dark:text-[#F2F0E8] placeholder:text-charcoal/50 dark:placeholder:text-[#F2F0E8]/50 font-medium"
+                        placeholder={t('contact.form_whatsapp_placeholder')}
+                        value={formData.whatsapp}
+                        onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
+                      />
+                    </div>
                   </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="email" className="text-sm font-medium text-charcoal/70 dark:text-[#F2F0E8]/70">
+                    {t('contact.form_email')} <span className="text-charcoal/40 dark:text-[#F2F0E8]/40">({t('contact.form_optional')})</span>
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    className="w-full bg-transparent border-b-2 border-charcoal/15 dark:border-[#F2F0E8]/15 focus:border-brass py-3 outline-none transition-colors text-charcoal dark:text-[#F2F0E8] placeholder:text-charcoal/50 dark:placeholder:text-[#F2F0E8]/50 font-medium"
+                    placeholder="akbar@example.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  />
                 </div>
 
                 <div className="space-y-2">
@@ -112,7 +145,7 @@ export default function Contact() {
                   className="w-full md:w-auto px-8 h-14 text-sm tracking-widest uppercase"
                 >
                   {t('contact.cta')}
-                  <FiMail size={16} className="ml-1" />
+                  <FiSend size={16} className="ml-2" />
                 </AnimatedButton>
               </form>
             </div>

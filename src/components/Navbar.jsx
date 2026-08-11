@@ -17,13 +17,13 @@ const LanguageToggle = ({ language, toggleLanguage }) => {
         <span className={`transition-opacity duration-300 ${!isEn ? "opacity-0" : "opacity-100"}`}>ID</span>
         <span className={`transition-opacity duration-300 ${isEn ? "opacity-0" : "opacity-100"}`}>EN</span>
       </div>
-      <div 
+      <div
         className={`w-6 h-6 rounded-full flex items-center justify-center transition-transform duration-300 shadow-sm relative z-10 overflow-hidden bg-white ${isEn ? 'translate-x-8' : 'translate-x-0'}`}
       >
-        <img 
-          src={isEn ? "https://flagcdn.com/w40/gb.png" : "https://flagcdn.com/w40/id.png"} 
-          alt={isEn ? "EN" : "ID"} 
-          className="w-full h-full object-cover scale-110" 
+        <img
+          src={isEn ? "https://flagcdn.com/w40/gb.png" : "https://flagcdn.com/w40/id.png"}
+          alt={isEn ? "EN" : "ID"}
+          className="w-full h-full object-cover scale-110"
         />
       </div>
     </button>
@@ -63,7 +63,7 @@ const ThemeToggle = ({ theme, toggleTheme }) => {
       </div>
 
       {/* Knob */}
-      <div 
+      <div
         className={`w-6 h-6 rounded-full transition-transform duration-300 shadow-md relative z-10 ${isDark ? 'translate-x-8 bg-[#E6E6EA]' : 'translate-x-0 bg-[#FFD700]'}`}
       >
         {isDark && (
@@ -136,8 +136,8 @@ export default function Navbar() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         className={`fixed top-0 left-0 right-0 z-[999] transition-all duration-300 ${scrolled
-            ? 'py-4 px-6 mx-auto mt-4 max-w-5xl bg-[#F7F5EE]/70 dark:bg-[#1A1A1C]/70 backdrop-blur-lg rounded-full shadow-sm border border-charcoal/10 dark:border-[#F2F0E8]/10'
-            : 'py-6 px-8 bg-transparent'
+          ? 'py-4 px-6 mx-auto mt-4 max-w-5xl bg-[#F7F5EE]/70 dark:bg-[#1A1A1C]/70 backdrop-blur-lg rounded-full shadow-sm border border-charcoal/10 dark:border-[#F2F0E8]/10'
+          : 'py-6 px-8 bg-transparent'
           }`}
       >
         <div className={`flex items-center justify-between ${!scrolled ? 'max-w-6xl mx-auto' : ''}`}>
@@ -188,7 +188,7 @@ export default function Navbar() {
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -216,7 +216,7 @@ export default function Navbar() {
             </div>
 
             <div className={`absolute bottom-12 left-10 flex space-x-6 text-sm font-medium opacity-60 ${theme === 'dark' ? 'text-[#F2F0E8]' : 'text-charcoal'}`}>
-              <a href="mailto:hello@akbaralfaidah.com" className="hover:text-brass transition-colors">Email</a>
+              <a href="mailto:akbaralfaidahohs@gmail.com" className="hover:text-brass transition-colors">Email</a>
               <a href="https://github.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="hover:text-brass transition-colors">GitHub</a>
               <a href="https://linkedin.com/in/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="hover:text-brass transition-colors">LinkedIn</a>
             </div>
@@ -232,11 +232,10 @@ export default function Navbar() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
             onClick={(e) => handleNavClick(e, 'top')}
-            className={`fixed bottom-6 right-6 md:bottom-8 md:right-10 z-[990] p-3 md:p-4 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border transition-all duration-300 hover:-translate-y-1 ${
-              theme === 'dark' 
-                ? 'bg-[#2C2E32]/90 backdrop-blur-md text-[#F2F0E8] border-white/10 hover:bg-[#F2F0E8] hover:text-charcoal' 
+            className={`fixed bottom-6 right-6 md:bottom-8 md:right-10 z-[990] p-3 md:p-4 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border transition-all duration-300 hover:-translate-y-1 ${theme === 'dark'
+                ? 'bg-[#2C2E32]/90 backdrop-blur-md text-[#F2F0E8] border-white/10 hover:bg-[#F2F0E8] hover:text-charcoal'
                 : 'bg-white/90 backdrop-blur-md text-charcoal border-black/5 hover:bg-charcoal hover:text-white'
-            }`}
+              }`}
             aria-label="Scroll to top"
           >
             <FiArrowUp size={22} />
