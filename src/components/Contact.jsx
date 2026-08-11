@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FiMail, FiMapPin, FiGithub, FiLinkedin, FiInstagram, FiSend } from 'react-icons/fi';
+import { FiMail, FiMapPin, FiGithub, FiLinkedin, FiInstagram, FiSend, FiChevronDown } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 import emailjs from '@emailjs/browser';
 import AnimatedButton from './ui/AnimatedButton';
@@ -271,6 +271,36 @@ export default function Contact() {
                     </div>
                   )}
 
+                  {/* Deadline Dropdown */}
+                  <div className="space-y-2">
+                    <label htmlFor="deadline" className="text-sm font-medium text-charcoal/70 dark:text-[#F2F0E8]/70">
+                      {t('contact.form_deadline')}
+                    </label>
+                    <div className="relative cursor-pointer">
+                      <select
+                        id="deadline"
+                        className={`w-full bg-transparent border-b-2 py-3 outline-none transition-colors font-medium appearance-none cursor-pointer pr-10 ${
+                          !formData.deadline
+                            ? 'text-charcoal/50 dark:text-[#F2F0E8]/50 border-charcoal/15 dark:border-[#F2F0E8]/15'
+                            : 'text-charcoal dark:text-[#F2F0E8] border-brass'
+                        } focus:border-brass`}
+                        value={formData.deadline}
+                        onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
+                      >
+                        <option value="" disabled className="text-charcoal/50 bg-paper dark:bg-[#1A1A1C] dark:text-white">
+                          {t('contact.form_deadline_placeholder')}
+                        </option>
+                        <option value="santai" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.santai')}</option>
+                        <option value="normal" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.normal')}</option>
+                        <option value="cepat" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.cepat')}</option>
+                        <option value="kilat" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.kilat')}</option>
+                      </select>
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-charcoal/50 dark:text-[#F2F0E8]/50">
+                        <FiChevronDown size={20} />
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Message — always shown */}
                   <div className="space-y-2">
                     <label htmlFor="message" className="text-sm font-medium text-charcoal/70 dark:text-[#F2F0E8]/70">{t('contact.form_message')}</label>
@@ -282,27 +312,6 @@ export default function Contact() {
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     />
-                  </div>
-
-                  {/* Deadline Dropdown */}
-                  <div className="space-y-2">
-                    <label htmlFor="deadline" className="text-sm font-medium text-charcoal/70 dark:text-[#F2F0E8]/70">
-                      {t('contact.form_deadline')}
-                    </label>
-                    <select
-                      id="deadline"
-                      className="w-full bg-transparent border-b-2 border-charcoal/15 dark:border-[#F2F0E8]/15 focus:border-brass py-3 outline-none transition-colors text-charcoal dark:text-[#F2F0E8] font-medium appearance-none"
-                      value={formData.deadline}
-                      onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
-                    >
-                      <option value="" disabled className="text-charcoal/50 bg-paper dark:bg-charcoal dark:text-white">
-                        {t('contact.form_deadline_placeholder')}
-                      </option>
-                      <option value="santai" className="bg-paper dark:bg-charcoal dark:text-white">{t('contact.form_deadline_options.santai')}</option>
-                      <option value="normal" className="bg-paper dark:bg-charcoal dark:text-white">{t('contact.form_deadline_options.normal')}</option>
-                      <option value="cepat" className="bg-paper dark:bg-charcoal dark:text-white">{t('contact.form_deadline_options.cepat')}</option>
-                      <option value="kilat" className="bg-paper dark:bg-charcoal dark:text-white">{t('contact.form_deadline_options.kilat')}</option>
-                    </select>
                   </div>
 
                   <AnimatedButton
