@@ -4,100 +4,100 @@ export const projects = [
     slug: 'bosdepot',
     name: 'BosDepot', 
     src: '/img/Katalog- Proyek/bosdepot.svg',
-    client: 'PT BosDepot Indonesia',
+    client: 'Depot Kayu & Toko Bangunan Esa',
     year: '2026',
     role: 'Lead Frontend Developer',
     url: 'https://bosdepot.com',
     techStack: ['React', 'TailwindCSS', 'Redux', 'Framer Motion'],
-    challenge: 'Membangun platform supply chain material bangunan yang mampu menangani ribuan transaksi harian tanpa lag. Tantangan utamanya adalah membuat UI yang kompleks menjadi sangat sederhana dan intuitif bagi pengguna lapangan.',
-    solution: 'Kami merancang arsitektur micro-frontend dan mengimplementasikan virtualisasi list untuk memastikan performa tetap maksimal meski memuat ribuan baris data katalog. UI dibuat dengan pendekatan "Mobile-First" yang sangat bersahabat untuk layar sentuh.'
+    challenge: 'Membangun aplikasi terintegrasi untuk POS (Point of Sale) kasir, manajemen gudang, dan sistem operasional harian yang mampu menangani ribuan transaksi material bangunan tanpa lag.',
+    solution: 'Merancang arsitektur UI yang intuitif agar karyawan toko bangunan yang mungkin kurang terbiasa dengan teknologi dapat dengan mudah memproses penjualan, mengecek stok gudang, dan memantau operasional toko dalam satu pintu.'
   },
   { 
     id: 'chattask',
     slug: 'chattask',
     name: 'ChatTask', 
     src: '/img/Katalog- Proyek/chattask.svg',
-    client: 'Internal Product',
+    client: 'Personal Project',
     year: '2026',
     role: 'Fullstack Developer',
     url: 'https://chattask.app',
     techStack: ['Next.js', 'Socket.io', 'PostgreSQL', 'Prisma'],
-    challenge: 'ChatTask membutuhkan sistem real-time yang bisa mensinkronkan pesan chat sekaligus manajemen tugas (to-do list) antar puluhan anggota tim secara instan tanpa delay atau konflik data.',
-    solution: 'Menggunakan WebSockets (Socket.io) untuk sinkronisasi dua arah yang instan, ditambah optimistic UI updates di sisi frontend agar aplikasi terasa sangat cepat.'
+    challenge: 'Banyak pekerja dan tim yang merasa kewalahan melacak tugas-tugas yang menumpuk di chat WhatsApp, sehingga banyak instruksi penting yang terlewat.',
+    solution: 'Membangun platform manajemen tugas cerdas yang dirancang khusus untuk merapikan, mencatat, dan menjadwalkan (*schedule*) setiap tugas yang masuk melalui pesan WA agar pengguna dapat bekerja jauh lebih terstruktur.'
   },
   { 
     id: 'jokipro',
     slug: 'jokipro',
     name: 'JokiPro', 
     src: '/img/Katalog- Proyek/jokipro.svg',
-    client: 'Startup JokiPro',
+    client: 'Confidential Company',
     year: '2026',
     role: 'UI/UX Designer & Frontend',
     url: 'https://jokipro.com',
     techStack: ['Vue.js', 'SCSS', 'GSAP'],
-    challenge: 'Mendesain ulang platform yang sebelumnya terlihat membosankan menjadi platform yang energik dan disukai oleh target pasar anak muda / Gen Z.',
-    solution: 'Memasukkan elemen desain brutalist modern dengan animasi GSAP yang playful, serta skema warna yang berani untuk memikat perhatian langsung dari detik pertama.'
+    challenge: 'Merancang landing page profil perusahaan (Company Profile) yang profesional dan modern, namun dengan syarat menjaga kerahasiaan identitas asli klien (*Non-Disclosure Agreement*).',
+    solution: 'Membuat halaman interaktif menggunakan animasi GSAP dan desain visual yang kuat. Identitas klien sengaja disamarkan menjadi "JokiPro" (Incognito) untuk mematuhi kesepakatan kerahasiaan pada portofolio ini.'
   },
   { 
     id: 'mpp',
     slug: 'mpp',
     name: 'MPP Digital', 
     src: '/img/Katalog- Proyek/mpp.svg',
-    client: 'Pemerintah Daerah',
+    client: 'M****a (Pemerintahan)',
     year: '2026',
     role: 'Frontend Architect',
     techStack: ['React', 'Material UI', 'TypeScript'],
-    challenge: 'Mendigitalisasi Mal Pelayanan Publik (MPP) ke dalam aplikasi web. Aplikasi ini harus mematuhi standar aksesibilitas (WCAG) yang sangat ketat karena digunakan oleh seluruh lapisan masyarakat.',
-    solution: 'Membangun sistem komponen yang sepenuhnya dapat diakses via keyboard dan screen-reader, serta menggunakan rasio kontras warna tinggi untuk memastikan keterbacaan yang maksimal.'
+    challenge: 'Sistem evaluasi Mal Pelayanan Publik (MPP) suatu daerah sebelumnya menggunakan metode survei kertas dan perhitungan manual yang sangat memakan waktu dan rentan *human error*.',
+    solution: 'Mendigitalisasi seluruh proses survei penilaian ke dalam bentuk aplikasi web terintegrasi. Hal ini mengotomatiskan rekapitulasi data dan perhitungan skor kepuasan masyarakat secara real-time.'
   },
   { 
     id: 'peka',
     slug: 'peka',
     name: 'PEKA', 
     src: '/img/Katalog- Proyek/peka.svg',
-    client: 'NGO Peduli Kucing',
+    client: 'Top 33 Indonesia Next',
     year: '2026',
-    role: 'Mobile Developer',
-    techStack: ['React Native', 'Firebase'],
-    challenge: 'Membuat aplikasi pelaporan hewan terlantar yang bisa digunakan dengan kondisi sinyal internet yang sangat minim di jalanan.',
-    solution: 'Mengimplementasikan arsitektur Offline-First. Pengguna bisa membuat laporan tanpa internet, dan laporan akan terkirim otomatis di background saat mereka kembali mendapat sinyal.'
+    role: 'Fullstack Developer',
+    techStack: ['React', 'TailwindCSS', 'Firebase'],
+    challenge: 'Banyak individu merasa kesepian dan kesulitan melacak kondisi mental mereka sehari-hari. Dibutuhkan sebuah wadah aman untuk mencurahkan isi hati dan mendapatkan validasi emosional.',
+    solution: 'PEKA lahir sebagai platform web *mood tracker* interaktif. Pengguna dapat menceritakan kondisi hati mereka, melacak jejak emosional (*tracking mood*), serta mendapatkan *feedback* dan validasi afirmatif agar mereka tidak pernah merasa sendirian.'
   },
   { 
     id: 'siabsen',
     slug: 'siabsen',
     name: 'SiAbsen', 
     src: '/img/Katalog- Proyek/siabsen.svg',
-    client: 'Universitas Lokal',
+    client: 'M****n (Universitas)',
     year: '2026',
     role: 'Frontend Developer',
     url: 'https://siabsen.univ.edu',
-    techStack: ['React', 'Vite', 'TailwindCSS'],
-    challenge: 'Menggantikan sistem absensi fingerprint lama dengan sistem absensi berbasis lokasi (Geofencing) dan deteksi wajah ringan via browser web.',
-    solution: 'Memanfaatkan HTML5 Geolocation API dan library face-api.js versi teringan untuk memverifikasi kehadiran mahasiswa secara real-time langsung dari smartphone mereka tanpa perlu instalasi aplikasi.'
+    techStack: ['React', 'Geolocation API', 'TailwindCSS'],
+    challenge: 'Proses absensi mahasiswa di mata kuliah rawan kecurangan (titip absen) jika hanya menggunakan metode konvensional.',
+    solution: 'Mengimplementasikan teknologi Geofencing (Radius Lokasi) yang membatasi akses presensi. Mahasiswa mutlak tidak bisa melakukan absen jika mereka berada di luar radius 50 meter dari titik koordinat lokasi kelas yang ditetapkan.'
   },
   { 
     id: 'simppk',
     slug: 'simppk',
     name: 'SimPPK', 
     src: '/img/Katalog- Proyek/simppk.svg',
-    client: 'Dinas Kesehatan',
+    client: 'A****d (Pemerintahan)',
     year: '2026',
     role: 'Frontend Engineer',
     techStack: ['Next.js', 'Chakra UI', 'GraphQL'],
-    challenge: 'Mengolah dan memvisualisasikan ribuan data laporan kesehatan dari berbagai puskesmas secara real-time ke dalam dashboard interaktif.',
-    solution: 'Membangun dashboard dinamis dengan Recharts dan D3.js. Data diambil menggunakan GraphQL agar request payload sangat kecil, sehingga dashboard bisa dimuat dalam waktu kurang dari 1 detik.'
+    challenge: 'Membutuhkan platform yang terstruktur, aman, dan dapat diandalkan untuk menampung dan mengelola data kepegawaian pemerintahan yang berskala besar.',
+    solution: 'Membangun Sistem Informasi Pemerintahan PPPK (Pegawai Pemerintah dengan Perjanjian Kerja) menggunakan arsitektur web modern yang menjamin kecepatan akses, keamanan data, dan kemudahan rekapitulasi administrasi.'
   },
   { 
     id: 'siskamling',
     slug: 'siskamling',
     name: 'Siskamling App', 
     src: '/img/Katalog- Proyek/siskamling.svg',
-    client: 'Komunitas Warga',
+    client: 'G*****n',
     year: '2026',
-    role: 'Mobile UI Developer',
-    techStack: ['Flutter', 'Dart'],
-    challenge: 'Membuat aplikasi ronda digital yang super simpel agar bisa dipahami seketika oleh bapak-bapak pos ronda yang mayoritas gaptek.',
-    solution: 'Menghilangkan semua fitur kompleks. Hanya menyisakan 3 tombol utama berukuran raksasa: "Lapor Aman", "Ada Tamu", dan "Peringatan Darurat" (Tombol Panik).'
+    role: 'Web Developer',
+    techStack: ['React', 'Geolocation API', 'Node.js'],
+    challenge: 'Membuat jadwal pos ronda dan memantau kehadiran warga seringkali berantakan jika hanya menggunakan grup WhatsApp atau papan tulis manual.',
+    solution: 'Mengembangkan aplikasi web khusus Siskamling yang mengatur pembagian jadwal secara otomatis dan menggunakan teknologi Geofencing untuk fitur absen ronda, memastikan warga benar-benar hadir di lokasi pos keamanan.'
   }
 ];
 
