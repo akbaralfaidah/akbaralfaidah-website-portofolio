@@ -322,8 +322,7 @@ export default function Hero() {
                   <FiArrowRight size={16} />
                 </AnimatedButton>
                 <AnimatedButton
-                  href="#projects"
-                  onClick={(e) => handleScrollTo(e, '#projects')}
+                  to="/projects"
                   variant="brass"
                   className="px-7 h-12 text-[0.9rem] tracking-wide"
                 >

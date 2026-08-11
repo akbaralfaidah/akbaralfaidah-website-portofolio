@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useEffect } from 'react';
 import Lenis from 'lenis';
 import HomePage from './pages/HomePage';
+import Projects from './pages/Projects';
 import ProjectDetail from './pages/ProjectDetail';
 import MeshGradient from './components/ui/MeshGradient';
 
@@ -40,6 +41,7 @@ function App() {
       <MeshGradient />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/projects" element={<Projects />} />
         <Route path="/project/:slug" element={<ProjectDetail />} />
       </Routes>
     </BrowserRouter>
