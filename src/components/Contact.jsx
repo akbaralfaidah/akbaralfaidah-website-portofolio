@@ -81,18 +81,17 @@ export default function Contact() {
     const waTarget = '62881080245045';
 
     const lines = [
-      `━━━━━━━━━━━━━━━━━━━━`,
-      `📩 *PESAN BARU DARI PORTOFOLIO*`,
-      `━━━━━━━━━━━━━━━━━━━━`,
+      `*=========================*`,
+      `*PESAN BARU - PORTOFOLIO*`,
+      `*=========================*`,
       ``,
-      `👤 *Nama:* ${name}`,
-      `📱 *WhatsApp:* ${whatsapp}`,
+      `*Nama:* ${name}`,
+      `*WhatsApp:* ${whatsapp}`,
       ``,
-      `💼 *Keperluan:*`,
-      message,
+      `*Keperluan:*`,
+      `_${message}_`,
       ``,
-      `━━━━━━━━━━━━━━━━━━━━`,
-      `_Dikirim dari akbaralfaidah.com_`,
+      `~Dikirim otomatis dari akbaralfaidah.com~`,
     ];
 
     const text = encodeURIComponent(lines.join('\n'));
