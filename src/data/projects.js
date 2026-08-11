@@ -6,9 +6,9 @@ export const projects = [
     src: '/img/Katalog- Proyek/bosdepot.svg',
     client: 'Depot Kayu & Toko Bangunan Esa',
     year: '2026',
-    role: 'Lead Frontend Developer',
+    role: 'Mobile Developer',
     url: 'https://bosdepot.com',
-    techStack: ['React', 'TailwindCSS', 'Redux', 'Framer Motion'],
+    techStack: ['Flutter', 'Dart', 'Firebase'],
     challenge: 'Membangun aplikasi terintegrasi untuk POS (Point of Sale) kasir, manajemen gudang, dan sistem operasional harian yang mampu menangani ribuan transaksi material bangunan tanpa lag.',
     solution: 'Merancang arsitektur UI yang intuitif agar karyawan toko bangunan yang mungkin kurang terbiasa dengan teknologi dapat dengan mudah memproses penjualan, mengecek stok gudang, dan memantau operasional toko dalam satu pintu.'
   },
