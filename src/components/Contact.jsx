@@ -7,10 +7,11 @@ import { Turnstile } from '@marsidev/react-turnstile';
 import AnimatedButton from './ui/AnimatedButton';
 import Toast from './ui/Toast';
 
-// EmailJS credentials — user will fill these after creating an EmailJS account
-const EMAILJS_SERVICE_ID = 'service_yrpp7lt';
-const EMAILJS_TEMPLATE_ID = 'template_vqna3cl';
-const EMAILJS_PUBLIC_KEY = 'CC8VVIa6kKxRTlQHm'; // Replace after setup
+// EmailJS credentials — fetched from environment variables
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
 export default function Contact() {
   const { t } = useTranslation();
@@ -102,11 +103,11 @@ export default function Contact() {
     const limitData = JSON.parse(localStorage.getItem('contact_limit') || '{"count":0, "lastSent":0}');
     const now = Date.now();
     const dailyMs = 24 * 60 * 60 * 1000;
-    
+
     if (now - limitData.lastSent > dailyMs) {
       limitData.count = 0;
     }
-    
+
     limitData.count += 1;
     limitData.lastSent = now;
     localStorage.setItem('contact_limit', JSON.stringify(limitData));
@@ -114,7 +115,7 @@ export default function Contact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Honeypot trap: if filled, it's 100% a bot. Fake a success!
     if (honeypot) {
       showToast(mode === 'wa' ? t('contact.toast.wa_success') : t('contact.toast.email_success'), 'success');
@@ -384,7 +385,7 @@ export default function Contact() {
                   {/* Cloudflare Turnstile Widget */}
                   <div className="pt-2">
                     <Turnstile 
-                      siteKey="1x00000000000000000000AA" 
+                      siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY} 
                       onSuccess={(token) => setTurnstileToken(token)}
                       options={{ theme: 'auto' }}
                     />
