@@ -87,7 +87,7 @@ export default function Contact() {
     const waTarget = '62881080245045';
 
     const lines = [
-      `Halo Akbar! \uD83D\uDC4B\uD83C\uDFFB`,
+      `Halo Akbar! \uD83D\uDC4B\uD83C\uDFFB `,
       `Saya tertarik untuk menggunakan layanan Anda. Boleh minta Estimasi Harga dan waktu pengerjaannya?`,
       ``,
       `Berikut detail pesanan saya:`,
@@ -179,9 +179,9 @@ export default function Contact() {
               <div>
                 <p className="text-sm font-medium text-charcoal/70 dark:text-[#F2F0E8]/70 mb-4">{t('contact.follow_me')}</p>
                 <div className="flex gap-4">
-                  <a href="https://github.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full border border-charcoal/15 dark:border-[#F2F0E8]/15 flex items-center justify-center text-charcoal dark:text-[#F2F0E8] hover:bg-brass hover:text-white hover:border-brass transition-colors"><FiGithub size={20} /></a>
-                  <a href="https://linkedin.com/in/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full border border-charcoal/15 dark:border-[#F2F0E8]/15 flex items-center justify-center text-charcoal dark:text-[#F2F0E8] hover:bg-brass hover:text-white hover:border-brass transition-colors"><FiLinkedin size={20} /></a>
-                  <a href="https://instagram.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full border border-charcoal/15 dark:border-[#F2F0E8]/15 flex items-center justify-center text-charcoal dark:text-[#F2F0E8] hover:bg-brass hover:text-white hover:border-brass transition-colors"><FiInstagram size={20} /></a>
+                  <a href="https://github.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="w-12 h-12 rounded-full border border-charcoal/15 dark:border-[#F2F0E8]/15 flex items-center justify-center text-charcoal dark:text-[#F2F0E8] hover:bg-brass hover:text-white hover:border-brass transition-colors"><FiGithub size={20} /></a>
+                  <a href="https://linkedin.com/in/akbaralfaidah" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="w-12 h-12 rounded-full border border-charcoal/15 dark:border-[#F2F0E8]/15 flex items-center justify-center text-charcoal dark:text-[#F2F0E8] hover:bg-brass hover:text-white hover:border-brass transition-colors"><FiLinkedin size={20} /></a>
+                  <a href="https://instagram.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-12 h-12 rounded-full border border-charcoal/15 dark:border-[#F2F0E8]/15 flex items-center justify-center text-charcoal dark:text-[#F2F0E8] hover:bg-brass hover:text-white hover:border-brass transition-colors"><FiInstagram size={20} /></a>
                 </div>
               </div>
             </div>
