@@ -2,16 +2,14 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FiMail, FiMapPin, FiGithub, FiLinkedin, FiInstagram, FiSend, FiChevronDown } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
-import { Coffee, Calendar, Zap, Flame } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import AnimatedButton from './ui/AnimatedButton';
 import Toast from './ui/Toast';
-import { FluidDropdown } from './ui/FluidDropdown';
 
 // EmailJS credentials — user will fill these after creating an EmailJS account
-const EMAILJS_SERVICE_ID = 'service_portfolio';
-const EMAILJS_TEMPLATE_ID = 'template_contact';
-const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY'; // Replace after setup
+const EMAILJS_SERVICE_ID = 'service_yrpp7lt';
+const EMAILJS_TEMPLATE_ID = 'template_vqna3cl';
+const EMAILJS_PUBLIC_KEY = 'CC8VVIa6kKxRTlQHm'; // Replace after setup
 
 export default function Contact() {
   const { t } = useTranslation();
@@ -23,13 +21,6 @@ export default function Contact() {
   const showToast = (message, type = 'error') => {
     setToast({ message, type });
   };
-
-  const DEADLINE_OPTIONS = [
-    { id: 'santai', label: t('contact.form_deadline_options.santai'), icon: Coffee, color: '#A06CD5' },
-    { id: 'normal', label: t('contact.form_deadline_options.normal'), icon: Calendar, color: '#4ECDC4' },
-    { id: 'cepat', label: t('contact.form_deadline_options.cepat'), icon: Zap, color: '#45B7D1' },
-    { id: 'kilat', label: t('contact.form_deadline_options.kilat'), icon: Flame, color: '#FF6B6B' },
-  ];
 
   const validate = () => {
     const { name, whatsapp, email, message, deadline } = formData;
@@ -96,15 +87,15 @@ export default function Contact() {
     const waTarget = '62881080245045';
 
     const lines = [
-      `Halo Mas Akbar! 👋`,
+      `Halo Akbar! 👋🏻`,
       `Saya tertarik untuk menggunakan layanan Anda. Boleh minta Estimasi Harga dan waktu pengerjaannya?`,
       ``,
       `Berikut detail pesanan saya:`,
       `👤 *Nama:* ${name}`,
       `📱 *WhatsApp:* ${whatsapp}`,
+      `⏰ *Deadline (Target Selesai):* ${t(`contact.form_deadline_options.${deadline}`)}`,
       `📌 *Detail Tugas:*`,
       `${message}`,
-      `⏰ *Deadline (Target Selesai):* ${t(`contact.form_deadline_options.${deadline}`)}`,
       ``,
       `Ditunggu balasannya ya, terima kasih! 🚀`,
     ];
@@ -205,11 +196,10 @@ export default function Contact() {
                     <button
                       type="button"
                       onClick={() => setMode('wa')}
-                      className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
-                        mode === 'wa'
-                          ? 'bg-green-500 text-white shadow-md'
-                          : 'text-charcoal/60 dark:text-[#F2F0E8]/60 hover:text-charcoal dark:hover:text-[#F2F0E8]'
-                      }`}
+                      className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${mode === 'wa'
+                        ? 'bg-green-500 text-white shadow-md'
+                        : 'text-charcoal/60 dark:text-[#F2F0E8]/60 hover:text-charcoal dark:hover:text-[#F2F0E8]'
+                        }`}
                     >
                       <FaWhatsapp size={16} />
                       WhatsApp
@@ -217,11 +207,10 @@ export default function Contact() {
                     <button
                       type="button"
                       onClick={() => setMode('email')}
-                      className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
-                        mode === 'email'
-                          ? 'bg-brass text-white shadow-md'
-                          : 'text-charcoal/60 dark:text-[#F2F0E8]/60 hover:text-charcoal dark:hover:text-[#F2F0E8]'
-                      }`}
+                      className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${mode === 'email'
+                        ? 'bg-brass text-white shadow-md'
+                        : 'text-charcoal/60 dark:text-[#F2F0E8]/60 hover:text-charcoal dark:hover:text-[#F2F0E8]'
+                        }`}
                     >
                       <FiMail size={16} />
                       Email
@@ -281,16 +270,32 @@ export default function Contact() {
                   )}
 
                   {/* Deadline Dropdown */}
-                  <div className="space-y-2 relative z-20">
+                  <div className="space-y-2">
                     <label htmlFor="deadline" className="text-sm font-medium text-charcoal/70 dark:text-[#F2F0E8]/70">
                       {t('contact.form_deadline')}
                     </label>
-                    <FluidDropdown
-                      value={formData.deadline}
-                      onChange={(val) => setFormData({ ...formData, deadline: val })}
-                      options={DEADLINE_OPTIONS}
-                      placeholder={t('contact.form_deadline_placeholder')}
-                    />
+                    <div className="relative cursor-pointer">
+                      <select
+                        id="deadline"
+                        className={`w-full bg-transparent border-b-2 py-3 outline-none transition-colors font-medium appearance-none cursor-pointer pr-10 ${!formData.deadline
+                          ? 'text-charcoal/50 dark:text-[#F2F0E8]/50 border-charcoal/15 dark:border-[#F2F0E8]/15'
+                          : 'text-charcoal dark:text-[#F2F0E8] border-brass'
+                          } focus:border-brass`}
+                        value={formData.deadline}
+                        onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
+                      >
+                        <option value="" disabled className="text-charcoal/50 bg-paper dark:bg-[#1A1A1C] dark:text-white">
+                          {t('contact.form_deadline_placeholder')}
+                        </option>
+                        <option value="santai" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.santai')}</option>
+                        <option value="normal" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.normal')}</option>
+                        <option value="cepat" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.cepat')}</option>
+                        <option value="kilat" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.kilat')}</option>
+                      </select>
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-charcoal/50 dark:text-[#F2F0E8]/50">
+                        <FiChevronDown size={20} />
+                      </div>
+                    </div>
                   </div>
 
                   {/* Message — always shown */}
