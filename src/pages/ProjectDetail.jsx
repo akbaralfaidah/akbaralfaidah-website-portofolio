@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
+import { FiArrowLeft, FiExternalLink, FiGlobe, FiInfo } from 'react-icons/fi';
 import { getProjectBySlug } from '../data/projects';
 import Footer from '../components/Footer';
 
@@ -27,135 +27,159 @@ export default function ProjectDetail() {
     );
   }
 
-  // Modern Stagger Animations
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.2 }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 80, damping: 20 } }
-  };
-
   return (
-    <div className="bg-paper min-h-screen text-charcoal selection:bg-charcoal selection:text-paper flex flex-col">
+    <div className="bg-paper min-h-screen text-charcoal selection:bg-charcoal selection:text-paper">
       
-      <main className="flex-grow grid grid-cols-1 lg:grid-cols-2">
+      {/* Top Navbar spacing is handled by App / Layout, assuming we need padding top */}
+      <main className="pt-24 pb-20 px-6 md:px-12 max-w-6xl mx-auto">
         
-        {/* LEFT: Immersive Sticky Image */}
-        <div className="relative w-full h-[60vh] lg:h-screen lg:sticky lg:top-0 bg-[#E8E8E8] overflow-hidden">
-          {/* Minimalist Back Button */}
-          <div className="absolute top-8 left-8 z-50">
-            <button 
-              onClick={() => navigate('/')} 
-              className="flex items-center justify-center w-12 h-12 bg-white/80 backdrop-blur-md rounded-full shadow-sm hover:scale-110 transition-transform duration-300 group"
-              aria-label="Kembali"
-            >
-              <FiArrowLeft className="text-charcoal group-hover:-translate-x-0.5 transition-transform" size={20} />
-            </button>
-          </div>
-
-          <motion.img 
-            initial={{ scale: 1.05, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-            src={project.src} 
-            alt={project.name} 
-            className="w-full h-full object-cover object-center block"
-          />
-        </div>
-
-        {/* RIGHT: Modern Typography & Content */}
-        <div className="w-full p-8 lg:p-16 xl:p-24 flex flex-col justify-center min-h-screen">
-          <motion.div 
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="max-w-2xl mx-auto lg:mx-0 w-full"
+        {/* Back Button */}
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="mb-10"
+        >
+          <button 
+            onClick={() => navigate('/')} 
+            className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-charcoal/20 text-sm font-medium hover:bg-charcoal hover:text-white transition-all duration-300"
           >
-            {/* Title */}
-            <motion.h1 variants={itemVariants} className="text-6xl md:text-7xl xl:text-8xl font-display font-bold mb-12 tracking-tighter leading-none text-charcoal">
-              {project.name}
-            </motion.h1>
+            <FiArrowLeft /> Back to Portfolio
+          </button>
+        </motion.div>
 
-            {/* Sleek Metadata Grid (No boxy pills) */}
-            <motion.div variants={itemVariants} className="grid grid-cols-2 md:grid-cols-3 gap-8 pb-12 mb-12 border-b border-charcoal/10">
-              <div>
-                <p className="text-[11px] uppercase tracking-widest text-charcoal/40 font-bold mb-2">Klien</p>
-                <p className="text-lg font-medium text-charcoal">{project.client}</p>
-              </div>
-              <div>
-                <p className="text-[11px] uppercase tracking-widest text-charcoal/40 font-bold mb-2">Tahun</p>
-                <p className="text-lg font-medium text-charcoal">{project.year}</p>
-              </div>
-              <div className="col-span-2 md:col-span-1">
-                <p className="text-[11px] uppercase tracking-widest text-charcoal/40 font-bold mb-2">Peran</p>
-                <p className="text-lg font-medium text-charcoal">{project.role}</p>
-              </div>
-            </motion.div>
+        {/* Header (Role, Year, Title) */}
+        <motion.header 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="mb-10"
+        >
+          <div className="flex items-center gap-3 text-sm font-bold uppercase tracking-widest text-charcoal/50 mb-3">
+            <span>{project.role}</span>
+            <span>&bull;</span>
+            <span>{project.year}</span>
+          </div>
+          <h1 className="text-5xl md:text-6xl font-display font-bold tracking-tight text-charcoal">
+            {project.name}
+          </h1>
+        </motion.header>
 
-            {/* Description / Story */}
-            <motion.div variants={itemVariants} className="mb-16 space-y-10">
-              <div>
-                <h2 className="text-[11px] uppercase tracking-widest text-charcoal/40 font-bold mb-4">Tantangan</h2>
-                <p className="text-xl md:text-2xl text-charcoal/80 leading-relaxed font-light">{project.challenge}</p>
-              </div>
-              <div>
-                <h2 className="text-[11px] uppercase tracking-widest text-charcoal/40 font-bold mb-4">Solusi & Hasil</h2>
-                <p className="text-xl md:text-2xl text-charcoal/80 leading-relaxed font-light">{project.solution}</p>
-              </div>
-            </motion.div>
+        {/* Main Image */}
+        <motion.section 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="mb-16 md:mb-24"
+        >
+          <div className="w-full bg-[#F5F5F5] dark:bg-[#1A1A1A] rounded-3xl overflow-hidden shadow-sm border border-charcoal/5 relative">
+            {/* The SVG images have built in frames usually, just show it */}
+            <img 
+              src={project.src} 
+              alt={project.name} 
+              className="w-full h-auto max-h-[80vh] object-cover object-top block"
+            />
+          </div>
+        </motion.section>
 
-            {/* Tech Stack - Outline Style */}
-            <motion.div variants={itemVariants} className="mb-16">
-              <h2 className="text-[11px] uppercase tracking-widest text-charcoal/40 font-bold mb-6">Teknologi</h2>
-              <div className="flex flex-wrap gap-3">
+        {/* Content Split (Left: Info, Right: Sidebar) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+          
+          {/* LEFT CONTENT */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="lg:col-span-8 space-y-16"
+          >
+            {/* About */}
+            <section>
+              <h2 className="text-3xl font-display font-bold mb-6">About this project</h2>
+              <div className="prose prose-lg text-charcoal/70">
+                <p className="mb-4">{project.challenge}</p>
+                <p>{project.solution}</p>
+              </div>
+            </section>
+
+            {/* Role */}
+            <section>
+              <h3 className="text-xs font-bold uppercase tracking-widest text-charcoal/50 mb-4">My Role</h3>
+              <div className="inline-flex px-5 py-2.5 rounded-full border border-charcoal/20 font-medium text-sm">
+                {project.role}
+              </div>
+            </section>
+
+            {/* Highlights (Using solution or challenge as bullet points if we want to innovate) */}
+            <section>
+              <h3 className="text-xs font-bold uppercase tracking-widest text-charcoal/50 mb-4">Key Details</h3>
+              <div className="space-y-3">
+                <div className="p-5 rounded-2xl bg-[#F0FDF4] dark:bg-emerald-950/20 text-emerald-900 dark:text-emerald-200 text-sm md:text-base leading-relaxed">
+                  &bull; Dibangun secara spesifik untuk klien <strong>{project.client}</strong>.
+                </div>
+                <div className="p-5 rounded-2xl bg-[#F0FDF4] dark:bg-emerald-950/20 text-emerald-900 dark:text-emerald-200 text-sm md:text-base leading-relaxed">
+                  &bull; Menjawab tantangan utama dengan pendekatan modern di tahun {project.year}.
+                </div>
+                <div className="p-5 rounded-2xl bg-[#F0FDF4] dark:bg-emerald-950/20 text-emerald-900 dark:text-emerald-200 text-sm md:text-base leading-relaxed">
+                  &bull; Fokus pada performa, aksesibilitas, dan User Experience (UX) yang optimal.
+                </div>
+              </div>
+            </section>
+
+          </motion.div>
+
+
+          {/* RIGHT SIDEBAR */}
+          <motion.aside 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="lg:col-span-4 space-y-6"
+          >
+            {/* Tech Stack Card */}
+            <div className="bg-[#FAFAFA] dark:bg-charcoal/10 rounded-3xl p-6 border border-charcoal/5">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-charcoal/50 mb-4">Tech Stack</h3>
+              <div className="flex flex-wrap gap-2">
                 {project.techStack.map(tech => (
-                  <span key={tech} className="px-5 py-2 border border-charcoal/20 rounded-full text-sm font-medium text-charcoal/80 hover:border-charcoal hover:text-charcoal transition-colors cursor-default">
+                  <span key={tech} className="px-4 py-2 bg-white dark:bg-charcoal/40 border border-charcoal/10 rounded-full text-sm font-medium shadow-sm">
                     {tech}
                   </span>
                 ))}
               </div>
-            </motion.div>
+            </div>
 
-            {/* Huge Interactive CTA Link */}
-            <motion.div variants={itemVariants}>
+            {/* Client / Platform Card */}
+            <div className="bg-[#FAFAFA] dark:bg-charcoal/10 rounded-3xl p-6 border border-charcoal/5">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-charcoal/50 mb-4">Client & Platform</h3>
+              <div className="flex items-center gap-3 text-charcoal/80 mb-3">
+                <div className="w-10 h-10 rounded-full bg-white dark:bg-charcoal/40 border border-charcoal/10 flex items-center justify-center shadow-sm">
+                  <FiGlobe />
+                </div>
+                <span className="font-medium">{project.client}</span>
+              </div>
+            </div>
+
+            {/* Action Button */}
+            <div className="pt-2">
               {project.url ? (
                 <a 
                   href={project.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative flex items-center justify-between w-full p-6 bg-charcoal rounded-2xl overflow-hidden hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-2xl"
+                  className="flex items-center justify-center gap-2 w-full py-4 rounded-full border border-charcoal text-charcoal font-semibold hover:bg-charcoal hover:text-white transition-all duration-300"
                 >
-                  <div className="relative z-10 flex flex-col">
-                    <span className="text-white/60 text-sm font-medium mb-1 uppercase tracking-wider">Kunjungi</span>
-                    <span className="text-white text-2xl font-bold">Live Website</span>
-                  </div>
-                  <div className="relative z-10 w-14 h-14 bg-white/10 rounded-full flex items-center justify-center group-hover:bg-white group-hover:text-charcoal text-white transition-colors duration-300">
-                    <FiArrowRight size={24} className="group-hover:-rotate-45 transition-transform duration-300" />
-                  </div>
-                  {/* Hover glow effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-brass/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <FiInfo /> Visit Live Site
                 </a>
               ) : (
-                <div className="flex items-center justify-between w-full p-6 bg-charcoal/5 border border-charcoal/10 rounded-2xl cursor-not-allowed">
-                  <div className="flex flex-col">
-                    <span className="text-charcoal/40 text-sm font-medium mb-1 uppercase tracking-wider">Status</span>
-                    <span className="text-charcoal/40 text-2xl font-bold">Sistem Internal</span>
-                  </div>
-                </div>
+                <button disabled className="flex items-center justify-center gap-2 w-full py-4 rounded-full border border-charcoal/20 text-charcoal/40 font-semibold cursor-not-allowed">
+                  <FiInfo /> Offline System
+                </button>
               )}
-            </motion.div>
+            </div>
+            
+          </motion.aside>
 
-          </motion.div>
         </div>
-
       </main>
-      
+
       <Footer />
     </div>
   );
