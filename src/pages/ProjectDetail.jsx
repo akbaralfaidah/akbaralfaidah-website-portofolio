@@ -14,7 +14,7 @@ export default function ProjectDetail() {
       </div>
 
       <div className="h-[150vh] relative">
-        <ScrollExpandMedia src="/img/akbar-2.jpg" alt="Project detail" />
+        <ScrollExpandMedia src="/img/akbar-2.webp" alt="Project detail" />
       </div>
 
       <div className="max-w-4xl mx-auto py-24 px-6 relative z-10 bg-paper">

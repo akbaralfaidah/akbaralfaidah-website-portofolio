@@ -34,8 +34,11 @@ export default function About() {
 
           {/* Main Image */}
           <img
-            src="/img/akbar-4.jpg"
+            src="/img/akbar-4.webp"
             alt="Akbar Alfaidah - Profile"
+            width={800}
+            height={1000}
+            loading="lazy"
             className="relative z-10 w-full aspect-[4/5] object-cover rounded-2xl shadow-lg border-2 border-paper dark:border-charcoal"
           />
 

@@ -143,7 +143,7 @@ export default function Navbar() {
         <div className={`flex items-center justify-between ${!scrolled ? 'max-w-6xl mx-auto' : ''}`}>
           <div className="flex-shrink-0">
             <button onClick={(e) => handleNavClick(e, 'top')} className="hover:opacity-70 transition-opacity flex items-center outline-none">
-              <img src="/img/unbackground.svg" alt="Akbar Alfaidah Logo" className="h-10 w-auto invert dark:invert-0" />
+              <img src="/img/unbackground.svg" alt="Akbar Alfaidah Logo" width={40} height={40} className="h-10 w-auto invert dark:invert-0" />
             </button>
           </div>
 
