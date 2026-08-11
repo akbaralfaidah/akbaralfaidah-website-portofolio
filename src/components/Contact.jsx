@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FiMail, FiMapPin, FiGithub, FiLinkedin, FiInstagram, FiSend, FiChevronDown } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
+import { Coffee, Calendar, Zap, Flame } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import AnimatedButton from './ui/AnimatedButton';
 import Toast from './ui/Toast';
+import { FluidDropdown } from './ui/FluidDropdown';
 
 // EmailJS credentials — user will fill these after creating an EmailJS account
 const EMAILJS_SERVICE_ID = 'service_portfolio';
@@ -21,6 +23,13 @@ export default function Contact() {
   const showToast = (message, type = 'error') => {
     setToast({ message, type });
   };
+
+  const DEADLINE_OPTIONS = [
+    { id: 'santai', label: t('contact.form_deadline_options.santai'), icon: Coffee, color: '#A06CD5' },
+    { id: 'normal', label: t('contact.form_deadline_options.normal'), icon: Calendar, color: '#4ECDC4' },
+    { id: 'cepat', label: t('contact.form_deadline_options.cepat'), icon: Zap, color: '#45B7D1' },
+    { id: 'kilat', label: t('contact.form_deadline_options.kilat'), icon: Flame, color: '#FF6B6B' },
+  ];
 
   const validate = () => {
     const { name, whatsapp, email, message, deadline } = formData;
@@ -272,33 +281,16 @@ export default function Contact() {
                   )}
 
                   {/* Deadline Dropdown */}
-                  <div className="space-y-2">
+                  <div className="space-y-2 relative z-20">
                     <label htmlFor="deadline" className="text-sm font-medium text-charcoal/70 dark:text-[#F2F0E8]/70">
                       {t('contact.form_deadline')}
                     </label>
-                    <div className="relative cursor-pointer">
-                      <select
-                        id="deadline"
-                        className={`w-full bg-transparent border-b-2 py-3 outline-none transition-colors font-medium appearance-none cursor-pointer pr-10 ${
-                          !formData.deadline
-                            ? 'text-charcoal/50 dark:text-[#F2F0E8]/50 border-charcoal/15 dark:border-[#F2F0E8]/15'
-                            : 'text-charcoal dark:text-[#F2F0E8] border-brass'
-                        } focus:border-brass`}
-                        value={formData.deadline}
-                        onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
-                      >
-                        <option value="" disabled className="text-charcoal/50 bg-paper dark:bg-[#1A1A1C] dark:text-white">
-                          {t('contact.form_deadline_placeholder')}
-                        </option>
-                        <option value="santai" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.santai')}</option>
-                        <option value="normal" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.normal')}</option>
-                        <option value="cepat" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.cepat')}</option>
-                        <option value="kilat" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.kilat')}</option>
-                      </select>
-                      <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-charcoal/50 dark:text-[#F2F0E8]/50">
-                        <FiChevronDown size={20} />
-                      </div>
-                    </div>
+                    <FluidDropdown
+                      value={formData.deadline}
+                      onChange={(val) => setFormData({ ...formData, deadline: val })}
+                      options={DEADLINE_OPTIONS}
+                      placeholder={t('contact.form_deadline_placeholder')}
+                    />
                   </div>
 
                   {/* Message — always shown */}
