@@ -29,3 +29,9 @@ dist-ssr
 skills-lock.json
 screenshot.js
 output.css
+
+# PRD Documents
+PRD-dashboard-admin.md
+PRD-portofolio (1).md
+
+supabase-setup.sql

@@ -1,57 +1,43 @@
-export const projects = [
+import { supabase } from '../lib/supabase';
+
+// ============================================
+// Fallback data (digunakan jika Supabase gagal)
+// ============================================
+const fallbackProjects = [
   { 
-    id: 'bosdepot',
-    slug: 'bosdepot',
-    name: 'BosDepot', 
+    id: 'bosdepot', slug: 'bosdepot', name: 'BosDepot',
     src: '/img/Katalog- Proyek/bosdepot.svg',
-    client: 'Depot Kayu & Toko Bangunan Esa',
-    year: '2026',
-    role: 'Mobile Developer',
-    url: 'https://bosdepot.com',
-    categories: ['Mobile Apps'],
+    client: 'Depot Kayu & Toko Bangunan Esa', year: '2026', role: 'Mobile Developer',
+    url: 'https://bosdepot.com', categories: ['Mobile Apps'],
     shortDescription: 'Aplikasi POS & Manajemen Gudang terintegrasi hardware (Scanner Barcode, Thermal Printer, Biometrik).',
     techStack: ['Flutter', 'Firebase', 'GetX', 'SQLite', 'FL Chart'],
     challenge: 'Membangun aplikasi terintegrasi untuk POS (Point of Sale) kasir, manajemen gudang, dan sistem operasional harian yang mampu menangani ribuan transaksi material bangunan tanpa lag.',
     solution: 'Merancang arsitektur UI yang intuitif agar karyawan toko bangunan yang mungkin kurang terbiasa dengan teknologi dapat dengan mudah memproses penjualan, mengecek stok gudang, dan memantau operasional toko dalam satu pintu.'
   },
   { 
-    id: 'chattask',
-    slug: 'chattask',
-    name: 'ChatTask', 
+    id: 'chattask', slug: 'chattask', name: 'ChatTask',
     src: '/img/Katalog- Proyek/chattask.svg',
-    client: 'Personal Project',
-    year: '2026',
-    role: 'Fullstack Developer',
-    url: 'https://chattask.app',
-    categories: ['Website', 'Machine Learning'],
+    client: 'Personal Project', year: '2026', role: 'Fullstack Developer',
+    url: 'https://chattask.app', categories: ['Website', 'Machine Learning'],
     shortDescription: 'Manajemen tugas cerdas untuk merapikan dan menjadwalkan instruksi dari chat WhatsApp menggunakan NLP.',
     techStack: ['Next.js', 'Socket.io', 'PostgreSQL', 'Prisma', 'NLP'],
     challenge: 'Banyak pekerja dan tim yang merasa kewalahan melacak tugas-tugas yang menumpuk di chat WhatsApp, sehingga banyak instruksi penting yang terlewat.',
     solution: 'Membangun platform manajemen tugas cerdas yang dirancang khusus untuk merapikan, mencatat, dan menjadwalkan (*schedule*) setiap tugas yang masuk melalui pesan WA agar pengguna dapat bekerja jauh lebih terstruktur.'
   },
   { 
-    id: 'jokipro',
-    slug: 'jokipro',
-    name: 'JokiPro', 
+    id: 'jokipro', slug: 'jokipro', name: 'JokiPro',
     src: '/img/Katalog- Proyek/jokipro.svg',
-    client: 'Confidential Company',
-    year: '2026',
-    role: 'UI/UX Designer & Frontend',
-    url: 'https://jokipro.com',
-    categories: ['Website'],
+    client: 'Confidential Company', year: '2026', role: 'UI/UX Designer & Frontend',
+    url: 'https://jokipro.com', categories: ['Website'],
     shortDescription: 'Landing page profil perusahaan modern dan interaktif dengan identitas anonim (Incognito).',
     techStack: ['Vue.js', 'SCSS', 'GSAP'],
     challenge: 'Merancang landing page profil perusahaan (Company Profile) yang profesional dan modern, namun dengan syarat menjaga kerahasiaan identitas asli klien (*Non-Disclosure Agreement*).',
     solution: 'Membuat halaman interaktif menggunakan animasi GSAP dan desain visual yang kuat. Identitas klien sengaja disamarkan menjadi "JokiPro" (Incognito) untuk mematuhi kesepakatan kerahasiaan pada portofolio ini.'
   },
   { 
-    id: 'mpp',
-    slug: 'mpp',
-    name: 'MPP Digital', 
+    id: 'mpp', slug: 'mpp', name: 'MPP Digital',
     src: '/img/Katalog- Proyek/mpp.svg',
-    client: 'M****a (Pemerintahan)',
-    year: '2026',
-    role: 'Frontend Architect',
+    client: 'M****a (Pemerintahan)', year: '2026', role: 'Frontend Architect',
     categories: ['Website'],
     shortDescription: 'Digitalisasi survei penilaian Mal Pelayanan Publik (MPP) untuk mengotomatiskan rekapitulasi data masyarakat.',
     techStack: ['React', 'Material UI', 'TypeScript'],
@@ -59,13 +45,9 @@ export const projects = [
     solution: 'Mendigitalisasi seluruh proses survei penilaian ke dalam bentuk aplikasi web terintegrasi. Hal ini mengotomatiskan rekapitulasi data dan perhitungan skor kepuasan masyarakat secara real-time.'
   },
   { 
-    id: 'peka',
-    slug: 'peka',
-    name: 'PEKA', 
+    id: 'peka', slug: 'peka', name: 'PEKA',
     src: '/img/Katalog- Proyek/peka.svg',
-    client: 'Top 33 Indonesia Next',
-    year: '2026',
-    role: 'Fullstack Developer',
+    client: 'Top 33 Indonesia Next', year: '2026', role: 'Fullstack Developer',
     categories: ['Website', 'Machine Learning'],
     shortDescription: 'Platform cerdas dengan integrasi AI (Gemini API) untuk export gambar dan manajemen data dinamis terkait mood.',
     techStack: ['React', 'Supabase', 'Gemini API', 'Tailwind', 'Framer Motion'],
@@ -73,28 +55,19 @@ export const projects = [
     solution: 'PEKA lahir sebagai platform web *mood tracker* interaktif. Pengguna dapat menceritakan kondisi hati mereka, melacak jejak emosional (*tracking mood*), serta mendapatkan *feedback* dan validasi afirmatif agar mereka tidak pernah merasa sendirian.'
   },
   { 
-    id: 'siabsen',
-    slug: 'siabsen',
-    name: 'SiAbsen', 
+    id: 'siabsen', slug: 'siabsen', name: 'SiAbsen',
     src: '/img/Katalog- Proyek/siabsen.svg',
-    client: 'M****n (Universitas)',
-    year: '2026',
-    role: 'Mobile Developer',
-    url: 'https://siabsen.univ.edu',
-    categories: ['Mobile Apps'],
+    client: 'M****n (Universitas)', year: '2026', role: 'Mobile Developer',
+    url: 'https://siabsen.univ.edu', categories: ['Mobile Apps'],
     shortDescription: 'Sistem absensi mahasiswa berbasis Geofencing untuk mencegah kecurangan presensi kelas.',
     techStack: ['Flutter', 'Firebase', 'Geofencing'],
     challenge: 'Proses absensi mahasiswa di mata kuliah rawan kecurangan (titip absen) jika hanya menggunakan metode konvensional.',
     solution: 'Mengimplementasikan teknologi Geofencing (Radius Lokasi) yang membatasi akses presensi. Mahasiswa mutlak tidak bisa melakukan absen jika mereka berada di luar radius 50 meter dari titik koordinat lokasi kelas yang ditetapkan.'
   },
   { 
-    id: 'simppk',
-    slug: 'simppk',
-    name: 'SimPPK', 
+    id: 'simppk', slug: 'simppk', name: 'SimPPK',
     src: '/img/Katalog- Proyek/simppk.svg',
-    client: 'A****d (Pemerintahan)',
-    year: '2026',
-    role: 'Frontend Engineer',
+    client: 'A****d (Pemerintahan)', year: '2026', role: 'Frontend Engineer',
     categories: ['Website'],
     shortDescription: 'Sistem Informasi Pemerintahan untuk manajemen dan rekapitulasi data pegawai PPPK.',
     techStack: ['Next.js', 'Chakra UI', 'GraphQL'],
@@ -102,13 +75,9 @@ export const projects = [
     solution: 'Membangun Sistem Informasi Pemerintahan PPPK (Pegawai Pemerintah dengan Perjanjian Kerja) menggunakan arsitektur web modern yang menjamin kecepatan akses, keamanan data, dan kemudahan rekapitulasi administrasi.'
   },
   { 
-    id: 'siskamling',
-    slug: 'siskamling',
-    name: 'Siskamling App', 
+    id: 'siskamling', slug: 'siskamling', name: 'Siskamling App',
     src: '/img/Katalog- Proyek/siskamling.svg',
-    client: 'G*****n',
-    year: '2026',
-    role: 'Web Developer',
+    client: 'G*****n', year: '2026', role: 'Web Developer',
     categories: ['Website'],
     shortDescription: 'Aplikasi pengelolaan jadwal ronda dan presensi kehadiran warga berbasis Geofencing pos keamanan.',
     techStack: ['React', 'Geolocation API', 'Node.js'],
@@ -117,6 +86,74 @@ export const projects = [
   }
 ];
 
+/**
+ * Mapping dari nama kolom Supabase ke nama properti yang sudah digunakan di seluruh komponen React.
+ * Ini memastikan kita tidak perlu mengubah satu pun komponen UI yang sudah ada.
+ */
+function mapSupabaseRow(row) {
+  return {
+    id: row.id,
+    slug: row.slug,
+    name: row.judul,
+    src: row.gambar_url,
+    client: row.client,
+    year: row.year,
+    role: row.role,
+    url: row.link_live || row.link_playstore || null,
+    categories: row.categories || [],
+    shortDescription: row.short_description,
+    techStack: row.tech_stack || [],
+    challenge: row.deskripsi,
+    solution: row.solution,
+  };
+}
+
+/**
+ * Fetch semua proyek dari Supabase.
+ * Jika gagal (network error, tabel belum ada, dll), fallback ke data lokal.
+ */
+export async function fetchProjects() {
+  try {
+    const { data, error } = await supabase
+      .from('projects')
+      .select('*')
+      .order('created_at', { ascending: true });
+
+    if (error) throw error;
+    if (!data || data.length === 0) return fallbackProjects;
+
+    return data.map(mapSupabaseRow);
+  } catch (err) {
+    console.warn('[projects] Supabase fetch failed, using fallback data:', err.message);
+    return fallbackProjects;
+  }
+}
+
+/**
+ * Fetch satu proyek berdasarkan slug.
+ */
+export async function fetchProjectBySlug(slug) {
+  try {
+    const { data, error } = await supabase
+      .from('projects')
+      .select('*')
+      .eq('slug', slug)
+      .single();
+
+    if (error) throw error;
+    return mapSupabaseRow(data);
+  } catch (err) {
+    console.warn('[projects] Supabase fetch by slug failed, using fallback:', err.message);
+    return fallbackProjects.find((p) => p.slug === slug) || null;
+  }
+}
+
+// ============================================
+// Ekspor yang tetap kompatibel dengan kode lama
+// (Untuk komponen yang masih import { projects })
+// ============================================
+export const projects = fallbackProjects;
+
 export function getProjectBySlug(slug) {
-  return projects.find((p) => p.slug === slug);
+  return fallbackProjects.find((p) => p.slug === slug);
 }

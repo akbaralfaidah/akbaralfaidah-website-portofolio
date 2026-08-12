@@ -2,22 +2,29 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiArrowLeft, FiArrowUpRight, FiGlobe, FiSmartphone, FiCpu, FiPlay } from 'react-icons/fi';
-import { projects } from '../data/projects';
+import { fetchProjects } from '../data/projects';
 import Footer from '../components/Footer';
 
 const CATEGORIES = ['All', 'Website', 'Mobile Apps', 'Machine Learning'];
 
 export default function Projects() {
   const [activeCategory, setActiveCategory] = useState('All');
+  const [allProjects, setAllProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    fetchProjects().then((data) => {
+      setAllProjects(data);
+      setLoading(false);
+    });
   }, []);
 
   const filteredProjects = activeCategory === 'All' 
-    ? projects 
-    : projects.filter(p => p.categories && p.categories.includes(activeCategory));
+    ? allProjects 
+    : allProjects.filter(p => p.categories && p.categories.includes(activeCategory));
+
 
   // Helper to render the right icon for the primary category
   const getCategoryIcon = (categories) => {
@@ -70,6 +77,27 @@ export default function Projects() {
 
       {/* Projects Grid */}
       <main className="px-6 md:px-12 pb-24 max-w-7xl mx-auto min-h-[50vh]">
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="flex flex-col bg-white rounded-3xl overflow-hidden shadow-sm border border-charcoal/5 animate-pulse">
+                <div className="w-full pt-[65%] bg-charcoal/10" />
+                <div className="p-6 md:p-8 space-y-4">
+                  <div className="h-3 w-24 bg-charcoal/10 rounded-full" />
+                  <div className="h-6 w-40 bg-charcoal/10 rounded-full" />
+                  <div className="h-3 w-full bg-charcoal/10 rounded-full" />
+                  <div className="h-3 w-3/4 bg-charcoal/10 rounded-full" />
+                  <div className="flex gap-2 pt-2">
+                    <div className="h-6 w-16 bg-charcoal/10 rounded-md" />
+                    <div className="h-6 w-16 bg-charcoal/10 rounded-md" />
+                    <div className="h-6 w-16 bg-charcoal/10 rounded-md" />
+                  </div>
+                  <div className="h-10 w-32 bg-charcoal/10 rounded-full mt-4" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
         <motion.div layout className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
           <AnimatePresence mode="popLayout">
             {filteredProjects.map((project) => (
@@ -137,8 +165,9 @@ export default function Projects() {
             ))}
           </AnimatePresence>
         </motion.div>
+        )}
 
-        {filteredProjects.length === 0 && (
+        {!loading && filteredProjects.length === 0 && (
           <div className="text-center py-20 text-charcoal/50">
             Tidak ada proyek dalam kategori ini.
           </div>

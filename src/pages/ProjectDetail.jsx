@@ -2,19 +2,32 @@ import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiArrowLeft, FiExternalLink, FiGlobe, FiInfo } from 'react-icons/fi';
-import { getProjectBySlug } from '../data/projects';
+import { fetchProjectBySlug } from '../data/projects';
 import Footer from '../components/Footer';
 
 export default function ProjectDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const [project, setProject] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const found = getProjectBySlug(slug);
-    setProject(found || null);
+    setLoading(true);
+    fetchProjectBySlug(slug).then((found) => {
+      setProject(found || null);
+      setLoading(false);
+    });
   }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-paper text-charcoal flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-charcoal/20 border-t-charcoal rounded-full animate-spin" />
+      </div>
+    );
+  }
+
 
   if (!project) {
     return (
