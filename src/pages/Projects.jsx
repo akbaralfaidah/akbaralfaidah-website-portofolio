@@ -21,9 +21,17 @@ export default function Projects() {
     });
   }, []);
 
-  const filteredProjects = activeCategory === 'All' 
+  let filteredProjects = activeCategory === 'All' 
     ? allProjects 
     : allProjects.filter(p => p.categories && p.categories.includes(activeCategory));
+
+  // Sort: On Progress (not 'selesai') first, then 'selesai'
+  filteredProjects.sort((a, b) => {
+    const isASelesai = a.status === 'selesai';
+    const isBSelesai = b.status === 'selesai';
+    if (isASelesai === isBSelesai) return 0;
+    return isASelesai ? 1 : -1;
+  });
 
 
   // Helper to render the right icon for the primary category
@@ -113,10 +121,15 @@ export default function Projects() {
                 {/* Image Container */}
                 <Link to={`/project/${project.slug}`} className="block relative w-full pt-[65%] bg-charcoal/5 overflow-hidden">
                   <img 
-                    src={project.src} 
+                    src={project.status !== 'selesai' ? '/on_development.gif' : project.src} 
                     alt={project.name} 
                     className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                   />
+                  {project.status !== 'selesai' && (
+                    <div className="absolute top-3 left-3 px-3 py-1 bg-amber-500 text-white text-xs font-bold rounded-full shadow-md z-10 animate-pulse">
+                      ON PROGRESS
+                    </div>
+                  )}
                 </Link>
 
                 {/* Content */}
