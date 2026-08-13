@@ -166,10 +166,7 @@ function OrbitColumn() {
             transformOrigin: 'top left',
           }}
         >
-          <Link to={`/project/${p.slug}`} className="block w-full h-full rounded-2xl overflow-hidden shadow-md border border-charcoal/6 dark:border-paper/6 bg-paper dark:bg-[#3A3C41] group">
-            <div className="absolute inset-0 bg-charcoal/20 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center">
-              <span className="text-white font-medium px-4 py-2 bg-charcoal/50 rounded-full backdrop-blur-sm">View Project</span>
-            </div>
+          <div className="block w-full h-full rounded-2xl overflow-hidden shadow-md border border-charcoal/6 dark:border-paper/6 bg-paper dark:bg-[#3A3C41] group">
             <img
               src={p.src}
               alt={p.name}
@@ -177,7 +174,7 @@ function OrbitColumn() {
               draggable="false"
               className="w-full h-full object-cover object-top block pointer-events-none select-none group-hover:scale-105 transition-transform duration-500"
             />
-          </Link>
+          </div>
         </div>
       ))}
     </div>
@@ -215,15 +212,12 @@ function MobileCarousel() {
       onTouchEnd={() => { pausedRef.current = false; }}>
       <div ref={trackRef} className="flex gap-4" style={{ willChange: 'transform' }}>
         {items.map((p, i) => (
-          <Link key={`${p.name}-${i}`} to={`/project/${p.slug}`}
+          <div key={`${p.name}-${i}`} 
             className="block flex-shrink-0 rounded-2xl overflow-hidden shadow-sm border border-charcoal/6 dark:border-paper/6 bg-paper dark:bg-[#3A3C41] relative group"
             style={{ width: '300px', height: '169px' }}>
-            <div className="absolute inset-0 bg-charcoal/20 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center">
-              <span className="text-white text-sm font-medium px-4 py-1.5 bg-charcoal/50 rounded-full backdrop-blur-sm">View</span>
-            </div>
             <img src={p.src} alt={p.name} loading="lazy" draggable="false"
               className="w-full h-full object-cover object-top block pointer-events-none group-hover:scale-105 transition-transform duration-500" />
-          </Link>
+          </div>
         ))}
       </div>
     </div>
