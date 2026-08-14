@@ -114,6 +114,7 @@ function mapSupabaseRow(row) {
     techStack: row.tech_stack || [],
     challenge: row.deskripsi,
     solution: row.solution,
+    is_hidden: row.is_hidden || false,
   };
 }
 
@@ -131,7 +132,7 @@ export async function fetchProjects() {
     if (error) throw error;
     if (!data || data.length === 0) return fallbackProjects;
 
-    return data.map(mapSupabaseRow);
+    return data.map(mapSupabaseRow).filter(p => !p.is_hidden);
   } catch (err) {
     console.warn('[projects] Supabase fetch failed, using fallback data:', err.message);
     return fallbackProjects;
