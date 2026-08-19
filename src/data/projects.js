@@ -135,7 +135,7 @@ export async function fetchProjects() {
       // Supabase free tier bisa memakan waktu 10-15 detik untuk cold start.
       // Kita batasi maksimal 3 detik agar UI tidak stuck di skeleton loader.
       const fetchReq = supabase
-        .from('projects')
+        .from('public_projects_view')
         .select('*')
         .order('created_at', { ascending: true });
         
@@ -175,7 +175,7 @@ export async function fetchProjectBySlug(slug) {
 
   try {
     const fetchReq = supabase
-      .from('projects')
+      .from('public_projects_view')
       .select('*')
       .eq('slug', slug)
       .single();

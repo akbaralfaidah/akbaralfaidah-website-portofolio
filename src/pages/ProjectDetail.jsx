@@ -41,7 +41,7 @@ export default function ProjectDetail() {
   }
 
   return (
-    <div className="bg-paper min-h-screen text-charcoal selection:bg-charcoal selection:text-paper">
+    <div className="bg-paper dark:bg-[#1A1A1C] min-h-screen text-charcoal dark:text-[#F2F0E8] selection:bg-charcoal dark:selection:bg-[#F2F0E8] selection:text-paper dark:selection:text-charcoal">
       
       {/* Top Navbar spacing is handled by App / Layout, assuming we need padding top */}
       <main className="pt-24 pb-20 px-6 md:px-12 max-w-6xl mx-auto">
@@ -54,7 +54,7 @@ export default function ProjectDetail() {
         >
           <button 
             onClick={() => navigate('/')} 
-            className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-charcoal/20 text-sm font-medium hover:bg-charcoal hover:text-white transition-all duration-300"
+            className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-charcoal/20 dark:border-white/20 text-sm font-medium hover:bg-charcoal dark:hover:bg-white hover:text-white dark:hover:text-charcoal transition-all duration-300"
           >
             <FiArrowLeft /> Back to Portfolio
           </button>
@@ -67,12 +67,12 @@ export default function ProjectDetail() {
           transition={{ delay: 0.1 }}
           className="mb-10"
         >
-          <div className="flex items-center gap-3 text-sm font-bold uppercase tracking-widest text-charcoal/50 mb-3">
+          <div className="flex items-center gap-3 text-sm font-bold uppercase tracking-widest text-charcoal/50 dark:text-[#F2F0E8]/50 mb-3">
             <span>{project.role}</span>
             <span>&bull;</span>
             <span>{project.year}</span>
           </div>
-          <h1 className="text-5xl md:text-6xl font-display font-bold tracking-tight text-charcoal">
+          <h1 className="text-5xl md:text-6xl font-display font-bold tracking-tight text-charcoal dark:text-[#F2F0E8]">
             {project.name}
           </h1>
         </motion.header>
@@ -107,7 +107,7 @@ export default function ProjectDetail() {
             {/* About */}
             <section>
               <h2 className="text-3xl font-display font-bold mb-6">About this project</h2>
-              <div className="prose prose-lg text-charcoal/70">
+              <div className="prose prose-lg text-charcoal/70 dark:text-[#F2F0E8]/70">
                 <p className="mb-4">{project.challenge}</p>
                 <p>{project.solution}</p>
               </div>
@@ -115,15 +115,15 @@ export default function ProjectDetail() {
 
             {/* Role */}
             <section>
-              <h3 className="text-xs font-bold uppercase tracking-widest text-charcoal/50 mb-4">My Role</h3>
-              <div className="inline-flex px-5 py-2.5 rounded-full border border-charcoal/20 font-medium text-sm">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-charcoal/50 dark:text-[#F2F0E8]/50 mb-4">My Role</h3>
+              <div className="inline-flex px-5 py-2.5 rounded-full border border-charcoal/20 dark:border-white/20 font-medium text-sm">
                 {project.role}
               </div>
             </section>
 
             {/* Highlights (Using solution or challenge as bullet points if we want to innovate) */}
             <section>
-              <h3 className="text-xs font-bold uppercase tracking-widest text-charcoal/50 mb-4">Key Details</h3>
+              <h3 className="text-xs font-bold uppercase tracking-widest text-charcoal/50 dark:text-[#F2F0E8]/50 mb-4">Key Details</h3>
               <div className="space-y-3">
                 <div className="p-5 rounded-2xl bg-[#F0FDF4] dark:bg-emerald-950/20 text-emerald-900 dark:text-emerald-200 text-sm md:text-base leading-relaxed">
                   &bull; Dibangun secara spesifik untuk klien <strong>{project.client}</strong>.
@@ -148,11 +148,11 @@ export default function ProjectDetail() {
             className="lg:col-span-4 space-y-6"
           >
             {/* Tech Stack Card */}
-            <div className="bg-[#FAFAFA] dark:bg-charcoal/10 rounded-3xl p-6 border border-charcoal/5">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-charcoal/50 mb-4">Tech Stack</h3>
+            <div className="bg-[#FAFAFA] dark:bg-[#2C2E32] rounded-3xl p-6 border border-charcoal/5 dark:border-white/5">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-charcoal/50 dark:text-[#F2F0E8]/50 mb-4">Tech Stack</h3>
               <div className="flex flex-wrap gap-2">
                 {project.techStack.map(tech => (
-                  <span key={tech} className="px-4 py-2 bg-white dark:bg-charcoal/40 border border-charcoal/10 rounded-full text-sm font-medium shadow-sm">
+                  <span key={tech} className="px-4 py-2 bg-white dark:bg-[#1A1A1C] border border-charcoal/10 dark:border-white/10 rounded-full text-sm font-medium shadow-sm">
                     {tech}
                   </span>
                 ))}
@@ -160,10 +160,10 @@ export default function ProjectDetail() {
             </div>
 
             {/* Client / Platform Card */}
-            <div className="bg-[#FAFAFA] dark:bg-charcoal/10 rounded-3xl p-6 border border-charcoal/5">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-charcoal/50 mb-4">Client & Platform</h3>
-              <div className="flex items-center gap-3 text-charcoal/80 mb-3">
-                <div className="w-10 h-10 rounded-full bg-white dark:bg-charcoal/40 border border-charcoal/10 flex items-center justify-center shadow-sm">
+            <div className="bg-[#FAFAFA] dark:bg-[#2C2E32] rounded-3xl p-6 border border-charcoal/5 dark:border-white/5">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-charcoal/50 dark:text-[#F2F0E8]/50 mb-4">Client & Platform</h3>
+              <div className="flex items-center gap-3 text-charcoal/80 dark:text-[#F2F0E8]/80 mb-3">
+                <div className="w-10 h-10 rounded-full bg-white dark:bg-[#1A1A1C] border border-charcoal/10 dark:border-white/10 flex items-center justify-center shadow-sm">
                   <FiGlobe />
                 </div>
                 <span className="font-medium">{project.client}</span>
@@ -177,12 +177,12 @@ export default function ProjectDetail() {
                   href={project.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full py-4 rounded-full border border-charcoal text-charcoal font-semibold hover:bg-charcoal hover:text-white transition-all duration-300"
+                  className="flex items-center justify-center gap-2 w-full py-4 rounded-full border border-charcoal dark:border-[#F2F0E8] text-charcoal dark:text-[#F2F0E8] font-semibold hover:bg-charcoal dark:hover:bg-[#F2F0E8] hover:text-white dark:hover:text-charcoal transition-all duration-300"
                 >
                   <FiInfo /> Visit Live Site
                 </a>
               ) : (
-                <button disabled className="flex items-center justify-center gap-2 w-full py-4 rounded-full border border-charcoal/20 text-charcoal/40 font-semibold cursor-not-allowed">
+                <button disabled className="flex items-center justify-center gap-2 w-full py-4 rounded-full border border-charcoal/20 dark:border-[#F2F0E8]/20 text-charcoal/40 dark:text-[#F2F0E8]/40 font-semibold cursor-not-allowed">
                   <FiInfo /> Offline System
                 </button>
               )}

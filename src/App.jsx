@@ -1,9 +1,10 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { lazy, Suspense, useEffect, useRef } from 'react';
 import { LenisProvider } from './context/LenisContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import HomePage from './pages/HomePage';
 import MeshGradient from './components/ui/MeshGradient';
+import { supabase } from './lib/supabase';
 
 // Fix #6: Lazy load route-level pages — these are only needed when navigating
 const Projects = lazy(() => import('./pages/Projects'));
@@ -15,11 +16,38 @@ const PageFallback = () => (
   </div>
 );
 
+// Komponen untuk melacak navigasi halaman (Analytics)
+const PageTracker = () => {
+  const location = useLocation();
+  const trackedPath = useRef('');
+
+  useEffect(() => {
+    if (trackedPath.current === location.pathname) return;
+    trackedPath.current = location.pathname;
+
+    const trackView = async () => {
+      try {
+        await supabase.from('page_views').insert([{
+          path: location.pathname,
+          browser: navigator.userAgent,
+          device_type: window.innerWidth < 768 ? 'Mobile' : 'Desktop'
+        }]);
+      } catch (e) {
+        console.log('Analytics error:', e);
+      }
+    };
+    trackView();
+  }, [location]);
+
+  return null; // Komponen ini tidak menampilkan apapun (invisible)
+};
+
 function App() {
   return (
     <ErrorBoundary>
       <LenisProvider>
         <BrowserRouter>
+          <PageTracker />
           <MeshGradient />
           <Suspense fallback={<PageFallback />}>
             <Routes>

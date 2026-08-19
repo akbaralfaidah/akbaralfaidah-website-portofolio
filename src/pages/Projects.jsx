@@ -50,13 +50,13 @@ export default function Projects() {
   };
 
   return (
-    <div className="bg-[#FAFAFA] min-h-screen text-charcoal">
+    <div className="bg-paper dark:bg-[#1A1A1C] min-h-screen text-charcoal dark:text-[#F2F0E8]">
       
       {/* Header Area */}
       <header className="pt-24 pb-12 px-6 md:px-12 max-w-7xl mx-auto">
         <button 
           onClick={() => navigate('/')} 
-          className="inline-flex items-center gap-2 px-5 py-2 mb-8 rounded-full border border-charcoal/20 text-sm font-medium hover:bg-charcoal hover:text-white transition-all duration-300"
+          className="inline-flex items-center gap-2 px-5 py-2 mb-8 rounded-full border border-charcoal/20 dark:border-white/20 text-sm font-medium hover:bg-charcoal dark:hover:bg-white hover:text-white dark:hover:text-charcoal transition-all duration-300"
         >
           <FiArrowLeft /> Kembali ke Beranda
         </button>
@@ -73,8 +73,8 @@ export default function Projects() {
               onClick={() => setActiveCategory(cat)}
               className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border ${
                 activeCategory === cat 
-                  ? 'bg-charcoal text-white border-charcoal' 
-                  : 'bg-white text-charcoal/70 border-charcoal/10 hover:border-charcoal/30'
+                  ? 'bg-charcoal dark:bg-[#F2F0E8] text-white dark:text-[#1A1A1C] border-charcoal dark:border-[#F2F0E8]' 
+                  : 'bg-white dark:bg-[#2C2E32] text-charcoal/70 dark:text-white/70 border-charcoal/10 dark:border-white/10 hover:border-charcoal/30 dark:hover:border-white/30'
               }`}
             >
               {cat}
@@ -88,7 +88,7 @@ export default function Projects() {
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="flex flex-col bg-white rounded-3xl overflow-hidden shadow-sm border border-charcoal/5 animate-pulse">
+              <div key={i} className="flex flex-col bg-white dark:bg-[#2C2E32] rounded-3xl overflow-hidden shadow-sm border border-charcoal/5 dark:border-white/5 animate-pulse">
                 <div className="w-full pt-[65%] bg-charcoal/10" />
                 <div className="p-6 md:p-8 space-y-4">
                   <div className="h-3 w-24 bg-charcoal/10 rounded-full" />
@@ -116,7 +116,7 @@ export default function Projects() {
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3 }}
                 key={project.id}
-                className="flex flex-col bg-white rounded-3xl overflow-hidden shadow-sm border border-charcoal/5 group"
+                className="flex flex-col bg-white dark:bg-[#2C2E32] rounded-3xl overflow-hidden shadow-sm border border-charcoal/5 dark:border-white/5 group"
               >
                 {/* Image Container */}
                 <Link to={`/project/${project.slug}`} className="block relative w-full pt-[65%] bg-charcoal/5 overflow-hidden">
@@ -141,7 +141,7 @@ export default function Projects() {
                       {getCategoryIcon(project.categories)}
                       <span>{getPrimaryCategoryLabel(project.categories)}</span>
                     </div>
-                    <span className="text-charcoal/40">{project.year}</span>
+                    <span className="text-charcoal/40 dark:text-[#F2F0E8]/40">{project.year}</span>
                   </div>
 
                   {/* Title */}
@@ -152,14 +152,14 @@ export default function Projects() {
                   </Link>
 
                   {/* Description */}
-                  <p className="text-charcoal/70 text-sm leading-relaxed mb-6 flex-grow">
+                  <p className="text-charcoal/70 dark:text-[#F2F0E8]/70 text-sm leading-relaxed mb-6 flex-grow">
                     {project.shortDescription}
                   </p>
 
                   {/* Tech Stack Pills */}
                   <div className="flex flex-wrap gap-2 mb-8">
                     {project.techStack.map(tech => (
-                      <span key={tech} className="px-3 py-1 bg-white border border-charcoal/10 rounded-md text-[11px] font-medium text-charcoal/60 whitespace-nowrap">
+                      <span key={tech} className="px-3 py-1 bg-white dark:bg-[#1A1A1C] border border-charcoal/10 dark:border-white/10 rounded-md text-[11px] font-medium text-charcoal/60 dark:text-white/60 whitespace-nowrap">
                         {tech}
                       </span>
                     ))}
@@ -168,7 +168,7 @@ export default function Projects() {
                   {/* Action Button */}
                   <Link 
                     to={`/project/${project.slug}`}
-                    className="inline-flex items-center justify-center gap-2 w-max px-6 py-3 bg-[#2D2E32] text-white text-sm font-semibold rounded-full hover:bg-black transition-colors mt-auto"
+                    className="inline-flex items-center justify-center gap-2 w-max px-6 py-3 bg-[#2D2E32] dark:bg-brass text-white text-sm font-semibold rounded-full hover:bg-black dark:hover:bg-[#8e6b32] transition-colors mt-auto"
                   >
                     Lihat Detail <FiArrowUpRight size={16} />
                   </Link>
