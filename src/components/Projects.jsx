@@ -1,97 +1,24 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FiArrowUpRight, FiGlobe } from 'react-icons/fi';
 import { FaGooglePlay } from 'react-icons/fa';
 import AnimatedButton from './ui/AnimatedButton';
+import { fetchProjects } from '../data/projects';
 
-const PROJECTS = [
-  {
-    id: "bosdepot",
-    title: "BosDepot",
-    category: "MOBILE APP",
-    year: "2026",
-    platform: "playstore",
-    stack: ["Flutter", "Firebase", "GetX", "SQLite", "FL Chart"],
-    link: "/project/bosdepot",
-    image: "/img/Katalog- Proyek/bosdepot.svg",
-  },
-  {
-    id: "siskamling",
-    title: "Siskamling",
-    category: "WEBSITE",
-    year: "2026",
-    platform: "website",
-    stack: ["Laravel 13", "PHP 8.3", "Tailwind v4", "Alpine.js", "Vite"],
-    link: "/project/siskamling",
-    image: "/img/Katalog- Proyek/siskamling.svg",
-  },
-  {
-    id: "peka",
-    title: "PEKA",
-    category: "WEBSITE",
-    year: "2026",
-    platform: "website",
-    stack: ["React", "Supabase", "Gemini API", "Tailwind", "Framer Motion"],
-    link: "/project/peka",
-    image: "/img/Katalog- Proyek/peka.svg",
-  },
-  {
-    id: "mpp",
-    title: "MPP",
-    category: "WEBSITE",
-    year: "2026",
-    platform: "website",
-    stack: ["Laravel 13", "MySQL", "Tailwind v4", "Chart.js"],
-    link: "/project/mpp",
-    image: "/img/Katalog- Proyek/mpp.svg",
-  },
-  {
-    id: "simppk",
-    title: "SIMPPK",
-    category: "WEBSITE",
-    year: "2026",
-    platform: "website",
-    stack: ["Laravel 13", "PHP 8.3", "Tailwind v4", "Vite"],
-    link: "/project/simppk",
-    image: "/img/Katalog- Proyek/simppk.svg",
-  },
-  {
-    id: "chattask",
-    title: "ChatTask",
-    category: "WEBSITE",
-    year: "2026",
-    platform: "website",
-    stack: ["Next.js", "Supabase", "Tailwind", "Jest", "Docker"],
-    link: "/project/chattask",
-    image: "/img/Katalog- Proyek/chattask.svg",
-  },
-  {
-    id: "jokipro",
-    title: "JokiPro",
-    category: "WEBSITE",
-    year: "2026",
-    platform: "website",
-    stack: ["React 19", "React Router v7", "Vite", "Tailwind"],
-    link: "/project/jokipro",
-    image: "/img/Katalog- Proyek/jokipro.svg",
-  },
-  {
-    id: "siabsen",
-    title: "SiAbsen",
-    category: "MOBILE APP",
-    year: "2026",
-    platform: "playstore",
-    stack: ["Flutter", "Dart", "GetX", "Firebase", "Geolocator"],
-    link: "/project/siabsen",
-    image: "/img/Katalog- Proyek/siabsen.svg",
-  }
-];
+/**
+ * Fix #5: Projects section now uses fetchProjects() from Supabase (single source of truth)
+ * instead of a hardcoded PROJECTS array. Featured projects are filtered by slug.
+ */
+const FEATURED_SLUGS = ['bosdepot', 'siabsen', 'peka', 'chattask'];
 
 function ProjectCard({ project, index }) {
   const [isHovered, setIsHovered] = useState(false);
   const { t } = useTranslation();
+
+  const category = project.categories?.[0] || 'Website';
+  const platform = project.categories?.includes('Mobile Apps') ? 'playstore' : 'website';
 
   return (
     <motion.div
@@ -107,20 +34,18 @@ function ProjectCard({ project, index }) {
         <motion.img
           animate={{ scale: isHovered ? 1.05 : 1 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          src={project.image}
-          alt={project.title}
+          src={project.src}
+          alt={project.name}
           className="w-full h-full object-cover object-top"
         />
-
-        {/* Overlay gradient for premium feel */}
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>
 
       <div className="flex flex-col flex-grow px-2">
         <div className="flex items-center gap-3 mb-3">
           <span className="flex items-center gap-1.5 text-[12px] font-mono font-bold tracking-[0.2em] uppercase text-brass bg-brass/10 px-2.5 py-1 rounded-full">
-            {project.platform === 'playstore' ? <FaGooglePlay size={10} /> : <FiGlobe size={11} />}
-            {project.category}
+            {platform === 'playstore' ? <FaGooglePlay size={10} /> : <FiGlobe size={11} />}
+            {category.toUpperCase()}
           </span>
           <span className="text-[13px] font-mono font-medium text-charcoal/40 dark:text-[#F2F0E8]/40">
             {project.year}
@@ -128,15 +53,15 @@ function ProjectCard({ project, index }) {
         </div>
 
         <h3 className="text-2xl font-display font-bold text-charcoal dark:text-[#F2F0E8] tracking-tight mb-2 group-hover:text-brass transition-colors duration-300">
-          {project.title}
+          {project.name}
         </h3>
 
         <p className="text-sm md:text-[0.95rem] text-charcoal/70 dark:text-paper/70 leading-relaxed mb-6 font-medium">
-          {t(`projects.${project.id}_desc`)}
+          {t(`projects.${project.slug}_desc`)}
         </p>
 
         <div className="flex flex-wrap gap-2 mb-8">
-          {project.stack.map((tech, i) => (
+          {(project.techStack || []).map((tech, i) => (
             <span key={i} className="text-[12px] font-mono text-charcoal/60 dark:text-[#F2F0E8]/60 border border-charcoal/10 dark:border-[#F2F0E8]/10 bg-mist/50 dark:bg-[#3A3C41]/50 px-2 py-1 rounded-md">
               {tech}
             </span>
@@ -145,7 +70,7 @@ function ProjectCard({ project, index }) {
 
         <div className="mt-auto pt-4">
           <AnimatedButton
-            to={project.link}
+            to={`/project/${project.slug}`}
             className="px-6 h-10 text-xs tracking-wide"
           >
             <span className="font-semibold text-sm tracking-wide">
@@ -161,11 +86,23 @@ function ProjectCard({ project, index }) {
 
 export default function Projects() {
   const { t } = useTranslation();
+  const [allProjects, setAllProjects] = useState([]);
+
+  useEffect(() => {
+    fetchProjects().then(setAllProjects);
+  }, []);
+
+  // Filter to featured projects only, preserve display order
+  const featured = useMemo(() => {
+    return FEATURED_SLUGS
+      .map(slug => allProjects.find(p => p.slug === slug))
+      .filter(Boolean);
+  }, [allProjects]);
 
   return (
     <section id="projects" className="py-8 md:py-12 lg:py-14 relative z-10 bg-paper text-charcoal overflow-hidden dark:bg-[#1A1A1C] dark:text-[#F2F0E8]">
 
-      {/* Header - Centered */}
+      {/* Header */}
       <div className="max-w-5xl mx-auto px-6 mb-12 md:mb-16 text-center">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
@@ -191,8 +128,8 @@ export default function Projects() {
       {/* Projects Grid */}
       <div className="max-w-5xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-16">
-          {PROJECTS.filter(p => ['BosDepot', 'SiAbsen', 'PEKA', 'ChatTask'].includes(p.title)).map((project, i) => (
-            <ProjectCard key={i} project={project} index={i} />
+          {featured.map((project, i) => (
+            <ProjectCard key={project.slug} project={project} index={i} />
           ))}
         </div>
       </div>

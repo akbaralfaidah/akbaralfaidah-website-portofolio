@@ -1,5 +1,6 @@
 import { motion, useMotionValue, useAnimationFrame, useMotionValueEvent } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
+import { useIsVisible } from '../../hooks/useIsVisible';
 import { 
   SiJavascript, SiTypescript, SiPython, 
   SiReact, SiNextdotjs, SiVuedotjs, SiTailwindcss, SiFlutter,
@@ -47,23 +48,23 @@ const DraggableMarqueeRow = ({ items, direction = 1, speed = 40 }) => {
   const x = useMotionValue(0);
   const firstItemRef = useRef(null);
   const firstDuplicateRef = useRef(null);
+  const { ref: visRef, isVisibleRef } = useIsVisible();
 
   useEffect(() => {
     const measure = () => {
       if (firstItemRef.current && firstDuplicateRef.current) {
-        // Measure exact pixel distance between the start of Set 1 and Set 2
         setWidth(firstDuplicateRef.current.offsetLeft - firstItemRef.current.offsetLeft);
       }
     };
     measure();
     window.addEventListener('resize', measure);
-    // Add a slight delay measure just in case fonts/icons load late
     setTimeout(measure, 500);
     return () => window.removeEventListener('resize', measure);
   }, []);
 
   useAnimationFrame((t, delta) => {
-    if (width === 0) return;
+    // Fix #2: Skip when offscreen
+    if (width === 0 || !isVisibleRef.current) return;
     let moveBy = direction * speed * (delta / 1000);
     x.set(x.get() + moveBy);
   });
@@ -80,6 +81,7 @@ const DraggableMarqueeRow = ({ items, direction = 1, speed = 40 }) => {
 
   return (
     <motion.div
+      ref={visRef}
       className="flex gap-3 sm:gap-4 w-max cursor-grab active:cursor-grabbing"
       style={{ x }}
       drag="x"

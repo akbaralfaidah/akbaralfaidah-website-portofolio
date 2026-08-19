@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FiMail, FiMapPin, FiGithub, FiLinkedin, FiInstagram, FiSend, FiChevronDown } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
@@ -8,10 +8,34 @@ import AnimatedButton from './ui/AnimatedButton';
 import Toast from './ui/Toast';
 
 // EmailJS credentials — fetched from environment variables
+// ⚠️ SECURITY: These are public keys exposed in the client bundle.
+// Make sure to restrict allowed origins in the EmailJS Dashboard:
+//   → https://dashboard.emailjs.com → Integration → Allowed Origins
 const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
 const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
 const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
+
+// Allowed production domains for EmailJS (Fix #2)
+const ALLOWED_ORIGINS = ['akbaralfaidah.com', 'www.akbaralfaidah.com', 'localhost'];
+
+/**
+ * Simple encode/decode helpers for rate limit data to resist casual localStorage tampering (Fix #4).
+ * This is NOT cryptographic security — it just raises the bar above editing raw JSON in DevTools.
+ */
+const RATE_KEY = '_cl_rl';
+function encodeRateData(data) {
+  try {
+    const json = JSON.stringify(data);
+    return btoa(json.split('').reverse().join(''));
+  } catch { return null; }
+}
+function decodeRateData(encoded) {
+  try {
+    const reversed = atob(encoded);
+    return JSON.parse(reversed.split('').reverse().join(''));
+  } catch { return { count: 0, lastSent: 0 }; }
+}
 
 export default function Contact() {
   const { t } = useTranslation();
@@ -21,6 +45,7 @@ export default function Contact() {
   const [isSending, setIsSending] = useState(false);
   const [honeypot, setHoneypot] = useState('');
   const [turnstileToken, setTurnstileToken] = useState(null);
+  const turnstileRef = useRef(null);
 
   const showToast = (message, type = 'error') => {
     setToast({ message, type });
@@ -76,7 +101,8 @@ export default function Contact() {
   };
 
   const checkRateLimit = () => {
-    const limitData = JSON.parse(localStorage.getItem('contact_limit') || '{"count":0, "lastSent":0}');
+    const stored = localStorage.getItem(RATE_KEY);
+    const limitData = stored ? decodeRateData(stored) : { count: 0, lastSent: 0 };
     const now = Date.now();
     const cooldownMs = 60 * 1000; // 60 seconds
     const dailyMs = 24 * 60 * 60 * 1000; // 24 hours
@@ -100,7 +126,8 @@ export default function Contact() {
   };
 
   const updateRateLimit = () => {
-    const limitData = JSON.parse(localStorage.getItem('contact_limit') || '{"count":0, "lastSent":0}');
+    const stored = localStorage.getItem(RATE_KEY);
+    const limitData = stored ? decodeRateData(stored) : { count: 0, lastSent: 0 };
     const now = Date.now();
     const dailyMs = 24 * 60 * 60 * 1000;
 
@@ -110,7 +137,7 @@ export default function Contact() {
 
     limitData.count += 1;
     limitData.lastSent = now;
-    localStorage.setItem('contact_limit', JSON.stringify(limitData));
+    localStorage.setItem(RATE_KEY, encodeRateData(limitData));
   };
 
   const handleSubmit = async (e) => {
@@ -137,9 +164,25 @@ export default function Contact() {
     }
   };
 
+  /**
+   * Reset Turnstile token after each submission to prevent token reuse (Fix #6).
+   */
+  const resetTurnstile = () => {
+    setTurnstileToken(null);
+    if (turnstileRef.current) {
+      turnstileRef.current.reset();
+    }
+  };
+
   const handleWhatsApp = () => {
     const { name, whatsapp, message, deadline } = formData;
-    const waTarget = import.meta.env.VITE_WHATSAPP_NUMBER || '62881080245045';
+    const waTarget = import.meta.env.VITE_WHATSAPP_NUMBER;
+
+    // Fix #10: Validate WhatsApp target number format
+    if (!waTarget || !/^\d{10,15}$/.test(waTarget)) {
+      showToast('Konfigurasi nomor WhatsApp tidak valid.', 'error');
+      return;
+    }
 
     const lines = [
       `Halo Akbar! \uD83D\uDC4B\uD83C\uDFFB `,
@@ -160,9 +203,17 @@ export default function Contact() {
     showToast(t('contact.toast.wa_success'), 'success');
     setFormData({ name: '', whatsapp: '', email: '', message: '', deadline: '' });
     updateRateLimit();
+    resetTurnstile();
   };
 
   const handleEmail = async () => {
+    // Fix #2: Validate origin before sending email
+    const currentHost = window.location.hostname;
+    if (!ALLOWED_ORIGINS.some(origin => currentHost === origin || currentHost.endsWith('.' + origin))) {
+      showToast('Pengiriman email tidak diizinkan dari domain ini.', 'error');
+      return;
+    }
+
     setIsSending(true);
     try {
       await emailjs.send(
@@ -180,6 +231,7 @@ export default function Contact() {
       showToast(t('contact.toast.email_success'), 'success');
       setFormData({ name: '', whatsapp: '', email: '', message: '', deadline: '' });
       updateRateLimit();
+      resetTurnstile();
     } catch {
       showToast(t('contact.toast.email_error'), 'error');
     } finally {
@@ -385,13 +437,21 @@ export default function Contact() {
                   {/* Cloudflare Turnstile Widget */}
                   <div className="pt-2">
                     <Turnstile 
+                      ref={turnstileRef}
                       siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY} 
                       onSuccess={(token) => setTurnstileToken(token)}
+                      onExpire={() => setTurnstileToken(null)}
                       options={{ theme: 'auto' }}
                     />
                     <p className="text-[10px] text-charcoal/40 dark:text-[#F2F0E8]/40 mt-1">
                       Dilindungi oleh Cloudflare Turnstile
                     </p>
+                    {/* 
+                      ⚠️ SECURITY TODO (Fix #6): For full protection, verify the Turnstile token 
+                      server-side via POST https://challenges.cloudflare.com/turnstile/v0/siteverify
+                      using your TURNSTILE_SECRET_KEY. This requires a backend/edge function.
+                      Current implementation: client-side token presence check + token reuse prevention.
+                    */}
                   </div>
 
                   <AnimatedButton

@@ -23,12 +23,23 @@ export default function HomePage() {
       <Navbar />
       <main>
         <Hero />
+        {/* Fix #7: Each section gets its own Suspense boundary so they load independently */}
         <Suspense fallback={<LazyFallback />}>
           <YouCanScroll />
+        </Suspense>
+        <Suspense fallback={<LazyFallback />}>
           <About />
+        </Suspense>
+        <Suspense fallback={<LazyFallback />}>
           <Projects />
+        </Suspense>
+        <Suspense fallback={<LazyFallback />}>
           <Experience />
+        </Suspense>
+        <Suspense fallback={<LazyFallback />}>
           <TestimonialsSection />
+        </Suspense>
+        <Suspense fallback={<LazyFallback />}>
           <Contact />
         </Suspense>
       </main>

@@ -33,3 +33,16 @@
     @apply outline-none ring-2 ring-brass ring-offset-2 ring-offset-paper;
   }
 }
+
+/* Fix #4: MeshGradient CSS animations — zero JS overhead */
+@keyframes mesh-float-1 {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(30px, 20px, 0) scale(1.1); }
+}
+@keyframes mesh-float-2 {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-30px, 30px, 0) scale(1.2); }
+}
+.mesh-blob { will-change: transform; }
+.mesh-blob-1 { animation: mesh-float-1 20s ease-in-out infinite; }
+.mesh-blob-2 { animation: mesh-float-2 25s ease-in-out infinite; }

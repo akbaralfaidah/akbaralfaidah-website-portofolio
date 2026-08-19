@@ -4,12 +4,11 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FiArrowRight } from 'react-icons/fi';
 import AnimatedButton from './ui/AnimatedButton';
+import { useLenis } from '../context/LenisContext';
+import { useIsVisible } from '../hooks/useIsVisible';
 import { TechLogoMarquee } from './ui/TechLogoMarquee';
 
 import { projects } from '../data/projects';
-
-// --- Helpers ---
-function lerp(a, b, t) { return a + (b - a) * t; }
 
 // Use all images from the catalog
 const orbitProjects = projects;
@@ -71,6 +70,7 @@ function OrbitColumn() {
   const velocity = useRef(0);
   const animFrame = useRef(null);
   const lastTime = useRef(performance.now());
+  const { ref: visRef, isVisibleRef } = useIsVisible();
 
   const applyTransforms = useCallback(() => {
     const c = containerRef.current;
@@ -82,7 +82,6 @@ function OrbitColumn() {
       const el = cardRefs.current[i];
       if (!el) continue;
 
-      // getTransform now handles the TOTAL_LENGTH wrapping and off-screen hiding
       const progress = globalProgress.current - OFFSETS[i];
       const { x, y, scale, zIndex, opacity } = getTransform(progress, ch, cw);
 
@@ -93,11 +92,18 @@ function OrbitColumn() {
   }, []);
 
   const animate = useCallback((now) => {
+    // Fix #2: Skip calculations when offscreen to save CPU
+    if (!isVisibleRef.current) {
+      lastTime.current = now;
+      animFrame.current = requestAnimationFrame(animate);
+      return;
+    }
+
     const dt = Math.min(now - lastTime.current, 50);
     lastTime.current = now;
 
     if (!isDragging.current) {
-      velocity.current *= 0.93; // Friction
+      velocity.current *= 0.93;
       if (Math.abs(velocity.current) < SPEED * 0.2) {
         velocity.current = 0;
         globalProgress.current += SPEED * (dt / 16.67);
@@ -106,7 +112,6 @@ function OrbitColumn() {
       }
     }
 
-    // Wrap around TOTAL_LENGTH instead of 1 so the backstage loop works perfectly
     globalProgress.current = ((globalProgress.current % TOTAL_LENGTH) + TOTAL_LENGTH) % TOTAL_LENGTH;
 
     applyTransforms();
@@ -142,10 +147,15 @@ function OrbitColumn() {
     return () => { if (animFrame.current) cancelAnimationFrame(animFrame.current); };
   }, [animate]);
 
+  // Merge visibility ref with container ref
+  const setRefs = useCallback((node) => {
+    containerRef.current = node;
+    visRef.current = node;
+  }, [visRef]);
+
   return (
     <div
-      ref={containerRef}
-      // REMOVED overflow-hidden and maskImage so images don't get clipped as they exit right
+      ref={setRefs}
       className="relative w-full h-full cursor-grab active:cursor-grabbing select-none"
       style={{
         touchAction: 'none'
@@ -187,12 +197,14 @@ function MobileCarousel() {
   const animRef = useRef(null);
   const posRef = useRef(0);
   const pausedRef = useRef(false);
+  const { ref: visRef, isVisibleRef } = useIsVisible();
 
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
     const animate = () => {
-      if (!pausedRef.current) {
+      // Fix #2: Skip when offscreen or user-paused
+      if (isVisibleRef.current && !pausedRef.current) {
         posRef.current -= 0.6;
         const half = track.scrollWidth / 2;
         if (Math.abs(posRef.current) >= half) posRef.current = 0;
@@ -207,7 +219,7 @@ function MobileCarousel() {
   const items = [...projects, ...projects];
 
   return (
-    <div className="w-full overflow-hidden"
+    <div ref={visRef} className="w-full overflow-hidden"
       onTouchStart={() => { pausedRef.current = true; }}
       onTouchEnd={() => { pausedRef.current = false; }}>
       <div ref={trackRef} className="flex gap-4" style={{ willChange: 'transform' }}>
@@ -228,11 +240,12 @@ function MobileCarousel() {
 export default function Hero() {
   const { t } = useTranslation();
   const heroRef = useRef(null);
+  const lenis = useLenis();
 
   const handleScrollTo = (e, target) => {
     e.preventDefault();
-    if (window.lenis) {
-      window.lenis.scrollTo(target, { offset: -100, duration: 1.5, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+    if (lenis) {
+      lenis.scrollTo(target, { offset: -100, duration: 1.5, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
     } else {
       const el = document.querySelector(target);
       if (el) {

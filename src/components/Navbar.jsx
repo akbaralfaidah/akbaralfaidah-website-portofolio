@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
+import { useLenis } from '../context/LenisContext';
 import { FiMenu, FiX, FiArrowUp } from 'react-icons/fi';
 import AnimatedButton from './ui/AnimatedButton';
 
@@ -84,6 +85,7 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { t, i18n } = useTranslation();
   const { theme, toggleTheme } = useTheme();
+  const lenis = useLenis();
 
   const navItems = [
     { id: 'about', label: t('nav.about') },
@@ -105,8 +107,8 @@ export default function Navbar() {
 
   const handleNavClick = (e, target) => {
     e.preventDefault();
-    if (window.lenis) {
-      window.lenis.scrollTo(target, { offset: -100, duration: 1.5, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+    if (lenis) {
+      lenis.scrollTo(target, { offset: -100, duration: 1.5, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
     } else {
       if (target === 'top') {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -217,7 +219,7 @@ export default function Navbar() {
             </div>
 
             <div className={`absolute bottom-12 left-10 flex space-x-6 text-sm font-medium opacity-60 ${theme === 'dark' ? 'text-[#F2F0E8]' : 'text-charcoal'}`}>
-              <a href={`mailto:${import.meta.env.VITE_CONTACT_EMAIL || 'akbaralfaidahohs@gmail.com'}`} className="hover:text-brass transition-colors">Email</a>
+              <a href={`mailto:${import.meta.env.VITE_CONTACT_EMAIL}`} className="hover:text-brass transition-colors">Email</a>
               <a href="https://github.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="hover:text-brass transition-colors">GitHub</a>
               <a href="https://linkedin.com/in/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="hover:text-brass transition-colors">LinkedIn</a>
             </div>

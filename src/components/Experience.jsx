@@ -116,50 +116,43 @@ export default function Experience() {
   
   const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
+  // Fix #9: Tech cards now use pure CSS hover — no more querySelector on every mouse event
   const renderTechCard = (tech, key) => (
     <div 
       key={key} 
-      className="relative flex flex-row items-center justify-center w-auto px-4 py-3 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl bg-paper dark:bg-[#3A3C41] border border-mist/50 dark:border-[#F2F0E8]/10 shadow-sm hover:-translate-y-2 transition-all duration-300 group cursor-pointer gap-3 z-10 hover:z-20 overflow-hidden"
-      onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = `0 4px 12px -2px ${tech.color}40, 0 0 8px 0 ${tech.color}20 inset`;
-        e.currentTarget.style.borderColor = tech.color;
-        const icon = e.currentTarget.querySelector('.icon-svg');
-        if (icon) {
-          icon.style.filter = `drop-shadow(0 0 10px ${tech.color})`;
-          icon.style.transform = 'scale(1.2) rotate(5deg)';
-        }
-        const bg = e.currentTarget.querySelector('.bg-glow');
-        if (bg) {
-          bg.style.opacity = '0.1';
-          bg.style.backgroundColor = tech.color;
-        }
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.boxShadow = '';
-        e.currentTarget.style.borderColor = '';
-        const icon = e.currentTarget.querySelector('.icon-svg');
-        if (icon) {
-          icon.style.filter = '';
-          icon.style.transform = '';
-        }
-        const bg = e.currentTarget.querySelector('.bg-glow');
-        if (bg) {
-          bg.style.opacity = '0';
-          bg.style.backgroundColor = 'transparent';
-        }
+      className="group/tech relative flex flex-row items-center justify-center w-auto px-4 py-3 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl bg-paper dark:bg-[#3A3C41] border border-mist/50 dark:border-[#F2F0E8]/10 shadow-sm hover:-translate-y-2 transition-all duration-300 cursor-pointer gap-3 z-10 hover:z-20 overflow-hidden"
+      style={{
+        '--tech-color': tech.color,
       }}
     >
-      <div className="bg-glow absolute inset-0 opacity-0 transition-opacity duration-300 pointer-events-none" />
+      <div 
+        className="absolute inset-0 opacity-0 group-hover/tech:opacity-10 transition-opacity duration-300 pointer-events-none" 
+        style={{ backgroundColor: tech.color }}
+      />
       
       <div 
-        className="transition-all duration-300 shrink-0 icon-svg relative z-10"
-        style={{ color: tech.color }}
+        className="transition-all duration-300 shrink-0 relative z-10 group-hover/tech:scale-120 group-hover/tech:rotate-[5deg]"
+        style={{ 
+          color: tech.color,
+          filter: 'none',
+          transition: 'filter 0.3s, transform 0.3s',
+        }}
       >
         <tech.icon size={20} className="sm:w-7 sm:h-7" />
       </div>
       <span className="text-xs sm:text-sm font-display font-bold tracking-wide text-charcoal dark:text-[#F2F0E8] relative z-10">
         {tech.name}
       </span>
+
+      <style>{`
+        .group\/tech:hover {
+          box-shadow: 0 4px 12px -2px ${tech.color}40, 0 0 8px 0 ${tech.color}20 inset;
+          border-color: ${tech.color};
+        }
+        .group\/tech:hover .shrink-0 {
+          filter: drop-shadow(0 0 10px ${tech.color});
+        }
+      `}</style>
     </div>
   );
 
@@ -235,11 +228,16 @@ export default function Experience() {
               </span>
             </a>
 
-            {/* Graph Container */}
+            {/* Graph Container — Fix #10: Added lazy loading, error fallback, and alt text */}
             <div className="w-full overflow-x-auto overflow-y-hidden hide-scrollbar flex justify-center pb-2">
               <img 
                 src="https://ghchart.rshah.org/akbaralfaidah" 
-                alt="Akbar Alfaidah's GitHub Activity Graph" 
+                alt="Akbar Alfaidah's GitHub Contribution Graph — showing daily commit activity"
+                loading="lazy"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.parentElement.innerHTML = '<p class="text-sm text-charcoal/50 dark:text-[#F2F0E8]/50 text-center py-8">GitHub activity chart tidak tersedia saat ini.</p>';
+                }}
                 className="min-w-[700px] opacity-90 hover:opacity-100 transition-opacity dark:invert dark:hue-rotate-180"
               />
             </div>

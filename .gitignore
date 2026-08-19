@@ -34,4 +34,5 @@ output.css
 PRD-dashboard-admin.md
 PRD-portofolio (1).md
 
-supabase-setup.sql
+# Database setup docs (contains schema — should not be public)
+docs/

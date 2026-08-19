@@ -1,50 +1,36 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useEffect } from 'react';
-import Lenis from 'lenis';
+import { lazy, Suspense } from 'react';
+import { LenisProvider } from './context/LenisContext';
+import ErrorBoundary from './components/ErrorBoundary';
 import HomePage from './pages/HomePage';
-import Projects from './pages/Projects';
-import ProjectDetail from './pages/ProjectDetail';
 import MeshGradient from './components/ui/MeshGradient';
 
+// Fix #6: Lazy load route-level pages — these are only needed when navigating
+const Projects = lazy(() => import('./pages/Projects'));
+const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
+
+const PageFallback = () => (
+  <div className="flex items-center justify-center min-h-screen bg-paper dark:bg-[#1A1A1C]">
+    <div className="w-8 h-8 border-2 border-brass border-t-transparent rounded-full animate-spin" />
+  </div>
+);
+
 function App() {
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      direction: 'vertical',
-      gestureDirection: 'vertical',
-      smooth: true,
-      mouseMultiplier: 1,
-      smoothTouch: false,
-      touchMultiplier: 2,
-      infinite: false,
-    });
-
-    // We expose lenis on the window so we can trigger specific scrolls from Navbar
-    window.lenis = lenis;
-
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-
-    return () => {
-      lenis.destroy();
-      window.lenis = undefined;
-    };
-  }, []);
-
   return (
-    <BrowserRouter>
-      <MeshGradient />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/project/:slug" element={<ProjectDetail />} />
-      </Routes>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <LenisProvider>
+        <BrowserRouter>
+          <MeshGradient />
+          <Suspense fallback={<PageFallback />}>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/projects" element={<Projects />} />
+              <Route path="/project/:slug" element={<ProjectDetail />} />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      </LenisProvider>
+    </ErrorBoundary>
   );
 }
 

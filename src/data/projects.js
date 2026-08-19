@@ -118,37 +118,73 @@ function mapSupabaseRow(row) {
   };
 }
 
+let cachedProjects = null;
+let projectsFetchPromise = null;
+
 /**
  * Fetch semua proyek dari Supabase.
- * Jika gagal (network error, tabel belum ada, dll), fallback ke data lokal.
+ * Ditambah cache & timeout 3 detik. Jika Supabase cold start / lambat, 
+ * langsung kembalikan fallback agar user tidak menunggu loading lama.
  */
 export async function fetchProjects() {
-  try {
-    const { data, error } = await supabase
-      .from('projects')
-      .select('*')
-      .order('created_at', { ascending: true });
+  if (cachedProjects) return cachedProjects;
+  if (projectsFetchPromise) return projectsFetchPromise;
 
-    if (error) throw error;
-    if (!data || data.length === 0) return fallbackProjects;
+  projectsFetchPromise = (async () => {
+    try {
+      // Supabase free tier bisa memakan waktu 10-15 detik untuk cold start.
+      // Kita batasi maksimal 3 detik agar UI tidak stuck di skeleton loader.
+      const fetchReq = supabase
+        .from('projects')
+        .select('*')
+        .order('created_at', { ascending: true });
+        
+      const timeoutReq = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Supabase request timeout')), 3000)
+      );
 
-    return data.map(mapSupabaseRow).filter(p => !p.is_hidden);
-  } catch (err) {
-    console.warn('[projects] Supabase fetch failed, using fallback data:', err.message);
-    return fallbackProjects;
-  }
+      const { data, error } = await Promise.race([fetchReq, timeoutReq]);
+
+      if (error) throw error;
+      if (!data || data.length === 0) {
+        cachedProjects = fallbackProjects;
+        return cachedProjects;
+      }
+
+      cachedProjects = data.map(mapSupabaseRow).filter(p => !p.is_hidden);
+      return cachedProjects;
+    } catch (err) {
+      console.warn('[projects] Supabase fetch failed/timeout, using fallback:', err.message);
+      // Simpan di cache agar navigasi selanjutnya instan
+      cachedProjects = fallbackProjects;
+      return cachedProjects;
+    }
+  })();
+
+  return projectsFetchPromise;
 }
 
 /**
  * Fetch satu proyek berdasarkan slug.
  */
 export async function fetchProjectBySlug(slug) {
+  // Gunakan cache jika data sudah di-fetch di halaman sebelumnya
+  if (cachedProjects) {
+    return cachedProjects.find((p) => p.slug === slug) || null;
+  }
+
   try {
-    const { data, error } = await supabase
+    const fetchReq = supabase
       .from('projects')
       .select('*')
       .eq('slug', slug)
       .single();
+
+    const timeoutReq = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Supabase request timeout')), 3000)
+    );
+
+    const { data, error } = await Promise.race([fetchReq, timeoutReq]);
 
     if (error) throw error;
     return mapSupabaseRow(data);

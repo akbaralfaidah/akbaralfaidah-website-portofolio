@@ -44,7 +44,8 @@ export default function About() {
 
           {/* Floating Element 1: Verified (Top Left) */}
           <motion.div
-            animate={floatAnimation1}
+            whileInView={floatAnimation1}
+            viewport={{ once: false, margin: "-50px" }}
             className="absolute z-20 top-8 -left-4 md:-left-12 bg-white/95 dark:bg-[#2C2E32]/95 backdrop-blur-md px-5 py-3 rounded-full shadow-md flex items-center gap-3"
           >
             <div className="bg-blue-500 text-white rounded-full p-1 shadow-inner">
@@ -62,7 +63,8 @@ export default function About() {
 
           {/* Floating Element 2: Full-Stack Dev (Bottom Right) */}
           <motion.div
-            animate={floatAnimation2}
+            whileInView={floatAnimation2}
+            viewport={{ once: false, margin: "-50px" }}
             className="absolute z-20 bottom-24 -right-4 md:-right-10 bg-white/95 dark:bg-[#2C2E32]/95 backdrop-blur-md px-5 py-3.5 rounded-2xl shadow-md flex items-center gap-3.5"
           >
             <div className="bg-indigo-500/10 text-indigo-500 p-2.5 rounded-xl">
@@ -76,7 +78,8 @@ export default function About() {
 
           {/* Floating Element 3: 10+ Client Card (Bottom Left) */}
           <motion.div
-            animate={floatAnimation3}
+            whileInView={floatAnimation3}
+            viewport={{ once: false, margin: "-50px" }}
             className="absolute z-20 -bottom-4 md:-bottom-8 left-2 md:left-8 bg-white/95 dark:bg-[#2C2E32]/95 backdrop-blur-md px-5 py-3.5 rounded-2xl shadow-md flex items-center gap-3.5"
           >
             <div className="bg-emerald-500/10 text-emerald-500 p-2.5 rounded-xl">
@@ -90,7 +93,8 @@ export default function About() {
 
           {/* Floating Element 4: AI Integrated (Top Right) */}
           <motion.div
-            animate={floatAnimation4}
+            whileInView={floatAnimation4}
+            viewport={{ once: false, margin: "-50px" }}
             className="absolute z-20 top-40 -right-6 md:-right-12 bg-white/95 dark:bg-[#2C2E32]/95 backdrop-blur-md px-4 py-2.5 rounded-full shadow-md flex items-center gap-3"
           >
             <div className="bg-amber-500/15 text-amber-600 dark:text-amber-400 p-1.5 rounded-full">
