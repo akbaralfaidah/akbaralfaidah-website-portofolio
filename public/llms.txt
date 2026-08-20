@@ -1,0 +1,9 @@
+# Akbar Alfaidah - AI & Developer Portfolio
+
+Welcome to the agentic representation of my portfolio.
+
+## Contact & Links
+- [Main Website](https://akbaralfaidah.com)
+- [GitHub Profile](https://github.com/akbaralfaidah)
+
+This file exists to help AI agents navigate and understand this site better.

@@ -93,6 +93,7 @@ const DraggableMarqueeRow = ({ items, direction = 1, speed = 40 }) => {
           className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-[1rem] bg-white dark:bg-[#1E1E20] border border-charcoal/10 dark:border-white/10 flex items-center justify-center shadow-sm"
         >
           <LogoData.icon 
+            aria-label="Technology Icon"
             className="w-6 h-6 sm:w-7 sm:h-7 pointer-events-none"
             style={{ color: LogoData.color === 'currentColor' ? 'inherit' : LogoData.color }} 
           />
