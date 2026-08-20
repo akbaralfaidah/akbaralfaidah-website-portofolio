@@ -6,7 +6,7 @@ import { supabase } from '../lib/supabase';
 const fallbackProjects = [
   { 
     id: 'bosdepot', slug: 'bosdepot', name: 'BosDepot',
-    src: '/img/bosdepot.svg',
+    src: '/img/bosdepot.webp',
     client: 'Depot Kayu & Toko Bangunan Esa', year: '2026', role: 'Mobile Developer',
     url: 'https://bosdepot.com', categories: ['Mobile Apps'],
     shortDescription: 'Aplikasi POS & Manajemen Gudang terintegrasi hardware (Scanner Barcode, Thermal Printer, Biometrik).',
@@ -17,7 +17,7 @@ const fallbackProjects = [
   },
   { 
     id: 'chattask', slug: 'chattask', name: 'ChatTask',
-    src: '/img/chattask.svg',
+    src: '/img/chattask.webp',
     client: 'Personal Project', year: '2026', role: 'Fullstack Developer',
     url: 'https://chattask.app', categories: ['Website', 'Machine Learning'],
     shortDescription: 'Manajemen tugas cerdas untuk merapikan dan menjadwalkan instruksi dari chat WhatsApp menggunakan NLP.',
@@ -28,7 +28,7 @@ const fallbackProjects = [
   },
   { 
     id: 'jokipro', slug: 'jokipro', name: 'JokiPro',
-    src: '/img/jokipro.svg',
+    src: '/img/jokipro.webp',
     client: 'Confidential Company', year: '2026', role: 'UI/UX Designer & Frontend',
     url: 'https://jokipro.com', categories: ['Website'],
     shortDescription: 'Landing page profil perusahaan modern dan interaktif dengan identitas anonim (Incognito).',
@@ -39,7 +39,7 @@ const fallbackProjects = [
   },
   { 
     id: 'mpp', slug: 'mpp', name: 'MPP Digital',
-    src: '/img/mpp.svg',
+    src: '/img/mpp.webp',
     client: 'M****a (Pemerintahan)', year: '2026', role: 'Frontend Architect',
     categories: ['Website'],
     shortDescription: 'Digitalisasi survei penilaian Mal Pelayanan Publik (MPP) untuk mengotomatiskan rekapitulasi data masyarakat.',
@@ -50,7 +50,7 @@ const fallbackProjects = [
   },
   { 
     id: 'peka', slug: 'peka', name: 'PEKA',
-    src: '/img/peka.svg',
+    src: '/img/peka.webp',
     client: 'Top 33 Indonesia Next', year: '2026', role: 'Fullstack Developer',
     categories: ['Website', 'Machine Learning'],
     shortDescription: 'Platform cerdas dengan integrasi AI (Gemini API) untuk export gambar dan manajemen data dinamis terkait mood.',
@@ -61,7 +61,7 @@ const fallbackProjects = [
   },
   { 
     id: 'siabsen', slug: 'siabsen', name: 'SiAbsen',
-    src: '/img/siabsen.svg',
+    src: '/img/siabsen.webp',
     client: 'M****n (Universitas)', year: '2026', role: 'Mobile Developer',
     url: 'https://siabsen.univ.edu', categories: ['Mobile Apps'],
     shortDescription: 'Sistem absensi mahasiswa berbasis Geofencing untuk mencegah kecurangan presensi kelas.',
@@ -72,7 +72,7 @@ const fallbackProjects = [
   },
   { 
     id: 'simppk', slug: 'simppk', name: 'SimPPK',
-    src: '/img/simppk.svg',
+    src: '/img/simppk.webp',
     client: 'A****d (Pemerintahan)', year: '2026', role: 'Frontend Engineer',
     categories: ['Website'],
     shortDescription: 'Sistem Informasi Pemerintahan untuk manajemen dan rekapitulasi data pegawai PPPK.',
@@ -83,7 +83,7 @@ const fallbackProjects = [
   },
   { 
     id: 'siskamling', slug: 'siskamling', name: 'Siskamling App',
-    src: '/img/siskamling.svg',
+    src: '/img/siskamling.webp',
     client: 'G*****n', year: '2026', role: 'Web Developer',
     categories: ['Website'],
     shortDescription: 'Aplikasi pengelolaan jadwal ronda dan presensi kehadiran warga berbasis Geofencing pos keamanan.',
@@ -103,7 +103,7 @@ function mapSupabaseRow(row) {
     id: row.id,
     slug: row.slug,
     name: row.judul,
-    src: `/img/${row.slug}.svg`,  // Pakai file lokal (lebih cepat dari Supabase Storage)
+    src: `/img/${row.slug}.webp`,  // WebP optimized (hemat ~97% vs SVG)
     client: row.client,
     year: row.year,
     role: row.role,

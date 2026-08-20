@@ -50,16 +50,16 @@ export default function YouCanScroll() {
       if (i === 0) {
         gsap.set(item, { opacity: 1 });
         gsap.set(bg, { scaleX: 1 });
-        tl.to(item, { opacity: 0.2, duration: 1 }, 0);
+        tl.to(item, { opacity: 0.35, duration: 1 }, 0);
         tl.to(bg, { scaleX: 0, duration: 1 }, 0);
       } else {
-        gsap.set(item, { opacity: 0.2 });
+        gsap.set(item, { opacity: 0.35 });
         gsap.set(bg, { scaleX: 0 });
         tl.to(item, { opacity: 1, duration: 1 }, i - 1);
         tl.to(bg, { scaleX: 1, duration: 1 }, i - 1);
 
         if (i !== totalItems - 1) {
-          tl.to(item, { opacity: 0.2, duration: 1 }, i);
+          tl.to(item, { opacity: 0.35, duration: 1 }, i);
           tl.to(bg, { scaleX: 0, duration: 1 }, i);
         }
       }

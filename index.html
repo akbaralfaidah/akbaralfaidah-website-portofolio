@@ -15,7 +15,7 @@
   <!-- Security Headers (Fix #5) -->
   <meta http-equiv="Content-Security-Policy" 
     content="default-src 'self'; 
-      script-src 'self' https://challenges.cloudflare.com; 
+      script-src 'self' https://challenges.cloudflare.com https://static.cloudflareinsights.com; 
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
       font-src 'self' https://fonts.gstatic.com; 
       img-src 'self' data: https: blob:; 
@@ -30,6 +30,7 @@
   <!-- Fonts (Fix #3: trimmed to only used weights, removed Poppins) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://qrtliglddxshyeabcjuj.supabase.co" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;600;700;800&display=swap"
     rel="stylesheet"

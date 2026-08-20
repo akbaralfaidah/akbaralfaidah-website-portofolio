@@ -13,7 +13,7 @@ export default function Footer() {
           
           {/* Brand */}
           <div className="flex flex-col gap-4">
-            <img src="/img/unbackground.svg" alt="Akbar Alfaidah Logo" className="h-8 w-auto self-start" />
+            <img src="/img/unbackground.svg" alt="Akbar Alfaidah Logo" width="32" height="32" className="h-8 w-auto self-start" />
             <p className="text-sm leading-relaxed text-[#F2F0E8]/70 max-w-xs">
               {t('hero.headline_1')}
             </p>

@@ -181,7 +181,9 @@ function OrbitColumn() {
               src={p.src}
               alt={p.name}
               loading="eager"
+              fetchPriority={i === 0 ? 'high' : 'auto'}
               draggable="false"
+              width="460" height="259"
               className="w-full h-full object-cover object-top block pointer-events-none select-none group-hover:scale-105 transition-transform duration-500"
             />
           </div>
@@ -196,18 +198,42 @@ function MobileCarousel() {
   const trackRef = useRef(null);
   const animRef = useRef(null);
   const posRef = useRef(0);
-  const pausedRef = useRef(false);
+  const autoSpeed = useRef(-0.6);
+  const isDragging = useRef(false);
+  const dragStartX = useRef(0);
+  const dragStartPos = useRef(0);
+  const velocityRef = useRef(0);
+  const lastTouchX = useRef(0);
   const { ref: visRef, isVisibleRef } = useIsVisible();
 
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
+
     const animate = () => {
-      // Fix #2: Skip when offscreen or user-paused
-      if (isVisibleRef.current && !pausedRef.current) {
-        posRef.current -= 0.6;
+      if (isVisibleRef.current) {
         const half = track.scrollWidth / 2;
-        if (Math.abs(posRef.current) >= half) posRef.current = 0;
+
+        if (!isDragging.current) {
+          // Apply momentum after drag release
+          if (Math.abs(velocityRef.current) > 0.5) {
+            posRef.current += velocityRef.current;
+            velocityRef.current *= 0.95; // Decelerate
+          } else {
+            // Resume auto-scroll when momentum is exhausted
+            velocityRef.current = 0;
+            posRef.current += autoSpeed.current;
+          }
+        }
+
+        // Seamless loop
+        if (Math.abs(posRef.current) >= half) {
+          posRef.current = posRef.current % half;
+        }
+        if (posRef.current > 0) {
+          posRef.current -= half;
+        }
+
         track.style.transform = `translateX(${posRef.current}px)`;
       }
       animRef.current = requestAnimationFrame(animate);
@@ -216,18 +242,46 @@ function MobileCarousel() {
     return () => { if (animRef.current) cancelAnimationFrame(animRef.current); };
   }, []);
 
+  const onPointerDown = useCallback((e) => {
+    isDragging.current = true;
+    dragStartX.current = e.clientX;
+    dragStartPos.current = posRef.current;
+    lastTouchX.current = e.clientX;
+    velocityRef.current = 0;
+    e.currentTarget.setPointerCapture(e.pointerId);
+  }, []);
+
+  const onPointerMove = useCallback((e) => {
+    if (!isDragging.current) return;
+    const dx = e.clientX - lastTouchX.current;
+    lastTouchX.current = e.clientX;
+    posRef.current += dx;
+    velocityRef.current = dx;
+  }, []);
+
+  const onPointerUp = useCallback(() => {
+    isDragging.current = false;
+  }, []);
+
   const items = [...projects, ...projects];
 
   return (
-    <div ref={visRef} className="w-full overflow-hidden"
-      onTouchStart={() => { pausedRef.current = true; }}
-      onTouchEnd={() => { pausedRef.current = false; }}>
+    <div
+      ref={visRef}
+      className="w-full overflow-hidden cursor-grab active:cursor-grabbing select-none"
+      style={{ touchAction: 'pan-y' }}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
+    >
       <div ref={trackRef} className="flex gap-4" style={{ willChange: 'transform' }}>
         {items.map((p, i) => (
           <div key={`${p.name}-${i}`} 
             className="block flex-shrink-0 rounded-2xl overflow-hidden shadow-sm border border-charcoal/6 dark:border-paper/6 bg-paper dark:bg-[#3A3C41] relative group"
             style={{ width: '300px', height: '169px' }}>
-            <img src={p.src} alt={p.name} loading="lazy" draggable="false"
+            <img src={p.src} alt={p.name} loading={i < 3 ? 'eager' : 'lazy'} fetchPriority={i === 0 ? 'high' : 'auto'} draggable="false"
+              width="300" height="169"
               className="w-full h-full object-cover object-top block pointer-events-none group-hover:scale-105 transition-transform duration-500" />
           </div>
         ))}
@@ -235,6 +289,7 @@ function MobileCarousel() {
     </div>
   );
 }
+
 
 // --- Hero Section ---
 export default function Hero() {
