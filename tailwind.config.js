@@ -14,7 +14,7 @@ export default {
         mist: 'var(--color-mist)',
       },
       fontFamily: {
-        sans: ['Outfit', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['Poppins', 'Outfit', 'system-ui', '-apple-system', 'sans-serif'],
         display: ['Outfit', 'system-ui', '-apple-system', 'sans-serif'],
         mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
       },
