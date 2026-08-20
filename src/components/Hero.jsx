@@ -8,10 +8,10 @@ import { useLenis } from '../context/LenisContext';
 import { useIsVisible } from '../hooks/useIsVisible';
 import { TechLogoMarquee } from './ui/TechLogoMarquee';
 
-import { projects } from '../data/projects';
+import { heroProjects } from '../data/projects';
 
 // Use all images from the catalog
-const orbitProjects = projects;
+const orbitProjects = heroProjects;
 
 // We want exactly 3.5 images visible on the C-curve at any time to guarantee ZERO overlap
 const VISIBLE_COUNT = 3.5;
