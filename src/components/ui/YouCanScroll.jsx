@@ -17,7 +17,7 @@ export default function YouCanScroll() {
 
     const totalItems = items.length;
     const listItems = gsap.utils.toArray('.ycs-item', listRef.current);
-    
+
     if (listItems.length < 2) return;
 
     const tl = gsap.timeline({
@@ -25,12 +25,12 @@ export default function YouCanScroll() {
         trigger: containerRef.current,
         start: 'top 25%',
         end: 'bottom 90%',
-        scrub: 1, 
+        scrub: 1,
         snap: {
-          snapTo: "labelsDirectional", 
-          duration: 0.2, 
-          delay: 0, 
-          ease: "back.out(1.5)" 
+          snapTo: "labelsDirectional",
+          duration: 0.2,
+          delay: 0,
+          ease: "back.out(1.5)"
         }
       }
     });
@@ -57,7 +57,7 @@ export default function YouCanScroll() {
         gsap.set(bg, { scaleX: 0 });
         tl.to(item, { opacity: 1, duration: 1 }, i - 1);
         tl.to(bg, { scaleX: 1, duration: 1 }, i - 1);
-        
+
         if (i !== totalItems - 1) {
           tl.to(item, { opacity: 0.2, duration: 1 }, i);
           tl.to(bg, { scaleX: 0, duration: 1 }, i);
@@ -73,14 +73,14 @@ export default function YouCanScroll() {
   }, [items, i18n.language]);
 
   return (
-    <section 
+    <section
       ref={containerRef}
       className="relative w-full bg-paper dark:bg-[#1A1A1C] text-charcoal dark:text-[#FAF8ED] h-[100vh] z-10"
     >
-      
+
       {/* Native Sticky Container - Zero Jitter */}
-      <div 
-        ref={stickyRef} 
+      <div
+        ref={stickyRef}
         className="sticky top-[30vh] h-[40vh] min-h-[250px] max-h-[400px] w-full flex flex-col justify-center items-center relative"
         style={{
           WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
@@ -88,21 +88,21 @@ export default function YouCanScroll() {
         }}
       >
         <div className="max-w-[1400px] mx-auto px-6 w-full flex items-center justify-center relative">
-          
+
           {/* Side-by-side flex layout */}
           <div className="flex w-full items-start max-w-[1200px] mx-auto">
-            
+
             {/* Left side fixed text */}
             <div className="w-[35%] flex justify-end pr-3 md:pr-6">
-              <h2 className="text-[clamp(1.5rem,3.5vw,4rem)] font-display font-extrabold leading-none whitespace-nowrap m-0 p-0">
+              <h2 className="text-[clamp(1.2rem,3.5vw,4rem)] font-display font-extrabold leading-none whitespace-nowrap m-0 p-0">
                 {t('scroll_section.title_1')}
               </h2>
             </div>
-            
+
             {/* Right side scrolling list */}
-            <div className="w-[65%] relative h-[1em] m-0 p-0 text-[clamp(1.5rem,3.5vw,4rem)]">
-              <ul 
-                ref={listRef} 
+            <div className="w-[65%] relative h-[1em] m-0 p-0 text-[clamp(1.2rem,3.5vw,4rem)]">
+              <ul
+                ref={listRef}
                 className="absolute top-0 left-0 md:left-2 flex flex-col items-start gap-6 md:gap-10 m-0 p-0 font-display font-extrabold leading-[1.1] md:leading-none whitespace-normal md:whitespace-nowrap w-full"
               >
                 {items.map((text, i) => {
@@ -116,19 +116,19 @@ export default function YouCanScroll() {
                   const bgColor = colors[i % colors.length];
 
                   return (
-                    <li 
-                      key={i} 
+                    <li
+                      key={i}
                       className="ycs-item m-0 p-0 relative w-max"
-                      style={{ 
+                      style={{
                         color: 'inherit'
                       }}
                     >
-                      <div 
+                      <div
                         className="ycs-bg absolute -z-10 rounded-xl"
-                        style={{ 
+                        style={{
                           backgroundColor: bgColor,
-                          top: '-15%', bottom: '-5%', left: '-15px', right: '-15px', 
-                          transformOrigin: 'left', transform: 'scaleX(0)' 
+                          top: '-15%', bottom: '-5%', left: '-15px', right: '-15px',
+                          transformOrigin: 'left', transform: 'scaleX(0)'
                         }}
                       ></div>
                       {text}
