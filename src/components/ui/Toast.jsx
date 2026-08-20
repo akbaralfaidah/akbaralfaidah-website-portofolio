@@ -23,11 +23,11 @@ export default function Toast({ message, type = 'success', onClose, duration = 4
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ opacity: 0, y: -40, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -40, scale: 0.95 }}
+          initial={{ opacity: 0, y: -40, x: "-50%", scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
+          exit={{ opacity: 0, y: -40, x: "-50%", scale: 0.95 }}
           transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-          className={`fixed top-6 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-2xl border backdrop-blur-xl max-w-md w-[calc(100%-2rem)] ${
+          className={`fixed top-6 left-1/2 z-[9999] flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-2xl border backdrop-blur-xl max-w-md w-[calc(100%-2rem)] ${
             isSuccess
               ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-700 dark:text-emerald-300'
               : 'bg-red-500/10 border-red-500/20 text-red-700 dark:text-red-300'
