@@ -208,7 +208,7 @@ export default function Experience() {
             {/* Header */}
             <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
               <div className="flex items-center gap-3">
-                <SiGithub size={24} className="text-charcoal dark:text-[#F2F0E8]" />
+                <SiGithub size={24} aria-label="GitHub Icon" className="text-charcoal dark:text-[#F2F0E8]" />
                 <h3 className="text-xl font-display font-bold text-charcoal dark:text-[#F2F0E8]">GitHub Contributions</h3>
               </div>
             </div>
