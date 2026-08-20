@@ -13,7 +13,7 @@ function mapSupabaseRow(row) {
     id: row.id,
     slug: row.slug,
     name: row.judul,
-    src: `/img/${row.slug}-opt.webp`,  // WebP optimized (hemat ~97% vs SVG)
+    src: `/img/${row.slug}.webp`,  // WebP optimized (hemat ~97% vs SVG)
     client: row.client,
     year: row.year,
     role: row.role,
@@ -114,12 +114,12 @@ export async function fetchProjectBySlug(slug) {
 
 
 export const heroProjects = [
-  { name: 'BosDepot', src: '/img/bosdepot-opt.webp' },
-  { name: 'ChatTask', src: '/img/chattask-opt.webp' },
-  { name: 'SiAbsen', src: '/img/siabsen-opt.webp' },
-  { name: 'MPP Digital', src: '/img/mpp-opt.webp' },
-  { name: 'JokiPro', src: '/img/jokipro-opt.webp' },
-  { name: 'PEKA', src: '/img/peka-opt.webp' },
-  { name: 'Siskamling App', src: '/img/siskamling-opt.webp' },
-  { name: 'SimPPK', src: '/img/simppk-opt.webp' }
+  { name: 'BosDepot', src: '/img/bosdepot.webp' },
+  { name: 'ChatTask', src: '/img/chattask.webp' },
+  { name: 'SiAbsen', src: '/img/siabsen.webp' },
+  { name: 'MPP Digital', src: '/img/mpp.webp' },
+  { name: 'JokiPro', src: '/img/jokipro.webp' },
+  { name: 'PEKA', src: '/img/peka.webp' },
+  { name: 'Siskamling App', src: '/img/siskamling.webp' },
+  { name: 'SimPPK', src: '/img/simppk.webp' }
 ];
