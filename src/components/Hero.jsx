@@ -263,7 +263,7 @@ function MobileCarousel() {
     isDragging.current = false;
   }, []);
 
-  const items = [...projects, ...projects];
+  const items = [...heroProjects, ...heroProjects];
 
   return (
     <div
