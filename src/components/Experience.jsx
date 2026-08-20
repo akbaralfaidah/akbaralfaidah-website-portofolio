@@ -234,6 +234,7 @@ export default function Experience() {
                 src="https://ghchart.rshah.org/akbaralfaidah" 
                 alt="Akbar Alfaidah's GitHub Contribution Graph — showing daily commit activity"
                 loading="lazy"
+                width="722" height="112"
                 onError={(e) => {
                   e.target.style.display = 'none';
                   e.target.parentElement.innerHTML = '<p class="text-sm text-charcoal/50 dark:text-[#F2F0E8]/50 text-center py-8">GitHub activity chart tidak tersedia saat ini.</p>';
