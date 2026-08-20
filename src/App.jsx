@@ -26,6 +26,12 @@ const PageTracker = () => {
     trackedPath.current = location.pathname;
 
     const trackView = async () => {
+      // Cegah Bot (UptimeRobot, Lighthouse, Googlebot) agar tidak mengotori analytics
+      const ua = navigator.userAgent.toLowerCase();
+      if (ua.includes('bot') || ua.includes('uptimerobot') || ua.includes('lighthouse') || ua.includes('spider') || ua.includes('headless')) {
+        return;
+      }
+
       try {
         await supabase.from('page_views').insert([{
           path: location.pathname,
