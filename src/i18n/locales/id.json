@@ -24,6 +24,16 @@
     "trust_clients": "10+ Klien",
     "trust_ai": "Kecerdasan Buatan"
   },
+  "services": {
+    "heading": "Layanan",
+    "subheading": "Solusi digital untuk bisnis, UMKM, dan personal - dikerjakan langsung di Jambi",
+    "web_dev_title": "Web Development",
+    "web_dev_desc": "Saya menyediakan jasa pembuatan website profesional untuk bisnis, UMKM, hingga perusahaan di Jambi. Setiap website dibangun dari nol dengan performa cepat, desain responsif, dan disesuaikan dengan kebutuhan spesifik klien - mulai dari landing page sederhana hingga aplikasi web yang lebih kompleks.",
+    "mobile_dev_title": "Mobile Development",
+    "mobile_dev_desc": "Butuh aplikasi Android untuk bisnis Anda? Saya menangani jasa pembuatan aplikasi mobile di Jambi, mulai dari perencanaan, desain antarmuka, pengembangan, hingga publikasi ke Google Play Store - disesuaikan dengan alur kerja bisnis Anda.",
+    "ai_dev_title": "AI / Kecerdasan Buatan",
+    "ai_dev_desc": "Sebagai AI Engineer, saya juga membuka jasa pembuatan kecerdasan buatan di Jambi - mulai dari integrasi chatbot, otomatisasi berbasis AI, hingga fitur cerdas lainnya yang disesuaikan dengan kebutuhan bisnis Anda."
+  },
   "projects": {
     "eyebrow": "Karya Pilihan",
     "heading": "Projek Terbaru.",

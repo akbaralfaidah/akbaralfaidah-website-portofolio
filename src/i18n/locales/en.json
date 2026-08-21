@@ -24,6 +24,16 @@
     "trust_clients": "10+ Clients",
     "trust_ai": "AI Integrated"
   },
+  "services": {
+    "heading": "Services",
+    "subheading": "Digital solutions for businesses, SMEs, and individuals - built directly from Jambi, Indonesia",
+    "web_dev_title": "Web Development",
+    "web_dev_desc": "I provide professional website development services for businesses, small enterprises, and weddings in Jambi. Every website is built from scratch with fast performance, responsive design, and tailored to each client's specific needs - from simple landing pages to more complex web applications.",
+    "mobile_dev_title": "Mobile Development",
+    "mobile_dev_desc": "Need an Android app for your business? I offer mobile app development services in Jambi, covering everything from planning and UI design to development and Google Play Store publication - built around how your business actually works.",
+    "ai_dev_title": "AI Development",
+    "ai_dev_desc": "As an AI Engineer, I also offer artificial intelligence development services in Jambi - from chatbot integration and AI-based automation to custom smart features tailored to your business needs."
+  },
   "projects": {
     "eyebrow": "Selected Work",
     "heading": "Latest Projects.",

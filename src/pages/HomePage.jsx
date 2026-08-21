@@ -6,6 +6,7 @@ import Footer from '../components/Footer';
 // Lazy load below-the-fold components
 const YouCanScroll = lazy(() => import('../components/ui/YouCanScroll'));
 const About = lazy(() => import('../components/About'));
+const Services = lazy(() => import('../components/Services'));
 const Projects = lazy(() => import('../components/Projects'));
 const Experience = lazy(() => import('../components/Experience'));
 const Contact = lazy(() => import('../components/Contact'));
@@ -29,6 +30,9 @@ export default function HomePage() {
         </Suspense>
         <Suspense fallback={<LazyFallback />}>
           <About />
+        </Suspense>
+        <Suspense fallback={<LazyFallback />}>
+          <Services />
         </Suspense>
         <Suspense fallback={<LazyFallback />}>
           <Projects />
