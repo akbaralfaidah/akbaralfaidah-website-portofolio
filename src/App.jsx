@@ -53,15 +53,17 @@ function App() {
     <ErrorBoundary>
       <LenisProvider>
         <BrowserRouter>
-          <PageTracker />
-          <MeshGradient />
-          <Suspense fallback={<PageFallback />}>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/projects" element={<Projects />} />
-              <Route path="/project/:slug" element={<ProjectDetail />} />
-            </Routes>
-          </Suspense>
+          <div className="relative w-full overflow-x-hidden min-h-screen">
+            <PageTracker />
+            <MeshGradient />
+            <Suspense fallback={<PageFallback />}>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/projects" element={<Projects />} />
+                <Route path="/project/:slug" element={<ProjectDetail />} />
+              </Routes>
+            </Suspense>
+          </div>
         </BrowserRouter>
       </LenisProvider>
     </ErrorBoundary>
