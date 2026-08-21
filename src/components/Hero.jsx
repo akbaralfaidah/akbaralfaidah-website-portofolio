@@ -313,8 +313,8 @@ export default function Hero() {
   return (
     <section
       ref={heroRef}
-      className="relative flex items-center"
-      style={{ minHeight: '100dvh', paddingTop: '6rem', paddingBottom: '2rem' }}
+      className="relative flex items-center min-h-[auto] lg:min-h-[90dvh]"
+      style={{ paddingTop: '6rem', paddingBottom: '2rem' }}
       id="home"
     >
       <div className="max-w-[1400px] mx-auto px-6 w-full grid grid-cols-1 md:grid-cols-[1fr_1.1fr] gap-6 items-center">
@@ -405,7 +405,7 @@ export default function Hero() {
         <motion.div
           className="relative z-0 w-full"
         >
-          <div className="hidden md:block relative" style={{ height: '85vh', maxHeight: '750px', minHeight: '520px' }}>
+          <div className="hidden md:block relative" style={{ height: '75vh', maxHeight: '650px', minHeight: '450px' }}>
             <OrbitColumn />
           </div>
           <div className="block md:hidden w-full overflow-hidden mt-4">
