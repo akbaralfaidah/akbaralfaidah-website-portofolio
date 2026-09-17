@@ -25,7 +25,7 @@ export default function YouCanScroll() {
         trigger: containerRef.current,
         pin: true,
         start: 'center center',
-        end: '+=150%',
+        end: '+=400%',
         scrub: 1,
         snap: {
           snapTo: "labelsDirectional",
