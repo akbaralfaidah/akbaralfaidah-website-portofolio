@@ -23,8 +23,9 @@ export default function YouCanScroll() {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: containerRef.current,
-        start: 'top 25%',
-        end: 'bottom 90%',
+        pin: true,
+        start: 'center center',
+        end: '+=150%',
         scrub: 1,
         snap: {
           snapTo: "labelsDirectional",
@@ -75,14 +76,14 @@ export default function YouCanScroll() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full bg-paper dark:bg-[#1A1A1C] text-charcoal dark:text-[#FAF8ED] h-[70vh] min-h-[400px] z-10"
+      className="relative w-full bg-paper dark:bg-[#1A1A1C] text-charcoal dark:text-[#FAF8ED] py-16 md:py-24 z-10"
     >
-
-      {/* Native Sticky Container - Zero Jitter */}
       <div
-        ref={stickyRef}
-        className="sticky top-[15vh] h-[40vh] min-h-[200px] max-h-[300px] w-full flex flex-col justify-center items-center relative"
+        className="w-full flex flex-col justify-center items-center relative"
         style={{
+          height: '40vh',
+          minHeight: '200px',
+          maxHeight: '300px',
           WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
           maskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)'
         }}
