@@ -13,7 +13,7 @@ function mapSupabaseRow(row) {
     id: row.id,
     slug: row.slug,
     name: row.judul,
-    src: `/img/${row.slug}.webp`,  // WebP optimized (hemat ~97% vs SVG)
+    src: row.gambar_url || `/img/${row.slug}.webp`,  // WebP optimized (hemat ~97% vs SVG)
     client: row.client,
     year: row.year,
     role: row.role,
