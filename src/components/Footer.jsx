@@ -17,6 +17,14 @@ export default function Footer() {
             <p className="text-sm leading-relaxed text-[#F2F0E8]/70 max-w-xs">
               {t('hero.headline_1')}
             </p>
+            <a
+              href="https://www.google.com/maps/search/?api=1&query=Akbar+Alfaidah+-+Jasa+Pembuatan+Website+%26+Aplikasi+di+Jambi"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-xs text-[#F2F0E8]/60 hover:text-brass transition-colors w-fit"
+            >
+              📍 Jambi, Indonesia &bull; Lihat di Maps
+            </a>
           </div>
 
           {/* Quick Links */}

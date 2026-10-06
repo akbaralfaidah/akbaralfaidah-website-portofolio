@@ -70,12 +70,49 @@ function getStageStatusMeta(status) {
     key: 'pending',
     label: 'Belum',
     badgeClass: 'bg-charcoal/5 dark:bg-white/5 text-charcoal/50 dark:text-[#F2F0E8]/50 border-charcoal/10 dark:border-white/10',
-    nodeBg: 'bg-paper dark:bg-[#1A1A1C] border-2 border-charcoal/20 dark:border-white/20 text-charcoal/40 dark:text-white/40',
-    cardBorder: 'border-charcoal/5 dark:border-white/5 opacity-80',
+    nodeBg: 'bg-white dark:bg-[#222428] border-2 border-neutral-300 dark:border-zinc-700 text-charcoal/70 dark:text-white/60 font-semibold shadow-sm',
+    cardBorder: 'border-charcoal/10 dark:border-white/10 opacity-85',
     isDone: false,
     isInProgress: false,
     isPending: true
   };
+}
+
+/**
+ * Determine the visual state of the connector line between stage[idx] and stage[idx + 1]
+ * Returns: 'completed' | 'active_flow' | 'pending'
+ */
+function getConnectorState(idx, stages) {
+  const current = stages[idx];
+  const next = stages[idx + 1];
+  if (!next) return 'none';
+
+  const isCurrentDone = ['done', 'selesai', 'completed'].includes((current.status || '').toLowerCase().trim());
+  const isCurrentInProgress = ['in_progress', 'sedang berjalan', 'ongoing', 'proses', 'progress'].includes((current.status || '').toLowerCase().trim());
+  const isNextDone = ['done', 'selesai', 'completed'].includes((next.status || '').toLowerCase().trim());
+  const isNextInProgress = ['in_progress', 'sedang berjalan', 'ongoing', 'proses', 'progress'].includes((next.status || '').toLowerCase().trim());
+
+  // 1. If current stage is in_progress, the line flowing to next stage is ACTIVE FLOW
+  if (isCurrentInProgress) {
+    return 'active_flow';
+  }
+
+  // 2. If both current and next are done (or next is in_progress), line is COMPLETED (solid green, no motion)
+  if (isCurrentDone && (isNextDone || isNextInProgress)) {
+    return 'completed';
+  }
+
+  // 3. If current is done and next is NOT done, but NO stage in the whole list is marked in_progress:
+  // Then this transition is the leading edge of progress -> active flow
+  const hasInProgress = stages.some(s =>
+    ['in_progress', 'sedang berjalan', 'ongoing', 'proses', 'progress'].includes((s.status || '').toLowerCase().trim())
+  );
+  if (isCurrentDone && !isNextDone && !hasInProgress) {
+    return 'active_flow';
+  }
+
+  // 4. In all other cases (e.g. stage 5 -> 6, 6 -> 7, ...), it's PENDING (solid gray, clearly visible)
+  return 'pending';
 }
 
 export default function ProjectProgress({ fallbackComponent = null }) {
@@ -551,30 +588,58 @@ export default function ProjectProgress({ fallbackComponent = null }) {
                           </div>
                         </div>
 
-                        {/* Animated Vertical Connector Line */}
-                        {!isLast && (
-                          <div className="relative w-1 flex-1 min-h-[4rem] my-1 rounded-full bg-charcoal/10 dark:bg-white/10 overflow-hidden">
-                            {/* Static completed line color */}
-                            {meta.isDone && (
-                              <div className="absolute inset-0 bg-emerald-500/80 rounded-full" />
-                            )}
+                        {/* Vertical Connector Line (Custom states based on progress) */}
+                        {!isLast && (() => {
+                          const lineState = getConnectorState(idx, sortedStages);
 
-                            {/* Active Flowing Beam Animation: travels downward toward next milestone */}
-                            {(meta.isDone || meta.isInProgress) && (
-                              <motion.div
-                                className="absolute left-0 right-0 h-10 rounded-full bg-gradient-to-b from-transparent via-brass to-transparent"
-                                animate={{
-                                  top: ['-100%', '100%']
-                                }}
-                                transition={{
-                                  duration: 2,
-                                  repeat: Infinity,
-                                  ease: 'easeInOut'
-                                }}
-                              />
-                            )}
-                          </div>
-                        )}
+                          if (lineState === 'completed') {
+                            // 1. Completed milestone line: Solid green, ZERO motion/animation
+                            return (
+                              <div className="relative w-1 flex-1 min-h-[4.5rem] my-1 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.3)]" />
+                            );
+                          }
+
+                          if (lineState === 'active_flow') {
+                            // 2. Active working segment (e.g. Stage 4 -> Stage 5): Prominent animated traveling beam
+                            return (
+                              <div className="relative w-1 sm:w-1.5 flex-1 min-h-[5rem] my-1 rounded-full bg-neutral-300 dark:bg-zinc-700/80 overflow-hidden shadow-[0_0_10px_rgba(201,152,63,0.4)]">
+                                {/* Ambient highlight on the active path */}
+                                <div className="absolute inset-0 bg-brass/25 dark:bg-brass/35" />
+                                
+                                {/* High-intensity traveling laser beam */}
+                                <motion.div
+                                  className="absolute left-0 right-0 h-16 rounded-full bg-gradient-to-b from-transparent via-amber-400 to-amber-200 dark:via-[#F5D061] dark:to-yellow-200 shadow-[0_0_14px_rgba(245,158,11,1)]"
+                                  animate={{
+                                    top: ['-100%', '100%']
+                                  }}
+                                  transition={{
+                                    duration: 1.4,
+                                    repeat: Infinity,
+                                    ease: 'easeInOut'
+                                  }}
+                                />
+
+                                {/* Bright leading spark traveling down */}
+                                <motion.div
+                                  className="absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_10px_rgba(251,191,36,1)]"
+                                  animate={{
+                                    top: ['-15%', '100%']
+                                  }}
+                                  transition={{
+                                    duration: 1.4,
+                                    repeat: Infinity,
+                                    ease: 'easeInOut'
+                                  }}
+                                />
+                              </div>
+                            );
+                          }
+
+                          // 3. Pending/Inactive line: Solid gray, clearly visible in both light & dark mode, zero animation
+                          return (
+                            <div className="relative w-1 flex-1 min-h-[4.5rem] my-1 rounded-full bg-neutral-300 dark:bg-zinc-700" />
+                          );
+                        })()}
                       </div>
 
                       {/* Right Stage Card */}

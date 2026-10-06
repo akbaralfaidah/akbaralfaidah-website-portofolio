@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FiMail, FiMapPin, FiGithub, FiLinkedin, FiInstagram, FiSend, FiChevronDown } from 'react-icons/fi';
+import { FiMail, FiMapPin, FiGithub, FiLinkedin, FiInstagram, FiSend, FiChevronDown, FiExternalLink } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 import emailjs from '@emailjs/browser';
 import { Turnstile } from '@marsidev/react-turnstile';
@@ -279,21 +279,65 @@ export default function Contact() {
                     </div>
                     <div>
                       <p className="text-sm font-medium text-charcoal/70 dark:text-[#F2F0E8]/70 mb-1">Location</p>
-                      <p className="font-medium text-charcoal dark:text-[#F2F0E8]">Indonesia</p>
+                      <p className="font-medium text-charcoal dark:text-[#F2F0E8]">Jambi, Indonesia</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div>
-                <p className="text-sm font-medium text-charcoal/70 dark:text-[#F2F0E8]/70 mb-4">{t('contact.follow_me')}</p>
-                <div className="flex gap-4">
-                  <a href="https://github.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="w-12 h-12 rounded-full border border-charcoal/15 dark:border-[#F2F0E8]/15 flex items-center justify-center text-charcoal dark:text-[#F2F0E8] hover:bg-brass hover:text-white hover:border-brass transition-colors"><FiGithub size={20} /></a>
-                  <a href="https://linkedin.com/in/akbaralfaidah" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="w-12 h-12 rounded-full border border-charcoal/15 dark:border-[#F2F0E8]/15 flex items-center justify-center text-charcoal dark:text-[#F2F0E8] hover:bg-brass hover:text-white hover:border-brass transition-colors"><FiLinkedin size={20} /></a>
-                  <a href="https://instagram.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-12 h-12 rounded-full border border-charcoal/15 dark:border-[#F2F0E8]/15 flex items-center justify-center text-charcoal dark:text-[#F2F0E8] hover:bg-brass hover:text-white hover:border-brass transition-colors"><FiInstagram size={20} /></a>
+              <div className="mb-8">
+                  <p className="text-sm font-medium text-charcoal/70 dark:text-[#F2F0E8]/70 mb-4">{t('contact.follow_me')}</p>
+                  <div className="flex gap-4">
+                    <a href="https://github.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="w-12 h-12 rounded-full border border-charcoal/15 dark:border-[#F2F0E8]/15 flex items-center justify-center text-charcoal dark:text-[#F2F0E8] hover:bg-brass hover:text-white hover:border-brass transition-colors"><FiGithub size={20} /></a>
+                    <a href="https://linkedin.com/in/akbaralfaidah" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="w-12 h-12 rounded-full border border-charcoal/15 dark:border-[#F2F0E8]/15 flex items-center justify-center text-charcoal dark:text-[#F2F0E8] hover:bg-brass hover:text-white hover:border-brass transition-colors"><FiLinkedin size={20} /></a>
+                    <a href="https://instagram.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-12 h-12 rounded-full border border-charcoal/15 dark:border-[#F2F0E8]/15 flex items-center justify-center text-charcoal dark:text-[#F2F0E8] hover:bg-brass hover:text-white hover:border-brass transition-colors"><FiInstagram size={20} /></a>
+                  </div>
+                </div>
+
+                {/* Google Maps Studio Card */}
+                <div className="rounded-3xl bg-charcoal/[0.03] dark:bg-[#F2F0E8]/5 border border-charcoal/10 dark:border-[#F2F0E8]/10 p-5 shadow-sm space-y-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-charcoal/70 dark:text-[#F2F0E8]/70">
+                        Studio & Lokasi Fisik
+                      </span>
+                    </div>
+                    <a
+                      href="https://www.google.com/maps/search/?api=1&query=Akbar+Alfaidah+-+Jasa+Pembuatan+Website+%26+Aplikasi+di+Jambi"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-brass hover:underline"
+                    >
+                      Buka Maps <FiExternalLink size={12} />
+                    </a>
+                  </div>
+
+                  <div>
+                    <h4 className="text-sm font-bold text-charcoal dark:text-[#F2F0E8]">
+                      Akbar Alfaidah
+                    </h4>
+                    <p className="text-xs text-charcoal/60 dark:text-[#F2F0E8]/60">
+                      Jasa Pembuatan Website & Aplikasi di Jambi
+                    </p>
+                  </div>
+
+                  {/* Responsive Map Viewport */}
+                  <div className="w-full aspect-[16/10] sm:aspect-[16/9] rounded-2xl overflow-hidden border border-charcoal/10 dark:border-white/10 bg-charcoal/5 shadow-inner">
+                    <iframe
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.2558810635155!2d103.61675777472514!3d-1.603528998381517!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e2589f0973acb6f%3A0xbbce088fb030a962!2sAkbar%20Alfaidah%20-%20Jasa%20Pembuatan%20Website%20%26%20Aplikasi%20di%20Jambi!5e0!3m2!1sid!2sid!4v1791261507483!5m2!1sid!2sid"
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen=""
+                      loading="lazy"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      title="Lokasi Kantor Akbar Alfaidah di Google Maps"
+                      className="w-full h-full object-cover dark:contrast-[1.05] dark:brightness-[0.9]"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
 
             {/* Right Column - Form */}
             <div className="w-full lg:w-7/12">
