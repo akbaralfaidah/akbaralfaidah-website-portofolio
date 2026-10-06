@@ -9,10 +9,14 @@ import {
   FiArrowLeft,
   FiAlertCircle,
   FiMessageSquare,
-  FiRefreshCw
+  FiRefreshCw,
+  FiActivity,
+  FiSun,
+  FiMoon
 } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 import { supabase } from '../lib/supabase';
+import { useTheme } from '../hooks/useTheme';
 
 /**
  * Format timestamp into Indonesian locale date string
@@ -34,7 +38,7 @@ function formatDate(dateString) {
 }
 
 /**
- * Map status to label, visual styling tokens, and icon
+ * Map status to visual metadata
  */
 function getStageStatusMeta(status) {
   const norm = (status || '').toLowerCase().trim();
@@ -42,9 +46,9 @@ function getStageStatusMeta(status) {
     return {
       key: 'done',
       label: 'Selesai',
-      badgeClass: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/20',
-      dotBg: 'bg-emerald-500 text-white shadow-emerald-500/30',
-      lineBg: 'bg-emerald-500',
+      badgeClass: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/25',
+      nodeBg: 'bg-emerald-500 text-white shadow-md shadow-emerald-500/25',
+      cardBorder: 'border-emerald-500/15 dark:border-emerald-500/20',
       isDone: true,
       isInProgress: false,
       isPending: false
@@ -54,9 +58,9 @@ function getStageStatusMeta(status) {
     return {
       key: 'in_progress',
       label: 'Sedang Berjalan',
-      badgeClass: 'bg-brass/15 text-brass dark:text-[#E0B566] border-brass/30',
-      dotBg: 'bg-brass text-white shadow-brass/30 ring-4 ring-brass/20',
-      lineBg: 'bg-charcoal/15 dark:bg-white/15',
+      badgeClass: 'bg-brass/15 text-brass dark:text-[#E0B566] border-brass/35 font-semibold',
+      nodeBg: 'bg-gradient-to-br from-brass to-amber-600 text-white shadow-lg shadow-brass/35',
+      cardBorder: 'border-brass/40 dark:border-brass/40 ring-1 ring-brass/25',
       isDone: false,
       isInProgress: true,
       isPending: false
@@ -65,9 +69,9 @@ function getStageStatusMeta(status) {
   return {
     key: 'pending',
     label: 'Belum',
-    badgeClass: 'bg-charcoal/5 dark:bg-white/5 text-charcoal/60 dark:text-[#F2F0E8]/60 border-charcoal/10 dark:border-white/10',
-    dotBg: 'bg-paper dark:bg-[#1A1A1C] border-2 border-charcoal/25 dark:border-white/25 text-charcoal/40 dark:text-white/40',
-    lineBg: 'bg-charcoal/10 dark:bg-white/10',
+    badgeClass: 'bg-charcoal/5 dark:bg-white/5 text-charcoal/50 dark:text-[#F2F0E8]/50 border-charcoal/10 dark:border-white/10',
+    nodeBg: 'bg-paper dark:bg-[#1A1A1C] border-2 border-charcoal/20 dark:border-white/20 text-charcoal/40 dark:text-white/40',
+    cardBorder: 'border-charcoal/5 dark:border-white/5 opacity-80',
     isDone: false,
     isInProgress: false,
     isPending: true
@@ -77,6 +81,7 @@ function getStageStatusMeta(status) {
 export default function ProjectProgress({ fallbackComponent = null }) {
   const { token, slug } = useParams();
   const currentToken = token || slug;
+  const { theme, toggleTheme } = useTheme();
 
   const [loading, setLoading] = useState(true);
   const [projectData, setProjectData] = useState(null);
@@ -201,6 +206,22 @@ export default function ProjectProgress({ fallbackComponent = null }) {
     return [...projectData.stages].sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
   }, [projectData]);
 
+  // Find currently active stage (in_progress, or first pending)
+  const activeStageInfo = useMemo(() => {
+    if (!sortedStages.length) return null;
+    const inProgress = sortedStages.find(s => {
+      const norm = (s.status || '').toLowerCase().trim();
+      return ['in_progress', 'sedang berjalan', 'ongoing', 'proses', 'progress'].includes(norm);
+    });
+    if (inProgress) return inProgress;
+
+    const firstPending = sortedStages.find(s => {
+      const norm = (s.status || '').toLowerCase().trim();
+      return !['done', 'selesai', 'completed'].includes(norm);
+    });
+    return firstPending || sortedStages[sortedStages.length - 1];
+  }, [sortedStages]);
+
   // If this token wasn't found in RPC and fallbackComponent is provided, render the fallback
   if (shouldFallback && fallbackComponent) {
     return fallbackComponent;
@@ -212,36 +233,24 @@ export default function ProjectProgress({ fallbackComponent = null }) {
   // 1. Loading State (Polished responsive skeleton)
   if (loading) {
     return (
-      <div className="min-h-screen bg-paper dark:bg-[#1A1A1C] text-charcoal dark:text-[#F2F0E8] py-8 sm:py-12 px-4 sm:px-6">
-        <div className="max-w-2xl mx-auto space-y-6">
-          {/* Skeleton Top Brand */}
+      <div className="min-h-screen bg-paper dark:bg-[#1A1A1C] text-charcoal dark:text-[#F2F0E8] py-8 sm:py-14 px-4 sm:px-6">
+        <div className="max-w-5xl mx-auto space-y-8">
           <div className="flex items-center justify-between pb-6 border-b border-charcoal/10 dark:border-white/10">
-            <div className="h-6 w-32 bg-charcoal/10 dark:bg-white/10 rounded-full animate-pulse" />
-            <div className="h-6 w-24 bg-charcoal/10 dark:bg-white/10 rounded-full animate-pulse" />
+            <div className="h-7 w-36 bg-charcoal/10 dark:bg-white/10 rounded-full animate-pulse" />
+            <div className="h-7 w-28 bg-charcoal/10 dark:bg-white/10 rounded-full animate-pulse" />
           </div>
 
-          {/* Skeleton Header Card */}
-          <div className="p-6 rounded-3xl bg-white/70 dark:bg-[#222428]/70 border border-charcoal/10 dark:border-white/10 space-y-4">
-            <div className="h-4 w-28 bg-charcoal/10 dark:bg-white/10 rounded-full animate-pulse" />
-            <div className="h-8 w-3/4 bg-charcoal/10 dark:bg-white/10 rounded-xl animate-pulse" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3">
-              <div className="h-16 bg-charcoal/5 dark:bg-white/5 rounded-2xl animate-pulse" />
-              <div className="h-16 bg-charcoal/5 dark:bg-white/5 rounded-2xl animate-pulse" />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div className="lg:col-span-5 space-y-4">
+              <div className="h-6 w-24 bg-charcoal/10 dark:bg-white/10 rounded-full animate-pulse" />
+              <div className="h-10 w-3/4 bg-charcoal/10 dark:bg-white/10 rounded-2xl animate-pulse" />
+              <div className="h-28 bg-charcoal/5 dark:bg-white/5 rounded-3xl animate-pulse" />
             </div>
-          </div>
-
-          {/* Skeleton Timeline Steps */}
-          <div className="p-6 rounded-3xl bg-white/70 dark:bg-[#222428]/70 border border-charcoal/10 dark:border-white/10 space-y-6">
-            <div className="h-5 w-40 bg-charcoal/10 dark:bg-white/10 rounded-full animate-pulse" />
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="flex gap-4 items-start">
-                <div className="w-8 h-8 rounded-full bg-charcoal/10 dark:bg-white/10 shrink-0 animate-pulse" />
-                <div className="flex-1 space-y-2">
-                  <div className="h-4 w-1/2 bg-charcoal/10 dark:bg-white/10 rounded-md animate-pulse" />
-                  <div className="h-3 w-1/4 bg-charcoal/5 dark:bg-white/5 rounded-md animate-pulse" />
-                </div>
-              </div>
-            ))}
+            <div className="lg:col-span-7 space-y-4">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="h-24 bg-charcoal/5 dark:bg-white/5 rounded-3xl animate-pulse" />
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -253,10 +262,10 @@ export default function ProjectProgress({ fallbackComponent = null }) {
     return (
       <div className="min-h-screen bg-paper dark:bg-[#1A1A1C] text-charcoal dark:text-[#F2F0E8] flex flex-col items-center justify-center p-6 text-center selection:bg-charcoal dark:selection:bg-[#F2F0E8] selection:text-paper dark:selection:text-charcoal">
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 10 }}
+          initial={{ opacity: 0, scale: 0.96, y: 12 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="max-w-md w-full bg-white dark:bg-[#222428] rounded-3xl p-8 sm:p-10 border border-charcoal/10 dark:border-white/10 shadow-sm flex flex-col items-center"
+          className="max-w-md w-full bg-white/90 dark:bg-[#222428]/90 backdrop-blur-md rounded-3xl p-8 sm:p-10 border border-charcoal/10 dark:border-white/10 shadow-lg flex flex-col items-center"
         >
           <div className="w-14 h-14 rounded-2xl bg-charcoal/5 dark:bg-white/5 border border-charcoal/10 dark:border-white/10 flex items-center justify-center text-charcoal/60 dark:text-[#F2F0E8]/60 mb-6">
             <FiAlertCircle size={28} />
@@ -284,252 +293,361 @@ export default function ProjectProgress({ fallbackComponent = null }) {
 
   // 3. Main Project Progress Tracker View
   return (
-    <div className="min-h-screen bg-paper dark:bg-[#1A1A1C] text-charcoal dark:text-[#F2F0E8] py-8 sm:py-12 px-4 sm:px-6 selection:bg-charcoal dark:selection:bg-[#F2F0E8] selection:text-paper dark:selection:text-charcoal transition-colors duration-300">
-      <main className="max-w-2xl mx-auto space-y-6">
-        
-        {/* Top Minimal Brand Bar */}
+    <div className="min-h-screen bg-paper dark:bg-[#1A1A1C] text-charcoal dark:text-[#F2F0E8] py-6 sm:py-10 px-4 sm:px-6 md:px-8 selection:bg-charcoal dark:selection:bg-[#F2F0E8] selection:text-paper dark:selection:text-charcoal transition-colors duration-300">
+      
+      {/* Top Header & Navigation */}
+      <header className="max-w-5xl mx-auto mb-8 sm:mb-12">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-between pb-4 border-b border-charcoal/10 dark:border-white/10 text-xs sm:text-sm font-medium"
+          className="flex items-center justify-between pb-4 border-b border-charcoal/10 dark:border-white/10"
         >
+          {/* Brand Logo & Name */}
           <Link
             to="/"
-            className="flex items-center gap-2.5 text-charcoal/80 dark:text-[#F2F0E8]/80 hover:text-brass dark:hover:text-brass transition-colors"
+            className="group flex items-center gap-3 hover:opacity-85 transition-opacity"
           >
             <img
               src="/img/unbackground.svg"
               alt="Akbar Alfaidah Logo"
-              width={26}
-              height={26}
-              className="h-6.5 w-auto invert dark:invert-0"
+              width={32}
+              height={32}
+              className="w-8 h-8 object-contain shrink-0 invert dark:invert-0 transition-transform group-hover:scale-105"
             />
-            <span className="font-semibold tracking-tight">Akbar Alfaidah</span>
+            <div className="flex flex-col">
+              <span className="font-display font-bold text-sm tracking-tight text-charcoal dark:text-[#F2F0E8]">
+                Akbar Alfaidah
+              </span>
+              <span className="text-[10px] uppercase font-mono tracking-wider text-charcoal/50 dark:text-[#F2F0E8]/50">
+                Client Portal
+              </span>
+            </div>
           </Link>
 
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brass/10 border border-brass/20 text-brass dark:text-[#E0B566] text-xs font-semibold tracking-wide">
-            <span className="w-1.5 h-1.5 rounded-full bg-brass animate-pulse" />
-            Live Tracker
+          {/* Right Controls: Live status & theme toggle */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-xs font-semibold">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              Live Tracking
+            </div>
+
+            <button
+              onClick={toggleTheme}
+              className="p-2 sm:px-3 sm:py-1.5 rounded-full border border-charcoal/10 dark:border-white/10 hover:bg-charcoal/5 dark:hover:bg-white/5 transition-colors flex items-center gap-1.5 text-xs font-medium text-charcoal/70 dark:text-[#F2F0E8]/70"
+              title="Ganti Tema"
+              aria-label="Toggle theme"
+            >
+              {theme === 'dark' ? <FiSun size={15} className="text-amber-400" /> : <FiMoon size={15} />}
+              <span className="hidden sm:inline">{theme === 'dark' ? 'Light' : 'Dark'}</span>
+            </button>
           </div>
         </motion.div>
+      </header>
 
-        {/* Project Header Summary Card */}
-        <motion.section
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35 }}
-          className="bg-white/90 dark:bg-[#222428]/90 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-charcoal/10 dark:border-white/10 shadow-sm space-y-6"
-        >
-          <div>
-            <div className="text-[11px] font-bold uppercase tracking-widest text-charcoal/50 dark:text-[#F2F0E8]/50 mb-2">
-              Status Pengerjaan Proyek
+      {/* Main Content Layout (Responsive 2-column on desktop, single column on mobile) */}
+      <main className="max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+          
+          {/* LEFT COLUMN: Sticky Project Overview (Desktop) */}
+          <motion.aside
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="lg:col-span-5 xl:col-span-5 lg:sticky lg:top-8 space-y-6"
+          >
+            {/* Project Summary Card */}
+            <div className="bg-white/80 dark:bg-[#222428]/80 backdrop-blur-xl rounded-[2rem] p-6 sm:p-7 border border-charcoal/10 dark:border-white/10 shadow-sm relative overflow-hidden">
+              
+              {/* Subtle ambient light gradient background */}
+              <div className="absolute -top-24 -right-24 w-48 h-48 bg-brass/10 dark:bg-brass/15 rounded-full blur-3xl pointer-events-none" />
+
+              {/* Eyebrow badge */}
+              <div className="flex items-center gap-2 mb-3">
+                <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-brass/15 text-brass dark:text-[#E0B566] border border-brass/25">
+                  Proyek Klien
+                </span>
+                <span className="text-xs text-charcoal/40 dark:text-white/40">&bull;</span>
+                <span className="text-xs text-charcoal/60 dark:text-[#F2F0E8]/60 font-medium">
+                  {sortedStages.length} Tahap Pengerjaan
+                </span>
+              </div>
+
+              {/* Project Headline */}
+              <h1 className="text-3xl sm:text-4xl font-display font-extrabold tracking-tight text-charcoal dark:text-[#F2F0E8] leading-tight mb-4">
+                {projectName}
+              </h1>
+
+              {/* Active Stage Callout banner */}
+              {activeStageInfo && (
+                <div className="mb-6 p-3.5 rounded-2xl bg-brass/[0.08] dark:bg-brass/[0.12] border border-brass/25 flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-brass text-white flex items-center justify-center shrink-0 shadow-sm shadow-brass/30">
+                    <FiActivity size={16} className="animate-pulse" />
+                  </div>
+                  <div className="min-w-0">
+                    <span className="block text-[10px] uppercase font-mono font-bold tracking-wider text-brass dark:text-[#E0B566]">
+                      Tahap Saat Ini
+                    </span>
+                    <span className="text-xs sm:text-sm font-semibold text-charcoal dark:text-[#F2F0E8] truncate block">
+                      {activeStageInfo.name}
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* Metadata Items: Estimasi Selesai & Terakhir Diperbarui */}
+              <div className="space-y-3 pt-1 border-t border-charcoal/5 dark:border-white/5">
+                
+                {/* Estimasi Selesai */}
+                <div className="flex items-center justify-between p-3.5 rounded-2xl bg-charcoal/[0.03] dark:bg-white/[0.03] border border-charcoal/5 dark:border-white/5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-xl bg-brass/10 text-brass dark:text-[#E0B566] flex items-center justify-center shrink-0">
+                      <FiCalendar size={15} />
+                    </div>
+                    <div>
+                      <span className="block text-[10px] uppercase font-bold tracking-wider text-charcoal/50 dark:text-[#F2F0E8]/50">
+                        Estimasi Selesai
+                      </span>
+                      <span className="text-sm font-semibold text-charcoal dark:text-[#F2F0E8]">
+                        {projectData.tracker_estimate && projectData.tracker_estimate.trim()
+                          ? projectData.tracker_estimate.trim()
+                          : 'Sesuai linimasa'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Terakhir Diperbarui */}
+                <div className="flex items-center justify-between p-3.5 rounded-2xl bg-charcoal/[0.03] dark:bg-white/[0.03] border border-charcoal/5 dark:border-white/5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-xl bg-charcoal/10 dark:bg-white/10 text-charcoal/70 dark:text-[#F2F0E8]/70 flex items-center justify-center shrink-0">
+                      <FiRefreshCw size={14} />
+                    </div>
+                    <div>
+                      <span className="block text-[10px] uppercase font-bold tracking-wider text-charcoal/50 dark:text-[#F2F0E8]/50">
+                        Terakhir Diperbarui
+                      </span>
+                      <span className="text-sm font-semibold text-charcoal dark:text-[#F2F0E8]">
+                        {formatDate(projectData.tracker_updated_at) || 'Hari ini'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Preview Link (Tautan Preview jika ada) */}
+              {previewUrl && (
+                <div className="mt-5 pt-3">
+                  <a
+                    href={previewUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2.5 w-full py-3.5 px-5 rounded-2xl bg-charcoal dark:bg-[#F2F0E8] text-paper dark:text-charcoal hover:bg-brass dark:hover:bg-brass dark:hover:text-white font-semibold text-sm transition-all duration-300 shadow-sm group"
+                  >
+                    <span>Buka Demo / Staging Preview</span>
+                    <FiExternalLink size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </a>
+                </div>
+              )}
+
             </div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold tracking-tight text-charcoal dark:text-[#F2F0E8] leading-tight">
-              {projectName}
-            </h1>
-          </div>
 
-          {/* Metadata Grid: Estimasi Selesai & Terakhir Diperbarui */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-            {/* Estimasi Selesai */}
-            <div className="p-4 rounded-2xl bg-charcoal/[0.03] dark:bg-white/[0.03] border border-charcoal/5 dark:border-white/5 flex items-start gap-3.5">
-              <div className="w-9 h-9 rounded-xl bg-brass/10 text-brass dark:text-[#E0B566] flex items-center justify-center shrink-0 mt-0.5">
-                <FiCalendar size={18} />
+            {/* Quick Contact & Reassurance Box */}
+            <div className="bg-white/60 dark:bg-[#222428]/60 backdrop-blur-md rounded-3xl p-5 border border-charcoal/10 dark:border-white/10 flex flex-col gap-3">
+              <div>
+                <h3 className="text-sm font-bold text-charcoal dark:text-[#F2F0E8]">
+                  Perlu Koordinasi atau Revisi?
+                </h3>
+                <p className="text-xs text-charcoal/60 dark:text-[#F2F0E8]/60 mt-0.5 leading-relaxed">
+                  Hubungi langsung pengembang untuk mendiskusikan penyesuaian pengerjaan.
+                </p>
               </div>
-              <div className="min-w-0">
-                <span className="block text-[11px] font-bold uppercase tracking-wider text-charcoal/50 dark:text-[#F2F0E8]/50">
-                  Estimasi Selesai
-                </span>
-                <span className="text-sm sm:text-base font-semibold text-charcoal dark:text-[#F2F0E8] truncate block">
-                  {projectData.tracker_estimate && projectData.tracker_estimate.trim()
-                    ? projectData.tracker_estimate.trim()
-                    : 'Sesuai linimasa'}
-                </span>
-              </div>
-            </div>
 
-            {/* Terakhir Diperbarui */}
-            <div className="p-4 rounded-2xl bg-charcoal/[0.03] dark:bg-white/[0.03] border border-charcoal/5 dark:border-white/5 flex items-start gap-3.5">
-              <div className="w-9 h-9 rounded-xl bg-charcoal/10 dark:bg-white/10 text-charcoal/70 dark:text-[#F2F0E8]/70 flex items-center justify-center shrink-0 mt-0.5">
-                <FiRefreshCw size={17} />
-              </div>
-              <div className="min-w-0">
-                <span className="block text-[11px] font-bold uppercase tracking-wider text-charcoal/50 dark:text-[#F2F0E8]/50">
-                  Terakhir Diperbarui
-                </span>
-                <span className="text-sm sm:text-base font-semibold text-charcoal dark:text-[#F2F0E8] truncate block">
-                  {formatDate(projectData.tracker_updated_at) || 'Baru saja'}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Preview Link (Tautan Preview jika ada) */}
-          {previewUrl && (
-            <div className="pt-1">
               <a
-                href={previewUrl}
+                href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+                  `Halo Mas Akbar, saya ingin koordinasi terkait update progres proyek "${projectName}".`
+                )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2.5 w-full py-3.5 px-5 rounded-2xl bg-charcoal/5 dark:bg-white/5 hover:bg-brass/15 dark:hover:bg-brass/20 border border-charcoal/10 dark:border-white/10 hover:border-brass/40 text-charcoal dark:text-[#F2F0E8] hover:text-brass dark:hover:text-[#E0B566] font-semibold text-sm transition-all duration-200 group"
+                className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold transition-colors duration-200 shadow-sm"
               >
-                <span>Buka Preview / Tautan Proyek</span>
-                <FiExternalLink size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <FaWhatsapp size={16} />
+                Hubungi via WhatsApp
               </a>
             </div>
-          )}
-        </motion.section>
 
-        {/* Vertical Stages Timeline */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          className="bg-white/90 dark:bg-[#222428]/90 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-charcoal/10 dark:border-white/10 shadow-sm"
-        >
-          <div className="flex items-center justify-between pb-6 mb-6 border-b border-charcoal/10 dark:border-white/10">
-            <div>
-              <h2 className="text-lg sm:text-xl font-display font-bold text-charcoal dark:text-[#F2F0E8]">
-                Tahapan Pengerjaan
-              </h2>
-              <p className="text-xs sm:text-sm text-charcoal/60 dark:text-[#F2F0E8]/60 mt-0.5">
-                Rangkaian progres tahapan pengerjaan proyek dari awal hingga rilis.
-              </p>
+            {/* Minimal Copyright */}
+            <div className="hidden lg:block text-xs text-charcoal/40 dark:text-[#F2F0E8]/40 pt-2">
+              © {new Date().getFullYear()} Akbar Alfaidah. Dokumen privat pelacakan proyek klien.
             </div>
-            {sortedStages.length > 0 && (
-              <span className="text-xs font-mono font-medium px-2.5 py-1 rounded-full bg-charcoal/5 dark:bg-white/5 border border-charcoal/10 dark:border-white/10 text-charcoal/70 dark:text-[#F2F0E8]/70">
+
+          </motion.aside>
+
+          {/* RIGHT COLUMN: Interactive Animated Timeline */}
+          <section className="lg:col-span-7 xl:col-span-7 space-y-6">
+            
+            {/* Section Header */}
+            <div className="flex items-center justify-between px-1">
+              <div>
+                <h2 className="text-xl sm:text-2xl font-display font-bold text-charcoal dark:text-[#F2F0E8]">
+                  Linimasa Tahapan
+                </h2>
+                <p className="text-xs sm:text-sm text-charcoal/60 dark:text-[#F2F0E8]/60 mt-0.5">
+                  Alur pengerjaan dari kesepakatan hingga serah terima.
+                </p>
+              </div>
+
+              <span className="text-xs font-mono font-semibold px-3 py-1 rounded-full bg-charcoal/5 dark:bg-white/5 border border-charcoal/10 dark:border-white/10 text-charcoal/70 dark:text-[#F2F0E8]/70">
                 {sortedStages.length} Tahap
               </span>
-            )}
-          </div>
-
-          {sortedStages.length === 0 ? (
-            <div className="text-center py-8 text-sm text-charcoal/50 dark:text-[#F2F0E8]/50">
-              Belum ada data tahapan pengerjaan yang ditambahkan.
             </div>
-          ) : (
-            <div className="relative">
-              {sortedStages.map((stage, idx) => {
-                const meta = getStageStatusMeta(stage.status);
-                const isLast = idx === sortedStages.length - 1;
-                const completedDate = formatDate(stage.completed_at);
 
-                return (
-                  <div key={stage.id || stage.position || idx} className="relative flex gap-4 sm:gap-6">
-                    
-                    {/* Left Column: Timeline Line & Node */}
-                    <div className="flex flex-col items-center shrink-0">
-                      {/* Step Indicator Dot */}
-                      <div
-                        className={`w-8 h-8 rounded-full flex items-center justify-center transition-all z-10 ${meta.dotBg}`}
-                        title={meta.label}
-                      >
-                        {meta.isDone ? (
-                          <FiCheck size={16} className="stroke-[2.5]" />
-                        ) : meta.isInProgress ? (
-                          <FiClock size={15} className="animate-spin-slow stroke-[2.2]" />
-                        ) : (
-                          <span className="text-[11px] font-mono font-medium">{stage.position ?? idx + 1}</span>
+            {/* Timeline Track Container */}
+            {sortedStages.length === 0 ? (
+              <div className="p-12 text-center text-sm text-charcoal/50 dark:text-[#F2F0E8]/50 bg-white/50 dark:bg-[#222428]/50 rounded-3xl border border-charcoal/10 dark:border-white/10">
+                Belum ada data tahapan pengerjaan yang ditambahkan.
+              </div>
+            ) : (
+              <div className="relative pl-2 sm:pl-4 space-y-4">
+                
+                {sortedStages.map((stage, idx) => {
+                  const meta = getStageStatusMeta(stage.status);
+                  const isLast = idx === sortedStages.length - 1;
+                  const completedDate = formatDate(stage.completed_at);
+
+                  return (
+                    <motion.div
+                      key={stage.id || stage.position || idx}
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.35, delay: idx * 0.04 }}
+                      className="relative flex gap-4 sm:gap-6 group"
+                    >
+                      {/* Vertical Spine (Node + Connecting line with flowing animation) */}
+                      <div className="flex flex-col items-center shrink-0 relative">
+                        
+                        {/* Node Container with Active Pulse/Ping */}
+                        <div className="relative z-10 flex items-center justify-center">
+                          {/* Active radar ping beacon on the In-Progress stage */}
+                          {meta.isInProgress && (
+                            <>
+                              <span className="absolute -inset-2 rounded-full bg-brass/25 animate-ping duration-1000 pointer-events-none" />
+                              <span className="absolute -inset-1 rounded-full bg-brass/35 animate-pulse duration-700 pointer-events-none" />
+                            </>
+                          )}
+
+                          {/* Node Circle */}
+                          <div
+                            className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-transform duration-300 group-hover:scale-105 ${meta.nodeBg}`}
+                            title={meta.label}
+                          >
+                            {meta.isDone ? (
+                              <FiCheck size={18} className="stroke-[2.5]" />
+                            ) : meta.isInProgress ? (
+                              <FiClock size={18} className="stroke-[2.2]" />
+                            ) : (
+                              <span className="text-xs font-mono font-medium">{stage.position ?? idx + 1}</span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Animated Vertical Connector Line */}
+                        {!isLast && (
+                          <div className="relative w-1 flex-1 min-h-[4rem] my-1 rounded-full bg-charcoal/10 dark:bg-white/10 overflow-hidden">
+                            {/* Static completed line color */}
+                            {meta.isDone && (
+                              <div className="absolute inset-0 bg-emerald-500/80 rounded-full" />
+                            )}
+
+                            {/* Active Flowing Beam Animation: travels downward toward next milestone */}
+                            {(meta.isDone || meta.isInProgress) && (
+                              <motion.div
+                                className="absolute left-0 right-0 h-10 rounded-full bg-gradient-to-b from-transparent via-brass to-transparent"
+                                animate={{
+                                  top: ['-100%', '100%']
+                                }}
+                                transition={{
+                                  duration: 2,
+                                  repeat: Infinity,
+                                  ease: 'easeInOut'
+                                }}
+                              />
+                            )}
+                          </div>
                         )}
                       </div>
 
-                      {/* Vertical Connector Line (hidden on last item) */}
-                      {!isLast && (
-                        <div
-                          className={`w-0.5 flex-1 min-h-[3rem] my-1 rounded-full transition-colors ${
-                            meta.isDone ? 'bg-emerald-500/70' : 'bg-charcoal/15 dark:bg-white/15'
-                          }`}
-                        />
-                      )}
-                    </div>
+                      {/* Right Stage Card */}
+                      <div className={`flex-1 min-w-0 ${isLast ? 'pb-2' : 'pb-5'}`}>
+                        <div className={`p-4 sm:p-5 rounded-3xl bg-white/80 dark:bg-[#222428]/80 backdrop-blur-md border ${meta.cardBorder} shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5`}>
+                          
+                          {/* Card Header: Position & Status Badge */}
+                          <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-charcoal/50 dark:text-[#F2F0E8]/50">
+                              Tahap {stage.position || idx + 1}
+                            </span>
 
-                    {/* Right Column: Stage Content */}
-                    <div className={`flex-1 min-w-0 ${isLast ? 'pb-2' : 'pb-8'}`}>
-                      
-                      {/* Header Row: Title & Status Badge */}
-                      <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
-                        <h3 className={`text-sm sm:text-base font-semibold leading-snug ${
-                          meta.isDone
-                            ? 'text-charcoal dark:text-[#F2F0E8]'
-                            : meta.isInProgress
-                            ? 'text-charcoal dark:text-[#F2F0E8] font-bold'
-                            : 'text-charcoal/70 dark:text-[#F2F0E8]/70'
-                        }`}>
-                          {stage.name}
-                        </h3>
+                            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border ${meta.badgeClass}`}>
+                              {meta.isInProgress && (
+                                <span className="w-1.5 h-1.5 rounded-full bg-brass animate-pulse" />
+                              )}
+                              {meta.label}
+                            </span>
+                          </div>
 
-                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border ${meta.badgeClass}`}>
-                          {meta.isInProgress && (
-                            <span className="w-1.5 h-1.5 rounded-full bg-brass animate-pulse" />
+                          {/* Stage Name / Headline */}
+                          <h3 className={`text-base sm:text-lg font-display font-semibold leading-snug mb-1.5 ${
+                            meta.isInProgress
+                              ? 'text-charcoal dark:text-[#F2F0E8] font-bold'
+                              : meta.isDone
+                              ? 'text-charcoal dark:text-[#F2F0E8]'
+                              : 'text-charcoal/70 dark:text-[#F2F0E8]/70'
+                          }`}>
+                            {stage.name}
+                          </h3>
+
+                          {/* Completion date subtitle */}
+                          {meta.isDone && completedDate && (
+                            <div className="text-[11px] font-medium text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5 mt-1">
+                              <span className="w-1 h-1 rounded-full bg-emerald-500" />
+                              Selesai pada {completedDate}
+                            </div>
                           )}
-                          {meta.label}
-                        </span>
+
+                          {/* Stage Note (Catatan singkat tahapan) */}
+                          {stage.note && stage.note.trim() && (
+                            <div className={`mt-3 p-3.5 rounded-2xl text-xs sm:text-sm leading-relaxed ${
+                              meta.isInProgress
+                                ? 'bg-brass/[0.08] dark:bg-brass/[0.12] border border-brass/25 text-charcoal dark:text-[#F2F0E8]'
+                                : 'bg-charcoal/[0.03] dark:bg-white/[0.03] border border-charcoal/5 dark:border-white/5 text-charcoal/80 dark:text-[#F2F0E8]/80'
+                            }`}>
+                              <div className="flex items-start gap-2.5">
+                                <FiMessageSquare size={14} className="shrink-0 mt-0.5 text-charcoal/40 dark:text-white/40" />
+                                <p className="whitespace-pre-line">{stage.note.trim()}</p>
+                              </div>
+                            </div>
+                          )}
+
+                        </div>
                       </div>
 
-                      {/* Completion Date (if completed) */}
-                      {meta.isDone && completedDate && (
-                        <div className="text-[11px] font-medium text-emerald-700/80 dark:text-emerald-400/80 mb-2">
-                          Selesai pada {completedDate}
-                        </div>
-                      )}
+                    </motion.div>
+                  );
+                })}
 
-                      {/* Brief Note (if provided) */}
-                      {stage.note && stage.note.trim() && (
-                        <div className={`mt-2 p-3.5 rounded-2xl text-xs sm:text-sm leading-relaxed ${
-                          meta.isInProgress
-                            ? 'bg-brass/5 border border-brass/20 text-charcoal dark:text-[#F2F0E8]'
-                            : 'bg-charcoal/[0.03] dark:bg-white/[0.03] border border-charcoal/5 dark:border-white/5 text-charcoal/80 dark:text-[#F2F0E8]/80'
-                        }`}>
-                          <div className="flex items-start gap-2">
-                            <FiMessageSquare size={14} className="shrink-0 mt-0.5 text-charcoal/40 dark:text-white/40" />
-                            <p className="whitespace-pre-line">{stage.note.trim()}</p>
-                          </div>
-                        </div>
-                      )}
+              </div>
+            )}
 
-                    </div>
-                  </div>
-                );
-              })}
+            {/* Mobile Copyright */}
+            <div className="block lg:hidden text-center text-xs text-charcoal/40 dark:text-[#F2F0E8]/40 pt-6 pb-4">
+              © {new Date().getFullYear()} Akbar Alfaidah. Dokumen privat pelacakan proyek klien.
             </div>
-          )}
-        </motion.section>
 
-        {/* Client Reassurance & Direct Contact Box */}
-        <motion.footer
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.35, delay: 0.2 }}
-          className="p-5 sm:p-6 rounded-3xl bg-white/60 dark:bg-[#222428]/60 border border-charcoal/10 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left"
-        >
-          <div>
-            <h4 className="text-sm font-semibold text-charcoal dark:text-[#F2F0E8]">
-              Ada pertanyaan terkait progres ini?
-            </h4>
-            <p className="text-xs text-charcoal/60 dark:text-[#F2F0E8]/60 mt-0.5">
-              Hubungi langsung pengembang untuk koordinasi atau penyesuaian pengerjaan.
-            </p>
-          </div>
+          </section>
 
-          <a
-            href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-              `Halo Mas Akbar, saya ingin menanyakan perkembangan proyek "${projectName}".`
-            )}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold transition-colors duration-200 shadow-sm shrink-0"
-          >
-            <FaWhatsapp size={16} />
-            Hubungi via WhatsApp
-          </a>
-        </motion.footer>
-
-        {/* Minimal Copyright */}
-        <div className="text-center pt-2 pb-6 text-xs text-charcoal/40 dark:text-[#F2F0E8]/40">
-          © {new Date().getFullYear()} Akbar Alfaidah. Dilindungi kerahasiaan klien.
         </div>
-
       </main>
+
     </div>
   );
 }
