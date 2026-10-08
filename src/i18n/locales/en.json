@@ -54,10 +54,16 @@
     "subheading": "My professional background and the technologies I work with.",
     "items": [
       {
+        "role": "Full-Stack Web Developer",
+        "company": "Balai Penegakan Hukum Lingkungan Hidup Kota Jambi",
+        "period": "August 2026 – Present",
+        "description": "Designed and developed an integrated institutional Web Portal hosting 4 core subsystems: State Asset Management (BMN), Finance, Staffing/HR, and Central Database."
+      },
+      {
         "role": "Programmer",
         "company": "Depot Kayu & Toko Bangunan Esa",
-        "period": "January 2026 – Present",
-        "description": "Building a mobile POS and inventory management system (Flutter/Firebase), including backend logic for stock calculations."
+        "period": "January 2026 – August 2026",
+        "description": "Built a mobile POS and inventory management system (Flutter/Firebase), including backend logic for stock calculations."
       },
       {
         "role": "Freelance Web & Mobile Developer",

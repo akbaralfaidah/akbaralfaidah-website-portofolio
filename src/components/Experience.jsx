@@ -10,9 +10,15 @@ import { TbBrain } from 'react-icons/tb';
 
 const EXPERIENCES = [
   {
+    role: "Full-Stack Web Developer",
+    company: "Balai Penegakan Hukum Lingkungan Hidup Kota Jambi",
+    period: "Agustus 2026 - Sekarang",
+    description: "Merancang dan mengembangkan Web Portal terpadu yang mengintegrasikan 4 sistem utama: Pengelolaan BMN (Barang Milik Negara), Keuangan, Kepegawaian, dan Manajemen Database."
+  },
+  {
     role: "Programmer",
     company: "Depot Kayu & Toko Bangunan Esa",
-    period: "Januari 2026 - Sekarang",
+    period: "Januari 2026 - Agustus 2026",
     description: "Membangun POS & manajemen inventaris mobile (Flutter/Firebase), serta merancang logika backend kalkulasi stok."
   },
   {
