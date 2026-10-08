@@ -1,7 +1,8 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FiMail, FiMapPin, FiGithub, FiLinkedin, FiInstagram, FiSend, FiChevronDown, FiExternalLink } from 'react-icons/fi';
+import { FiMail, FiMapPin, FiGithub, FiLinkedin, FiInstagram, FiSend, FiChevronDown, FiExternalLink, FiCheck } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 import { Turnstile } from '@marsidev/react-turnstile';
 import AnimatedButton from './ui/AnimatedButton';
@@ -46,6 +47,39 @@ export default function Contact() {
   const [honeypot, setHoneypot] = useState('');
   const [turnstileToken, setTurnstileToken] = useState(null);
   const turnstileRef = useRef(null);
+
+  // Custom Deadline Dropdown State & Click-outside Handler
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+  const deadlineOptions = [
+    { id: 'cepat', emoji: '⚡', label: t('contact.form_deadline_options.cepat') },
+    { id: 'standar', emoji: '💼', label: t('contact.form_deadline_options.standar') },
+    { id: 'menengah', emoji: '📱', label: t('contact.form_deadline_options.menengah') },
+    { id: 'kompleks', emoji: '🏢', label: t('contact.form_deadline_options.kompleks') },
+    { id: 'fleksibel', emoji: '🤝', label: t('contact.form_deadline_options.fleksibel') },
+  ];
+
+  const selectedDeadlineObj = deadlineOptions.find((opt) => opt.id === formData.deadline);
 
   const showToast = (message, type = 'error') => {
     setToast({ message, type });
@@ -422,33 +456,98 @@ export default function Contact() {
                     </div>
                   )}
 
-                  {/* Deadline Dropdown */}
-                  <div className="space-y-2">
-                    <label htmlFor="deadline" className="text-sm font-medium text-charcoal/70 dark:text-[#F2F0E8]/70">
-                      {t('contact.form_deadline')}
-                    </label>
-                    <div className="relative cursor-pointer">
-                      <select
+                  {/* Custom Deadline Dropdown */}
+                  <div className="space-y-1.5" ref={dropdownRef}>
+                    <div className="relative">
+                      <button
+                        type="button"
                         id="deadline"
-                        className={`w-full bg-transparent border-b-2 py-3 outline-none transition-colors font-medium appearance-none cursor-pointer pr-10 ${!formData.deadline
-                          ? 'text-charcoal/50 dark:text-[#F2F0E8]/50 border-charcoal/15 dark:border-[#F2F0E8]/15'
-                          : 'text-charcoal dark:text-[#F2F0E8] border-brass'
-                          } focus:border-brass`}
-                        value={formData.deadline}
-                        onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
+                        aria-haspopup="listbox"
+                        aria-expanded={isDropdownOpen}
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                        className={`w-full px-4 py-3 min-h-[60px] rounded-2xl border-2 flex items-center justify-between text-left transition-all duration-200 select-none focus:outline-none ${
+                          isDropdownOpen
+                            ? 'border-brass bg-white dark:bg-[#202226] ring-4 ring-brass/15 shadow-sm'
+                            : formData.deadline
+                              ? 'border-emerald-500/70 dark:border-emerald-400/70 bg-emerald-500/[0.03] dark:bg-emerald-500/[0.05]'
+                              : 'border-charcoal/15 dark:border-[#F2F0E8]/15 hover:border-charcoal/30 dark:hover:border-[#F2F0E8]/30 bg-transparent'
+                        }`}
                       >
-                        <option value="" disabled className="text-charcoal/50 bg-paper dark:bg-[#1A1A1C] dark:text-white">
-                          {t('contact.form_deadline_placeholder')}
-                        </option>
-                        <option value="cepat" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.cepat')}</option>
-                        <option value="standar" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.standar')}</option>
-                        <option value="menengah" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.menengah')}</option>
-                        <option value="kompleks" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.kompleks')}</option>
-                        <option value="fleksibel" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.fleksibel')}</option>
-                      </select>
-                      <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-charcoal/50 dark:text-[#F2F0E8]/50">
-                        <FiChevronDown size={20} />
-                      </div>
+                        <div className="flex flex-col gap-0.5 min-w-0 pr-3">
+                          <span className="text-[11px] font-semibold uppercase tracking-wider text-charcoal/50 dark:text-[#F2F0E8]/50">
+                            {t('contact.form_deadline')}
+                          </span>
+                          {selectedDeadlineObj ? (
+                            <div className="flex items-center gap-2.5 text-sm md:text-base font-semibold text-charcoal dark:text-[#F2F0E8] truncate">
+                              <span className="text-lg leading-none shrink-0">{selectedDeadlineObj.emoji}</span>
+                              <span className="truncate">{selectedDeadlineObj.label}</span>
+                            </div>
+                          ) : (
+                            <span className="text-sm md:text-base text-charcoal/40 dark:text-[#F2F0E8]/40 font-medium">
+                              {t('contact.form_deadline_placeholder')}
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="flex items-center gap-2 shrink-0">
+                          {formData.deadline && !isDropdownOpen && (
+                            <div className="w-6 h-6 rounded-full bg-emerald-500/15 dark:bg-emerald-500/25 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                              <FiCheck size={14} strokeWidth={2.5} />
+                            </div>
+                          )}
+                          <FiChevronDown
+                            size={20}
+                            className={`transition-transform duration-300 ${
+                              isDropdownOpen
+                                ? 'rotate-180 text-brass'
+                                : formData.deadline
+                                  ? 'text-emerald-600 dark:text-emerald-400'
+                                  : 'text-charcoal/50 dark:text-[#F2F0E8]/50'
+                            }`}
+                          />
+                        </div>
+                      </button>
+
+                      <AnimatePresence>
+                        {isDropdownOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                            transition={{ duration: 0.18, ease: "easeOut" }}
+                            className="absolute left-0 right-0 top-[calc(100%+8px)] z-50 bg-white dark:bg-[#202226] rounded-2xl border border-charcoal/10 dark:border-white/10 shadow-2xl shadow-charcoal/15 dark:shadow-black/60 p-2 overflow-hidden"
+                          >
+                            <div className="max-h-64 overflow-y-auto space-y-1 pr-1">
+                              {deadlineOptions.map((opt) => {
+                                const isSelected = formData.deadline === opt.id;
+                                return (
+                                  <button
+                                    key={opt.id}
+                                    type="button"
+                                    onClick={() => {
+                                      setFormData({ ...formData, deadline: opt.id });
+                                      setIsDropdownOpen(false);
+                                    }}
+                                    className={`w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-left text-sm md:text-[0.925rem] transition-all duration-150 ${
+                                      isSelected
+                                        ? 'bg-brass/15 dark:bg-brass/25 text-charcoal dark:text-white font-semibold'
+                                        : 'text-charcoal/80 dark:text-[#F2F0E8]/80 hover:bg-charcoal/5 dark:hover:bg-white/5 font-medium'
+                                    }`}
+                                  >
+                                    <div className="flex items-center gap-3 min-w-0 pr-2">
+                                      <span className="text-xl leading-none shrink-0">{opt.emoji}</span>
+                                      <span className="truncate">{opt.label}</span>
+                                    </div>
+                                    {isSelected && (
+                                      <FiCheck size={18} className="text-brass shrink-0" strokeWidth={2.5} />
+                                    )}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
                   </div>
 
