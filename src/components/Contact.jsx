@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FiMail, FiMapPin, FiGithub, FiLinkedin, FiInstagram, FiSend, FiChevronDown, FiExternalLink, FiCheck } from 'react-icons/fi';
+import { FiMail, FiMapPin, FiGithub, FiLinkedin, FiInstagram, FiSend, FiExternalLink } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
+import { Zap, Briefcase, Smartphone, Building2, Handshake, ChevronDown, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 import { Turnstile } from '@marsidev/react-turnstile';
@@ -72,11 +73,36 @@ export default function Contact() {
   }, []);
 
   const deadlineOptions = [
-    { id: 'cepat', emoji: '⚡', label: t('contact.form_deadline_options.cepat') },
-    { id: 'standar', emoji: '💼', label: t('contact.form_deadline_options.standar') },
-    { id: 'menengah', emoji: '📱', label: t('contact.form_deadline_options.menengah') },
-    { id: 'kompleks', emoji: '🏢', label: t('contact.form_deadline_options.kompleks') },
-    { id: 'fleksibel', emoji: '🤝', label: t('contact.form_deadline_options.fleksibel') },
+    {
+      id: 'cepat',
+      icon: Zap,
+      badgeClass: 'bg-amber-500/10 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400',
+      label: t('contact.form_deadline_options.cepat'),
+    },
+    {
+      id: 'standar',
+      icon: Briefcase,
+      badgeClass: 'bg-blue-500/10 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400',
+      label: t('contact.form_deadline_options.standar'),
+    },
+    {
+      id: 'menengah',
+      icon: Smartphone,
+      badgeClass: 'bg-purple-500/10 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400',
+      label: t('contact.form_deadline_options.menengah'),
+    },
+    {
+      id: 'kompleks',
+      icon: Building2,
+      badgeClass: 'bg-rose-500/10 text-rose-600 dark:bg-rose-500/20 dark:text-rose-400',
+      label: t('contact.form_deadline_options.kompleks'),
+    },
+    {
+      id: 'fleksibel',
+      icon: Handshake,
+      badgeClass: 'bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400',
+      label: t('contact.form_deadline_options.fleksibel'),
+    },
   ];
 
   const selectedDeadlineObj = deadlineOptions.find((opt) => opt.id === formData.deadline);
@@ -479,7 +505,9 @@ export default function Contact() {
                           </span>
                           {selectedDeadlineObj ? (
                             <div className="flex items-center gap-2.5 text-sm md:text-base font-semibold text-charcoal dark:text-[#F2F0E8] truncate">
-                              <span className="text-lg leading-none shrink-0">{selectedDeadlineObj.emoji}</span>
+                              <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${selectedDeadlineObj.badgeClass}`}>
+                                <selectedDeadlineObj.icon size={15} strokeWidth={2.2} />
+                              </div>
                               <span className="truncate">{selectedDeadlineObj.label}</span>
                             </div>
                           ) : (
@@ -492,10 +520,10 @@ export default function Contact() {
                         <div className="flex items-center gap-2 shrink-0">
                           {formData.deadline && !isDropdownOpen && (
                             <div className="w-6 h-6 rounded-full bg-emerald-500/15 dark:bg-emerald-500/25 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
-                              <FiCheck size={14} strokeWidth={2.5} />
+                              <Check size={14} strokeWidth={2.5} />
                             </div>
                           )}
-                          <FiChevronDown
+                          <ChevronDown
                             size={20}
                             className={`transition-transform duration-300 ${
                               isDropdownOpen
@@ -520,6 +548,7 @@ export default function Contact() {
                             <div className="max-h-64 overflow-y-auto space-y-1 pr-1">
                               {deadlineOptions.map((opt) => {
                                 const isSelected = formData.deadline === opt.id;
+                                const OptIcon = opt.icon;
                                 return (
                                   <button
                                     key={opt.id}
@@ -528,18 +557,20 @@ export default function Contact() {
                                       setFormData({ ...formData, deadline: opt.id });
                                       setIsDropdownOpen(false);
                                     }}
-                                    className={`w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-left text-sm md:text-[0.925rem] transition-all duration-150 ${
+                                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left text-sm md:text-[0.925rem] transition-all duration-150 ${
                                       isSelected
                                         ? 'bg-brass/15 dark:bg-brass/25 text-charcoal dark:text-white font-semibold'
                                         : 'text-charcoal/80 dark:text-[#F2F0E8]/80 hover:bg-charcoal/5 dark:hover:bg-white/5 font-medium'
                                     }`}
                                   >
                                     <div className="flex items-center gap-3 min-w-0 pr-2">
-                                      <span className="text-xl leading-none shrink-0">{opt.emoji}</span>
+                                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${opt.badgeClass}`}>
+                                        <OptIcon size={17} strokeWidth={2.2} />
+                                      </div>
                                       <span className="truncate">{opt.label}</span>
                                     </div>
                                     {isSelected && (
-                                      <FiCheck size={18} className="text-brass shrink-0" strokeWidth={2.5} />
+                                      <Check size={18} className="text-brass shrink-0" strokeWidth={2.5} />
                                     )}
                                   </button>
                                 );
