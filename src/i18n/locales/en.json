@@ -101,13 +101,14 @@
     "form_whatsapp_placeholder": "08xx xxxx xxxx",
     "form_email": "Email",
     "form_message": "What Do You Want to Build?",
-    "form_deadline": "Deadline (Target Completion)",
-    "form_deadline_placeholder": "Select Deadline",
+    "form_deadline": "Target Timeline",
+    "form_deadline_placeholder": "Select Estimated Timeline",
     "form_deadline_options": {
-      "santai": "Relaxed (1-2 Weeks)",
-      "normal": "Normal (3-5 Days)",
-      "cepat": "Fast (1-2 Days)",
-      "kilat": "Urgent (< 24 Hours)"
+      "cepat": "2 - 4 Weeks (Landing Page / Simple Web)",
+      "standar": "1 - 2 Months (Business Web / Web App)",
+      "menengah": "2 - 3 Months (Information System / Mobile App)",
+      "kompleks": "> 3 Months (Large Scale / Complex Project)",
+      "fleksibel": "Flexible (To be discussed)"
     },
     "cta": "Send Message",
     "cta_sending": "Sending...",
@@ -120,7 +121,7 @@
       "email_empty": "Email is required",
       "email_invalid": "Invalid email format",
       "message": "Message is required (at least 10 characters)",
-      "deadline": "Please select a deadline"
+      "deadline": "Please select an estimated target timeline"
     },
     "toast": {
       "wa_success": "WhatsApp opened! Please send the pre-formatted message 🚀",

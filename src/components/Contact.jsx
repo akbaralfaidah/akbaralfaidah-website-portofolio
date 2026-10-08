@@ -440,10 +440,11 @@ export default function Contact() {
                         <option value="" disabled className="text-charcoal/50 bg-paper dark:bg-[#1A1A1C] dark:text-white">
                           {t('contact.form_deadline_placeholder')}
                         </option>
-                        <option value="santai" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.santai')}</option>
-                        <option value="normal" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.normal')}</option>
                         <option value="cepat" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.cepat')}</option>
-                        <option value="kilat" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.kilat')}</option>
+                        <option value="standar" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.standar')}</option>
+                        <option value="menengah" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.menengah')}</option>
+                        <option value="kompleks" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.kompleks')}</option>
+                        <option value="fleksibel" className="bg-paper dark:bg-[#1A1A1C] dark:text-white text-charcoal">{t('contact.form_deadline_options.fleksibel')}</option>
                       </select>
                       <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-charcoal/50 dark:text-[#F2F0E8]/50">
                         <FiChevronDown size={20} />
