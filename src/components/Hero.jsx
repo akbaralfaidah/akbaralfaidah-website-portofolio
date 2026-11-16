@@ -117,7 +117,28 @@ export default function Hero() {
       id="hero"
       className="relative min-h-[100svh] flex items-center bg-paper text-ink pt-24 pb-12 sm:pt-28 sm:pb-16 border-b border-line overflow-hidden"
     >
-      {/* Crisp Geometric Constellation & Click-Ripple Field (NO blurry smoke) */}
+      {/* Luminous Daylight Radial Atmosphere + Dark Evening Glow */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+      >
+        <div
+          className="absolute -top-32 right-[-8%] w-[680px] h-[680px] rounded-full blur-3xl opacity-90 dark:opacity-35"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(56,189,248,0.22) 0%, rgba(37,99,235,0.10) 45%, transparent 72%)'
+          }}
+        />
+        <div
+          className="absolute -bottom-36 left-[-8%] w-[580px] h-[580px] rounded-full blur-3xl opacity-85 dark:opacity-30"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(16,185,129,0.16) 0%, rgba(14,165,233,0.08) 48%, transparent 74%)'
+          }}
+        />
+      </div>
+
+      {/* Interactive Vector Silk Harmonics, Constellation & Click Ripples */}
       <HeroCanvas />
 
       <div className="relative z-10 max-w-6xl w-full mx-auto px-5 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
@@ -127,11 +148,11 @@ export default function Hero() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, ease: STUDIO_EASE }}
-            className="inline-flex items-center gap-2.5 font-mono text-xs uppercase tracking-[0.12em] text-ink-muted mb-6"
+            className="inline-flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 rounded-full bg-surface/90 border border-line shadow-sm font-mono text-[10px] sm:text-xs uppercase tracking-[0.06em] sm:tracking-[0.12em] whitespace-nowrap max-w-full text-ink-muted mb-6"
           >
             <span className="relative flex h-2 w-2 shrink-0" aria-hidden="true">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-80" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
             </span>
             <span>{t('hero.badge')} · Jambi / Remote</span>
           </motion.div>
@@ -173,7 +194,7 @@ export default function Hero() {
           >
             <Magnetic strength={0.25} className="w-full sm:w-auto">
               <Button
-                variant="primary"
+                variant="accent"
                 size="lg"
                 onClick={scrollToContact}
                 className="w-full sm:w-auto"
@@ -192,7 +213,7 @@ export default function Hero() {
               to="/projects"
               variant="outline"
               size="lg"
-              className="w-full sm:w-auto bg-paper/50 backdrop-blur-md"
+              className="w-full sm:w-auto backdrop-blur-md"
             >
               <span>{t('hero.cta_secondary')}</span>
               <ArrowUpRight
@@ -215,28 +236,30 @@ export default function Hero() {
                   <dt className="font-mono text-[11px] uppercase tracking-wider text-ink-muted mb-1">
                     {fact.label}
                   </dt>
-                  <dd className="text-sm sm:text-base font-medium text-ink">{fact.value}</dd>
+                  <dd className="text-sm sm:text-base font-semibold text-ink">{fact.value}</dd>
                 </div>
               ))}
           </motion.dl>
         </div>
 
-        {/* Right: Genuine Interactive Live Engineering Playground */}
+        {/* Right: Crisp Daylight Interactive Live Playground */}
         <motion.div
           initial={{ opacity: 0, scale: 0.97, y: 16 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.14, ease: STUDIO_EASE }}
           className="lg:col-span-6"
         >
-          <div className="rounded-xl bg-[#0A0C10]/90 backdrop-blur-xl text-slate-100 border border-white/15 shadow-[0_32px_90px_rgba(0,0,0,0.65)] overflow-hidden">
+          <div className="rounded-2xl bg-white/95 dark:bg-[#0D1017]/95 backdrop-blur-xl text-ink border border-slate-200/90 dark:border-white/15 shadow-[0_24px_70px_-14px_rgba(37,99,235,0.16),0_10px_28px_-10px_rgba(15,23,42,0.08)] dark:shadow-[0_32px_90px_rgba(0,0,0,0.65)] overflow-hidden">
             {/* Interactive Mode Tabs */}
-            <div className="px-3.5 sm:px-5 py-3 bg-[#10131A] border-b border-white/10 flex flex-wrap items-center justify-between gap-2">
-              <div className="flex w-full sm:w-auto items-center justify-between sm:justify-start gap-1 p-0.5 rounded-lg bg-white/[0.05] border border-white/10 overflow-x-auto">
+            <div className="px-3.5 sm:px-5 py-3 bg-slate-50/90 dark:bg-[#121620] border-b border-slate-200/80 dark:border-white/10 flex flex-wrap items-center justify-between gap-2">
+              <div className="flex w-full sm:w-auto items-center justify-between sm:justify-start gap-1 p-0.5 rounded-lg bg-slate-200/70 dark:bg-white/[0.06] border border-slate-200/80 dark:border-white/10 overflow-x-auto">
                 <button
                   type="button"
                   onClick={() => setLabTab('radar')}
-                  className={`min-h-[32px] px-2 sm:px-3 rounded-md text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 inline-flex items-center gap-1 sm:gap-1.5 transition-colors ${
-                    labTab === 'radar' ? 'bg-white text-[#050608]' : 'text-slate-400 hover:text-white'
+                  className={`min-h-[32px] px-2 sm:px-3 rounded-md text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 inline-flex items-center gap-1 sm:gap-1.5 transition-all ${
+                    labTab === 'radar'
+                      ? 'bg-accent text-white shadow-sm shadow-blue-600/25'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-ink'
                   }`}
                 >
                   <Radar size={13} aria-hidden="true" />
@@ -246,8 +269,10 @@ export default function Hero() {
                 <button
                   type="button"
                   onClick={() => setLabTab('ai')}
-                  className={`min-h-[32px] px-2 sm:px-3 rounded-md text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 inline-flex items-center gap-1 sm:gap-1.5 transition-colors ${
-                    labTab === 'ai' ? 'bg-white text-[#050608]' : 'text-slate-400 hover:text-white'
+                  className={`min-h-[32px] px-2 sm:px-3 rounded-md text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 inline-flex items-center gap-1 sm:gap-1.5 transition-all ${
+                    labTab === 'ai'
+                      ? 'bg-accent text-white shadow-sm shadow-blue-600/25'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-ink'
                   }`}
                 >
                   <Sparkles size={13} aria-hidden="true" />
@@ -257,8 +282,10 @@ export default function Hero() {
                 <button
                   type="button"
                   onClick={() => setLabTab('deck')}
-                  className={`min-h-[32px] px-2 sm:px-3 rounded-md text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 inline-flex items-center gap-1 sm:gap-1.5 transition-colors ${
-                    labTab === 'deck' ? 'bg-white text-[#050608]' : 'text-slate-400 hover:text-white'
+                  className={`min-h-[32px] px-2 sm:px-3 rounded-md text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 inline-flex items-center gap-1 sm:gap-1.5 transition-all ${
+                    labTab === 'deck'
+                      ? 'bg-accent text-white shadow-sm shadow-blue-600/25'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-ink'
                   }`}
                 >
                   <Layers size={13} aria-hidden="true" />
@@ -266,7 +293,7 @@ export default function Hero() {
                 </button>
               </div>
 
-              <span className="font-mono text-[11px] uppercase tracking-wider text-blue-400 hidden sm:inline">
+              <span className="font-mono text-[11px] uppercase tracking-wider text-accent hidden sm:inline">
                 Interactive Demo
               </span>
             </div>
@@ -283,18 +310,16 @@ export default function Hero() {
                   className="p-4 sm:p-5 space-y-4"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div>
-                      <p className="font-mono text-xs text-slate-400">
-                        {isEn
-                          ? 'Drag or click anywhere on the radar grid'
-                          : 'Klik atau geser pin di area radar'}
-                      </p>
-                    </div>
+                    <p className="font-mono text-xs text-ink-muted">
+                      {isEn
+                        ? 'Drag or click anywhere on the radar grid'
+                        : 'Klik atau geser pin di area radar'}
+                    </p>
                     <span
                       className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-xs font-semibold border ${
                         isInsideRadius
-                          ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
-                          : 'bg-rose-500/15 text-rose-300 border-rose-500/30'
+                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/15 dark:text-emerald-300 dark:border-emerald-500/30'
+                          : 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-500/15 dark:text-rose-300 dark:border-rose-500/30'
                       }`}
                     >
                       {isInsideRadius ? (
@@ -329,10 +354,10 @@ export default function Hero() {
                     onPointerLeave={() => setDraggingPin(false)}
                     role="application"
                     aria-label="Interactive 50m GPS geofence validator"
-                    className="relative h-[240px] sm:h-[260px] rounded-lg bg-[#050608] border border-white/10 overflow-hidden cursor-crosshair select-none touch-none"
+                    className="relative h-[240px] sm:h-[260px] rounded-xl bg-gradient-to-br from-sky-50/90 via-white to-emerald-50/70 dark:from-[#07090F] dark:via-[#080B12] dark:to-[#0A1116] border border-slate-200 dark:border-white/10 overflow-hidden cursor-crosshair select-none touch-none"
                     style={{
                       backgroundImage:
-                        'radial-gradient(rgba(255,255,255,0.09) 1px, transparent 1px)',
+                        'radial-gradient(rgba(37, 99, 235, 0.14) 1px, transparent 1px)',
                       backgroundSize: '20px 20px'
                     }}
                   >
@@ -340,13 +365,13 @@ export default function Hero() {
                     <div
                       className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-dashed transition-colors duration-200 pointer-events-none ${
                         isInsideRadius
-                          ? 'border-emerald-400/60 bg-emerald-500/[0.06]'
-                          : 'border-rose-400/60 bg-rose-500/[0.06]'
+                          ? 'border-emerald-500/70 bg-emerald-500/10 dark:border-emerald-400/60 dark:bg-emerald-500/[0.06]'
+                          : 'border-rose-500/70 bg-rose-500/10 dark:border-rose-400/60 dark:bg-rose-500/[0.06]'
                       }`}
                       style={{ width: '64%', aspectRatio: '1 / 1' }}
                     />
                     <div
-                      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 pointer-events-none"
+                      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-slate-300/60 dark:border-white/10 pointer-events-none"
                       style={{ width: '32%', aspectRatio: '1 / 1' }}
                     />
 
@@ -357,16 +382,16 @@ export default function Hero() {
                         y1="50%"
                         x2={`${50 + pinPos.dx}%`}
                         y2={`${50 + pinPos.dy}%`}
-                        stroke={isInsideRadius ? '#34d399' : '#fb7185'}
-                        strokeWidth="1.5"
+                        stroke={isInsideRadius ? '#10b981' : '#f43f5e'}
+                        strokeWidth="1.75"
                         strokeDasharray="4 4"
                       />
                     </svg>
 
                     {/* Center Target Anchor */}
                     <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none flex flex-col items-center">
-                      <span className="w-3 h-3 rounded-full bg-blue-400 ring-4 ring-blue-500/25" />
-                      <span className="font-mono text-[10px] text-slate-400 mt-1 bg-[#050608]/80 px-1.5 rounded">
+                      <span className="w-3 h-3 rounded-full bg-accent ring-4 ring-blue-500/20" />
+                      <span className="font-mono text-[10px] font-medium text-slate-600 dark:text-slate-300 mt-1.5 bg-white/95 dark:bg-[#080B12]/85 border border-slate-200 dark:border-white/10 px-1.5 py-0.5 rounded shadow-sm">
                         50m Geofence
                       </span>
                     </div>
@@ -381,10 +406,10 @@ export default function Hero() {
                       className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-none flex flex-col items-center"
                     >
                       <span
-                        className={`w-8 h-8 rounded-full flex items-center justify-center shadow-lg border ${
+                        className={`w-8 h-8 rounded-full flex items-center justify-center shadow-lg border-2 ${
                           isInsideRadius
-                            ? 'bg-emerald-500 text-[#050608] border-emerald-300'
-                            : 'bg-rose-500 text-white border-rose-300'
+                            ? 'bg-emerald-500 text-white border-white dark:border-emerald-300'
+                            : 'bg-rose-500 text-white border-white dark:border-rose-300'
                         }`}
                       >
                         <MapPin size={16} aria-hidden="true" />
@@ -398,21 +423,21 @@ export default function Hero() {
                       <button
                         type="button"
                         onClick={() => setPinPos({ dx: 8, dy: -6 })}
-                        className="px-2.5 py-1 rounded bg-white/[0.06] hover:bg-white/15 font-mono text-xs text-slate-300 transition-colors"
+                        className="px-2.5 py-1 rounded-md bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-accent border border-slate-200/80 dark:bg-white/[0.06] dark:hover:bg-white/15 dark:text-slate-300 dark:border-white/10 font-mono text-xs transition-colors"
                       >
                         {isEn ? 'Inside (16m)' : 'Dalam Kelas (16m)'}
                       </button>
                       <button
                         type="button"
                         onClick={() => setPinPos({ dx: -26, dy: 14 })}
-                        className="px-2.5 py-1 rounded bg-white/[0.06] hover:bg-white/15 font-mono text-xs text-slate-300 transition-colors"
+                        className="px-2.5 py-1 rounded-md bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-accent border border-slate-200/80 dark:bg-white/[0.06] dark:hover:bg-white/15 dark:text-slate-300 dark:border-white/10 font-mono text-xs transition-colors"
                       >
                         {isEn ? 'Edge (46m)' : 'Pinggir (46m)'}
                       </button>
                       <button
                         type="button"
                         onClick={() => setPinPos({ dx: 34, dy: -26 })}
-                        className="px-2.5 py-1 rounded bg-white/[0.06] hover:bg-white/15 font-mono text-xs text-slate-300 transition-colors"
+                        className="px-2.5 py-1 rounded-md bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-rose-600 border border-slate-200/80 dark:bg-white/[0.06] dark:hover:bg-white/15 dark:text-slate-300 dark:border-white/10 font-mono text-xs transition-colors"
                       >
                         {isEn ? 'Outside (67m)' : 'Luar Radius (67m)'}
                       </button>
@@ -420,7 +445,7 @@ export default function Hero() {
 
                     <Link
                       to="/project/siabsen"
-                      className="inline-flex items-center gap-1 font-mono text-xs text-blue-400 hover:text-blue-300 transition-colors"
+                      className="inline-flex items-center gap-1 font-mono text-xs font-medium text-accent hover:underline"
                     >
                       <span>SiAbsen App</span>
                       <ArrowUpRight size={13} aria-hidden="true" />
@@ -441,7 +466,7 @@ export default function Hero() {
                   <div>
                     <label
                       htmlFor="hero-ai-input"
-                      className="block font-mono text-xs text-slate-400 mb-2"
+                      className="block font-mono text-xs text-ink-muted mb-2"
                     >
                       {isEn
                         ? 'Type or pick a messy chat message to extract a structured task:'
@@ -452,7 +477,7 @@ export default function Hero() {
                       rows={2}
                       value={chatInput}
                       onChange={(e) => setChatInput(e.target.value)}
-                      className="w-full rounded-lg bg-[#050608] border border-white/15 focus:border-blue-400 px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none resize-none"
+                      className="w-full rounded-lg bg-slate-50 dark:bg-[#07090F] border border-slate-200 dark:border-white/15 focus:border-accent px-3.5 py-2.5 text-sm text-ink placeholder:text-slate-400 outline-none resize-none"
                     />
                   </div>
 
@@ -462,44 +487,44 @@ export default function Hero() {
                         key={sample}
                         type="button"
                         onClick={() => setChatInput(sample)}
-                        className="px-2.5 py-1 rounded bg-white/[0.06] hover:bg-white/15 font-mono text-xs text-slate-300 transition-colors"
+                        className="px-2.5 py-1 rounded-md bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-accent border border-slate-200/80 dark:bg-white/[0.06] dark:hover:bg-white/15 dark:text-slate-300 dark:border-white/10 font-mono text-xs transition-colors"
                       >
                         Sample #{i + 1}
                       </button>
                     ))}
                   </div>
 
-                  <div className="rounded-lg bg-[#050608] border border-white/10 p-4 font-mono text-xs space-y-2">
-                    <div className="flex items-center justify-between text-slate-400 pb-2 border-b border-white/10">
+                  <div className="rounded-lg bg-slate-50/90 dark:bg-[#07090F] border border-slate-200 dark:border-white/10 p-4 font-mono text-xs space-y-2">
+                    <div className="flex items-center justify-between text-ink-muted pb-2 border-b border-slate-200 dark:border-white/10">
                       <span>chattask-nlp-output.json</span>
                       <span
                         className={`px-2 py-0.5 rounded font-semibold ${
                           parsedTask.priority === 'HIGH'
-                            ? 'bg-amber-500/20 text-amber-300'
-                            : 'bg-blue-500/20 text-blue-300'
+                            ? 'bg-amber-100 text-amber-800 border border-amber-200 dark:bg-amber-500/20 dark:text-amber-300 dark:border-transparent'
+                            : 'bg-blue-100 text-blue-800 border border-blue-200 dark:bg-blue-500/20 dark:text-blue-300 dark:border-transparent'
                         }`}
                       >
                         PRIORITY: {parsedTask.priority}
                       </span>
                     </div>
-                    <p className="text-slate-300">
-                      <span className="text-blue-400">title</span>: &quot;{parsedTask.title}&quot;
+                    <p className="text-ink">
+                      <span className="text-accent font-semibold">title</span>: &quot;{parsedTask.title}&quot;
                     </p>
-                    <p className="text-slate-300">
-                      <span className="text-blue-400">module</span>: &quot;{parsedTask.module}&quot;
+                    <p className="text-ink">
+                      <span className="text-accent font-semibold">module</span>: &quot;{parsedTask.module}&quot;
                     </p>
-                    <p className="text-slate-300">
-                      <span className="text-blue-400">deadline</span>: &quot;{parsedTask.deadline}&quot;
+                    <p className="text-ink">
+                      <span className="text-accent font-semibold">deadline</span>: &quot;{parsedTask.deadline}&quot;
                     </p>
                   </div>
 
                   <div className="flex items-center justify-between pt-1">
-                    <span className="font-mono text-xs text-slate-400">
+                    <span className="font-mono text-xs text-ink-muted">
                       Built with Next.js + Gemini / NLP
                     </span>
                     <Link
                       to="/project/chattask"
-                      className="inline-flex items-center gap-1 font-mono text-xs text-blue-400 hover:text-blue-300 transition-colors"
+                      className="inline-flex items-center gap-1 font-mono text-xs font-medium text-accent hover:underline"
                     >
                       <span>ChatTask Case</span>
                       <ArrowUpRight size={13} aria-hidden="true" />
@@ -517,7 +542,7 @@ export default function Hero() {
                   transition={{ duration: 0.2, ease: STUDIO_EASE }}
                   className="p-4 sm:p-5 space-y-4"
                 >
-                  <div className="relative aspect-video rounded-lg bg-[#050608] border border-white/10 overflow-hidden">
+                  <div className="relative aspect-video rounded-xl bg-slate-100 dark:bg-[#07090F] border border-slate-200 dark:border-white/10 overflow-hidden">
                     <motion.div
                       key={activeProject.slug}
                       drag="x"
@@ -545,13 +570,13 @@ export default function Hero() {
 
                   <div className="flex items-center justify-between gap-3">
                     <div className="min-w-0">
-                      <h2 className="font-display text-lg font-semibold text-white truncate">
+                      <h2 className="font-display text-lg font-semibold text-ink truncate">
                         {activeProject.name} ·{' '}
-                        <span className="font-mono text-xs font-normal text-blue-400">
+                        <span className="font-mono text-xs font-normal text-accent">
                           {activeProject.category}
                         </span>
                       </h2>
-                      <p className="text-xs text-slate-400 truncate">{activeProject.summary}</p>
+                      <p className="text-xs text-ink-muted truncate">{activeProject.summary}</p>
                     </div>
 
                     <div className="flex items-center gap-1 shrink-0">
@@ -560,7 +585,7 @@ export default function Hero() {
                         onClick={() =>
                           setActiveSlide((prev) => (prev - 1 + heroProjects.length) % heroProjects.length)
                         }
-                        className="w-8 h-8 rounded-md bg-white/[0.06] hover:bg-white/15 flex items-center justify-center text-white transition-colors"
+                        className="w-8 h-8 rounded-md bg-slate-100 hover:bg-slate-200 border border-slate-200 dark:bg-white/[0.06] dark:hover:bg-white/15 dark:border-white/10 flex items-center justify-center text-ink transition-colors"
                         aria-label="Previous showcase"
                       >
                         <ChevronLeft size={15} aria-hidden="true" />
@@ -568,14 +593,14 @@ export default function Hero() {
                       <button
                         type="button"
                         onClick={() => setActiveSlide((prev) => (prev + 1) % heroProjects.length)}
-                        className="w-8 h-8 rounded-md bg-white/[0.06] hover:bg-white/15 flex items-center justify-center text-white transition-colors"
+                        className="w-8 h-8 rounded-md bg-slate-100 hover:bg-slate-200 border border-slate-200 dark:bg-white/[0.06] dark:hover:bg-white/15 dark:border-white/10 flex items-center justify-center text-ink transition-colors"
                         aria-label="Next showcase"
                       >
                         <ChevronRight size={15} aria-hidden="true" />
                       </button>
                       <Link
                         to={`/project/${activeProject.slug}`}
-                        className="ml-1 px-3 py-1.5 rounded-md bg-white text-[#050608] text-xs font-semibold hover:bg-slate-200 inline-flex items-center gap-1 transition-colors"
+                        className="ml-1 px-3 py-1.5 rounded-md bg-accent hover:bg-accent-hover text-white text-xs font-semibold inline-flex items-center gap-1 transition-colors shadow-sm shadow-blue-600/20"
                       >
                         <span>{t('hero.stage_action')}</span>
                         <ArrowUpRight size={13} aria-hidden="true" />

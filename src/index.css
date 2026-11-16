@@ -43,40 +43,40 @@
 @tailwind utilities;
 
 :root {
-  --color-paper-rgb: 246 245 240;
+  --color-paper-rgb: 250 251 255;
   --color-surface-rgb: 255 255 255;
-  --color-mist-rgb: 235 232 224;
-  --color-ink-rgb: 17 17 16;
-  --color-ink-muted-rgb: 92 90 84;
+  --color-mist-rgb: 238 243 251;
+  --color-ink-rgb: 15 23 42;
+  --color-ink-muted-rgb: 71 85 105;
   --color-accent-rgb: 37 99 235;
-  --color-accent-solid-rgb: 17 17 16;
-  --color-accent-hover-rgb: 39 39 42;
-  --color-on-accent-rgb: 246 245 240;
-  --color-gold-rgb: 180 83 9;
-  --color-on-ink-rgb: 246 245 240;
-  --color-paper: #F6F5F0;
-  --color-ink: #111110;
+  --color-accent-solid-rgb: 37 99 235;
+  --color-accent-hover-rgb: 29 78 216;
+  --color-on-accent-rgb: 255 255 255;
+  --color-gold-rgb: 217 119 6;
+  --color-on-ink-rgb: 255 255 255;
+  --color-paper: #FAFBFF;
+  --color-ink: #0F172A;
   --color-accent: #2563EB;
-  --color-border: rgba(17, 17, 16, 0.12);
+  --color-border: rgba(15, 23, 42, 0.1);
   --spotlight-color: rgba(37, 99, 235, 0.08);
 }
 
 .dark {
-  --color-paper-rgb: 5 6 8;
-  --color-surface-rgb: 13 15 20;
-  --color-mist-rgb: 22 25 34;
-  --color-ink-rgb: 244 244 240;
-  --color-ink-muted-rgb: 156 161 173;
+  --color-paper-rgb: 8 11 18;
+  --color-surface-rgb: 15 19 29;
+  --color-mist-rgb: 23 29 44;
+  --color-ink-rgb: 244 246 251;
+  --color-ink-muted-rgb: 156 163 175;
   --color-accent-rgb: 96 165 250;
-  --color-accent-solid-rgb: 244 244 240;
-  --color-accent-hover-rgb: 220 223 230;
-  --color-on-accent-rgb: 5 6 8;
+  --color-accent-solid-rgb: 59 130 246;
+  --color-accent-hover-rgb: 37 99 235;
+  --color-on-accent-rgb: 255 255 255;
   --color-gold-rgb: 251 191 36;
-  --color-on-ink-rgb: 5 6 8;
-  --color-paper: #050608;
-  --color-ink: #F4F4F0;
+  --color-on-ink-rgb: 8 11 18;
+  --color-paper: #080B12;
+  --color-ink: #F4F6FB;
   --color-accent: #60A5FA;
-  --color-border: rgba(244, 244, 240, 0.11);
+  --color-border: rgba(244, 246, 251, 0.11);
   --spotlight-color: rgba(96, 165, 250, 0.12);
 }
 

@@ -2,11 +2,13 @@ import { forwardRef } from 'react';
 import { cn } from '../../lib/utils';
 
 const VARIANTS = {
-  primary: 'bg-ink text-on-ink hover:opacity-85 border border-transparent',
-  accent: 'bg-ink text-on-ink hover:opacity-85 border border-transparent',
-  outline: 'bg-transparent text-ink border border-line hover:border-ink/40 hover:bg-mist/50',
+  primary:
+    'bg-ink text-on-ink hover:opacity-90 border border-transparent shadow-sm shadow-ink/10',
+  accent:
+    'bg-accent-solid text-on-accent hover:bg-accent-hover border border-transparent shadow-[0_8px_22px_-6px_rgba(37,99,235,0.45)]',
+  outline: 'bg-surface/80 text-ink border border-line hover:border-accent/50 hover:bg-mist/70',
   ghost: 'bg-transparent text-ink hover:bg-mist/60 border border-transparent',
-  whatsapp: 'bg-ink text-on-ink hover:opacity-85 border border-transparent'
+  whatsapp: 'bg-emerald-600 text-white hover:bg-emerald-700 border border-transparent'
 };
 
 const SIZES = {

@@ -12,11 +12,13 @@ import { Button } from '../components/ui/Button';
 import { FadeUp } from '../components/ui/MotionPrimitives';
 import { STUDIO_EASE } from '../lib/motion';
 import SpotlightCard from '../components/ui/SpotlightCard';
+import { useTheme } from '../hooks/useTheme';
 import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function ProjectDetail({ initialProject = null }) {
   const { token } = useParams();
   const { t, i18n } = useTranslation();
+  const { theme } = useTheme();
 
   const [project, setProject] = useState(initialProject);
   const [nextProject, setNextProject] = useState(null);
@@ -103,15 +105,15 @@ export default function ProjectDetail({ initialProject = null }) {
       <Navbar />
 
       <main id="main-content" className="flex-1">
-        {/* Atmospheric Dark Obsidian Exhibition Stage */}
-        <section className="relative bg-[#0B0C10] text-slate-100 pt-28 sm:pt-36 pb-20 sm:pb-24 px-5 sm:px-6 border-b border-white/10 overflow-hidden">
-          <MeshGradient dark />
+        {/* Luminous Daylight Exhibition Stage */}
+        <section className="relative bg-gradient-to-b from-blue-50/75 via-paper to-paper dark:from-[#0B0E16] dark:via-[#080B12] dark:to-paper text-ink pt-28 sm:pt-36 pb-20 sm:pb-24 px-5 sm:px-6 border-b border-line overflow-hidden">
+          <MeshGradient dark={theme === 'dark'} />
 
           <div className="relative z-10 max-w-5xl mx-auto space-y-10">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <Link
                 to="/projects"
-                className="inline-flex items-center gap-2 min-h-[44px] text-sm font-medium text-slate-300 hover:text-white transition-colors"
+                className="inline-flex items-center gap-2 min-h-[44px] text-sm font-medium text-ink-muted hover:text-ink transition-colors"
               >
                 <ArrowLeft size={16} aria-hidden="true" />
                 <span>{t('projects.back_projects')}</span>
@@ -122,7 +124,7 @@ export default function ProjectDetail({ initialProject = null }) {
                   href={project.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="min-h-[40px] px-4 py-2 rounded-lg bg-white text-[#0B0C10] hover:bg-slate-200 text-sm font-medium inline-flex items-center gap-1.5 transition-colors"
+                  className="min-h-[40px] px-4 py-2 rounded-lg bg-accent text-white hover:bg-accent-hover text-sm font-medium inline-flex items-center gap-1.5 transition-colors shadow-sm shadow-blue-600/20"
                 >
                   <span>{t('projects.live_preview')}</span>
                   <ArrowUpRight size={15} aria-hidden="true" />
@@ -136,38 +138,38 @@ export default function ProjectDetail({ initialProject = null }) {
               transition={{ duration: 0.45, ease: STUDIO_EASE }}
               className="space-y-4"
             >
-              <div className="flex flex-wrap gap-3 font-mono text-xs uppercase tracking-wider text-blue-400">
+              <div className="flex flex-wrap gap-3 font-mono text-xs uppercase tracking-wider font-semibold text-accent">
                 {(project.categories || []).join(' · ')}
               </div>
 
-              <h1 className="font-display text-4xl sm:text-6xl font-semibold tracking-[-0.03em] leading-[1.04] text-white">
+              <h1 className="font-display text-4xl sm:text-6xl font-semibold tracking-[-0.03em] leading-[1.04] text-ink">
                 {project.name}
               </h1>
 
-              <p className="text-lg sm:text-xl text-slate-300 max-w-3xl leading-relaxed">
+              <p className="text-lg sm:text-xl text-ink-muted max-w-3xl leading-relaxed">
                 {translatedSummary}
               </p>
             </motion.div>
 
             {/* Metadata Strip */}
-            <dl className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-6 border-t border-white/10">
+            <dl className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-6 border-t border-line">
               <div>
-                <dt className="text-sm text-slate-400 mb-1">{t('projects.client_label')}</dt>
-                <dd className="text-base sm:text-lg font-semibold text-white">{project.client}</dd>
+                <dt className="text-sm text-ink-muted mb-1">{t('projects.client_label')}</dt>
+                <dd className="text-base sm:text-lg font-semibold text-ink">{project.client}</dd>
               </div>
               <div>
-                <dt className="text-sm text-slate-400 mb-1">{t('projects.year_label')}</dt>
-                <dd className="text-base sm:text-lg font-semibold text-white tabular-nums">
+                <dt className="text-sm text-ink-muted mb-1">{t('projects.year_label')}</dt>
+                <dd className="text-base sm:text-lg font-semibold text-ink tabular-nums">
                   {project.year}
                 </dd>
               </div>
               <div>
-                <dt className="text-sm text-slate-400 mb-1">{t('projects.role_label')}</dt>
-                <dd className="text-base sm:text-lg font-semibold text-white">{project.role}</dd>
+                <dt className="text-sm text-ink-muted mb-1">{t('projects.role_label')}</dt>
+                <dd className="text-base sm:text-lg font-semibold text-ink">{project.role}</dd>
               </div>
               <div>
-                <dt className="text-sm text-slate-400 mb-1">{t('projects.categories_label')}</dt>
-                <dd className="text-base sm:text-lg font-semibold text-white">
+                <dt className="text-sm text-ink-muted mb-1">{t('projects.categories_label')}</dt>
+                <dd className="text-base sm:text-lg font-semibold text-ink">
                   {(project.categories || []).join(' / ')}
                 </dd>
               </div>
@@ -178,9 +180,9 @@ export default function ProjectDetail({ initialProject = null }) {
               initial={{ opacity: 0, scale: 0.97, y: 16 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.65, delay: 0.12, ease: STUDIO_EASE }}
-              className="rounded-2xl bg-white/5 p-2 sm:p-3 border border-white/15 shadow-2xl"
+              className="rounded-2xl bg-white dark:bg-white/5 p-2 sm:p-3 border border-slate-200/90 dark:border-white/15 shadow-[0_24px_65px_-16px_rgba(37,99,235,0.16),0_10px_28px_-10px_rgba(15,23,42,0.08)]"
             >
-              <div className="aspect-video rounded-xl overflow-hidden bg-slate-900">
+              <div className="aspect-video rounded-xl overflow-hidden bg-mist dark:bg-slate-900">
                 <img
                   src={project.src}
                   alt={`${project.name} HD showcase`}

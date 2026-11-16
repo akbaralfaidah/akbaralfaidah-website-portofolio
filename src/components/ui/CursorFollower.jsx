@@ -58,8 +58,8 @@ export function CursorFollower() {
         transition={{ duration: 0.16, ease: [0.22, 1, 0.36, 1] }}
         className={`rounded-full flex items-center justify-center transition-all duration-150 ${
           label
-            ? 'px-3.5 py-1.5 bg-white text-[#050608] font-mono text-xs font-semibold shadow-2xl border border-black/10'
-            : 'w-2.5 h-2.5 bg-ink/80 mix-blend-difference'
+            ? 'px-3.5 py-1.5 bg-ink text-on-ink font-mono text-xs font-semibold shadow-xl border border-line'
+            : 'w-2.5 h-2.5 bg-accent/80'
         }`}
       >
         {label}

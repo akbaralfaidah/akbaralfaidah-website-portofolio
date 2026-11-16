@@ -5,7 +5,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#050608" />
+    <meta name="theme-color" content="#FAFBFF" />
 
     <!-- Security Policy fallback for dev/preview; production HTTP headers in nginx.conf also enforce frame-ancestors & HSTS -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.emailjs.com https://challenges.cloudflare.com https://cloudflareinsights.com https://github-contributions-api.jogruber.de; frame-src https://challenges.cloudflare.com https://www.google.com https://maps.google.com; object-src 'none'; base-uri 'self';" />
@@ -38,20 +38,19 @@
     <meta name="twitter:description" content="Full-stack web platforms, React Native &amp; Flutter apps, and applied AI — built end-to-end from UI to production." />
     <meta name="twitter:image" content="https://akbaralfaidah.com/og-banner.jpg" />
 
-    <!-- Pre-paint theme initialization to prevent flash -->
+    <!-- Pre-paint theme initialization to prevent flash (defaults to bright daylight studio) -->
     <script>
       (function () {
         try {
-          var saved = localStorage.getItem('theme_v2');
-          var isLight = saved === 'light';
-          if (!isLight) {
+          var saved = localStorage.getItem('theme_v3');
+          var isDark = saved === 'dark';
+          if (isDark) {
             document.documentElement.classList.add('dark');
-          } else {
             var meta = document.querySelector('meta[name="theme-color"]');
-            if (meta) meta.setAttribute('content', '#F6F5F0');
+            if (meta) meta.setAttribute('content', '#080B12');
           }
         } catch (e) {
-          document.documentElement.classList.add('dark');
+          // Stay in crisp light daylight theme by default
         }
       })();
     </script>

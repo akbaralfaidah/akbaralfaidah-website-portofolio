@@ -2,14 +2,14 @@ import { useEffect, useState, useCallback } from 'react';
 import { ThemeContext } from './theme-context';
 
 function getInitialTheme() {
-  if (typeof window === 'undefined') return 'dark';
+  if (typeof window === 'undefined') return 'light';
   try {
-    const saved = window.localStorage.getItem('theme_v2');
+    const saved = window.localStorage.getItem('theme_v3');
     if (saved === 'light' || saved === 'dark') return saved;
   } catch {
     // Ignore storage restriction
   }
-  return 'dark';
+  return 'light';
 }
 
 export function ThemeProvider({ children }) {
@@ -21,14 +21,14 @@ export function ThemeProvider({ children }) {
     root.classList.toggle('dark', isDark);
 
     try {
-      window.localStorage.setItem('theme_v2', theme);
+      window.localStorage.setItem('theme_v3', theme);
     } catch {
       // Ignore storage restriction
     }
 
     const themeColorMeta = document.querySelector('meta[name="theme-color"]');
     if (themeColorMeta) {
-      themeColorMeta.setAttribute('content', isDark ? '#050608' : '#F6F5F0');
+      themeColorMeta.setAttribute('content', isDark ? '#080B12' : '#FAFBFF');
     }
   }, [theme]);
 

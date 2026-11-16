@@ -166,7 +166,7 @@ export default function ProjectsPage() {
                       <div>
                         <Link
                           to={`/project/${project.slug}`}
-                          className="block relative aspect-video rounded-xl bg-[#0B0C10] border border-line overflow-hidden"
+                          className="block relative aspect-video rounded-xl bg-mist dark:bg-[#0D1017] border border-line hover:border-accent/40 overflow-hidden transition-all"
                           aria-label={`${project.name} — ${t('projects.cta')}`}
                         >
                           {isInDevelopment ? (

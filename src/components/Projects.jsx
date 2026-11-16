@@ -199,7 +199,7 @@ export default function Projects() {
                   <Link
                     to={`/project/${leadProject.slug}`}
                     data-cursor={isEn ? 'Inspect ↗' : 'Buka Proyek ↗'}
-                    className="lg:col-span-7 group block relative aspect-video rounded-xl bg-[#090B10] border border-line overflow-hidden shadow-xl shadow-black/20"
+                    className="lg:col-span-7 group block relative aspect-video rounded-xl bg-mist dark:bg-[#0D1017] border border-line hover:border-accent/40 overflow-hidden shadow-[0_20px_50px_-15px_rgba(37,99,235,0.14)] dark:shadow-xl dark:shadow-black/20 transition-all"
                   >
                     <img
                       src={leadProject.src}
@@ -245,7 +245,7 @@ export default function Projects() {
                     <div className="pt-2 flex items-center gap-5">
                       <Link
                         to={`/project/${leadProject.slug}`}
-                        className="min-h-[42px] px-4 py-2 rounded-lg bg-ink text-on-ink hover:opacity-90 text-sm font-medium inline-flex items-center gap-2 transition-opacity"
+                        className="min-h-[42px] px-4 py-2 rounded-lg bg-accent-solid text-on-accent hover:bg-accent-hover text-sm font-medium inline-flex items-center gap-2 transition-colors shadow-sm shadow-blue-600/20"
                       >
                         <span>{t('projects.cta')}</span>
                         <ArrowRight size={15} aria-hidden="true" />
@@ -281,7 +281,7 @@ export default function Projects() {
                         <Link
                           to={`/project/${project.slug}`}
                           data-cursor={isEn ? 'Inspect ↗' : 'Buka Proyek ↗'}
-                          className="block relative aspect-video rounded-xl bg-[#090B10] border border-line overflow-hidden"
+                          className="block relative aspect-video rounded-xl bg-mist dark:bg-[#0D1017] border border-line hover:border-accent/40 overflow-hidden shadow-[0_14px_38px_-14px_rgba(15,23,42,0.1)] dark:shadow-none transition-all"
                         >
                           <img
                             src={project.src}
@@ -422,7 +422,7 @@ export default function Projects() {
               x: smoothX,
               y: smoothY
             }}
-            className="pointer-events-none fixed top-0 left-0 z-50 hidden lg:block w-[360px] rounded-xl bg-[#090B10] border border-white/20 shadow-[0_28px_70px_rgba(0,0,0,0.65)] overflow-hidden"
+            className="pointer-events-none fixed top-0 left-0 z-50 hidden lg:block w-[360px] rounded-xl bg-white dark:bg-[#0E1118] border border-slate-200 dark:border-white/20 shadow-[0_24px_60px_rgba(15,23,42,0.18)] dark:shadow-[0_28px_70px_rgba(0,0,0,0.65)] overflow-hidden"
           >
             <div className="aspect-video overflow-hidden">
               <img
@@ -431,9 +431,9 @@ export default function Projects() {
                 className="w-full h-full object-cover object-center"
               />
             </div>
-            <div className="px-3.5 py-2.5 bg-[#0F1118] border-t border-white/10 flex items-center justify-between font-mono text-xs text-slate-300">
+            <div className="px-3.5 py-2.5 bg-slate-50 dark:bg-[#121620] border-t border-slate-200 dark:border-white/10 flex items-center justify-between font-mono text-xs text-ink">
               <span className="truncate">{hoveredRowProject.name}</span>
-              <span className="text-blue-400 shrink-0">View ↗</span>
+              <span className="text-accent font-semibold shrink-0">View ↗</span>
             </div>
           </motion.div>
         )}
@@ -481,7 +481,7 @@ export default function Projects() {
               </div>
 
               <div className="max-h-[75vh] overflow-y-auto p-6 space-y-6">
-                <div className="aspect-video rounded-lg overflow-hidden bg-[#0B0C10] border border-line">
+                <div className="aspect-video rounded-lg overflow-hidden bg-mist dark:bg-[#0D1017] border border-line">
                   <img
                     src={quickProject.src}
                     alt={`${quickProject.name} showcase`}
