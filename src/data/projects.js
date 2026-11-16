@@ -183,6 +183,8 @@ export const heroProjects = [
     slug: 'bosdepot',
     category: 'Mobile POS',
     summary: 'Flutter POS, Barcode Scanner & Offline SQLite',
+    stack: ['Flutter', 'Firebase', 'GetX', 'SQLite'],
+    client: 'Depot Kayu & Toko Bangunan Esa',
     src: '/img/bosdepot.webp'
   },
   {
@@ -190,6 +192,8 @@ export const heroProjects = [
     slug: 'chattask',
     category: 'Web & NLP',
     summary: 'Next.js, Socket.io & WhatsApp NLP Parser',
+    stack: ['Next.js', 'Socket.io', 'PostgreSQL', 'NLP'],
+    client: 'Internal Studio Product',
     src: '/img/chattask.webp'
   },
   {
@@ -197,6 +201,8 @@ export const heroProjects = [
     slug: 'peka',
     category: 'Web & AI',
     summary: 'React, Supabase & Gemini AI Reflection',
+    stack: ['React', 'Supabase', 'Gemini API', 'Tailwind CSS'],
+    client: 'Top 33 Indonesia Next',
     src: '/img/peka.webp'
   },
   {
@@ -204,6 +210,8 @@ export const heroProjects = [
     slug: 'mpp',
     category: 'GovTech Web',
     summary: 'TypeScript Real-Time Survey Index Engine',
+    stack: ['React', 'TypeScript', 'Material UI'],
+    client: 'Instansi Pemerintah Daerah',
     src: '/img/mpp.webp'
   },
   {
@@ -211,6 +219,8 @@ export const heroProjects = [
     slug: 'siabsen',
     category: 'Mobile App',
     summary: 'Flutter 50m GPS Geofencing Attendance',
+    stack: ['Flutter', 'Firebase', 'Geofencing'],
+    client: 'Perguruan Tinggi Daerah',
     src: '/img/siabsen.webp'
   }
 ];

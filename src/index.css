@@ -19,29 +19,41 @@
 @tailwind utilities;
 
 :root {
-  --color-paper: #FAF8F2;
-  --color-surface: #FFFFFF;
-  --color-mist: #EFECE3;
-  --color-ink: #222428;
-  --color-ink-muted: #55585F;
-  --color-brass: #8A611C;
-  --color-brass-hover: #734F14;
-  --color-on-brass: #FFFFFF;
-  --color-on-ink: #FAF8F2;
-  --color-border: rgba(34, 36, 40, 0.12);
+  --color-paper-rgb: 247 249 252;
+  --color-surface-rgb: 255 255 255;
+  --color-mist-rgb: 235 240 247;
+  --color-ink-rgb: 15 23 42;
+  --color-ink-muted-rgb: 71 85 105;
+  --color-accent-rgb: 29 78 216;
+  --color-accent-solid-rgb: 29 78 216;
+  --color-accent-hover-rgb: 30 64 175;
+  --color-on-accent-rgb: 255 255 255;
+  --color-gold-rgb: 217 119 6;
+  --color-on-ink-rgb: 255 255 255;
+  --color-paper: #F7F9FC;
+  --color-ink: #0F172A;
+  --color-accent: #1D4ED8;
+  --color-border: rgba(15, 23, 42, 0.11);
+  --spotlight-color: rgba(29, 78, 216, 0.08);
 }
 
 .dark {
-  --color-paper: #161719;
-  --color-surface: #202226;
-  --color-mist: #2B2D32;
-  --color-ink: #F2F0E8;
-  --color-ink-muted: #A9ABB3;
-  --color-brass: #D4A24C;
-  --color-brass-hover: #E0B262;
-  --color-on-brass: #161719;
-  --color-on-ink: #161719;
-  --color-border: rgba(242, 240, 232, 0.12);
+  --color-paper-rgb: 9 13 22;
+  --color-surface-rgb: 17 24 39;
+  --color-mist-rgb: 27 36 54;
+  --color-ink-rgb: 241 245 249;
+  --color-ink-muted-rgb: 148 163 184;
+  --color-accent-rgb: 96 165 250;
+  --color-accent-solid-rgb: 37 99 235;
+  --color-accent-hover-rgb: 59 130 246;
+  --color-on-accent-rgb: 255 255 255;
+  --color-gold-rgb: 251 191 36;
+  --color-on-ink-rgb: 9 13 22;
+  --color-paper: #090D16;
+  --color-ink: #F1F5F9;
+  --color-accent: #60A5FA;
+  --color-border: rgba(241, 245, 249, 0.11);
+  --spotlight-color: rgba(96, 165, 250, 0.12);
 }
 
 @layer base {
@@ -68,24 +80,55 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-brass);
+    outline: 2px solid var(--color-accent);
     outline-offset: 3px;
-    border-radius: 4px;
+    border-radius: 6px;
   }
 }
 
 .bg-architectural-grid {
   background-image:
-    linear-gradient(to right, rgba(34, 36, 40, 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(34, 36, 40, 0.045) 1px, transparent 1px);
+    linear-gradient(to right, rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
   background-size: 48px 48px;
 }
 
 .dark .bg-architectural-grid {
   background-image:
-    linear-gradient(to right, rgba(242, 240, 232, 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(242, 240, 232, 0.045) 1px, transparent 1px);
+    linear-gradient(to right, rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
   background-size: 48px 48px;
+}
+
+.bg-obsidian-grid {
+  background-image:
+    linear-gradient(to right, rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+.spotlight-surface {
+  position: relative;
+}
+
+.spotlight-surface::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 250ms ease;
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 50%),
+    var(--spotlight-color),
+    transparent 65%
+  );
+  z-index: 0;
+}
+
+.spotlight-surface:hover::before {
+  opacity: 1;
 }
 
 @keyframes marquee {
@@ -93,13 +136,23 @@
   100% { transform: translateX(-50%); }
 }
 
+@keyframes stageProgress {
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+
 .animate-marquee {
-  animation: marquee 32s linear infinite;
+  animation: marquee 30s linear infinite;
 }
 
 .animate-marquee:hover,
 .animate-marquee:focus-within {
   animation-play-state: paused;
+}
+
+.animate-stage-progress {
+  transform-origin: left center;
+  animation: stageProgress 4.8s linear forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -116,7 +169,8 @@
     scroll-behavior: auto !important;
   }
 
-  .animate-marquee {
+  .animate-marquee,
+  .animate-stage-progress {
     animation: none !important;
   }
 }

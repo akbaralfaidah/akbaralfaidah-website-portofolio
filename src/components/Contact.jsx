@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import {
   Mail,
@@ -7,6 +8,7 @@ import {
   ExternalLink,
   ChevronDown,
   Check,
+  CheckCircle2,
   Zap,
   Briefcase,
   Smartphone,
@@ -20,6 +22,9 @@ import emailjs from '@emailjs/browser';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { useTheme } from '../hooks/useTheme';
 import { Button } from './ui/Button';
+import { FadeUp } from './ui/MotionPrimitives';
+import { STUDIO_EASE } from '../lib/motion';
+import SpotlightCard from './ui/SpotlightCard';
 import Toast from './ui/Toast';
 
 const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
@@ -111,6 +116,16 @@ export default function Contact() {
 
   const selectedDeadline = deadlineOptions.find((opt) => opt.id === formData.deadline);
 
+  const isNameValid = formData.name.trim().length >= 2;
+  const cleanedWa = formData.whatsapp.replace(/[\s\-()+]/g, '');
+  const isWaValid =
+    formData.whatsapp.trim().length > 0 &&
+    /^\+?[\d\s\-()]+$/.test(formData.whatsapp.trim()) &&
+    cleanedWa.length >= 10 &&
+    cleanedWa.length <= 15;
+  const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim());
+  const isMessageValid = formData.message.trim().length >= 10;
+
   const clearFieldError = (field) => {
     if (errors[field]) {
       setErrors((prev) => {
@@ -123,23 +138,21 @@ export default function Contact() {
 
   const validate = () => {
     const nextErrors = {};
-    const { name, whatsapp, email, message, deadline } = formData;
 
-    if (!name.trim() || name.trim().length < 2) {
+    if (!isNameValid) {
       nextErrors.name = t('contact.validation.name');
     }
 
     if (mode === 'wa') {
-      const cleaned = whatsapp.replace(/[\s\-()+]/g, '');
-      if (!whatsapp.trim() || !/^\+?[\d\s\-()]+$/.test(whatsapp.trim())) {
+      if (!formData.whatsapp.trim() || !/^\+?[\d\s\-()]+$/.test(formData.whatsapp.trim())) {
         nextErrors.whatsapp = t('contact.validation.wa_invalid');
-      } else if (cleaned.length < 10 || cleaned.length > 15) {
+      } else if (cleanedWa.length < 10 || cleanedWa.length > 15) {
         nextErrors.whatsapp = t('contact.validation.wa_length');
       }
     } else {
-      if (!email.trim()) {
+      if (!formData.email.trim()) {
         nextErrors.email = t('contact.validation.email_empty');
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      } else if (!isEmailValid) {
         nextErrors.email = t('contact.validation.email_invalid');
       }
 
@@ -148,11 +161,11 @@ export default function Contact() {
       }
     }
 
-    if (!deadline) {
+    if (!formData.deadline) {
       nextErrors.deadline = t('contact.validation.deadline');
     }
 
-    if (!message.trim() || message.trim().length < 10) {
+    if (!isMessageValid) {
       nextErrors.message = t('contact.validation.message');
     }
 
@@ -167,8 +180,7 @@ export default function Contact() {
         deadline: 'contact-deadline',
         message: 'contact-message'
       };
-      const el = document.getElementById(fieldIdMap[firstKey]);
-      el?.focus();
+      document.getElementById(fieldIdMap[firstKey])?.focus();
       return false;
     }
 
@@ -240,10 +252,7 @@ export default function Contact() {
 
   const handleWhatsApp = () => {
     if (!/^\d{10,15}$/.test(WHATSAPP_TARGET)) {
-      setToast({
-        message: 'WhatsApp configuration invalid.',
-        type: 'error'
-      });
+      setToast({ message: 'WhatsApp configuration invalid.', type: 'error' });
       return;
     }
 
@@ -346,34 +355,32 @@ export default function Contact() {
         <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
       )}
 
-      <section id="contact" className="py-16 sm:py-24 px-6 bg-paper text-ink">
+      <section id="contact" className="py-20 sm:py-24 px-6 bg-paper text-ink">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
-          {/* Left Column — Contact Details & Map Facade */}
-          <div className="lg:col-span-5 space-y-8">
+          {/* Left Column */}
+          <FadeUp className="lg:col-span-5 space-y-8">
             <div>
-              <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-brass mb-3">
-                {t('contact.eyebrow')}
-              </p>
-              <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1] text-ink mb-4">
+              <h2 className="font-display text-3xl sm:text-5xl lg:text-[3.25rem] font-bold tracking-tight leading-[1.08] text-ink mb-4">
                 {t('contact.heading_1')}{' '}
-                <span className="text-brass">{t('contact.heading_2')}</span>
+                <span className="text-accent">{t('contact.heading_2')}</span>
               </h2>
-              <p className="text-base text-ink-muted leading-relaxed">{t('contact.desc')}</p>
+              <p className="text-lg sm:text-xl text-ink-muted leading-relaxed">
+                {t('contact.desc')}
+              </p>
             </div>
 
-            {/* Direct Info */}
             <div className="space-y-4 pt-2">
               <div className="flex items-center gap-4">
-                <div className="w-11 h-11 rounded-xl bg-surface border border-line flex items-center justify-center text-brass shrink-0">
-                  <Mail size={18} aria-hidden="true" />
+                <div className="w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent shrink-0">
+                  <Mail size={20} aria-hidden="true" />
                 </div>
                 <div className="min-w-0">
-                  <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+                  <p className="text-sm font-medium text-ink-muted">
                     {t('contact.direct_email')}
                   </p>
                   <a
                     href={`mailto:${DISPLAY_EMAIL}`}
-                    className="text-sm sm:text-base font-medium text-ink hover:text-brass transition-colors break-all"
+                    className="text-base sm:text-lg font-semibold text-ink hover:text-accent transition-colors break-all"
                   >
                     {DISPLAY_EMAIL}
                   </a>
@@ -381,21 +388,18 @@ export default function Contact() {
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="w-11 h-11 rounded-xl bg-surface border border-line flex items-center justify-center text-brass shrink-0">
-                  <MapPin size={18} aria-hidden="true" />
+                <div className="w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent shrink-0">
+                  <MapPin size={20} aria-hidden="true" />
                 </div>
                 <div>
-                  <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
-                    Studio
-                  </p>
-                  <p className="text-sm sm:text-base font-medium text-ink">Jambi, Indonesia</p>
+                  <p className="text-sm font-medium text-ink-muted">Studio</p>
+                  <p className="text-base sm:text-lg font-semibold text-ink">Jambi, Indonesia</p>
                 </div>
               </div>
             </div>
 
-            {/* Social Links */}
             <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted mb-3">
+              <p className="text-sm font-semibold text-ink-muted mb-3">
                 {t('contact.follow_me')}
               </p>
               <div className="flex items-center gap-3">
@@ -404,47 +408,50 @@ export default function Contact() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="GitHub Akbar Alfaidah"
-                  className="w-11 h-11 rounded-xl bg-surface border border-line flex items-center justify-center text-ink hover:border-brass hover:text-brass transition-colors"
+                  className="w-12 h-12 rounded-xl bg-surface border border-line flex items-center justify-center text-ink hover:border-accent hover:text-accent hover:-translate-y-0.5 transition-all"
                 >
-                  <FiGithub size={18} aria-hidden="true" />
+                  <FiGithub size={20} aria-hidden="true" />
                 </a>
                 <a
                   href="https://www.linkedin.com/in/akbar-alfaidah/"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="LinkedIn Akbar Alfaidah"
-                  className="w-11 h-11 rounded-xl bg-surface border border-line flex items-center justify-center text-ink hover:border-brass hover:text-brass transition-colors"
+                  className="w-12 h-12 rounded-xl bg-surface border border-line flex items-center justify-center text-ink hover:border-accent hover:text-accent hover:-translate-y-0.5 transition-all"
                 >
-                  <FiLinkedin size={18} aria-hidden="true" />
+                  <FiLinkedin size={20} aria-hidden="true" />
                 </a>
                 <a
                   href="https://www.instagram.com/akbralf._/"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram Akbar Alfaidah"
-                  className="w-11 h-11 rounded-xl bg-surface border border-line flex items-center justify-center text-ink hover:border-brass hover:text-brass transition-colors"
+                  className="w-12 h-12 rounded-xl bg-surface border border-line flex items-center justify-center text-ink hover:border-accent hover:text-accent hover:-translate-y-0.5 transition-all"
                 >
-                  <FiInstagram size={18} aria-hidden="true" />
+                  <FiInstagram size={20} aria-hidden="true" />
                 </a>
               </div>
             </div>
 
-            {/* Privacy-Friendly Click-to-Load Map Card */}
-            <div className="rounded-2xl bg-surface border border-line p-5 space-y-3 shadow-sm">
+            <SpotlightCard hoverLift={false} className="p-6 space-y-3">
               <div className="flex items-center justify-between gap-2">
-                <h3 className="font-display text-sm font-bold text-ink">{t('contact.map_title')}</h3>
+                <h3 className="font-display text-base sm:text-lg font-bold text-ink">
+                  {t('contact.map_title')}
+                </h3>
                 <a
                   href={MAPS_DIRECT_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="min-h-[44px] inline-flex items-center gap-1 text-xs font-semibold text-brass hover:underline shrink-0"
+                  className="min-h-[44px] inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:underline shrink-0"
                 >
                   <span>{t('contact.map_open_external')}</span>
-                  <ExternalLink size={12} aria-hidden="true" />
+                  <ExternalLink size={14} aria-hidden="true" />
                 </a>
               </div>
 
-              <p className="text-xs text-ink-muted leading-relaxed">{t('contact.map_desc')}</p>
+              <p className="text-sm sm:text-base text-ink-muted leading-relaxed">
+                {t('contact.map_desc')}
+              </p>
 
               <div className="aspect-[16/9] rounded-xl overflow-hidden border border-line bg-mist/60 flex items-center justify-center">
                 {isMapLoaded ? (
@@ -463,28 +470,30 @@ export default function Contact() {
                   <button
                     type="button"
                     onClick={() => setIsMapLoaded(true)}
-                    className="w-full h-full flex flex-col items-center justify-center gap-2.5 p-4 text-center hover:bg-mist transition-colors cursor-pointer"
+                    className="w-full h-full flex flex-col items-center justify-center gap-3 p-4 text-center hover:bg-mist transition-colors cursor-pointer group"
                   >
-                    <span className="w-10 h-10 rounded-full bg-surface border border-line flex items-center justify-center text-brass shadow-sm">
-                      <MapIcon size={18} aria-hidden="true" />
+                    <span className="w-11 h-11 rounded-full bg-surface border border-line group-hover:border-accent flex items-center justify-center text-accent shadow-sm transition-colors">
+                      <MapIcon size={20} aria-hidden="true" />
                     </span>
-                    <span className="text-xs sm:text-sm font-semibold text-ink">
+                    <span className="text-sm sm:text-base font-semibold text-ink">
                       {t('contact.map_load')}
                     </span>
                   </button>
                 )}
               </div>
-            </div>
-          </div>
+            </SpotlightCard>
+          </FadeUp>
 
-          {/* Right Column — Contact Form */}
-          <div className="lg:col-span-7">
-            <div className="rounded-2xl bg-surface border border-line p-6 sm:p-8 lg:p-10 shadow-sm">
-              {/* Channel Tabs */}
+          {/* Right Column */}
+          <FadeUp delay={0.08} className="lg:col-span-7">
+            <SpotlightCard
+              hoverLift={false}
+              className="p-6 sm:p-8 lg:p-10 shadow-lg shadow-ink/[0.04] dark:shadow-black/30"
+            >
               <div
                 role="tablist"
                 aria-label="Contact channel"
-                className="grid grid-cols-2 gap-2 p-1.5 rounded-xl bg-mist border border-line mb-8"
+                className="relative grid grid-cols-2 gap-1.5 p-1.5 rounded-xl bg-mist border border-line mb-8"
               >
                 <button
                   type="button"
@@ -494,14 +503,19 @@ export default function Contact() {
                     setMode('wa');
                     setErrors({});
                   }}
-                  className={`min-h-[44px] px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors ${
-                    mode === 'wa'
-                      ? 'bg-emerald-700 text-white shadow-sm'
-                      : 'text-ink-muted hover:text-ink'
+                  className={`relative min-h-[48px] px-4 py-2.5 rounded-lg text-sm sm:text-base font-semibold inline-flex items-center justify-center gap-2 transition-colors ${
+                    mode === 'wa' ? 'text-white' : 'text-ink-muted hover:text-ink'
                   }`}
                 >
-                  <FaWhatsapp size={16} aria-hidden="true" />
-                  <span>{t('contact.tab_wa')}</span>
+                  {mode === 'wa' && (
+                    <motion.span
+                      layoutId="contact-tab-pill"
+                      transition={{ type: 'spring', stiffness: 420, damping: 32 }}
+                      className="absolute inset-0 rounded-lg bg-emerald-700 shadow-sm"
+                    />
+                  )}
+                  <FaWhatsapp size={18} className="relative z-10" aria-hidden="true" />
+                  <span className="relative z-10">{t('contact.tab_wa')}</span>
                 </button>
 
                 <button
@@ -512,23 +526,36 @@ export default function Contact() {
                     setMode('email');
                     setErrors({});
                   }}
-                  className={`min-h-[44px] px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors ${
-                    mode === 'email'
-                      ? 'bg-brass text-on-brass shadow-sm'
-                      : 'text-ink-muted hover:text-ink'
+                  className={`relative min-h-[48px] px-4 py-2.5 rounded-lg text-sm sm:text-base font-semibold inline-flex items-center justify-center gap-2 transition-colors ${
+                    mode === 'email' ? 'text-on-accent' : 'text-ink-muted hover:text-ink'
                   }`}
                 >
-                  <Mail size={16} aria-hidden="true" />
-                  <span>{t('contact.tab_email')}</span>
+                  {mode === 'email' && (
+                    <motion.span
+                      layoutId="contact-tab-pill"
+                      transition={{ type: 'spring', stiffness: 420, damping: 32 }}
+                      className="absolute inset-0 rounded-lg bg-accent-solid shadow-sm"
+                    />
+                  )}
+                  <Mail size={18} className="relative z-10" aria-hidden="true" />
+                  <span className="relative z-10">{t('contact.tab_email')}</span>
                 </button>
               </div>
 
               <form onSubmit={handleSubmit} noValidate className="space-y-6">
-                {/* Full Name */}
                 <div>
-                  <label htmlFor="contact-name" className="block text-sm font-medium text-ink mb-2">
-                    {t('contact.form_name')}
-                  </label>
+                  <div className="flex items-center justify-between mb-2">
+                    <label htmlFor="contact-name" className="text-base font-medium text-ink">
+                      {t('contact.form_name')}
+                    </label>
+                    {isNameValid && (
+                      <CheckCircle2
+                        size={17}
+                        className="text-emerald-600 dark:text-emerald-400"
+                        aria-hidden="true"
+                      />
+                    )}
+                  </div>
                   <input
                     id="contact-name"
                     type="text"
@@ -541,7 +568,7 @@ export default function Contact() {
                     aria-invalid={Boolean(errors.name)}
                     aria-describedby={errors.name ? 'contact-name-error' : undefined}
                     placeholder={t('contact.form_name_placeholder')}
-                    className={`w-full rounded-xl border bg-paper px-4 py-3 text-sm sm:text-base text-ink placeholder:text-ink-muted/60 focus:border-brass outline-none transition-colors ${
+                    className={`w-full rounded-xl border bg-paper px-4 py-3.5 text-base text-ink placeholder:text-ink-muted/60 focus:border-accent outline-none transition-colors ${
                       errors.name ? 'border-red-600 dark:border-red-400' : 'border-line'
                     }`}
                   />
@@ -549,92 +576,122 @@ export default function Contact() {
                     <p
                       id="contact-name-error"
                       role="alert"
-                      className="text-xs font-medium text-red-700 dark:text-red-400 mt-1.5"
+                      className="text-sm font-medium text-red-700 dark:text-red-400 mt-1.5"
                     >
                       {errors.name}
                     </p>
                   )}
                 </div>
 
-                {/* Conditional WhatsApp / Email */}
-                {mode === 'wa' ? (
-                  <div>
-                    <label
-                      htmlFor="contact-whatsapp"
-                      className="block text-sm font-medium text-ink mb-2"
+                <AnimatePresence mode="wait" initial={false}>
+                  {mode === 'wa' ? (
+                    <motion.div
+                      key="field-wa"
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ duration: 0.16 }}
                     >
-                      {t('contact.form_whatsapp')}
-                    </label>
-                    <input
-                      id="contact-whatsapp"
-                      type="tel"
-                      autoComplete="tel"
-                      value={formData.whatsapp}
-                      onChange={(e) => {
-                        setFormData({ ...formData, whatsapp: e.target.value });
-                        clearFieldError('whatsapp');
-                      }}
-                      aria-invalid={Boolean(errors.whatsapp)}
-                      aria-describedby={errors.whatsapp ? 'contact-whatsapp-error' : undefined}
-                      placeholder={t('contact.form_whatsapp_placeholder')}
-                      className={`w-full rounded-xl border bg-paper px-4 py-3 text-sm sm:text-base text-ink placeholder:text-ink-muted/60 focus:border-brass outline-none transition-colors ${
-                        errors.whatsapp ? 'border-red-600 dark:border-red-400' : 'border-line'
-                      }`}
-                    />
-                    {errors.whatsapp && (
-                      <p
-                        id="contact-whatsapp-error"
-                        role="alert"
-                        className="text-xs font-medium text-red-700 dark:text-red-400 mt-1.5"
-                      >
-                        {errors.whatsapp}
-                      </p>
-                    )}
-                  </div>
-                ) : (
-                  <div>
-                    <label
-                      htmlFor="contact-email"
-                      className="block text-sm font-medium text-ink mb-2"
+                      <div className="flex items-center justify-between mb-2">
+                        <label htmlFor="contact-whatsapp" className="text-base font-medium text-ink">
+                          {t('contact.form_whatsapp')}
+                        </label>
+                        {isWaValid && (
+                          <CheckCircle2
+                            size={17}
+                            className="text-emerald-600 dark:text-emerald-400"
+                            aria-hidden="true"
+                          />
+                        )}
+                      </div>
+                      <input
+                        id="contact-whatsapp"
+                        type="tel"
+                        autoComplete="tel"
+                        value={formData.whatsapp}
+                        onChange={(e) => {
+                          setFormData({ ...formData, whatsapp: e.target.value });
+                          clearFieldError('whatsapp');
+                        }}
+                        aria-invalid={Boolean(errors.whatsapp)}
+                        aria-describedby={errors.whatsapp ? 'contact-whatsapp-error' : undefined}
+                        placeholder={t('contact.form_whatsapp_placeholder')}
+                        className={`w-full rounded-xl border bg-paper px-4 py-3.5 text-base text-ink placeholder:text-ink-muted/60 focus:border-accent outline-none transition-colors ${
+                          errors.whatsapp ? 'border-red-600 dark:border-red-400' : 'border-line'
+                        }`}
+                      />
+                      {errors.whatsapp && (
+                        <p
+                          id="contact-whatsapp-error"
+                          role="alert"
+                          className="text-sm font-medium text-red-700 dark:text-red-400 mt-1.5"
+                        >
+                          {errors.whatsapp}
+                        </p>
+                      )}
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="field-email"
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ duration: 0.16 }}
                     >
-                      {t('contact.form_email')}
-                    </label>
-                    <input
-                      id="contact-email"
-                      type="email"
-                      autoComplete="email"
-                      value={formData.email}
-                      onChange={(e) => {
-                        setFormData({ ...formData, email: e.target.value });
-                        clearFieldError('email');
-                      }}
-                      aria-invalid={Boolean(errors.email)}
-                      aria-describedby={errors.email ? 'contact-email-error' : undefined}
-                      placeholder={t('contact.form_email_placeholder')}
-                      className={`w-full rounded-xl border bg-paper px-4 py-3 text-sm sm:text-base text-ink placeholder:text-ink-muted/60 focus:border-brass outline-none transition-colors ${
-                        errors.email ? 'border-red-600 dark:border-red-400' : 'border-line'
-                      }`}
-                    />
-                    {errors.email && (
-                      <p
-                        id="contact-email-error"
-                        role="alert"
-                        className="text-xs font-medium text-red-700 dark:text-red-400 mt-1.5"
-                      >
-                        {errors.email}
-                      </p>
-                    )}
-                  </div>
-                )}
+                      <div className="flex items-center justify-between mb-2">
+                        <label htmlFor="contact-email" className="text-base font-medium text-ink">
+                          {t('contact.form_email')}
+                        </label>
+                        {isEmailValid && (
+                          <CheckCircle2
+                            size={17}
+                            className="text-emerald-600 dark:text-emerald-400"
+                            aria-hidden="true"
+                          />
+                        )}
+                      </div>
+                      <input
+                        id="contact-email"
+                        type="email"
+                        autoComplete="email"
+                        value={formData.email}
+                        onChange={(e) => {
+                          setFormData({ ...formData, email: e.target.value });
+                          clearFieldError('email');
+                        }}
+                        aria-invalid={Boolean(errors.email)}
+                        aria-describedby={errors.email ? 'contact-email-error' : undefined}
+                        placeholder={t('contact.form_email_placeholder')}
+                        className={`w-full rounded-xl border bg-paper px-4 py-3.5 text-base text-ink placeholder:text-ink-muted/60 focus:border-accent outline-none transition-colors ${
+                          errors.email ? 'border-red-600 dark:border-red-400' : 'border-line'
+                        }`}
+                      />
+                      {errors.email && (
+                        <p
+                          id="contact-email-error"
+                          role="alert"
+                          className="text-sm font-medium text-red-700 dark:text-red-400 mt-1.5"
+                        >
+                          {errors.email}
+                        </p>
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
-                {/* Accessible Timeline Select */}
                 <div ref={dropdownRef} className="relative">
-                  <label
-                    htmlFor="contact-deadline"
-                    className="block text-sm font-medium text-ink mb-2"
-                  >
-                    {t('contact.form_deadline')}
-                  </label>
+                  <div className="flex items-center justify-between mb-2">
+                    <label htmlFor="contact-deadline" className="text-base font-medium text-ink">
+                      {t('contact.form_deadline')}
+                    </label>
+                    {selectedDeadline && (
+                      <CheckCircle2
+                        size={17}
+                        className="text-emerald-600 dark:text-emerald-400"
+                        aria-hidden="true"
+                      />
+                    )}
+                  </div>
 
                   <button
                     ref={deadlineTriggerRef}
@@ -645,96 +702,111 @@ export default function Contact() {
                     aria-invalid={Boolean(errors.deadline)}
                     aria-describedby={errors.deadline ? 'contact-deadline-error' : undefined}
                     onClick={() => setIsDropdownOpen((open) => !open)}
-                    className={`w-full min-h-[48px] rounded-xl border bg-paper px-4 py-3 flex items-center justify-between text-left transition-colors ${
+                    className={`w-full min-h-[52px] rounded-xl border bg-paper px-4 py-3.5 flex items-center justify-between text-left transition-colors ${
                       isDropdownOpen
-                        ? 'border-brass'
+                        ? 'border-accent'
                         : errors.deadline
                         ? 'border-red-600 dark:border-red-400'
-                        : 'border-line hover:border-ink/40'
+                        : 'border-line hover:border-accent/50'
                     }`}
                   >
                     {selectedDeadline ? (
-                      <span className="flex items-center gap-2.5 text-sm sm:text-base font-medium text-ink truncate pr-2">
+                      <span className="flex items-center gap-2.5 text-base font-medium text-ink truncate pr-2">
                         <selectedDeadline.icon
-                          size={16}
-                          className="text-brass shrink-0"
+                          size={17}
+                          className="text-accent shrink-0"
                           aria-hidden="true"
                         />
                         <span className="truncate">{selectedDeadline.label}</span>
                       </span>
                     ) : (
-                      <span className="text-sm sm:text-base text-ink-muted/70">
+                      <span className="text-base text-ink-muted/70">
                         {t('contact.form_deadline_placeholder')}
                       </span>
                     )}
 
                     <ChevronDown
-                      size={18}
+                      size={19}
                       className={`text-ink-muted shrink-0 transition-transform duration-200 ${
-                        isDropdownOpen ? 'rotate-180 text-brass' : ''
+                        isDropdownOpen ? 'rotate-180 text-accent' : ''
                       }`}
                       aria-hidden="true"
                     />
                   </button>
 
-                  {isDropdownOpen && (
-                    <div
-                      role="listbox"
-                      aria-labelledby="contact-deadline"
-                      className="absolute left-0 right-0 top-[calc(100%+6px)] z-30 rounded-xl bg-surface border border-line shadow-xl p-1.5 space-y-1 max-h-64 overflow-y-auto"
-                    >
-                      {deadlineOptions.map((opt) => {
-                        const selected = formData.deadline === opt.id;
-                        const OptIcon = opt.icon;
-                        return (
-                          <button
-                            key={opt.id}
-                            type="button"
-                            role="option"
-                            aria-selected={selected}
-                            onClick={() => {
-                              setFormData({ ...formData, deadline: opt.id });
-                              clearFieldError('deadline');
-                              setIsDropdownOpen(false);
-                            }}
-                            className={`w-full min-h-[44px] px-3 py-2 rounded-lg text-left text-sm flex items-center justify-between gap-2 transition-colors ${
-                              selected
-                                ? 'bg-mist text-ink font-semibold'
-                                : 'text-ink-muted hover:bg-mist/60 hover:text-ink'
-                            }`}
-                          >
-                            <span className="flex items-center gap-2.5 min-w-0">
-                              <OptIcon size={16} className="text-brass shrink-0" aria-hidden="true" />
-                              <span className="truncate">{opt.label}</span>
-                            </span>
-                            {selected && (
-                              <Check size={16} className="text-brass shrink-0" aria-hidden="true" />
-                            )}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  )}
+                  <AnimatePresence>
+                    {isDropdownOpen && (
+                      <motion.div
+                        role="listbox"
+                        aria-labelledby="contact-deadline"
+                        initial={{ opacity: 0, y: -6, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -6, scale: 0.98 }}
+                        transition={{ duration: 0.16, ease: STUDIO_EASE }}
+                        className="absolute left-0 right-0 top-[calc(100%+6px)] z-30 rounded-xl bg-surface border border-line shadow-xl p-1.5 space-y-1 max-h-64 overflow-y-auto"
+                      >
+                        {deadlineOptions.map((opt) => {
+                          const selected = formData.deadline === opt.id;
+                          const OptIcon = opt.icon;
+                          return (
+                            <button
+                              key={opt.id}
+                              type="button"
+                              role="option"
+                              aria-selected={selected}
+                              onClick={() => {
+                                setFormData({ ...formData, deadline: opt.id });
+                                clearFieldError('deadline');
+                                setIsDropdownOpen(false);
+                              }}
+                              className={`w-full min-h-[46px] px-3.5 py-2.5 rounded-lg text-left text-[15px] flex items-center justify-between gap-2 transition-colors ${
+                                selected
+                                  ? 'bg-accent/10 text-ink font-semibold'
+                                  : 'text-ink-muted hover:bg-mist/70 hover:text-ink'
+                              }`}
+                            >
+                              <span className="flex items-center gap-2.5 min-w-0">
+                                <OptIcon
+                                  size={17}
+                                  className="text-accent shrink-0"
+                                  aria-hidden="true"
+                                />
+                                <span className="truncate">{opt.label}</span>
+                              </span>
+                              {selected && (
+                                <Check size={17} className="text-accent shrink-0" aria-hidden="true" />
+                              )}
+                            </button>
+                          );
+                        })}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
 
                   {errors.deadline && (
                     <p
                       id="contact-deadline-error"
                       role="alert"
-                      className="text-xs font-medium text-red-700 dark:text-red-400 mt-1.5"
+                      className="text-sm font-medium text-red-700 dark:text-red-400 mt-1.5"
                     >
                       {errors.deadline}
                     </p>
                   )}
                 </div>
 
-                {/* Project Brief */}
                 <div>
-                  <label
-                    htmlFor="contact-message"
-                    className="block text-sm font-medium text-ink mb-2"
-                  >
-                    {t('contact.form_message')}
-                  </label>
+                  <div className="flex items-center justify-between mb-2">
+                    <label htmlFor="contact-message" className="text-base font-medium text-ink">
+                      {t('contact.form_message')}
+                    </label>
+                    {isMessageValid && (
+                      <CheckCircle2
+                        size={17}
+                        className="text-emerald-600 dark:text-emerald-400"
+                        aria-hidden="true"
+                      />
+                    )}
+                  </div>
                   <textarea
                     id="contact-message"
                     rows={4}
@@ -746,7 +818,7 @@ export default function Contact() {
                     aria-invalid={Boolean(errors.message)}
                     aria-describedby={errors.message ? 'contact-message-error' : undefined}
                     placeholder={t('contact.form_message_placeholder')}
-                    className={`w-full rounded-xl border bg-paper px-4 py-3 text-sm sm:text-base text-ink placeholder:text-ink-muted/60 focus:border-brass outline-none transition-colors resize-y ${
+                    className={`w-full rounded-xl border bg-paper px-4 py-3.5 text-base text-ink placeholder:text-ink-muted/60 focus:border-accent outline-none transition-colors resize-y ${
                       errors.message ? 'border-red-600 dark:border-red-400' : 'border-line'
                     }`}
                   />
@@ -754,14 +826,13 @@ export default function Contact() {
                     <p
                       id="contact-message-error"
                       role="alert"
-                      className="text-xs font-medium text-red-700 dark:text-red-400 mt-1.5"
+                      className="text-sm font-medium text-red-700 dark:text-red-400 mt-1.5"
                     >
                       {errors.message}
                     </p>
                   )}
                 </div>
 
-                {/* Honeypot */}
                 <div className="hidden" aria-hidden="true">
                   <label htmlFor="website_url">Website</label>
                   <input
@@ -775,10 +846,9 @@ export default function Contact() {
                   />
                 </div>
 
-                {/* Cloudflare Turnstile shown in Email mode where backend/API quota needs protection */}
                 {mode === 'email' && (
                   <div className="space-y-2">
-                    <span className="block font-mono text-xs uppercase tracking-[0.12em] text-ink-muted">
+                    <span className="block text-sm font-medium text-ink-muted">
                       {t('contact.turnstile_label')}
                     </span>
                     {TURNSTILE_SITE_KEY ? (
@@ -793,12 +863,12 @@ export default function Contact() {
                         options={{ theme: theme === 'dark' ? 'dark' : 'light' }}
                       />
                     ) : (
-                      <p className="text-xs text-ink-muted border border-line rounded-lg px-3.5 py-2.5 bg-paper">
+                      <p className="text-sm text-ink-muted border border-line rounded-xl px-4 py-3 bg-paper">
                         {t('contact.turnstile_unavailable')}
                       </p>
                     )}
                     {errors.turnstile && (
-                      <p role="alert" className="text-xs font-medium text-red-700 dark:text-red-400">
+                      <p role="alert" className="text-sm font-medium text-red-700 dark:text-red-400">
                         {errors.turnstile}
                       </p>
                     )}
@@ -814,19 +884,19 @@ export default function Contact() {
                 >
                   {mode === 'wa' ? (
                     <>
-                      <FaWhatsapp size={18} aria-hidden="true" />
+                      <FaWhatsapp size={19} aria-hidden="true" />
                       <span>{t('contact.cta_wa')}</span>
                     </>
                   ) : (
                     <>
-                      <Send size={16} aria-hidden="true" />
+                      <Send size={17} aria-hidden="true" />
                       <span>{isSending ? t('contact.cta_sending') : t('contact.cta_email')}</span>
                     </>
                   )}
                 </Button>
               </form>
-            </div>
-          </div>
+            </SpotlightCard>
+          </FadeUp>
         </div>
       </section>
     </>

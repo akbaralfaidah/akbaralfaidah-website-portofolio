@@ -8,7 +8,7 @@ function getInitialTheme() {
     if (saved === 'light' || saved === 'dark') return saved;
     if (window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
   } catch {
-    // Ignore storage access errors in strict privacy browsers
+    // Ignore storage restriction
   }
   return 'light';
 }
@@ -24,12 +24,12 @@ export function ThemeProvider({ children }) {
     try {
       window.localStorage.setItem('theme', theme);
     } catch {
-      // Ignore storage access errors
+      // Ignore storage restriction
     }
 
     const themeColorMeta = document.querySelector('meta[name="theme-color"]');
     if (themeColorMeta) {
-      themeColorMeta.setAttribute('content', isDark ? '#161719' : '#FAF8F2');
+      themeColorMeta.setAttribute('content', isDark ? '#090D16' : '#F7F9FC');
     }
   }, [theme]);
 

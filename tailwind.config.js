@@ -8,17 +8,24 @@ export default {
   theme: {
     extend: {
       colors: {
-        paper: 'var(--color-paper)',
-        surface: 'var(--color-surface)',
-        mist: 'var(--color-mist)',
-        ink: 'var(--color-ink)',
-        'ink-muted': 'var(--color-ink-muted)',
-        brass: 'var(--color-brass)',
-        'brass-hover': 'var(--color-brass-hover)',
-        'on-brass': 'var(--color-on-brass)',
-        'on-ink': 'var(--color-on-ink)',
+        paper: 'rgb(var(--color-paper-rgb) / <alpha-value>)',
+        surface: 'rgb(var(--color-surface-rgb) / <alpha-value>)',
+        mist: 'rgb(var(--color-mist-rgb) / <alpha-value>)',
+        ink: 'rgb(var(--color-ink-rgb) / <alpha-value>)',
+        'ink-muted': 'rgb(var(--color-ink-muted-rgb) / <alpha-value>)',
+        brass: 'rgb(var(--color-accent-rgb) / <alpha-value>)',
+        'brass-hover': 'rgb(var(--color-accent-hover-rgb) / <alpha-value>)',
+        'on-brass': 'rgb(var(--color-on-accent-rgb) / <alpha-value>)',
+        accent: 'rgb(var(--color-accent-rgb) / <alpha-value>)',
+        'accent-solid': 'rgb(var(--color-accent-solid-rgb) / <alpha-value>)',
+        'accent-hover': 'rgb(var(--color-accent-hover-rgb) / <alpha-value>)',
+        'on-accent': 'rgb(var(--color-on-accent-rgb) / <alpha-value>)',
+        gold: 'rgb(var(--color-gold-rgb) / <alpha-value>)',
+        'on-ink': 'rgb(var(--color-on-ink-rgb) / <alpha-value>)',
         line: 'var(--color-border)',
-        charcoal: 'var(--color-ink)'
+        obsidian: '#0B101B',
+        'obsidian-surface': '#131A29',
+        charcoal: 'rgb(var(--color-ink-rgb) / <alpha-value>)'
       },
       fontFamily: {
         sans: ['Outfit', 'system-ui', '-apple-system', 'sans-serif'],

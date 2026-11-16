@@ -25,26 +25,27 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-surface border-t border-line py-14 sm:py-16 px-6">
+    <footer className="bg-surface border-t border-line py-16 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-10 border-b border-line">
-          {/* Brand Summary */}
           <div className="md:col-span-5 flex flex-col gap-4">
-            <Link to="/" className="inline-flex items-center min-h-[44px] self-start hover:opacity-85 transition-opacity">
+            <Link
+              to="/"
+              className="inline-flex items-center min-h-[44px] self-start hover:opacity-85 transition-opacity"
+            >
               <BrandLogo className="h-8 w-auto text-ink" showWordmark />
             </Link>
-            <p className="text-sm text-ink-muted max-w-sm leading-relaxed">
+            <p className="text-base text-ink-muted max-w-sm leading-relaxed">
               {t('footer.tagline')}
             </p>
-            <p className="inline-flex items-center gap-2 font-mono text-xs text-ink-muted pt-1">
-              <MapPin size={14} className="text-brass shrink-0" aria-hidden="true" />
+            <p className="inline-flex items-center gap-2 text-sm text-ink-muted pt-1">
+              <MapPin size={16} className="text-accent shrink-0" aria-hidden="true" />
               <span>{t('footer.location')}</span>
             </p>
           </div>
 
-          {/* Navigation */}
           <div className="md:col-span-3">
-            <h3 className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-ink mb-4">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-ink mb-4">
               {t('footer.nav_title')}
             </h3>
             <ul className="space-y-1">
@@ -52,7 +53,7 @@ export default function Footer() {
                 <li key={item.key}>
                   <a
                     href={item.href}
-                    className="inline-flex items-center min-h-[44px] text-sm text-ink-muted hover:text-brass transition-colors"
+                    className="inline-flex items-center min-h-[44px] text-base text-ink-muted hover:text-accent transition-colors"
                   >
                     {t(`nav.${item.key}`)}
                   </a>
@@ -61,7 +62,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/projects"
-                  className="inline-flex items-center min-h-[44px] text-sm text-ink-muted hover:text-brass transition-colors"
+                  className="inline-flex items-center min-h-[44px] text-base text-ink-muted hover:text-accent transition-colors"
                 >
                   {t('projects.back_projects')}
                 </Link>
@@ -69,9 +70,8 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* External Links */}
           <div className="md:col-span-4">
-            <h3 className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-ink mb-4">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-ink mb-4">
               {t('footer.connect_title')}
             </h3>
             <ul className="space-y-1">
@@ -83,10 +83,10 @@ export default function Footer() {
                       href={item.href}
                       target={isExternal ? '_blank' : undefined}
                       rel={isExternal ? 'noopener noreferrer' : undefined}
-                      className="inline-flex items-center gap-1.5 min-h-[44px] text-sm text-ink-muted hover:text-brass transition-colors break-all"
+                      className="inline-flex items-center gap-1.5 min-h-[44px] text-base text-ink-muted hover:text-accent transition-colors break-all"
                     >
                       <span>{item.label}</span>
-                      {isExternal && <ArrowUpRight size={13} aria-hidden="true" />}
+                      {isExternal && <ArrowUpRight size={15} aria-hidden="true" />}
                     </a>
                   </li>
                 );
@@ -95,7 +95,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs sm:text-sm text-ink-muted">
+        <div className="pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-sm sm:text-base text-ink-muted">
           <p>
             © {year} Akbar Alfaidah — {t('footer.role')}.
           </p>

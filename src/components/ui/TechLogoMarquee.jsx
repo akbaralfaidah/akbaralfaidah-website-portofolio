@@ -27,32 +27,32 @@ import {
 
 const STACK_LOGOS = [
   { name: 'TypeScript', icon: SiTypescript, color: '#3178C6' },
-  { name: 'JavaScript', icon: SiJavascript, color: '#C5A300' },
-  { name: 'Python', icon: SiPython, color: '#3776AB' },
-  { name: 'React', icon: SiReact, color: '#087EA4' },
+  { name: 'JavaScript', icon: SiJavascript, color: '#EAB308' },
+  { name: 'Python', icon: SiPython, color: '#3B82F6' },
+  { name: 'React', icon: SiReact, color: '#38BDF8' },
   { name: 'Next.js', icon: SiNextdotjs, color: 'currentColor' },
-  { name: 'Vue.js', icon: SiVuedotjs, color: '#349E6E' },
-  { name: 'Tailwind CSS', icon: SiTailwindcss, color: '#0284C7' },
-  { name: 'Flutter', icon: SiFlutter, color: '#02569B' },
-  { name: 'Node.js', icon: SiNodedotjs, color: '#2F855A' },
+  { name: 'Vue.js', icon: SiVuedotjs, color: '#34D399' },
+  { name: 'Tailwind CSS', icon: SiTailwindcss, color: '#0EA5E9' },
+  { name: 'Flutter', icon: SiFlutter, color: '#38BDF8' },
+  { name: 'Node.js', icon: SiNodedotjs, color: '#22C55E' },
   { name: 'Express', icon: SiExpress, color: 'currentColor' },
-  { name: 'NestJS', icon: SiNestjs, color: '#E0234E' },
-  { name: 'Laravel', icon: SiLaravel, color: '#E62E22' },
-  { name: 'CodeIgniter', icon: SiCodeigniter, color: '#D93B1F' },
-  { name: 'FastAPI', icon: SiFastapi, color: '#00897B' },
-  { name: 'GraphQL', icon: SiGraphql, color: '#C5117B' },
-  { name: 'PostgreSQL', icon: SiPostgresql, color: '#336791' },
-  { name: 'MongoDB', icon: SiMongodb, color: '#2F855A' },
-  { name: 'Supabase', icon: SiSupabase, color: '#1F9D68' },
-  { name: 'Firebase', icon: SiFirebase, color: '#D97706' },
-  { name: 'Docker', icon: SiDocker, color: '#1D72B8' },
-  { name: 'Kubernetes', icon: SiKubernetes, color: '#326CE5' },
-  { name: 'GitLab CI', icon: SiGitlab, color: '#E24329' },
-  { name: 'GitHub Actions', icon: SiGithubactions, color: '#2088FF' },
-  { name: 'Figma', icon: SiFigma, color: '#D9480F' }
+  { name: 'NestJS', icon: SiNestjs, color: '#F43F5E' },
+  { name: 'Laravel', icon: SiLaravel, color: '#EF4444' },
+  { name: 'CodeIgniter', icon: SiCodeigniter, color: '#F97316' },
+  { name: 'FastAPI', icon: SiFastapi, color: '#14B8A6' },
+  { name: 'GraphQL', icon: SiGraphql, color: '#EC4899' },
+  { name: 'PostgreSQL', icon: SiPostgresql, color: '#60A5FA' },
+  { name: 'MongoDB', icon: SiMongodb, color: '#22C55E' },
+  { name: 'Supabase', icon: SiSupabase, color: '#3ECF8E' },
+  { name: 'Firebase', icon: SiFirebase, color: '#F59E0B' },
+  { name: 'Docker', icon: SiDocker, color: '#38BDF8' },
+  { name: 'Kubernetes', icon: SiKubernetes, color: '#60A5FA' },
+  { name: 'GitLab CI', icon: SiGitlab, color: '#FB923C' },
+  { name: 'GitHub Actions', icon: SiGithubactions, color: '#60A5FA' },
+  { name: 'Figma', icon: SiFigma, color: '#F97316' }
 ];
 
-function MarqueeTrack({ items, reverse = false }) {
+function MarqueeTrack({ items, reverse = false, darkSurface = false }) {
   const repeated = [...items, ...items];
 
   return (
@@ -74,10 +74,14 @@ function MarqueeTrack({ items, reverse = false }) {
             <div
               key={`${item.name}-${idx}`}
               aria-hidden={isDuplicate ? 'true' : undefined}
-              className="inline-flex items-center gap-2.5 px-3.5 py-2 rounded-lg bg-surface border border-line text-ink shrink-0"
+              className={`inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl border shrink-0 transition-colors ${
+                darkSurface
+                  ? 'bg-white/[0.04] border-white/10 text-slate-100 hover:border-blue-400/50'
+                  : 'bg-surface border-line text-ink hover:border-accent/50'
+              }`}
             >
-              <Icon size={16} style={{ color: item.color }} aria-hidden="true" />
-              <span className="font-mono text-xs font-medium tracking-tight text-ink whitespace-nowrap">
+              <Icon size={18} style={{ color: item.color }} aria-hidden="true" />
+              <span className="font-mono text-sm font-medium tracking-tight whitespace-nowrap">
                 {item.name}
               </span>
             </div>
@@ -88,14 +92,14 @@ function MarqueeTrack({ items, reverse = false }) {
   );
 }
 
-export function TechLogoMarquee() {
+export function TechLogoMarquee({ darkSurface = false }) {
   const rowOne = STACK_LOGOS.slice(0, 12);
   const rowTwo = STACK_LOGOS.slice(12);
 
   return (
-    <div className="space-y-2.5 select-none">
-      <MarqueeTrack items={rowOne} />
-      <MarqueeTrack items={rowTwo} reverse />
+    <div className="space-y-3 select-none">
+      <MarqueeTrack items={rowOne} darkSurface={darkSurface} />
+      <MarqueeTrack items={rowTwo} reverse darkSurface={darkSurface} />
     </div>
   );
 }

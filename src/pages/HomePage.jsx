@@ -9,6 +9,7 @@ import Experience from '../components/Experience';
 import TestimonialsSection from '../components/TestimonialsSection';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
+import BackToTop from '../components/ui/BackToTop';
 import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function HomePage() {
@@ -22,7 +23,7 @@ export default function HomePage() {
   });
 
   return (
-    <div className="min-h-screen bg-paper text-ink selection:bg-brass/25 transition-colors duration-300">
+    <div className="min-h-screen bg-paper text-ink selection:bg-accent/20 transition-colors duration-300">
       <Navbar />
       <main id="main-content">
         <Hero />
@@ -35,6 +36,7 @@ export default function HomePage() {
         <Contact />
       </main>
       <Footer />
+      <BackToTop />
     </div>
   );
 }

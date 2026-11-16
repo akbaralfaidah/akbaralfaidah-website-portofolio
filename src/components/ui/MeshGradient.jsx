@@ -7,8 +7,10 @@ export function MeshGradient({ className = '' }) {
       <div
         className="w-full h-full"
         style={{
-          background:
-            'radial-gradient(ellipse 68% 54% at 75% 18%, rgba(138, 97, 28, 0.08), transparent 72%)'
+          background: [
+            'radial-gradient(ellipse 62% 50% at 78% 16%, rgba(29, 78, 216, 0.11), transparent 70%)',
+            'radial-gradient(ellipse 46% 42% at 14% 78%, rgba(14, 165, 233, 0.08), transparent 68%)'
+          ].join(', ')
         }}
       />
     </div>

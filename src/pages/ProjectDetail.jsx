@@ -5,8 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { fetchProjectBySlug } from '../data/projects';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import BackToTop from '../components/ui/BackToTop';
 import NotFound from './NotFound';
 import { Button } from '../components/ui/Button';
+import { FadeUp } from '../components/ui/MotionPrimitives';
+import SpotlightCard from '../components/ui/SpotlightCard';
 import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function ProjectDetail({ initialProject = null }) {
@@ -85,15 +88,14 @@ export default function ProjectDetail({ initialProject = null }) {
     <div className="min-h-screen flex flex-col bg-paper text-ink transition-colors duration-300">
       <Navbar />
 
-      <main id="main-content" className="flex-1 pt-28 sm:pt-32 pb-20 px-6">
+      <main id="main-content" className="flex-1 pt-28 sm:pt-36 pb-20 px-6">
         <article className="max-w-5xl mx-auto space-y-12">
-          {/* Top Breadcrumb */}
           <div className="flex flex-wrap items-center justify-between gap-4">
             <Link
               to="/projects"
-              className="inline-flex items-center gap-2 min-h-[44px] text-sm font-medium text-ink-muted hover:text-brass transition-colors"
+              className="inline-flex items-center gap-2 min-h-[44px] text-base font-medium text-ink-muted hover:text-accent transition-colors"
             >
-              <ArrowLeft size={16} aria-hidden="true" />
+              <ArrowLeft size={17} aria-hidden="true" />
               <span>{t('projects.back_projects')}</span>
             </Link>
 
@@ -107,67 +109,67 @@ export default function ProjectDetail({ initialProject = null }) {
                 size="sm"
               >
                 <span>{t('projects.live_preview')}</span>
-                <ArrowUpRight size={14} aria-hidden="true" />
+                <ArrowUpRight size={15} aria-hidden="true" />
               </Button>
             )}
           </div>
 
-          {/* Header */}
-          <header className="space-y-4">
+          <FadeUp className="space-y-4">
             <div className="flex flex-wrap gap-2">
               {(project.categories || []).map((cat) => (
                 <span
                   key={cat}
-                  className="px-3 py-1 rounded-md font-mono text-xs font-medium bg-mist text-ink border border-line"
+                  className="px-3.5 py-1 rounded-lg text-sm font-medium bg-mist text-ink border border-line"
                 >
                   {cat}
                 </span>
               ))}
             </div>
 
-            <h1 className="font-display text-3xl sm:text-5xl lg:text-[3.25rem] font-extrabold tracking-tight leading-[1.08] text-ink">
+            <h1 className="font-display text-4xl sm:text-5xl lg:text-[3.5rem] font-extrabold tracking-tight leading-[1.06] text-ink">
               {project.name}
             </h1>
 
-            <p className="text-base sm:text-xl text-ink-muted max-w-3xl leading-relaxed">
+            <p className="text-lg sm:text-xl text-ink-muted max-w-3xl leading-relaxed">
               {translatedSummary}
             </p>
-          </header>
+          </FadeUp>
 
-          {/* Metadata Strip */}
-          <dl className="grid grid-cols-2 md:grid-cols-4 gap-4 py-6 border-y border-line">
+          <dl className="grid grid-cols-2 md:grid-cols-4 gap-5 py-6 border-y border-line">
             <div>
-              <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted mb-1">
+              <dt className="text-sm font-medium text-ink-muted mb-1">
                 {t('projects.client_label')}
               </dt>
-              <dd className="text-sm sm:text-base font-semibold text-ink">{project.client}</dd>
+              <dd className="text-base sm:text-lg font-semibold text-ink">{project.client}</dd>
             </div>
             <div>
-              <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted mb-1">
+              <dt className="text-sm font-medium text-ink-muted mb-1">
                 {t('projects.year_label')}
               </dt>
-              <dd className="text-sm sm:text-base font-semibold text-ink tabular-nums">
+              <dd className="text-base sm:text-lg font-semibold text-ink tabular-nums">
                 {project.year}
               </dd>
             </div>
             <div>
-              <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted mb-1">
+              <dt className="text-sm font-medium text-ink-muted mb-1">
                 {t('projects.role_label')}
               </dt>
-              <dd className="text-sm sm:text-base font-semibold text-ink">{project.role}</dd>
+              <dd className="text-base sm:text-lg font-semibold text-ink">{project.role}</dd>
             </div>
             <div>
-              <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted mb-1">
+              <dt className="text-sm font-medium text-ink-muted mb-1">
                 {t('projects.categories_label')}
               </dt>
-              <dd className="text-sm sm:text-base font-semibold text-ink">
+              <dd className="text-base sm:text-lg font-semibold text-ink">
                 {(project.categories || []).join(' / ')}
               </dd>
             </div>
           </dl>
 
-          {/* Preview Screenshot */}
-          <div className="rounded-2xl bg-surface border border-line p-2 sm:p-3 shadow-sm">
+          <FadeUp
+            delay={0.08}
+            className="rounded-2xl bg-surface border border-line p-2 sm:p-3 shadow-lg shadow-ink/[0.04] dark:shadow-black/30"
+          >
             <div className="aspect-[16/10] sm:aspect-[16/9] rounded-xl overflow-hidden bg-mist">
               <img
                 src={project.src}
@@ -177,86 +179,89 @@ export default function ProjectDetail({ initialProject = null }) {
                 className="w-full h-full object-cover object-top"
               />
             </div>
-          </div>
+          </FadeUp>
 
-          {/* Challenge & Solution */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <section className="rounded-2xl bg-surface border border-line p-6 sm:p-8 space-y-3">
-              <h2 className="font-display text-xl sm:text-2xl font-bold text-ink">
+            <SpotlightCard className="p-7 sm:p-8 space-y-3">
+              <h2 className="font-display text-2xl font-bold text-ink">
                 {t('projects.challenge_title')}
               </h2>
-              <p className="text-sm sm:text-base text-ink-muted leading-relaxed">{challengeText}</p>
-            </section>
+              <p className="text-base sm:text-[17px] text-ink-muted leading-relaxed">
+                {challengeText}
+              </p>
+            </SpotlightCard>
 
             {solutionText && (
-              <section className="rounded-2xl bg-surface border border-line p-6 sm:p-8 space-y-3">
-                <h2 className="font-display text-xl sm:text-2xl font-bold text-ink">
+              <SpotlightCard className="p-7 sm:p-8 space-y-3">
+                <h2 className="font-display text-2xl font-bold text-ink">
                   {t('projects.solution_title')}
                 </h2>
-                <p className="text-sm sm:text-base text-ink-muted leading-relaxed">
+                <p className="text-base sm:text-[17px] text-ink-muted leading-relaxed">
                   {solutionText}
                 </p>
-              </section>
+              </SpotlightCard>
             )}
           </div>
 
-          {/* Engineering Highlights & Tech Stack */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             {highlightsList.length > 0 && (
-              <section className="md:col-span-7 rounded-2xl bg-surface border border-line p-6 sm:p-8 space-y-4">
-                <h2 className="font-display text-lg sm:text-xl font-bold text-ink">
+              <SpotlightCard className="md:col-span-7 p-7 sm:p-8 space-y-4">
+                <h2 className="font-display text-xl sm:text-2xl font-bold text-ink">
                   {t('projects.highlights_title')}
                 </h2>
                 <ul className="space-y-3">
                   {highlightsList.map((point) => (
-                    <li key={point} className="flex items-start gap-2.5 text-sm sm:text-base text-ink">
-                      <Check size={16} className="text-brass shrink-0 mt-1" aria-hidden="true" />
+                    <li key={point} className="flex items-start gap-2.5 text-base sm:text-[17px] text-ink">
+                      <Check size={17} className="text-accent shrink-0 mt-1" aria-hidden="true" />
                       <span>{point}</span>
                     </li>
                   ))}
                 </ul>
-              </section>
+              </SpotlightCard>
             )}
 
-            <section
+            <SpotlightCard
               className={`${
                 highlightsList.length > 0 ? 'md:col-span-5' : 'md:col-span-12'
-              } rounded-2xl bg-surface border border-line p-6 sm:p-8 space-y-4`}
+              } p-7 sm:p-8 space-y-4`}
             >
-              <h2 className="font-display text-lg sm:text-xl font-bold text-ink">
+              <h2 className="font-display text-xl sm:text-2xl font-bold text-ink">
                 {t('projects.tech_title')}
               </h2>
               <div className="flex flex-wrap gap-2">
                 {(project.techStack || []).map((tech) => (
                   <span
                     key={tech}
-                    className="px-3 py-1.5 rounded-lg font-mono text-xs font-medium bg-mist text-ink border border-line"
+                    className="px-3.5 py-1.5 rounded-lg font-mono text-sm font-medium bg-mist text-ink border border-line"
                   >
                     {tech}
                   </span>
                 ))}
               </div>
-            </section>
+            </SpotlightCard>
           </div>
 
-          {/* Conversion CTA Banner */}
-          <section className="rounded-2xl bg-surface border border-line p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+          <SpotlightCard
+            hoverLift={false}
+            className="p-7 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6"
+          >
             <div>
-              <h2 className="font-display text-xl sm:text-2xl font-bold text-ink mb-1">
+              <h2 className="font-display text-2xl font-bold text-ink mb-1">
                 {t('projects.next_cta_title')}
               </h2>
-              <p className="text-sm sm:text-base text-ink-muted">{t('projects.next_cta_desc')}</p>
+              <p className="text-base text-ink-muted">{t('projects.next_cta_desc')}</p>
             </div>
 
             <Button as={Link} to="/#contact" variant="accent" size="md" className="shrink-0">
               <span>{t('projects.next_cta_button')}</span>
-              <ArrowRight size={16} aria-hidden="true" />
+              <ArrowRight size={17} aria-hidden="true" />
             </Button>
-          </section>
+          </SpotlightCard>
         </article>
       </main>
 
       <Footer />
+      <BackToTop />
     </div>
   );
 }
