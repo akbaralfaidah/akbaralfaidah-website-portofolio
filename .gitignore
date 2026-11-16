@@ -39,5 +39,5 @@ docs/
 Users/
 .playwright-mcp/
 lighthouse-*.json
-img/
+/img/
 plan/

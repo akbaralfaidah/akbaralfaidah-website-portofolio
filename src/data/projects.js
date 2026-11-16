@@ -57,20 +57,15 @@ function normalizeTechStack(stack) {
 function mapSupabaseRow(row) {
   const slug = row.slug;
   const fallback = FALLBACK_BY_SLUG.get(slug);
-  const hasRemoteSvg =
-    typeof row.gambar_url === 'string' && /\.svg(\?|$)/i.test(row.gambar_url);
-  const resolvedImage =
-    !row.gambar_url || (hasRemoteSvg && LOCAL_WEBP_SLUGS.has(slug))
-      ? LOCAL_WEBP_SLUGS.has(slug)
-        ? `/img/${slug}.webp`
-        : row.gambar_url
-      : row.gambar_url;
+  const resolvedImage = LOCAL_WEBP_SLUGS.has(slug)
+    ? `/img/showcases/${slug}.webp`
+    : row.gambar_url || `/img/${slug}.webp`;
 
   return {
     id: row.id || slug,
     slug,
     name: normalizeTitle(row.judul, slug),
-    src: resolvedImage || `/img/${slug}.webp`,
+    src: resolvedImage,
     client: normalizeClient(row.client, fallback),
     year: row.year || fallback?.year || '2026',
     role: cleanText(row.role) || fallback?.role || 'Full-Stack Developer',
@@ -185,7 +180,7 @@ export const heroProjects = [
     summary: 'Flutter POS, Barcode Scanner & Offline SQLite',
     stack: ['Flutter', 'Firebase', 'GetX', 'SQLite'],
     client: 'Depot Kayu & Toko Bangunan Esa',
-    src: '/img/bosdepot.webp'
+    src: '/img/showcases/bosdepot.webp'
   },
   {
     name: 'ChatTask',
@@ -194,7 +189,7 @@ export const heroProjects = [
     summary: 'Next.js, Socket.io & WhatsApp NLP Parser',
     stack: ['Next.js', 'Socket.io', 'PostgreSQL', 'NLP'],
     client: 'Internal Product',
-    src: '/img/chattask.webp'
+    src: '/img/showcases/chattask.webp'
   },
   {
     name: 'PEKA',
@@ -203,7 +198,7 @@ export const heroProjects = [
     summary: 'React, Supabase & Gemini AI Reflection',
     stack: ['React', 'Supabase', 'Gemini API', 'Tailwind CSS'],
     client: 'Top 33 Indonesia Next',
-    src: '/img/peka.webp'
+    src: '/img/showcases/peka.webp'
   },
   {
     name: 'MPP',
@@ -212,7 +207,7 @@ export const heroProjects = [
     summary: 'TypeScript Real-Time Survey Index Engine',
     stack: ['React', 'TypeScript', 'Material UI'],
     client: 'Instansi Pemerintah Daerah',
-    src: '/img/mpp.webp'
+    src: '/img/showcases/mpp.webp'
   },
   {
     name: 'SiAbsen',
@@ -221,6 +216,6 @@ export const heroProjects = [
     summary: 'Flutter 50m GPS Geofencing Attendance',
     stack: ['Flutter', 'Firebase', 'Geofencing'],
     client: 'Perguruan Tinggi Daerah',
-    src: '/img/siabsen.webp'
+    src: '/img/showcases/siabsen.webp'
   }
 ];

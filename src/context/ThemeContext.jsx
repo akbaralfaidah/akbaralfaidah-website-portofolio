@@ -4,7 +4,7 @@ import { ThemeContext } from './theme-context';
 function getInitialTheme() {
   if (typeof window === 'undefined') return 'dark';
   try {
-    const saved = window.localStorage.getItem('theme');
+    const saved = window.localStorage.getItem('theme_v2');
     if (saved === 'light' || saved === 'dark') return saved;
   } catch {
     // Ignore storage restriction
@@ -21,7 +21,7 @@ export function ThemeProvider({ children }) {
     root.classList.toggle('dark', isDark);
 
     try {
-      window.localStorage.setItem('theme', theme);
+      window.localStorage.setItem('theme_v2', theme);
     } catch {
       // Ignore storage restriction
     }
