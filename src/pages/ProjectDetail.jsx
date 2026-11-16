@@ -1,196 +1,259 @@
-import { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { FiArrowLeft, FiExternalLink, FiGlobe, FiInfo } from 'react-icons/fi';
+import { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { ArrowLeft, ArrowUpRight, ArrowRight, Check } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { fetchProjectBySlug } from '../data/projects';
+import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import NotFound from './NotFound';
+import { Button } from '../components/ui/Button';
+import { usePageMeta } from '../hooks/usePageMeta';
 
-export default function ProjectDetail() {
-  const { slug } = useParams();
-  const navigate = useNavigate();
-  const [project, setProject] = useState(null);
-  const [loading, setLoading] = useState(true);
+export default function ProjectDetail({ initialProject = null }) {
+  const { token } = useParams();
+  const { t, i18n } = useTranslation();
+
+  const [project, setProject] = useState(initialProject);
+  const [loading, setLoading] = useState(!initialProject);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    setLoading(true);
-    fetchProjectBySlug(slug).then((found) => {
-      setProject(found || null);
+    if (initialProject && initialProject.slug === token) {
+      setProject(initialProject);
       setLoading(false);
+      return undefined;
+    }
+
+    let isMounted = true;
+    setLoading(true);
+    fetchProjectBySlug(token).then((data) => {
+      if (isMounted) {
+        setProject(data);
+        setLoading(false);
+      }
     });
-  }, [slug]);
+    return () => {
+      isMounted = false;
+    };
+  }, [token, initialProject]);
+
+  const isEn = i18n.language === 'en';
+  const translatedSummary = project
+    ? t(`projects.${project.slug}_desc`, { defaultValue: '' }) ||
+      (isEn && project.shortDescriptionEn
+        ? project.shortDescriptionEn
+        : project.shortDescription)
+    : '';
+
+  usePageMeta({
+    title: project ? `${project.name} — Case Study | Akbar Alfaidah` : 'Case Study | Akbar Alfaidah',
+    description: translatedSummary || t('meta.projects_description'),
+    path: token ? `/project/${token}` : '/projects',
+    robots: project ? 'index,follow' : 'noindex,nofollow'
+  });
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-paper text-charcoal flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-charcoal/20 border-t-charcoal rounded-full animate-spin" />
+      <div className="min-h-screen flex flex-col bg-paper text-ink">
+        <Navbar />
+        <main className="flex-1 max-w-5xl w-full mx-auto px-6 pt-32 pb-20 animate-pulse space-y-8">
+          <div className="h-5 w-32 bg-mist rounded" />
+          <div className="h-12 w-2/3 bg-mist rounded" />
+          <div className="aspect-[16/9] w-full bg-mist rounded-2xl" />
+        </main>
+        <Footer />
       </div>
     );
   }
-
 
   if (!project) {
-    return (
-      <div className="min-h-screen bg-paper text-charcoal flex flex-col items-center justify-center p-6">
-        <h1 className="text-3xl font-display font-bold mb-4">Project Tidak Ditemukan</h1>
-        <Link to="/" className="px-6 py-2 bg-charcoal text-paper rounded-full hover:bg-brass transition-colors">
-          Kembali ke Beranda
-        </Link>
-      </div>
-    );
+    return <NotFound />;
   }
 
+  const challengeText =
+    isEn && project.challengeEn ? project.challengeEn : project.challenge || translatedSummary;
+  const solutionText =
+    isEn && project.solutionEn ? project.solutionEn : project.solution || '';
+  const highlightsList =
+    isEn && Array.isArray(project.highlightsEn) && project.highlightsEn.length > 0
+      ? project.highlightsEn
+      : Array.isArray(project.highlights)
+      ? project.highlights
+      : [];
+
   return (
-    <div className="bg-paper dark:bg-[#1A1A1C] min-h-screen text-charcoal dark:text-[#F2F0E8] selection:bg-charcoal dark:selection:bg-[#F2F0E8] selection:text-paper dark:selection:text-charcoal">
-      
-      {/* Top Navbar spacing is handled by App / Layout, assuming we need padding top */}
-      <main className="pt-24 pb-20 px-6 md:px-12 max-w-6xl mx-auto">
-        
-        {/* Back Button */}
-        <motion.div 
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="mb-10"
-        >
-          <button 
-            onClick={() => navigate('/')} 
-            className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-charcoal/20 dark:border-white/20 text-sm font-medium hover:bg-charcoal dark:hover:bg-white hover:text-white dark:hover:text-charcoal transition-all duration-300"
-          >
-            <FiArrowLeft /> Back to Portfolio
-          </button>
-        </motion.div>
+    <div className="min-h-screen flex flex-col bg-paper text-ink transition-colors duration-300">
+      <Navbar />
 
-        {/* Header (Role, Year, Title) */}
-        <motion.header 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="mb-10"
-        >
-          <div className="flex items-center gap-3 text-sm font-bold uppercase tracking-widest text-charcoal/50 dark:text-[#F2F0E8]/50 mb-3">
-            <span>{project.role}</span>
-            <span>&bull;</span>
-            <span>{project.year}</span>
+      <main id="main-content" className="flex-1 pt-28 sm:pt-32 pb-20 px-6">
+        <article className="max-w-5xl mx-auto space-y-12">
+          {/* Top Breadcrumb */}
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <Link
+              to="/projects"
+              className="inline-flex items-center gap-2 min-h-[44px] text-sm font-medium text-ink-muted hover:text-brass transition-colors"
+            >
+              <ArrowLeft size={16} aria-hidden="true" />
+              <span>{t('projects.back_projects')}</span>
+            </Link>
+
+            {project.url && (
+              <Button
+                as="a"
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="outline"
+                size="sm"
+              >
+                <span>{t('projects.live_preview')}</span>
+                <ArrowUpRight size={14} aria-hidden="true" />
+              </Button>
+            )}
           </div>
-          <h1 className="text-5xl md:text-6xl font-display font-bold tracking-tight text-charcoal dark:text-[#F2F0E8]">
-            {project.name}
-          </h1>
-        </motion.header>
 
-        {/* Main Image */}
-        <motion.section 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="mb-16 md:mb-24"
-        >
-          <div className="w-full bg-[#F5F5F5] dark:bg-[#1A1A1A] rounded-3xl overflow-hidden shadow-sm border border-charcoal/5 relative">
-            {/* The SVG images have built in frames usually, just show it */}
-            <img 
-              src={project.src} 
-              alt={project.name} 
-              className="w-full h-auto max-h-[80vh] object-cover object-top block"
-            />
+          {/* Header */}
+          <header className="space-y-4">
+            <div className="flex flex-wrap gap-2">
+              {(project.categories || []).map((cat) => (
+                <span
+                  key={cat}
+                  className="px-3 py-1 rounded-md font-mono text-xs font-medium bg-mist text-ink border border-line"
+                >
+                  {cat}
+                </span>
+              ))}
+            </div>
+
+            <h1 className="font-display text-3xl sm:text-5xl lg:text-[3.25rem] font-extrabold tracking-tight leading-[1.08] text-ink">
+              {project.name}
+            </h1>
+
+            <p className="text-base sm:text-xl text-ink-muted max-w-3xl leading-relaxed">
+              {translatedSummary}
+            </p>
+          </header>
+
+          {/* Metadata Strip */}
+          <dl className="grid grid-cols-2 md:grid-cols-4 gap-4 py-6 border-y border-line">
+            <div>
+              <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted mb-1">
+                {t('projects.client_label')}
+              </dt>
+              <dd className="text-sm sm:text-base font-semibold text-ink">{project.client}</dd>
+            </div>
+            <div>
+              <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted mb-1">
+                {t('projects.year_label')}
+              </dt>
+              <dd className="text-sm sm:text-base font-semibold text-ink tabular-nums">
+                {project.year}
+              </dd>
+            </div>
+            <div>
+              <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted mb-1">
+                {t('projects.role_label')}
+              </dt>
+              <dd className="text-sm sm:text-base font-semibold text-ink">{project.role}</dd>
+            </div>
+            <div>
+              <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted mb-1">
+                {t('projects.categories_label')}
+              </dt>
+              <dd className="text-sm sm:text-base font-semibold text-ink">
+                {(project.categories || []).join(' / ')}
+              </dd>
+            </div>
+          </dl>
+
+          {/* Preview Screenshot */}
+          <div className="rounded-2xl bg-surface border border-line p-2 sm:p-3 shadow-sm">
+            <div className="aspect-[16/10] sm:aspect-[16/9] rounded-xl overflow-hidden bg-mist">
+              <img
+                src={project.src}
+                alt={`${project.name} showcase`}
+                width={1200}
+                height={675}
+                className="w-full h-full object-cover object-top"
+              />
+            </div>
           </div>
-        </motion.section>
 
-        {/* Content Split (Left: Info, Right: Sidebar) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
-          
-          {/* LEFT CONTENT */}
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="lg:col-span-8 space-y-16"
-          >
-            {/* About */}
-            <section>
-              <h2 className="text-3xl font-display font-bold mb-6">About this project</h2>
-              <div className="prose prose-lg text-charcoal/70 dark:text-[#F2F0E8]/70">
-                <p className="mb-4">{project.challenge}</p>
-                <p>{project.solution}</p>
-              </div>
+          {/* Challenge & Solution */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <section className="rounded-2xl bg-surface border border-line p-6 sm:p-8 space-y-3">
+              <h2 className="font-display text-xl sm:text-2xl font-bold text-ink">
+                {t('projects.challenge_title')}
+              </h2>
+              <p className="text-sm sm:text-base text-ink-muted leading-relaxed">{challengeText}</p>
             </section>
 
-            {/* Role */}
-            <section>
-              <h3 className="text-xs font-bold uppercase tracking-widest text-charcoal/50 dark:text-[#F2F0E8]/50 mb-4">My Role</h3>
-              <div className="inline-flex px-5 py-2.5 rounded-full border border-charcoal/20 dark:border-white/20 font-medium text-sm">
-                {project.role}
-              </div>
-            </section>
+            {solutionText && (
+              <section className="rounded-2xl bg-surface border border-line p-6 sm:p-8 space-y-3">
+                <h2 className="font-display text-xl sm:text-2xl font-bold text-ink">
+                  {t('projects.solution_title')}
+                </h2>
+                <p className="text-sm sm:text-base text-ink-muted leading-relaxed">
+                  {solutionText}
+                </p>
+              </section>
+            )}
+          </div>
 
-            {/* Highlights (Using solution or challenge as bullet points if we want to innovate) */}
-            <section>
-              <h3 className="text-xs font-bold uppercase tracking-widest text-charcoal/50 dark:text-[#F2F0E8]/50 mb-4">Key Details</h3>
-              <div className="space-y-3">
-                <div className="p-5 rounded-2xl bg-[#F0FDF4] dark:bg-emerald-950/20 text-emerald-900 dark:text-emerald-200 text-sm md:text-base leading-relaxed">
-                  &bull; Dibangun secara spesifik untuk klien <strong>{project.client}</strong>.
-                </div>
-                <div className="p-5 rounded-2xl bg-[#F0FDF4] dark:bg-emerald-950/20 text-emerald-900 dark:text-emerald-200 text-sm md:text-base leading-relaxed">
-                  &bull; Menjawab tantangan utama dengan pendekatan modern di tahun {project.year}.
-                </div>
-                <div className="p-5 rounded-2xl bg-[#F0FDF4] dark:bg-emerald-950/20 text-emerald-900 dark:text-emerald-200 text-sm md:text-base leading-relaxed">
-                  &bull; Fokus pada performa, aksesibilitas, dan User Experience (UX) yang optimal.
-                </div>
-              </div>
-            </section>
+          {/* Engineering Highlights & Tech Stack */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+            {highlightsList.length > 0 && (
+              <section className="md:col-span-7 rounded-2xl bg-surface border border-line p-6 sm:p-8 space-y-4">
+                <h2 className="font-display text-lg sm:text-xl font-bold text-ink">
+                  {t('projects.highlights_title')}
+                </h2>
+                <ul className="space-y-3">
+                  {highlightsList.map((point) => (
+                    <li key={point} className="flex items-start gap-2.5 text-sm sm:text-base text-ink">
+                      <Check size={16} className="text-brass shrink-0 mt-1" aria-hidden="true" />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
 
-          </motion.div>
-
-
-          {/* RIGHT SIDEBAR */}
-          <motion.aside 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="lg:col-span-4 space-y-6"
-          >
-            {/* Tech Stack Card */}
-            <div className="bg-[#FAFAFA] dark:bg-[#2C2E32] rounded-3xl p-6 border border-charcoal/5 dark:border-white/5">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-charcoal/50 dark:text-[#F2F0E8]/50 mb-4">Tech Stack</h3>
+            <section
+              className={`${
+                highlightsList.length > 0 ? 'md:col-span-5' : 'md:col-span-12'
+              } rounded-2xl bg-surface border border-line p-6 sm:p-8 space-y-4`}
+            >
+              <h2 className="font-display text-lg sm:text-xl font-bold text-ink">
+                {t('projects.tech_title')}
+              </h2>
               <div className="flex flex-wrap gap-2">
-                {project.techStack.map(tech => (
-                  <span key={tech} className="px-4 py-2 bg-white dark:bg-[#1A1A1C] border border-charcoal/10 dark:border-white/10 rounded-full text-sm font-medium shadow-sm">
+                {(project.techStack || []).map((tech) => (
+                  <span
+                    key={tech}
+                    className="px-3 py-1.5 rounded-lg font-mono text-xs font-medium bg-mist text-ink border border-line"
+                  >
                     {tech}
                   </span>
                 ))}
               </div>
+            </section>
+          </div>
+
+          {/* Conversion CTA Banner */}
+          <section className="rounded-2xl bg-surface border border-line p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+            <div>
+              <h2 className="font-display text-xl sm:text-2xl font-bold text-ink mb-1">
+                {t('projects.next_cta_title')}
+              </h2>
+              <p className="text-sm sm:text-base text-ink-muted">{t('projects.next_cta_desc')}</p>
             </div>
 
-            {/* Client / Platform Card */}
-            <div className="bg-[#FAFAFA] dark:bg-[#2C2E32] rounded-3xl p-6 border border-charcoal/5 dark:border-white/5">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-charcoal/50 dark:text-[#F2F0E8]/50 mb-4">Client & Platform</h3>
-              <div className="flex items-center gap-3 text-charcoal/80 dark:text-[#F2F0E8]/80 mb-3">
-                <div className="w-10 h-10 rounded-full bg-white dark:bg-[#1A1A1C] border border-charcoal/10 dark:border-white/10 flex items-center justify-center shadow-sm">
-                  <FiGlobe />
-                </div>
-                <span className="font-medium">{project.client}</span>
-              </div>
-            </div>
-
-            {/* Action Button */}
-            <div className="pt-2">
-              {project.url ? (
-                <a 
-                  href={project.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full py-4 rounded-full border border-charcoal dark:border-[#F2F0E8] text-charcoal dark:text-[#F2F0E8] font-semibold hover:bg-charcoal dark:hover:bg-[#F2F0E8] hover:text-white dark:hover:text-charcoal transition-all duration-300"
-                >
-                  <FiInfo /> Visit Live Site
-                </a>
-              ) : (
-                <button disabled className="flex items-center justify-center gap-2 w-full py-4 rounded-full border border-charcoal/20 dark:border-[#F2F0E8]/20 text-charcoal/40 dark:text-[#F2F0E8]/40 font-semibold cursor-not-allowed">
-                  <FiInfo /> Offline System
-                </button>
-              )}
-            </div>
-            
-          </motion.aside>
-
-        </div>
+            <Button as={Link} to="/#contact" variant="accent" size="md" className="shrink-0">
+              <span>{t('projects.next_cta_button')}</span>
+              <ArrowRight size={16} aria-hidden="true" />
+            </Button>
+          </section>
+        </article>
       </main>
 
       <Footer />

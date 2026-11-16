@@ -1,10 +1,18 @@
-# Akbar Alfaidah - AI & Developer Portfolio
+# Akbar Alfaidah — Tech Agency & Engineering Studio
+> Principal Software Engineer specializing in Full-Stack Web Platforms, Mobile Apps, and Applied Machine Learning / Computer Vision. Based in Jambi, Indonesia; available worldwide remotely.
 
-Welcome to the agentic representation of my portfolio.
+## Core Services
+- **Web Platforms & Custom Systems:** React, Next.js, TypeScript, Laravel, PostgreSQL, Supabase, Docker deployment.
+- **Mobile Applications:** React Native, Flutter, Android & iOS production releases with geolocation, real-time sync, and offline resilience.
+- **Applied AI & Computer Vision:** YOLO detection, BiLSTM / OpenCV pipelines, FastAPI inference services, and automated document extraction.
 
-## Contact & Links
-- [Main Website](https://akbaralfaidah.com)
-- [GitHub Profile](https://github.com/akbaralfaidah)
-- [Email](mailto:hello@akbaralfaidah.com)
+## Public Pages
+- Home: https://akbaralfaidah.com/
+- Portfolio Archive: https://akbaralfaidah.com/projects
+- Case Studies: https://akbaralfaidah.com/project/{slug}
 
-This file exists to help AI agents navigate and understand this site better.
+## Contact
+- Website: https://akbaralfaidah.com/#contact
+- Email: akbaralfaidah667@gmail.com
+- GitHub: https://github.com/AkbarAlfaidah
+- LinkedIn: https://www.linkedin.com/in/akbar-alfaidah/

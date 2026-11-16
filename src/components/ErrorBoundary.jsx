@@ -1,10 +1,5 @@
 import { Component } from 'react';
 
-/**
- * ErrorBoundary — catches JavaScript errors in child component tree
- * and displays a fallback UI instead of crashing the whole app.
- * (Security Fix #11)
- */
 export default class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
@@ -16,7 +11,6 @@ export default class ErrorBoundary extends Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    // In production, you could send this to an error reporting service
     console.error('[ErrorBoundary] Caught error:', error, errorInfo);
   }
 
@@ -36,65 +30,60 @@ export default class ErrorBoundary extends Component {
             alignItems: 'center',
             justifyContent: 'center',
             padding: '2rem',
-            fontFamily: "'Outfit', 'Poppins', sans-serif",
-            backgroundColor: '#FAF8ED',
-            color: '#2D2E32',
-            textAlign: 'center',
+            fontFamily: "'Outfit', system-ui, sans-serif",
+            backgroundColor: '#FAF8F2',
+            color: '#222428',
+            textAlign: 'center'
           }}
         >
-          <div
+          <p
             style={{
-              width: '64px',
-              height: '64px',
-              borderRadius: '50%',
-              backgroundColor: '#FEE2E2',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: '1.5rem',
-              fontSize: '1.5rem',
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: '0.75rem',
+              fontWeight: 700,
+              letterSpacing: '0.16em',
+              textTransform: 'uppercase',
+              color: '#8A611C',
+              marginBottom: '0.75rem'
             }}
           >
-            ⚠️
-          </div>
+            Application Notice
+          </p>
           <h1
             style={{
-              fontSize: 'clamp(1.5rem, 3vw, 2.5rem)',
+              fontSize: 'clamp(1.5rem, 3vw, 2.25rem)',
               fontWeight: 700,
               marginBottom: '0.75rem',
-              letterSpacing: '-0.02em',
+              letterSpacing: '-0.02em'
             }}
           >
-            Terjadi Kesalahan
+            Terjadi Kesalahan Tampilan
           </h1>
           <p
             style={{
               fontSize: '1rem',
-              opacity: 0.7,
+              color: '#55585F',
               maxWidth: '420px',
               lineHeight: 1.6,
-              marginBottom: '2rem',
+              marginBottom: '2rem'
             }}
           >
-            Maaf, terjadi kesalahan yang tidak terduga. Silakan muat ulang halaman atau kembali ke beranda.
+            Maaf, terjadi gangguan saat memuat komponen ini. Muat ulang halaman atau kembali ke beranda.
           </p>
           <button
+            type="button"
             onClick={this.handleReload}
             style={{
-              padding: '0.75rem 2rem',
-              backgroundColor: '#2D2E32',
-              color: '#FAF8ED',
+              padding: '0.75rem 1.75rem',
+              minHeight: '44px',
+              backgroundColor: '#222428',
+              color: '#FAF8F2',
               border: 'none',
-              borderRadius: '9999px',
+              borderRadius: '10px',
               fontSize: '0.875rem',
               fontWeight: 600,
-              cursor: 'pointer',
-              letterSpacing: '0.05em',
-              textTransform: 'uppercase',
-              transition: 'opacity 0.2s',
+              cursor: 'pointer'
             }}
-            onMouseEnter={(e) => (e.target.style.opacity = '0.85')}
-            onMouseLeave={(e) => (e.target.style.opacity = '1')}
           >
             Kembali ke Beranda
           </button>

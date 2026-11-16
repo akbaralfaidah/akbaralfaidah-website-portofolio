@@ -1,29 +1,30 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import Sitemap from 'vite-plugin-sitemap'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import Sitemap from 'vite-plugin-sitemap';
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
     Sitemap({
       hostname: 'https://akbaralfaidah.com',
+      exclude: ['/google8c2a8f60a27d8865'],
       dynamicRoutes: [
         '/projects',
         '/project/bosdepot',
+        '/project/chattask',
         '/project/siabsen',
+        '/project/mpp',
+        '/project/jokipro',
         '/project/peka',
-        '/project/chattask'
+        '/project/siskamling',
+        '/project/simppk',
+        '/project/caterly',
+        '/project/minum-vr9'
       ],
       robots: [{ userAgent: '*', allow: '/' }]
     })
   ],
-  server: {
-    headers: {
-      'X-Frame-Options': 'DENY',
-      'X-Content-Type-Options': 'nosniff',
-      'Referrer-Policy': 'strict-origin-when-cross-origin',
-      'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=()',
-    },
-  },
-})
+  build: {
+    chunkSizeWarningLimit: 600
+  }
+});

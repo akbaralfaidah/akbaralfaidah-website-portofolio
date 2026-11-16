@@ -27,7 +27,7 @@ ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL \
     VITE_CONTACT_EMAIL=$VITE_CONTACT_EMAIL
 
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
 COPY . .
 RUN npm run build

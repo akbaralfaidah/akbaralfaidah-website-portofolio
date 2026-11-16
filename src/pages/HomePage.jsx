@@ -1,51 +1,38 @@
-import { lazy, Suspense } from 'react';
+import { useTranslation } from 'react-i18next';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
+import Capabilities from '../components/Capabilities';
+import About from '../components/About';
+import Services from '../components/Services';
+import Projects from '../components/Projects';
+import Experience from '../components/Experience';
+import TestimonialsSection from '../components/TestimonialsSection';
+import Contact from '../components/Contact';
 import Footer from '../components/Footer';
-
-// Lazy load below-the-fold components
-const YouCanScroll = lazy(() => import('../components/ui/YouCanScroll'));
-const About = lazy(() => import('../components/About'));
-const Services = lazy(() => import('../components/Services'));
-const Projects = lazy(() => import('../components/Projects'));
-const Experience = lazy(() => import('../components/Experience'));
-const Contact = lazy(() => import('../components/Contact'));
-const TestimonialsSection = lazy(() => import('../components/TestimonialsSection'));
-
-const LazyFallback = () => (
-  <div className="flex items-center justify-center py-24">
-    <div className="w-8 h-8 border-2 border-brass border-t-transparent rounded-full animate-spin" />
-  </div>
-);
+import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function HomePage() {
+  const { t } = useTranslation();
+
+  usePageMeta({
+    title: t('meta.home_title'),
+    description: t('meta.home_description'),
+    path: '/',
+    robots: 'index,follow'
+  });
+
   return (
-    <div className="bg-paper min-h-screen text-charcoal selection:bg-brass selection:text-paper">
+    <div className="min-h-screen bg-paper text-ink selection:bg-brass/25 transition-colors duration-300">
       <Navbar />
-      <main>
+      <main id="main-content">
         <Hero />
-        {/* Fix #7: Each section gets its own Suspense boundary so they load independently */}
-        <Suspense fallback={<LazyFallback />}>
-          <YouCanScroll />
-        </Suspense>
-        <Suspense fallback={<LazyFallback />}>
-          <About />
-        </Suspense>
-        <Suspense fallback={<LazyFallback />}>
-          <Services />
-        </Suspense>
-        <Suspense fallback={<LazyFallback />}>
-          <Projects />
-        </Suspense>
-        <Suspense fallback={<LazyFallback />}>
-          <Experience />
-        </Suspense>
-        <Suspense fallback={<LazyFallback />}>
-          <TestimonialsSection />
-        </Suspense>
-        <Suspense fallback={<LazyFallback />}>
-          <Contact />
-        </Suspense>
+        <Capabilities />
+        <About />
+        <Services />
+        <Projects />
+        <Experience />
+        <TestimonialsSection />
+        <Contact />
       </main>
       <Footer />
     </div>

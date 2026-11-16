@@ -1,53 +1,105 @@
-import { useTheme } from '../hooks/useTheme';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { MapPin, ArrowUpRight } from 'lucide-react';
+import BrandLogo from './BrandLogo';
+
+const FOOTER_SECTIONS = [
+  { key: 'about', href: '/#about' },
+  { key: 'services', href: '/#services' },
+  { key: 'projects', href: '/#projects' },
+  { key: 'experience', href: '/#experience' },
+  { key: 'contact', href: '/#contact' }
+];
+
+const CONTACT_EMAIL = import.meta.env.VITE_CONTACT_EMAIL || 'akbaralfaidah667@gmail.com';
+
+const EXTERNAL_LINKS = [
+  { label: 'GitHub', href: 'https://github.com/AkbarAlfaidah' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/akbar-alfaidah/' },
+  { label: 'Instagram', href: 'https://www.instagram.com/akbralf._/' },
+  { label: CONTACT_EMAIL, href: `mailto:${CONTACT_EMAIL}` }
+];
 
 export default function Footer() {
-  const { theme } = useTheme();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-charcoal dark:bg-[#111113] text-[#F2F0E8]/70 py-10 px-6 transition-colors duration-300 border-t border-[#F2F0E8]/5">
-      <div className="max-w-5xl mx-auto">
-        {/* Top Row: 3 columns */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 mb-12">
-          
-          {/* Brand */}
-          <div className="flex flex-col gap-4">
-            <img src="/img/unbackground.svg" alt="Akbar Alfaidah Logo" width="32" height="32" className="h-8 w-auto self-start" />
-            <p className="text-sm leading-relaxed text-[#F2F0E8]/70 max-w-xs">
-              {t('hero.headline_1')}
+    <footer className="bg-surface border-t border-line py-14 sm:py-16 px-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-10 border-b border-line">
+          {/* Brand Summary */}
+          <div className="md:col-span-5 flex flex-col gap-4">
+            <Link to="/" className="inline-flex items-center min-h-[44px] self-start hover:opacity-85 transition-opacity">
+              <BrandLogo className="h-8 w-auto text-ink" showWordmark />
+            </Link>
+            <p className="text-sm text-ink-muted max-w-sm leading-relaxed">
+              {t('footer.tagline')}
             </p>
-            <a
-              href="https://www.google.com/maps/search/?api=1&query=Akbar+Alfaidah+-+Jasa+Pembuatan+Website+%26+Aplikasi+di+Jambi"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs text-[#F2F0E8]/60 hover:text-brass transition-colors w-fit"
-            >
-              📍 Jambi, Indonesia &bull; Lihat di Maps
-            </a>
+            <p className="inline-flex items-center gap-2 font-mono text-xs text-ink-muted pt-1">
+              <MapPin size={14} className="text-brass shrink-0" aria-hidden="true" />
+              <span>{t('footer.location')}</span>
+            </p>
           </div>
 
-          {/* Quick Links */}
-          <div className="flex flex-col gap-3">
-            <h3 className="text-xs font-semibold tracking-wide uppercase text-[#F2F0E8]/70 mb-1">Navigasi</h3>
-            <a href="#about" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">{t('nav.about')}</a>
-            <a href="#projects" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">{t('nav.projects')}</a>
-            <a href="#experience" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">{t('nav.experience')}</a>
-            <a href="#contact" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">{t('nav.contact')}</a>
+          {/* Navigation */}
+          <div className="md:col-span-3">
+            <h3 className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-ink mb-4">
+              {t('footer.nav_title')}
+            </h3>
+            <ul className="space-y-1">
+              {FOOTER_SECTIONS.map((item) => (
+                <li key={item.key}>
+                  <a
+                    href={item.href}
+                    className="inline-flex items-center min-h-[44px] text-sm text-ink-muted hover:text-brass transition-colors"
+                  >
+                    {t(`nav.${item.key}`)}
+                  </a>
+                </li>
+              ))}
+              <li>
+                <Link
+                  to="/projects"
+                  className="inline-flex items-center min-h-[44px] text-sm text-ink-muted hover:text-brass transition-colors"
+                >
+                  {t('projects.back_projects')}
+                </Link>
+              </li>
+            </ul>
           </div>
 
-          {/* Social */}
-          <div className="flex flex-col gap-3">
-            <h3 className="text-xs font-semibold tracking-wide uppercase text-[#F2F0E8]/70 mb-1">Connect</h3>
-            <a href="https://github.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">GitHub</a>
-            <a href="https://linkedin.com/in/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">LinkedIn</a>
-            <a href="https://instagram.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" className="text-sm text-[#F2F0E8]/60 hover:text-brass transition-colors">Instagram</a>
+          {/* External Links */}
+          <div className="md:col-span-4">
+            <h3 className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-ink mb-4">
+              {t('footer.connect_title')}
+            </h3>
+            <ul className="space-y-1">
+              {EXTERNAL_LINKS.map((item) => {
+                const isExternal = item.href.startsWith('http');
+                return (
+                  <li key={item.label}>
+                    <a
+                      href={item.href}
+                      target={isExternal ? '_blank' : undefined}
+                      rel={isExternal ? 'noopener noreferrer' : undefined}
+                      className="inline-flex items-center gap-1.5 min-h-[44px] text-sm text-ink-muted hover:text-brass transition-colors break-all"
+                    >
+                      <span>{item.label}</span>
+                      {isExternal && <ArrowUpRight size={13} aria-hidden="true" />}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-[#F2F0E8]/10 pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <span className="text-xs font-medium text-[#F2F0E8]/70">© {new Date().getFullYear()} Akbar Alfaidah. {i18n.language === 'id' ? 'Hak cipta dilindungi.' : 'All rights reserved.'}</span>
+        <div className="pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs sm:text-sm text-ink-muted">
+          <p>
+            © {year} Akbar Alfaidah — {t('footer.role')}.
+          </p>
+          <p>{t('footer.copyright')}</p>
         </div>
       </div>
     </footer>

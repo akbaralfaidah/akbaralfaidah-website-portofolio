@@ -1,71 +1,121 @@
 <!doctype html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FAF8F2" />
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/img/unbackground.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Security Policy fallback for dev/preview; production HTTP headers in nginx.conf also enforce frame-ancestors & HSTS -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.emailjs.com https://challenges.cloudflare.com https://cloudflareinsights.com; frame-src https://challenges.cloudflare.com https://www.google.com https://maps.google.com; object-src 'none'; base-uri 'self';" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
 
-  <!-- SEO Meta Tags -->
-  <meta name="description"
-    content="Jasa pembuatan website, aplikasi mobile, dan kecerdasan buatan (AI) di Jambi. Solusi digital untuk UMKM, bisnis, dan perusahaan - cepat, profesional, dan sesuai kebutuhan Anda." />
-  <meta property="og:title" content="Akbar Alfaidah - Jasa Pembuatan Website & Aplikasi di Jambi" />
-  <meta property="og:description"
-    content="Jasa pembuatan website, aplikasi mobile, dan kecerdasan buatan (AI) di Jambi. Solusi digital untuk UMKM, bisnis, dan perusahaan - cepat, profesional, dan sesuai kebutuhan Anda." />
-  <meta property="og:type" content="website" />
+    <!-- Preconnect external APIs used dynamically -->
+    <link rel="preconnect" href="https://challenges.cloudflare.com" crossorigin />
 
-  <!-- Security Headers (Fix #5) -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; 
-      script-src 'self' https://challenges.cloudflare.com https://static.cloudflareinsights.com; 
-      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
-      font-src 'self' https://fonts.gstatic.com; 
-      img-src 'self' data: https: blob:; 
-      connect-src 'self' https://*.supabase.co https://api.emailjs.com https://challenges.cloudflare.com https://api.dicebear.com https://flagcdn.com; 
-      frame-src https://challenges.cloudflare.com https://www.google.com https://maps.google.com;
-      object-src 'none'; 
-      base-uri 'self';" />
-  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-  <meta name="referrer" content="strict-origin-when-cross-origin" />
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()" />
+    <title>Akbar Alfaidah — Jasa Web, Aplikasi Mobile &amp; AI | Tech Agency Jambi</title>
+    <meta name="description" content="Studio rekayasa perangkat lunak oleh Akbar Alfaidah. Layanan pembuatan aplikasi web full-stack, mobile React Native, dan sistem Machine Learning dari UI hingga deployment produksi." />
+    <meta name="author" content="Akbar Alfaidah" />
+    <link rel="canonical" href="https://akbaralfaidah.com/" />
 
-  <!-- Fonts (Fix #3: trimmed to only used weights, removed Poppins) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://qrtliglddxshyeabcjuj.supabase.co">
-  <link rel="preload" as="image" type="image/webp" href="/img/bosdepot.webp" fetchpriority="high">
-  <link rel="preload" as="font" type="font/woff2" href="/fonts/poppins-400.woff2" crossorigin>
-  <link rel="preload" as="style"
-    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;600;700;800&display=swap"
-    crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;600;700;800&display=swap"
-    rel="stylesheet" media="print" onload="this.media='all'" crossorigin>
-  <noscript>
-    <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;600;700;800&display=swap"
-      rel="stylesheet" crossorigin>
-  </noscript>
-  <title>Akbar Alfaidah - Jasa Pembuatan Website & Aplikasi di Jambi</title>
-  
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "ProfessionalService",
-      "name": "Akbar Alfaidah",
-      "description": "Jasa pembuatan website, aplikasi mobile, dan kecerdasan buatan di Jambi",
-      "areaServed": {
-        "@type": "City",
-        "name": "Jambi"
-      },
-      "telephone": "0881-0802-45045",
-      "url": "https://akbaralfaidah.com"
-    }
-  </script>
-</head>
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Akbar Alfaidah — Tech Agency" />
+    <meta property="og:locale" content="id_ID" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:url" content="https://akbaralfaidah.com/" />
+    <meta property="og:title" content="Akbar Alfaidah — Jasa Web, Aplikasi Mobile &amp; AI | Tech Agency" />
+    <meta property="og:description" content="Membangun sistem web, aplikasi mobile, dan AI terintegrasi secara penuh dari desain antarmuka hingga infrastruktur cloud dan deployment produksi." />
+    <meta property="og:image" content="https://akbaralfaidah.com/og-banner.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Akbar Alfaidah — Web, Mobile &amp; AI Engineering Studio" />
 
-<body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
-</body>
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Akbar Alfaidah — Web, Mobile &amp; AI Engineering Studio" />
+    <meta name="twitter:description" content="Full-stack web platforms, React Native apps, and applied computer vision — engineered cleanly from interface to production." />
+    <meta name="twitter:image" content="https://akbaralfaidah.com/og-banner.jpg" />
 
+    <!-- Pre-paint theme initialization to prevent light/dark flash -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('theme');
+          var isDark = saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (isDark) {
+            document.documentElement.classList.add('dark');
+            var meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) meta.setAttribute('content', '#161719');
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "@id": "https://akbaralfaidah.com/#organization",
+        "name": "Akbar Alfaidah — Tech Agency",
+        "alternateName": "Akbar Alfaidah",
+        "url": "https://akbaralfaidah.com",
+        "logo": "https://akbaralfaidah.com/favicon.svg",
+        "image": "https://akbaralfaidah.com/og-banner.jpg",
+        "email": "akbaralfaidah667@gmail.com",
+        "telephone": "+62881080245045",
+        "description": "Studio rekayasa perangkat lunak dan Tech Agency di Jambi, Indonesia yang menyediakan layanan pembuatan sistem web full-stack, aplikasi mobile, dan integrasi machine learning / computer vision.",
+        "founder": {
+          "@type": "Person",
+          "name": "Akbar Alfaidah",
+          "jobTitle": "Principal Software Engineer & Founder",
+          "url": "https://akbaralfaidah.com"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Jambi",
+          "addressRegion": "Jambi",
+          "addressCountry": "ID"
+        },
+        "areaServed": [
+          { "@type": "Country", "name": "Indonesia" },
+          { "@type": "Place", "name": "Worldwide (Remote)" }
+        ],
+        "sameAs": [
+          "https://github.com/AkbarAlfaidah",
+          "https://www.linkedin.com/in/akbar-alfaidah/",
+          "https://www.instagram.com/akbralf._/"
+        ],
+        "makesOffer": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Web Platform & Custom SaaS Engineering"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Mobile Application Development (React Native & Flutter)"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Applied Machine Learning & Computer Vision"
+            }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>

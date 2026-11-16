@@ -1,57 +1,85 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FiMail, FiMapPin, FiGithub, FiLinkedin, FiInstagram, FiSend, FiExternalLink } from 'react-icons/fi';
+import {
+  Mail,
+  MapPin,
+  Send,
+  ExternalLink,
+  ChevronDown,
+  Check,
+  Zap,
+  Briefcase,
+  Smartphone,
+  Building2,
+  Handshake,
+  Map as MapIcon
+} from 'lucide-react';
+import { FiGithub, FiLinkedin, FiInstagram } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
-import { Zap, Briefcase, Smartphone, Building2, Handshake, ChevronDown, Check } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 import { Turnstile } from '@marsidev/react-turnstile';
-import AnimatedButton from './ui/AnimatedButton';
+import { useTheme } from '../hooks/useTheme';
+import { Button } from './ui/Button';
 import Toast from './ui/Toast';
 
-// EmailJS credentials — fetched from environment variables
-// ⚠️ SECURITY: These are public keys exposed in the client bundle.
-// Make sure to restrict allowed origins in the EmailJS Dashboard:
-//   → https://dashboard.emailjs.com → Integration → Allowed Origins
 const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
 const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
 const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
+const CONTACT_ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT;
+const DISPLAY_EMAIL = import.meta.env.VITE_CONTACT_EMAIL || 'akbaralfaidah667@gmail.com';
+const WHATSAPP_TARGET = import.meta.env.VITE_WHATSAPP_NUMBER || '62881080245045';
 
-// Allowed production domains for EmailJS (Fix #2)
-const ALLOWED_ORIGINS = ['akbaralfaidah.com', 'www.akbaralfaidah.com', 'localhost'];
-
-/**
- * Simple encode/decode helpers for rate limit data to resist casual localStorage tampering (Fix #4).
- * This is NOT cryptographic security — it just raises the bar above editing raw JSON in DevTools.
- */
+const ALLOWED_ORIGINS = ['akbaralfaidah.com', 'www.akbaralfaidah.com', 'localhost', '127.0.0.1'];
 const RATE_KEY = '_cl_rl';
+
+const MAPS_EMBED_URL =
+  'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.2558810635155!2d103.61675777472514!3d-1.603528998381517!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e2589f0973acb6f%3A0xbbce088fb030a962!2sAkbar%20Alfaidah%20-%20Jasa%20Pembuatan%20Website%20%26%20Aplikasi%20di%20Jambi!5e0!3m2!1sid!2sid!4v1791261507483!5m2!1sid!2sid';
+
+const MAPS_DIRECT_URL =
+  'https://www.google.com/maps/search/?api=1&query=Akbar+Alfaidah+-+Jasa+Pembuatan+Website+%26+Aplikasi+di+Jambi';
+
 function encodeRateData(data) {
   try {
     const json = JSON.stringify(data);
     return btoa(json.split('').reverse().join(''));
-  } catch { return null; }
+  } catch {
+    return null;
+  }
 }
+
 function decodeRateData(encoded) {
   try {
     const reversed = atob(encoded);
     return JSON.parse(reversed.split('').reverse().join(''));
-  } catch { return { count: 0, lastSent: 0 }; }
+  } catch {
+    return { count: 0, lastSent: 0 };
+  }
 }
 
 export default function Contact() {
-  const { t } = useTranslation();
-  const [mode, setMode] = useState('wa'); // 'wa' or 'email'
-  const [formData, setFormData] = useState({ name: '', whatsapp: '', email: '', message: '', deadline: '' });
+  const { t, i18n } = useTranslation();
+  const { theme } = useTheme();
+
+  const [mode, setMode] = useState('wa');
+  const [formData, setFormData] = useState({
+    name: '',
+    whatsapp: '',
+    email: '',
+    message: '',
+    deadline: ''
+  });
+  const [errors, setErrors] = useState({});
   const [toast, setToast] = useState(null);
   const [isSending, setIsSending] = useState(false);
   const [honeypot, setHoneypot] = useState('');
   const [turnstileToken, setTurnstileToken] = useState(null);
-  const turnstileRef = useRef(null);
-
-  // Custom Deadline Dropdown State & Click-outside Handler
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const turnstileRef = useRef(null);
   const dropdownRef = useRef(null);
+  const deadlineTriggerRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -60,8 +88,9 @@ export default function Contact() {
       }
     };
     const handleKeyDown = (event) => {
-      if (event.key === 'Escape') {
+      if (event.key === 'Escape' && isDropdownOpen) {
         setIsDropdownOpen(false);
+        deadlineTriggerRef.current?.focus();
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -70,90 +99,76 @@ export default function Contact() {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [isDropdownOpen]);
 
   const deadlineOptions = [
-    {
-      id: 'cepat',
-      icon: Zap,
-      badgeClass: 'bg-amber-500/10 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400',
-      label: t('contact.form_deadline_options.cepat'),
-    },
-    {
-      id: 'standar',
-      icon: Briefcase,
-      badgeClass: 'bg-blue-500/10 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400',
-      label: t('contact.form_deadline_options.standar'),
-    },
-    {
-      id: 'menengah',
-      icon: Smartphone,
-      badgeClass: 'bg-purple-500/10 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400',
-      label: t('contact.form_deadline_options.menengah'),
-    },
-    {
-      id: 'kompleks',
-      icon: Building2,
-      badgeClass: 'bg-rose-500/10 text-rose-600 dark:bg-rose-500/20 dark:text-rose-400',
-      label: t('contact.form_deadline_options.kompleks'),
-    },
-    {
-      id: 'fleksibel',
-      icon: Handshake,
-      badgeClass: 'bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400',
-      label: t('contact.form_deadline_options.fleksibel'),
-    },
+    { id: 'cepat', icon: Zap, label: t('contact.form_deadline_options.cepat') },
+    { id: 'standar', icon: Briefcase, label: t('contact.form_deadline_options.standar') },
+    { id: 'menengah', icon: Smartphone, label: t('contact.form_deadline_options.menengah') },
+    { id: 'kompleks', icon: Building2, label: t('contact.form_deadline_options.kompleks') },
+    { id: 'fleksibel', icon: Handshake, label: t('contact.form_deadline_options.fleksibel') }
   ];
 
-  const selectedDeadlineObj = deadlineOptions.find((opt) => opt.id === formData.deadline);
+  const selectedDeadline = deadlineOptions.find((opt) => opt.id === formData.deadline);
 
-  const showToast = (message, type = 'error') => {
-    setToast({ message, type });
+  const clearFieldError = (field) => {
+    if (errors[field]) {
+      setErrors((prev) => {
+        const next = { ...prev };
+        delete next[field];
+        return next;
+      });
+    }
   };
 
   const validate = () => {
+    const nextErrors = {};
     const { name, whatsapp, email, message, deadline } = formData;
 
-    // Name validation
     if (!name.trim() || name.trim().length < 2) {
-      showToast(t('contact.validation.name'));
-      return false;
+      nextErrors.name = t('contact.validation.name');
     }
 
-    // Mode-specific validation
     if (mode === 'wa') {
-      // WhatsApp number: digits only, 10-15 chars
-      const cleanedWa = whatsapp.replace(/[\s\-()]/g, ''); // allow spaces/dashes for formatting
-      if (!cleanedWa || !/^\d+$/.test(cleanedWa)) {
-        showToast(t('contact.validation.wa_invalid'));
-        return false;
-      }
-      if (cleanedWa.length < 10 || cleanedWa.length > 15) {
-        showToast(t('contact.validation.wa_length'));
-        return false;
+      const cleaned = whatsapp.replace(/[\s\-()+]/g, '');
+      if (!whatsapp.trim() || !/^\+?[\d\s\-()]+$/.test(whatsapp.trim())) {
+        nextErrors.whatsapp = t('contact.validation.wa_invalid');
+      } else if (cleaned.length < 10 || cleaned.length > 15) {
+        nextErrors.whatsapp = t('contact.validation.wa_length');
       }
     } else {
-      // Email validation
       if (!email.trim()) {
-        showToast(t('contact.validation.email_empty'));
-        return false;
+        nextErrors.email = t('contact.validation.email_empty');
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+        nextErrors.email = t('contact.validation.email_invalid');
       }
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email.trim())) {
-        showToast(t('contact.validation.email_invalid'));
-        return false;
+
+      if (TURNSTILE_SITE_KEY && !turnstileToken) {
+        nextErrors.turnstile = t('contact.validation.turnstile');
       }
     }
 
-    // Message validation
-    if (!message.trim() || message.trim().length < 10) {
-      showToast(t('contact.validation.message'));
-      return false;
-    }
-
-    // Deadline validation
     if (!deadline) {
-      showToast(t('contact.validation.deadline'));
+      nextErrors.deadline = t('contact.validation.deadline');
+    }
+
+    if (!message.trim() || message.trim().length < 10) {
+      nextErrors.message = t('contact.validation.message');
+    }
+
+    setErrors(nextErrors);
+
+    const firstKey = Object.keys(nextErrors)[0];
+    if (firstKey) {
+      const fieldIdMap = {
+        name: 'contact-name',
+        whatsapp: 'contact-whatsapp',
+        email: 'contact-email',
+        deadline: 'contact-deadline',
+        message: 'contact-message'
+      };
+      const el = document.getElementById(fieldIdMap[firstKey]);
+      el?.focus();
       return false;
     }
 
@@ -161,56 +176,157 @@ export default function Contact() {
   };
 
   const checkRateLimit = () => {
-    const stored = localStorage.getItem(RATE_KEY);
-    const limitData = stored ? decodeRateData(stored) : { count: 0, lastSent: 0 };
-    const now = Date.now();
-    const cooldownMs = 60 * 1000; // 60 seconds
-    const dailyMs = 24 * 60 * 60 * 1000; // 24 hours
+    try {
+      const stored = window.localStorage.getItem(RATE_KEY);
+      const limitData = stored ? decodeRateData(stored) : { count: 0, lastSent: 0 };
+      const now = Date.now();
+      const cooldownMs = 60 * 1000;
+      const dailyMs = 24 * 60 * 60 * 1000;
 
-    if (now - limitData.lastSent > dailyMs) {
-      limitData.count = 0;
+      if (now - limitData.lastSent > dailyMs) {
+        limitData.count = 0;
+      }
+
+      if (limitData.count >= 3) {
+        setToast({
+          message:
+            i18n.language === 'en'
+              ? 'Daily limit reached (max 3 inquiries per day).'
+              : 'Batas harian tercapai (maksimal 3 pesan per hari).',
+          type: 'error'
+        });
+        return false;
+      }
+
+      if (now - limitData.lastSent < cooldownMs) {
+        const waitSecs = Math.ceil((cooldownMs - (now - limitData.lastSent)) / 1000);
+        setToast({
+          message:
+            i18n.language === 'en'
+              ? `Please wait ${waitSecs} seconds before sending again.`
+              : `Tunggu ${waitSecs} detik sebelum mengirim kembali.`,
+          type: 'error'
+        });
+        return false;
+      }
+    } catch {
+      // Allow if localStorage unavailable
     }
-
-    if (limitData.count >= 3) {
-      showToast('Batas harian tercapai. Maksimal 3 pesan per hari.', 'error');
-      return false;
-    }
-
-    if (now - limitData.lastSent < cooldownMs) {
-      const waitSecs = Math.ceil((cooldownMs - (now - limitData.lastSent)) / 1000);
-      showToast(`Tunggu ${waitSecs} detik sebelum mengirim lagi.`, 'error');
-      return false;
-    }
-
     return true;
   };
 
   const updateRateLimit = () => {
-    const stored = localStorage.getItem(RATE_KEY);
-    const limitData = stored ? decodeRateData(stored) : { count: 0, lastSent: 0 };
-    const now = Date.now();
-    const dailyMs = 24 * 60 * 60 * 1000;
+    try {
+      const stored = window.localStorage.getItem(RATE_KEY);
+      const limitData = stored ? decodeRateData(stored) : { count: 0, lastSent: 0 };
+      const now = Date.now();
+      const dailyMs = 24 * 60 * 60 * 1000;
 
-    if (now - limitData.lastSent > dailyMs) {
-      limitData.count = 0;
+      if (now - limitData.lastSent > dailyMs) {
+        limitData.count = 0;
+      }
+      limitData.count += 1;
+      limitData.lastSent = now;
+      window.localStorage.setItem(RATE_KEY, encodeRateData(limitData));
+    } catch {
+      // Ignore storage restriction
+    }
+  };
+
+  const resetTurnstile = () => {
+    setTurnstileToken(null);
+    turnstileRef.current?.reset?.();
+  };
+
+  const handleWhatsApp = () => {
+    if (!/^\d{10,15}$/.test(WHATSAPP_TARGET)) {
+      setToast({
+        message: 'WhatsApp configuration invalid.',
+        type: 'error'
+      });
+      return;
     }
 
-    limitData.count += 1;
-    limitData.lastSent = now;
-    localStorage.setItem(RATE_KEY, encodeRateData(limitData));
+    const lines = [
+      'Halo Akbar,',
+      'Saya ingin berdiskusi mengenai pembuatan proyek digital.',
+      '',
+      `Nama: ${formData.name.trim()}`,
+      `WhatsApp: ${formData.whatsapp.trim()}`,
+      `Target Waktu: ${t(`contact.form_deadline_options.${formData.deadline}`)}`,
+      '',
+      'Ringkasan Kebutuhan:',
+      formData.message.trim()
+    ];
+
+    const url = `https://wa.me/${WHATSAPP_TARGET}?text=${encodeURIComponent(lines.join('\n'))}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+    setToast({ message: t('contact.toast.wa_success'), type: 'success' });
+    setFormData({ name: '', whatsapp: '', email: '', message: '', deadline: '' });
+    setErrors({});
+    updateRateLimit();
+  };
+
+  const handleEmail = async () => {
+    const currentHost = window.location.hostname;
+    if (!ALLOWED_ORIGINS.some((origin) => currentHost === origin || currentHost.endsWith(`.${origin}`))) {
+      setToast({ message: 'Origin is not permitted for form dispatch.', type: 'error' });
+      return;
+    }
+
+    setIsSending(true);
+    try {
+      if (CONTACT_ENDPOINT) {
+        const res = await fetch(CONTACT_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            deadline: t(`contact.form_deadline_options.${formData.deadline}`),
+            message: formData.message.trim(),
+            turnstileToken
+          })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      } else {
+        if (!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY) {
+          throw new Error('Email service not configured');
+        }
+        await emailjs.send(
+          EMAILJS_SERVICE_ID,
+          EMAILJS_TEMPLATE_ID,
+          {
+            from_name: formData.name.trim(),
+            from_email: formData.email.trim(),
+            message: formData.message.trim(),
+            deadline: t(`contact.form_deadline_options.${formData.deadline}`),
+            to_name: 'Akbar Alfaidah'
+          },
+          EMAILJS_PUBLIC_KEY
+        );
+      }
+
+      setToast({ message: t('contact.toast.email_success'), type: 'success' });
+      setFormData({ name: '', whatsapp: '', email: '', message: '', deadline: '' });
+      setErrors({});
+      updateRateLimit();
+      resetTurnstile();
+    } catch {
+      setToast({ message: t('contact.toast.email_error'), type: 'error' });
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Honeypot trap: if filled, it's 100% a bot. Fake a success!
     if (honeypot) {
-      showToast(mode === 'wa' ? t('contact.toast.wa_success') : t('contact.toast.email_success'), 'success');
-      return;
-    }
-
-    if (!turnstileToken) {
-      showToast('Mohon selesaikan verifikasi keamanan (Anti-Spam) terlebih dahulu.', 'error');
+      setToast({
+        message: mode === 'wa' ? t('contact.toast.wa_success') : t('contact.toast.email_success'),
+        type: 'success'
+      });
       return;
     }
 
@@ -224,424 +340,492 @@ export default function Contact() {
     }
   };
 
-  /**
-   * Reset Turnstile token after each submission to prevent token reuse (Fix #6).
-   */
-  const resetTurnstile = () => {
-    setTurnstileToken(null);
-    if (turnstileRef.current) {
-      turnstileRef.current.reset();
-    }
-  };
-
-  const handleWhatsApp = () => {
-    const { name, whatsapp, message, deadline } = formData;
-    const waTarget = import.meta.env.VITE_WHATSAPP_NUMBER;
-
-    // Fix #10: Validate WhatsApp target number format
-    if (!waTarget || !/^\d{10,15}$/.test(waTarget)) {
-      showToast('Konfigurasi nomor WhatsApp tidak valid.', 'error');
-      return;
-    }
-
-    const lines = [
-      `Halo Akbar! \uD83D\uDC4B\uD83C\uDFFB `,
-      `Saya tertarik untuk menggunakan layanan Anda. Boleh minta Estimasi Harga dan waktu pengerjaannya?`,
-      ``,
-      `Berikut detail pesanan saya:`,
-      `\uD83D\uDC64 *Nama:* ${name}`,
-      `\uD83D\uDCF1 *WhatsApp:* ${whatsapp}`,
-      `\u23F0 *Deadline (Target Selesai):* ${t(`contact.form_deadline_options.${deadline}`)}`,
-      `\uD83D\uDCCC *Detail Tugas:*`,
-      `${message}`,
-      ``,
-      `Ditunggu balasannya ya, terima kasih! \uD83D\uDE80`,
-    ];
-
-    const text = encodeURIComponent(lines.join('\n'));
-    window.open(`https://wa.me/${waTarget}?text=${text}`, '_blank');
-    showToast(t('contact.toast.wa_success'), 'success');
-    setFormData({ name: '', whatsapp: '', email: '', message: '', deadline: '' });
-    updateRateLimit();
-    resetTurnstile();
-  };
-
-  const handleEmail = async () => {
-    // Fix #2: Validate origin before sending email
-    const currentHost = window.location.hostname;
-    if (!ALLOWED_ORIGINS.some(origin => currentHost === origin || currentHost.endsWith('.' + origin))) {
-      showToast('Pengiriman email tidak diizinkan dari domain ini.', 'error');
-      return;
-    }
-
-    setIsSending(true);
-    try {
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        {
-          from_name: formData.name,
-          from_email: formData.email,
-          message: formData.message,
-          deadline: t(`contact.form_deadline_options.${formData.deadline}`),
-          to_name: 'Akbar Alfaidah',
-        },
-        EMAILJS_PUBLIC_KEY
-      );
-      showToast(t('contact.toast.email_success'), 'success');
-      setFormData({ name: '', whatsapp: '', email: '', message: '', deadline: '' });
-      updateRateLimit();
-      resetTurnstile();
-    } catch {
-      showToast(t('contact.toast.email_error'), 'error');
-    } finally {
-      setIsSending(false);
-    }
-  };
-
   return (
     <>
       {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
+        <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
       )}
 
-      <section id="contact" className="py-8 md:py-12 lg:py-14 px-6 relative z-10 bg-paper dark:bg-[#1A1A1C] text-charcoal dark:text-[#F2F0E8]">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col lg:flex-row gap-16 lg:gap-24">
+      <section id="contact" className="py-16 sm:py-24 px-6 bg-paper text-ink">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+          {/* Left Column — Contact Details & Map Facade */}
+          <div className="lg:col-span-5 space-y-8">
+            <div>
+              <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-brass mb-3">
+                {t('contact.eyebrow')}
+              </p>
+              <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1] text-ink mb-4">
+                {t('contact.heading_1')}{' '}
+                <span className="text-brass">{t('contact.heading_2')}</span>
+              </h2>
+              <p className="text-base text-ink-muted leading-relaxed">{t('contact.desc')}</p>
+            </div>
 
-            {/* Left Column - Info */}
-            <div className="w-full lg:w-5/12 flex flex-col justify-between">
-              <div>
-                <h2 className="text-5xl md:text-7xl font-display font-bold text-charcoal dark:text-[#F2F0E8] mb-6 leading-tight tracking-tight">
-                  {t('contact.heading_1')} <br /><span className="text-brass">{t('contact.heading_2')}</span>
-                </h2>
-                <p className="text-charcoal/70 dark:text-[#F2F0E8]/70 text-lg mb-12 max-w-md">
-                  {t('contact.desc')}
-                </p>
-
-                <div className="space-y-6 text-charcoal/80 dark:text-[#F2F0E8]/80 mb-12">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-charcoal/5 dark:bg-[#F2F0E8]/10 flex items-center justify-center text-brass">
-                      <FiMail size={20} />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-charcoal/70 dark:text-[#F2F0E8]/70 mb-1">Email</p>
-                      <p className="font-medium text-charcoal dark:text-[#F2F0E8]">{import.meta.env.VITE_CONTACT_EMAIL}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-charcoal/5 dark:bg-[#F2F0E8]/10 flex items-center justify-center text-brass">
-                      <FiMapPin size={20} />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-charcoal/70 dark:text-[#F2F0E8]/70 mb-1">Location</p>
-                      <p className="font-medium text-charcoal dark:text-[#F2F0E8]">Jambi, Indonesia</p>
-                    </div>
-                  </div>
+            {/* Direct Info */}
+            <div className="space-y-4 pt-2">
+              <div className="flex items-center gap-4">
+                <div className="w-11 h-11 rounded-xl bg-surface border border-line flex items-center justify-center text-brass shrink-0">
+                  <Mail size={18} aria-hidden="true" />
                 </div>
-              </div>
-
-              <div className="mb-8">
-                  <p className="text-sm font-medium text-charcoal/70 dark:text-[#F2F0E8]/70 mb-4">{t('contact.follow_me')}</p>
-                  <div className="flex gap-4">
-                    <a href="https://github.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="w-12 h-12 rounded-full border border-charcoal/15 dark:border-[#F2F0E8]/15 flex items-center justify-center text-charcoal dark:text-[#F2F0E8] hover:bg-brass hover:text-white hover:border-brass transition-colors"><FiGithub size={20} /></a>
-                    <a href="https://linkedin.com/in/akbaralfaidah" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="w-12 h-12 rounded-full border border-charcoal/15 dark:border-[#F2F0E8]/15 flex items-center justify-center text-charcoal dark:text-[#F2F0E8] hover:bg-brass hover:text-white hover:border-brass transition-colors"><FiLinkedin size={20} /></a>
-                    <a href="https://instagram.com/akbaralfaidah" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-12 h-12 rounded-full border border-charcoal/15 dark:border-[#F2F0E8]/15 flex items-center justify-center text-charcoal dark:text-[#F2F0E8] hover:bg-brass hover:text-white hover:border-brass transition-colors"><FiInstagram size={20} /></a>
-                  </div>
-                </div>
-
-                {/* Google Maps Studio Card */}
-                <div className="rounded-3xl bg-charcoal/[0.03] dark:bg-[#F2F0E8]/5 border border-charcoal/10 dark:border-[#F2F0E8]/10 p-5 shadow-sm space-y-3">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                      <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-charcoal/70 dark:text-[#F2F0E8]/70">
-                        Studio & Lokasi Fisik
-                      </span>
-                    </div>
-                    <a
-                      href="https://www.google.com/maps/search/?api=1&query=Akbar+Alfaidah+-+Jasa+Pembuatan+Website+%26+Aplikasi+di+Jambi"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-brass hover:underline"
-                    >
-                      Buka Maps <FiExternalLink size={12} />
-                    </a>
-                  </div>
-
-                  <div>
-                    <h4 className="text-sm font-bold text-charcoal dark:text-[#F2F0E8]">
-                      Akbar Alfaidah
-                    </h4>
-                    <p className="text-xs text-charcoal/60 dark:text-[#F2F0E8]/60">
-                      Jasa Pembuatan Website & Aplikasi di Jambi
-                    </p>
-                  </div>
-
-                  {/* Responsive Map Viewport */}
-                  <div className="w-full aspect-[16/10] sm:aspect-[16/9] rounded-2xl overflow-hidden border border-charcoal/10 dark:border-white/10 bg-charcoal/5 shadow-inner">
-                    <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.2558810635155!2d103.61675777472514!3d-1.603528998381517!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e2589f0973acb6f%3A0xbbce088fb030a962!2sAkbar%20Alfaidah%20-%20Jasa%20Pembuatan%20Website%20%26%20Aplikasi%20di%20Jambi!5e0!3m2!1sid!2sid!4v1791261507483!5m2!1sid!2sid"
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0 }}
-                      allowFullScreen=""
-                      loading="lazy"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      title="Lokasi Kantor Akbar Alfaidah di Google Maps"
-                      className="w-full h-full object-cover dark:contrast-[1.05] dark:brightness-[0.9]"
-                    />
-                  </div>
-                </div>
-              </div>
-
-            {/* Right Column - Form */}
-            <div className="w-full lg:w-7/12">
-              <div className="bg-charcoal/[0.03] dark:bg-[#F2F0E8]/5 border border-charcoal/10 dark:border-[#F2F0E8]/10 shadow-2xl rounded-[2.5rem] p-8 md:p-12">
-
-                {/* Mode Toggle */}
-                <div className="flex items-center justify-center mb-10">
-                  <div className="inline-flex items-center bg-charcoal/5 dark:bg-[#F2F0E8]/5 rounded-full p-1 border border-charcoal/10 dark:border-[#F2F0E8]/10">
-                    <button
-                      type="button"
-                      onClick={() => setMode('wa')}
-                      className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${mode === 'wa'
-                        ? 'bg-green-500 text-white shadow-md'
-                        : 'text-charcoal/60 dark:text-[#F2F0E8]/60 hover:text-charcoal dark:hover:text-[#F2F0E8]'
-                        }`}
-                    >
-                      <FaWhatsapp size={16} />
-                      WhatsApp
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setMode('email')}
-                      className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${mode === 'email'
-                        ? 'bg-brass text-white shadow-md'
-                        : 'text-charcoal/60 dark:text-[#F2F0E8]/60 hover:text-charcoal dark:hover:text-[#F2F0E8]'
-                        }`}
-                    >
-                      <FiMail size={16} />
-                      Email
-                    </button>
-                  </div>
-                </div>
-
-                <form onSubmit={handleSubmit} className="space-y-10">
-                  {/* Name — always shown */}
-                  <div className="space-y-2">
-                    <label htmlFor="name" className="text-sm font-medium text-charcoal/70 dark:text-[#F2F0E8]/70">{t('contact.form_name')}</label>
-                    <input
-                      type="text"
-                      id="name"
-                      className="w-full bg-transparent border-b-2 border-charcoal/15 dark:border-[#F2F0E8]/15 focus:border-brass py-3 outline-none transition-colors text-charcoal dark:text-[#F2F0E8] placeholder:text-charcoal/50 dark:placeholder:text-[#F2F0E8]/50 font-medium"
-                      placeholder={t('contact.form_name_placeholder')}
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    />
-                  </div>
-
-                  {/* WA Number — only in WA mode */}
-                  {mode === 'wa' && (
-                    <div className="space-y-2">
-                      <label htmlFor="whatsapp" className="text-sm font-medium text-charcoal/70 dark:text-[#F2F0E8]/70">
-                        {t('contact.form_whatsapp')}
-                      </label>
-                      <div className="relative">
-                        <FaWhatsapp size={18} className="absolute left-0 top-1/2 -translate-y-1/2 text-green-500" />
-                        <input
-                          type="tel"
-                          id="whatsapp"
-                          className="w-full bg-transparent border-b-2 border-charcoal/15 dark:border-[#F2F0E8]/15 focus:border-brass py-3 pl-7 outline-none transition-colors text-charcoal dark:text-[#F2F0E8] placeholder:text-charcoal/50 dark:placeholder:text-[#F2F0E8]/50 font-medium"
-                          placeholder={t('contact.form_whatsapp_placeholder')}
-                          value={formData.whatsapp}
-                          onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Email — only in Email mode */}
-                  {mode === 'email' && (
-                    <div className="space-y-2">
-                      <label htmlFor="email" className="text-sm font-medium text-charcoal/70 dark:text-[#F2F0E8]/70">
-                        {t('contact.form_email')}
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        className="w-full bg-transparent border-b-2 border-charcoal/15 dark:border-[#F2F0E8]/15 focus:border-brass py-3 outline-none transition-colors text-charcoal dark:text-[#F2F0E8] placeholder:text-charcoal/50 dark:placeholder:text-[#F2F0E8]/50 font-medium"
-                        placeholder="akbar@example.com"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      />
-                    </div>
-                  )}
-
-                  {/* Custom Deadline Dropdown */}
-                  <div className="space-y-1.5" ref={dropdownRef}>
-                    <div className="relative">
-                      <button
-                        type="button"
-                        id="deadline"
-                        aria-haspopup="listbox"
-                        aria-expanded={isDropdownOpen}
-                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        className={`w-full px-4 py-3 min-h-[60px] rounded-2xl border-2 flex items-center justify-between text-left transition-all duration-200 select-none focus:outline-none ${
-                          isDropdownOpen
-                            ? 'border-brass bg-white dark:bg-[#202226] ring-4 ring-brass/15 shadow-sm'
-                            : formData.deadline
-                              ? 'border-emerald-500/70 dark:border-emerald-400/70 bg-emerald-500/[0.03] dark:bg-emerald-500/[0.05]'
-                              : 'border-charcoal/15 dark:border-[#F2F0E8]/15 hover:border-charcoal/30 dark:hover:border-[#F2F0E8]/30 bg-transparent'
-                        }`}
-                      >
-                        <div className="flex flex-col gap-0.5 min-w-0 pr-3">
-                          <span className="text-[11px] font-semibold uppercase tracking-wider text-charcoal/50 dark:text-[#F2F0E8]/50">
-                            {t('contact.form_deadline')}
-                          </span>
-                          {selectedDeadlineObj ? (
-                            <div className="flex items-center gap-2.5 text-sm md:text-base font-semibold text-charcoal dark:text-[#F2F0E8] truncate">
-                              <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${selectedDeadlineObj.badgeClass}`}>
-                                <selectedDeadlineObj.icon size={15} strokeWidth={2.2} />
-                              </div>
-                              <span className="truncate">{selectedDeadlineObj.label}</span>
-                            </div>
-                          ) : (
-                            <span className="text-sm md:text-base text-charcoal/40 dark:text-[#F2F0E8]/40 font-medium">
-                              {t('contact.form_deadline_placeholder')}
-                            </span>
-                          )}
-                        </div>
-
-                        <div className="flex items-center gap-2 shrink-0">
-                          {formData.deadline && !isDropdownOpen && (
-                            <div className="w-6 h-6 rounded-full bg-emerald-500/15 dark:bg-emerald-500/25 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
-                              <Check size={14} strokeWidth={2.5} />
-                            </div>
-                          )}
-                          <ChevronDown
-                            size={20}
-                            className={`transition-transform duration-300 ${
-                              isDropdownOpen
-                                ? 'rotate-180 text-brass'
-                                : formData.deadline
-                                  ? 'text-emerald-600 dark:text-emerald-400'
-                                  : 'text-charcoal/50 dark:text-[#F2F0E8]/50'
-                            }`}
-                          />
-                        </div>
-                      </button>
-
-                      <AnimatePresence>
-                        {isDropdownOpen && (
-                          <motion.div
-                            initial={{ opacity: 0, y: -8, scale: 0.98 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: -8, scale: 0.98 }}
-                            transition={{ duration: 0.18, ease: "easeOut" }}
-                            className="absolute left-0 right-0 top-[calc(100%+8px)] z-50 bg-white dark:bg-[#202226] rounded-2xl border border-charcoal/10 dark:border-white/10 shadow-2xl shadow-charcoal/15 dark:shadow-black/60 p-2 overflow-hidden"
-                          >
-                            <div className="max-h-64 overflow-y-auto space-y-1 pr-1">
-                              {deadlineOptions.map((opt) => {
-                                const isSelected = formData.deadline === opt.id;
-                                const OptIcon = opt.icon;
-                                return (
-                                  <button
-                                    key={opt.id}
-                                    type="button"
-                                    onClick={() => {
-                                      setFormData({ ...formData, deadline: opt.id });
-                                      setIsDropdownOpen(false);
-                                    }}
-                                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left text-sm md:text-[0.925rem] transition-all duration-150 ${
-                                      isSelected
-                                        ? 'bg-brass/15 dark:bg-brass/25 text-charcoal dark:text-white font-semibold'
-                                        : 'text-charcoal/80 dark:text-[#F2F0E8]/80 hover:bg-charcoal/5 dark:hover:bg-white/5 font-medium'
-                                    }`}
-                                  >
-                                    <div className="flex items-center gap-3 min-w-0 pr-2">
-                                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${opt.badgeClass}`}>
-                                        <OptIcon size={17} strokeWidth={2.2} />
-                                      </div>
-                                      <span className="truncate">{opt.label}</span>
-                                    </div>
-                                    {isSelected && (
-                                      <Check size={18} className="text-brass shrink-0" strokeWidth={2.5} />
-                                    )}
-                                  </button>
-                                );
-                              })}
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  </div>
-
-                  {/* Message — always shown */}
-                  <div className="space-y-2">
-                    <label htmlFor="message" className="text-sm font-medium text-charcoal/70 dark:text-[#F2F0E8]/70">{t('contact.form_message')}</label>
-                    <textarea
-                      id="message"
-                      rows={4}
-                      className="w-full bg-transparent border-b-2 border-charcoal/15 dark:border-[#F2F0E8]/15 focus:border-brass py-3 outline-none transition-colors text-charcoal dark:text-[#F2F0E8] placeholder:text-charcoal/50 dark:placeholder:text-[#F2F0E8]/50 font-medium resize-none"
-                      placeholder={t('contact.form_message_placeholder')}
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    />
-                  </div>
-
-                  {/* Honeypot Field (Invisible to users) */}
-                  <div style={{ display: 'none' }} aria-hidden="true">
-                    <label htmlFor="website_url">Website URL</label>
-                    <input
-                      type="text"
-                      id="website_url"
-                      name="website_url"
-                      tabIndex="-1"
-                      autoComplete="off"
-                      value={honeypot}
-                      onChange={(e) => setHoneypot(e.target.value)}
-                    />
-                  </div>
-
-                  {/* Cloudflare Turnstile Widget */}
-                  <div className="pt-2">
-                    <Turnstile 
-                      ref={turnstileRef}
-                      siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY} 
-                      onSuccess={(token) => setTurnstileToken(token)}
-                      onExpire={() => setTurnstileToken(null)}
-                      options={{ theme: 'auto' }}
-                    />
-                    <p className="text-[10px] text-charcoal/40 dark:text-[#F2F0E8]/40 mt-1">
-                      Dilindungi oleh Cloudflare Turnstile
-                    </p>
-                    {/* 
-                      ⚠️ SECURITY TODO (Fix #6): For full protection, verify the Turnstile token 
-                      server-side via POST https://challenges.cloudflare.com/turnstile/v0/siteverify
-                      using your TURNSTILE_SECRET_KEY. This requires a backend/edge function.
-                      Current implementation: client-side token presence check + token reuse prevention.
-                    */}
-                  </div>
-
-                  <AnimatedButton
-                    type="submit"
-                    variant="brass"
-                    disabled={isSending}
-                    className="w-full md:w-auto px-8 h-14 text-sm tracking-widest uppercase"
+                <div className="min-w-0">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+                    {t('contact.direct_email')}
+                  </p>
+                  <a
+                    href={`mailto:${DISPLAY_EMAIL}`}
+                    className="text-sm sm:text-base font-medium text-ink hover:text-brass transition-colors break-all"
                   >
-                    {isSending ? t('contact.cta_sending') : t('contact.cta')}
-                    <FiSend size={16} className="ml-2" />
-                  </AnimatedButton>
-                </form>
+                    {DISPLAY_EMAIL}
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <div className="w-11 h-11 rounded-xl bg-surface border border-line flex items-center justify-center text-brass shrink-0">
+                  <MapPin size={18} aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+                    Studio
+                  </p>
+                  <p className="text-sm sm:text-base font-medium text-ink">Jambi, Indonesia</p>
+                </div>
               </div>
             </div>
 
+            {/* Social Links */}
+            <div>
+              <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted mb-3">
+                {t('contact.follow_me')}
+              </p>
+              <div className="flex items-center gap-3">
+                <a
+                  href="https://github.com/AkbarAlfaidah"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="GitHub Akbar Alfaidah"
+                  className="w-11 h-11 rounded-xl bg-surface border border-line flex items-center justify-center text-ink hover:border-brass hover:text-brass transition-colors"
+                >
+                  <FiGithub size={18} aria-hidden="true" />
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/akbar-alfaidah/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn Akbar Alfaidah"
+                  className="w-11 h-11 rounded-xl bg-surface border border-line flex items-center justify-center text-ink hover:border-brass hover:text-brass transition-colors"
+                >
+                  <FiLinkedin size={18} aria-hidden="true" />
+                </a>
+                <a
+                  href="https://www.instagram.com/akbralf._/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram Akbar Alfaidah"
+                  className="w-11 h-11 rounded-xl bg-surface border border-line flex items-center justify-center text-ink hover:border-brass hover:text-brass transition-colors"
+                >
+                  <FiInstagram size={18} aria-hidden="true" />
+                </a>
+              </div>
+            </div>
+
+            {/* Privacy-Friendly Click-to-Load Map Card */}
+            <div className="rounded-2xl bg-surface border border-line p-5 space-y-3 shadow-sm">
+              <div className="flex items-center justify-between gap-2">
+                <h3 className="font-display text-sm font-bold text-ink">{t('contact.map_title')}</h3>
+                <a
+                  href={MAPS_DIRECT_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="min-h-[44px] inline-flex items-center gap-1 text-xs font-semibold text-brass hover:underline shrink-0"
+                >
+                  <span>{t('contact.map_open_external')}</span>
+                  <ExternalLink size={12} aria-hidden="true" />
+                </a>
+              </div>
+
+              <p className="text-xs text-ink-muted leading-relaxed">{t('contact.map_desc')}</p>
+
+              <div className="aspect-[16/9] rounded-xl overflow-hidden border border-line bg-mist/60 flex items-center justify-center">
+                {isMapLoaded ? (
+                  <iframe
+                    src={MAPS_EMBED_URL}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    title="Akbar Alfaidah Studio Location on Google Maps"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setIsMapLoaded(true)}
+                    className="w-full h-full flex flex-col items-center justify-center gap-2.5 p-4 text-center hover:bg-mist transition-colors cursor-pointer"
+                  >
+                    <span className="w-10 h-10 rounded-full bg-surface border border-line flex items-center justify-center text-brass shadow-sm">
+                      <MapIcon size={18} aria-hidden="true" />
+                    </span>
+                    <span className="text-xs sm:text-sm font-semibold text-ink">
+                      {t('contact.map_load')}
+                    </span>
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column — Contact Form */}
+          <div className="lg:col-span-7">
+            <div className="rounded-2xl bg-surface border border-line p-6 sm:p-8 lg:p-10 shadow-sm">
+              {/* Channel Tabs */}
+              <div
+                role="tablist"
+                aria-label="Contact channel"
+                className="grid grid-cols-2 gap-2 p-1.5 rounded-xl bg-mist border border-line mb-8"
+              >
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={mode === 'wa'}
+                  onClick={() => {
+                    setMode('wa');
+                    setErrors({});
+                  }}
+                  className={`min-h-[44px] px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors ${
+                    mode === 'wa'
+                      ? 'bg-emerald-700 text-white shadow-sm'
+                      : 'text-ink-muted hover:text-ink'
+                  }`}
+                >
+                  <FaWhatsapp size={16} aria-hidden="true" />
+                  <span>{t('contact.tab_wa')}</span>
+                </button>
+
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={mode === 'email'}
+                  onClick={() => {
+                    setMode('email');
+                    setErrors({});
+                  }}
+                  className={`min-h-[44px] px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors ${
+                    mode === 'email'
+                      ? 'bg-brass text-on-brass shadow-sm'
+                      : 'text-ink-muted hover:text-ink'
+                  }`}
+                >
+                  <Mail size={16} aria-hidden="true" />
+                  <span>{t('contact.tab_email')}</span>
+                </button>
+              </div>
+
+              <form onSubmit={handleSubmit} noValidate className="space-y-6">
+                {/* Full Name */}
+                <div>
+                  <label htmlFor="contact-name" className="block text-sm font-medium text-ink mb-2">
+                    {t('contact.form_name')}
+                  </label>
+                  <input
+                    id="contact-name"
+                    type="text"
+                    autoComplete="name"
+                    value={formData.name}
+                    onChange={(e) => {
+                      setFormData({ ...formData, name: e.target.value });
+                      clearFieldError('name');
+                    }}
+                    aria-invalid={Boolean(errors.name)}
+                    aria-describedby={errors.name ? 'contact-name-error' : undefined}
+                    placeholder={t('contact.form_name_placeholder')}
+                    className={`w-full rounded-xl border bg-paper px-4 py-3 text-sm sm:text-base text-ink placeholder:text-ink-muted/60 focus:border-brass outline-none transition-colors ${
+                      errors.name ? 'border-red-600 dark:border-red-400' : 'border-line'
+                    }`}
+                  />
+                  {errors.name && (
+                    <p
+                      id="contact-name-error"
+                      role="alert"
+                      className="text-xs font-medium text-red-700 dark:text-red-400 mt-1.5"
+                    >
+                      {errors.name}
+                    </p>
+                  )}
+                </div>
+
+                {/* Conditional WhatsApp / Email */}
+                {mode === 'wa' ? (
+                  <div>
+                    <label
+                      htmlFor="contact-whatsapp"
+                      className="block text-sm font-medium text-ink mb-2"
+                    >
+                      {t('contact.form_whatsapp')}
+                    </label>
+                    <input
+                      id="contact-whatsapp"
+                      type="tel"
+                      autoComplete="tel"
+                      value={formData.whatsapp}
+                      onChange={(e) => {
+                        setFormData({ ...formData, whatsapp: e.target.value });
+                        clearFieldError('whatsapp');
+                      }}
+                      aria-invalid={Boolean(errors.whatsapp)}
+                      aria-describedby={errors.whatsapp ? 'contact-whatsapp-error' : undefined}
+                      placeholder={t('contact.form_whatsapp_placeholder')}
+                      className={`w-full rounded-xl border bg-paper px-4 py-3 text-sm sm:text-base text-ink placeholder:text-ink-muted/60 focus:border-brass outline-none transition-colors ${
+                        errors.whatsapp ? 'border-red-600 dark:border-red-400' : 'border-line'
+                      }`}
+                    />
+                    {errors.whatsapp && (
+                      <p
+                        id="contact-whatsapp-error"
+                        role="alert"
+                        className="text-xs font-medium text-red-700 dark:text-red-400 mt-1.5"
+                      >
+                        {errors.whatsapp}
+                      </p>
+                    )}
+                  </div>
+                ) : (
+                  <div>
+                    <label
+                      htmlFor="contact-email"
+                      className="block text-sm font-medium text-ink mb-2"
+                    >
+                      {t('contact.form_email')}
+                    </label>
+                    <input
+                      id="contact-email"
+                      type="email"
+                      autoComplete="email"
+                      value={formData.email}
+                      onChange={(e) => {
+                        setFormData({ ...formData, email: e.target.value });
+                        clearFieldError('email');
+                      }}
+                      aria-invalid={Boolean(errors.email)}
+                      aria-describedby={errors.email ? 'contact-email-error' : undefined}
+                      placeholder={t('contact.form_email_placeholder')}
+                      className={`w-full rounded-xl border bg-paper px-4 py-3 text-sm sm:text-base text-ink placeholder:text-ink-muted/60 focus:border-brass outline-none transition-colors ${
+                        errors.email ? 'border-red-600 dark:border-red-400' : 'border-line'
+                      }`}
+                    />
+                    {errors.email && (
+                      <p
+                        id="contact-email-error"
+                        role="alert"
+                        className="text-xs font-medium text-red-700 dark:text-red-400 mt-1.5"
+                      >
+                        {errors.email}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* Accessible Timeline Select */}
+                <div ref={dropdownRef} className="relative">
+                  <label
+                    htmlFor="contact-deadline"
+                    className="block text-sm font-medium text-ink mb-2"
+                  >
+                    {t('contact.form_deadline')}
+                  </label>
+
+                  <button
+                    ref={deadlineTriggerRef}
+                    id="contact-deadline"
+                    type="button"
+                    aria-haspopup="listbox"
+                    aria-expanded={isDropdownOpen}
+                    aria-invalid={Boolean(errors.deadline)}
+                    aria-describedby={errors.deadline ? 'contact-deadline-error' : undefined}
+                    onClick={() => setIsDropdownOpen((open) => !open)}
+                    className={`w-full min-h-[48px] rounded-xl border bg-paper px-4 py-3 flex items-center justify-between text-left transition-colors ${
+                      isDropdownOpen
+                        ? 'border-brass'
+                        : errors.deadline
+                        ? 'border-red-600 dark:border-red-400'
+                        : 'border-line hover:border-ink/40'
+                    }`}
+                  >
+                    {selectedDeadline ? (
+                      <span className="flex items-center gap-2.5 text-sm sm:text-base font-medium text-ink truncate pr-2">
+                        <selectedDeadline.icon
+                          size={16}
+                          className="text-brass shrink-0"
+                          aria-hidden="true"
+                        />
+                        <span className="truncate">{selectedDeadline.label}</span>
+                      </span>
+                    ) : (
+                      <span className="text-sm sm:text-base text-ink-muted/70">
+                        {t('contact.form_deadline_placeholder')}
+                      </span>
+                    )}
+
+                    <ChevronDown
+                      size={18}
+                      className={`text-ink-muted shrink-0 transition-transform duration-200 ${
+                        isDropdownOpen ? 'rotate-180 text-brass' : ''
+                      }`}
+                      aria-hidden="true"
+                    />
+                  </button>
+
+                  {isDropdownOpen && (
+                    <div
+                      role="listbox"
+                      aria-labelledby="contact-deadline"
+                      className="absolute left-0 right-0 top-[calc(100%+6px)] z-30 rounded-xl bg-surface border border-line shadow-xl p-1.5 space-y-1 max-h-64 overflow-y-auto"
+                    >
+                      {deadlineOptions.map((opt) => {
+                        const selected = formData.deadline === opt.id;
+                        const OptIcon = opt.icon;
+                        return (
+                          <button
+                            key={opt.id}
+                            type="button"
+                            role="option"
+                            aria-selected={selected}
+                            onClick={() => {
+                              setFormData({ ...formData, deadline: opt.id });
+                              clearFieldError('deadline');
+                              setIsDropdownOpen(false);
+                            }}
+                            className={`w-full min-h-[44px] px-3 py-2 rounded-lg text-left text-sm flex items-center justify-between gap-2 transition-colors ${
+                              selected
+                                ? 'bg-mist text-ink font-semibold'
+                                : 'text-ink-muted hover:bg-mist/60 hover:text-ink'
+                            }`}
+                          >
+                            <span className="flex items-center gap-2.5 min-w-0">
+                              <OptIcon size={16} className="text-brass shrink-0" aria-hidden="true" />
+                              <span className="truncate">{opt.label}</span>
+                            </span>
+                            {selected && (
+                              <Check size={16} className="text-brass shrink-0" aria-hidden="true" />
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {errors.deadline && (
+                    <p
+                      id="contact-deadline-error"
+                      role="alert"
+                      className="text-xs font-medium text-red-700 dark:text-red-400 mt-1.5"
+                    >
+                      {errors.deadline}
+                    </p>
+                  )}
+                </div>
+
+                {/* Project Brief */}
+                <div>
+                  <label
+                    htmlFor="contact-message"
+                    className="block text-sm font-medium text-ink mb-2"
+                  >
+                    {t('contact.form_message')}
+                  </label>
+                  <textarea
+                    id="contact-message"
+                    rows={4}
+                    value={formData.message}
+                    onChange={(e) => {
+                      setFormData({ ...formData, message: e.target.value });
+                      clearFieldError('message');
+                    }}
+                    aria-invalid={Boolean(errors.message)}
+                    aria-describedby={errors.message ? 'contact-message-error' : undefined}
+                    placeholder={t('contact.form_message_placeholder')}
+                    className={`w-full rounded-xl border bg-paper px-4 py-3 text-sm sm:text-base text-ink placeholder:text-ink-muted/60 focus:border-brass outline-none transition-colors resize-y ${
+                      errors.message ? 'border-red-600 dark:border-red-400' : 'border-line'
+                    }`}
+                  />
+                  {errors.message && (
+                    <p
+                      id="contact-message-error"
+                      role="alert"
+                      className="text-xs font-medium text-red-700 dark:text-red-400 mt-1.5"
+                    >
+                      {errors.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Honeypot */}
+                <div className="hidden" aria-hidden="true">
+                  <label htmlFor="website_url">Website</label>
+                  <input
+                    id="website_url"
+                    name="website_url"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                  />
+                </div>
+
+                {/* Cloudflare Turnstile shown in Email mode where backend/API quota needs protection */}
+                {mode === 'email' && (
+                  <div className="space-y-2">
+                    <span className="block font-mono text-xs uppercase tracking-[0.12em] text-ink-muted">
+                      {t('contact.turnstile_label')}
+                    </span>
+                    {TURNSTILE_SITE_KEY ? (
+                      <Turnstile
+                        ref={turnstileRef}
+                        siteKey={TURNSTILE_SITE_KEY}
+                        onSuccess={(token) => {
+                          setTurnstileToken(token);
+                          clearFieldError('turnstile');
+                        }}
+                        onExpire={() => setTurnstileToken(null)}
+                        options={{ theme: theme === 'dark' ? 'dark' : 'light' }}
+                      />
+                    ) : (
+                      <p className="text-xs text-ink-muted border border-line rounded-lg px-3.5 py-2.5 bg-paper">
+                        {t('contact.turnstile_unavailable')}
+                      </p>
+                    )}
+                    {errors.turnstile && (
+                      <p role="alert" className="text-xs font-medium text-red-700 dark:text-red-400">
+                        {errors.turnstile}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                <Button
+                  type="submit"
+                  variant={mode === 'wa' ? 'whatsapp' : 'accent'}
+                  size="lg"
+                  disabled={isSending}
+                  className="w-full sm:w-auto"
+                >
+                  {mode === 'wa' ? (
+                    <>
+                      <FaWhatsapp size={18} aria-hidden="true" />
+                      <span>{t('contact.cta_wa')}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send size={16} aria-hidden="true" />
+                      <span>{isSending ? t('contact.cta_sending') : t('contact.cta_email')}</span>
+                    </>
+                  )}
+                </Button>
+              </form>
+            </div>
           </div>
         </div>
       </section>

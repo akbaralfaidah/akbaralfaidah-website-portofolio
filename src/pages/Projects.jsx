@@ -1,190 +1,224 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FiArrowLeft, FiArrowUpRight, FiGlobe, FiSmartphone, FiCpu, FiPlay } from 'react-icons/fi';
+import { useState, useEffect, useMemo } from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowLeft, ArrowRight, Wrench } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { fetchProjects } from '../data/projects';
+import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { Button } from '../components/ui/Button';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 const CATEGORIES = ['All', 'Website', 'Mobile Apps', 'Machine Learning'];
 
-export default function Projects() {
-  const [activeCategory, setActiveCategory] = useState('All');
-  const [allProjects, setAllProjects] = useState([]);
+export default function ProjectsPage() {
+  const { t, i18n } = useTranslation();
+  const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState('All');
+
+  usePageMeta({
+    title: t('meta.projects_title'),
+    description: t('meta.projects_description'),
+    path: '/projects',
+    robots: 'index,follow'
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    let isMounted = true;
     fetchProjects().then((data) => {
-      setAllProjects(data);
-      setLoading(false);
+      if (isMounted) {
+        setProjects(data);
+        setLoading(false);
+      }
     });
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  let filteredProjects = activeCategory === 'All' 
-    ? allProjects 
-    : allProjects.filter(p => p.categories && p.categories.includes(activeCategory));
+  const filteredProjects = useMemo(() => {
+    if (selectedCategory === 'All') return projects;
+    return projects.filter((p) => (p.categories || []).includes(selectedCategory));
+  }, [projects, selectedCategory]);
 
-  // Sort: On Progress (not 'selesai') first, then 'selesai'
-  filteredProjects.sort((a, b) => {
-    const isASelesai = a.status === 'selesai';
-    const isBSelesai = b.status === 'selesai';
-    if (isASelesai === isBSelesai) return 0;
-    return isASelesai ? 1 : -1;
-  });
-
-
-  // Helper to render the right icon for the primary category
-  const getCategoryIcon = (categories) => {
-    if (!categories || categories.length === 0) return <FiGlobe />;
-    if (categories.includes('Mobile Apps')) return <FiPlay />;
-    if (categories.includes('Machine Learning')) return <FiCpu />;
-    return <FiGlobe />;
-  };
-
-  // Helper to get the primary category label
-  const getPrimaryCategoryLabel = (categories) => {
-    if (!categories || categories.length === 0) return 'Website';
-    if (categories.includes('Mobile Apps')) return 'Mobile App';
-    return categories[0];
-  };
+  const isEn = i18n.language === 'en';
 
   return (
-    <div className="bg-paper dark:bg-[#1A1A1C] min-h-screen text-charcoal dark:text-[#F2F0E8]">
-      
-      {/* Header Area */}
-      <header className="pt-24 pb-12 px-6 md:px-12 max-w-7xl mx-auto">
-        <button 
-          onClick={() => navigate('/')} 
-          className="inline-flex items-center gap-2 px-5 py-2 mb-8 rounded-full border border-charcoal/20 dark:border-white/20 text-sm font-medium hover:bg-charcoal dark:hover:bg-white hover:text-white dark:hover:text-charcoal transition-all duration-300"
-        >
-          <FiArrowLeft /> Kembali ke Beranda
-        </button>
+    <div className="min-h-screen flex flex-col bg-paper text-ink transition-colors duration-300">
+      <Navbar />
 
-        <h1 className="text-5xl md:text-6xl font-display font-bold tracking-tight mb-8">
-          Katalog Proyek
-        </h1>
-
-        {/* Filters */}
-        <div className="flex flex-wrap items-center gap-3">
-          {CATEGORIES.map(cat => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border ${
-                activeCategory === cat 
-                  ? 'bg-charcoal dark:bg-[#F2F0E8] text-white dark:text-[#1A1A1C] border-charcoal dark:border-[#F2F0E8]' 
-                  : 'bg-white dark:bg-[#2C2E32] text-charcoal/70 dark:text-white/70 border-charcoal/10 dark:border-white/10 hover:border-charcoal/30 dark:hover:border-white/30'
-              }`}
+      <main id="main-content" className="flex-1 pt-28 sm:pt-32 pb-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-8">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 min-h-[44px] text-sm font-medium text-ink-muted hover:text-brass transition-colors"
             >
-              {cat}
-            </button>
-          ))}
-        </div>
-      </header>
-
-      {/* Projects Grid */}
-      <main className="px-6 md:px-12 pb-24 max-w-7xl mx-auto min-h-[50vh]">
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="flex flex-col bg-white dark:bg-[#2C2E32] rounded-3xl overflow-hidden shadow-sm border border-charcoal/5 dark:border-white/5 animate-pulse">
-                <div className="w-full pt-[65%] bg-charcoal/10" />
-                <div className="p-6 md:p-8 space-y-4">
-                  <div className="h-3 w-24 bg-charcoal/10 rounded-full" />
-                  <div className="h-6 w-40 bg-charcoal/10 rounded-full" />
-                  <div className="h-3 w-full bg-charcoal/10 rounded-full" />
-                  <div className="h-3 w-3/4 bg-charcoal/10 rounded-full" />
-                  <div className="flex gap-2 pt-2">
-                    <div className="h-6 w-16 bg-charcoal/10 rounded-md" />
-                    <div className="h-6 w-16 bg-charcoal/10 rounded-md" />
-                    <div className="h-6 w-16 bg-charcoal/10 rounded-md" />
-                  </div>
-                  <div className="h-10 w-32 bg-charcoal/10 rounded-full mt-4" />
-                </div>
-              </div>
-            ))}
+              <ArrowLeft size={16} aria-hidden="true" />
+              <span>{t('projects.back_home')}</span>
+            </Link>
           </div>
-        ) : (
-        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-          <AnimatePresence mode="popLayout">
-            {filteredProjects.map((project) => (
-              <motion.div
-                layout
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3 }}
-                key={project.id}
-                className="flex flex-col bg-white dark:bg-[#2C2E32] rounded-3xl overflow-hidden shadow-sm border border-charcoal/5 dark:border-white/5 group"
-              >
-                {/* Image Container */}
-                <Link to={`/project/${project.slug}`} className="block relative w-full pt-[65%] bg-charcoal/5 overflow-hidden">
-                  <img 
-                    src={project.status !== 'selesai' ? '/on_development.gif' : project.src} 
-                    alt={project.name} 
-                    className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                  />
-                  {project.status !== 'selesai' && (
-                    <div className="absolute top-3 left-3 px-3 py-1 bg-amber-500 text-white text-xs font-bold rounded-full shadow-md z-10 animate-pulse">
-                      ON PROGRESS
-                    </div>
-                  )}
-                </Link>
 
-                {/* Content */}
-                <div className="p-6 md:p-8 flex flex-col flex-grow">
-                  
-                  {/* Meta: Icon + Category + Year */}
-                  <div className="flex items-center gap-4 text-[11px] font-bold uppercase tracking-widest text-[#B5915F] mb-4">
-                    <div className="flex items-center gap-1.5">
-                      {getCategoryIcon(project.categories)}
-                      <span>{getPrimaryCategoryLabel(project.categories)}</span>
-                    </div>
-                    <span className="text-charcoal/40 dark:text-[#F2F0E8]/40">{project.year}</span>
+          <div className="mb-10 sm:mb-12">
+            <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-brass mb-3">
+              {t('projects.eyebrow')}
+            </p>
+            <h1 className="font-display text-3xl sm:text-5xl font-extrabold tracking-tight text-ink mb-4">
+              {t('projects.archive_heading')}
+            </h1>
+            <p className="text-base sm:text-lg text-ink-muted max-w-2xl leading-relaxed">
+              {t('projects.archive_subheading')}
+            </p>
+          </div>
+
+          {/* Filter Tabs */}
+          <div
+            role="tablist"
+            aria-label="Filter projects by category"
+            className="flex flex-wrap gap-2 mb-10 pb-6 border-b border-line"
+          >
+            {CATEGORIES.map((category) => {
+              const active = selectedCategory === category;
+              const label = category === 'All' ? t('projects.filter_all') : category;
+              return (
+                <button
+                  key={category}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`min-h-[44px] px-4 py-2 rounded-xl text-sm font-medium transition-colors border ${
+                    active
+                      ? 'bg-ink text-on-ink border-ink'
+                      : 'bg-surface text-ink-muted border-line hover:text-ink hover:border-ink/40'
+                  }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Grid */}
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Array.from({ length: 6 }).map((_, idx) => (
+                <div
+                  key={idx}
+                  className="rounded-2xl bg-surface border border-line overflow-hidden animate-pulse"
+                >
+                  <div className="aspect-[4/3] bg-mist" />
+                  <div className="p-6 space-y-3">
+                    <div className="h-4 w-24 bg-mist rounded" />
+                    <div className="h-6 w-2/3 bg-mist rounded" />
+                    <div className="h-12 w-full bg-mist rounded" />
                   </div>
+                </div>
+              ))}
+            </div>
+          ) : filteredProjects.length === 0 ? (
+            <div className="rounded-2xl bg-surface border border-line p-12 text-center space-y-4">
+              <h2 className="font-display text-xl font-bold text-ink">
+                {t('projects.empty_title')}
+              </h2>
+              <p className="text-sm text-ink-muted">{t('projects.empty_desc')}</p>
+              <Button variant="outline" size="md" onClick={() => setSelectedCategory('All')}>
+                {t('projects.filter_all')}
+              </Button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredProjects.map((project, idx) => {
+                const translatedDesc = t(`projects.${project.slug}_desc`, { defaultValue: '' });
+                const desc =
+                  translatedDesc ||
+                  (isEn && project.shortDescriptionEn
+                    ? project.shortDescriptionEn
+                    : project.shortDescription);
+                const isInDevelopment = project.status && project.status !== 'selesai';
 
-                  {/* Title */}
-                  <Link to={`/project/${project.slug}`}>
-                    <h2 className="text-2xl font-display font-bold mb-3 group-hover:text-[#B5915F] transition-colors">
-                      {project.name}
-                    </h2>
-                  </Link>
-
-                  {/* Description */}
-                  <p className="text-charcoal/70 dark:text-[#F2F0E8]/70 text-sm leading-relaxed mb-6 flex-grow">
-                    {project.shortDescription}
-                  </p>
-
-                  {/* Tech Stack Pills */}
-                  <div className="flex flex-wrap gap-2 mb-8">
-                    {project.techStack.map(tech => (
-                      <span key={tech} className="px-3 py-1 bg-white dark:bg-[#1A1A1C] border border-charcoal/10 dark:border-white/10 rounded-md text-[11px] font-medium text-charcoal/60 dark:text-white/60 whitespace-nowrap">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Action Button */}
-                  <Link 
-                    to={`/project/${project.slug}`}
-                    className="inline-flex items-center justify-center gap-2 w-max px-6 py-3 bg-[#2D2E32] dark:bg-brass text-white text-sm font-semibold rounded-full hover:bg-black dark:hover:bg-[#8e6b32] transition-colors mt-auto"
+                return (
+                  <article
+                    key={project.id || project.slug}
+                    className="group rounded-2xl bg-surface border border-line overflow-hidden flex flex-col justify-between hover:border-brass/70 transition-colors shadow-sm"
                   >
-                    Lihat Detail <FiArrowUpRight size={16} />
-                  </Link>
+                    <div>
+                      <Link
+                        to={`/project/${project.slug}`}
+                        className="block relative aspect-[4/3] bg-mist overflow-hidden border-b border-line"
+                        aria-label={`${project.name} — ${t('projects.cta')}`}
+                      >
+                        {isInDevelopment ? (
+                          <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-mist text-ink-muted p-6">
+                            <Wrench size={24} className="text-brass" aria-hidden="true" />
+                            <span className="font-mono text-xs font-semibold uppercase tracking-widest">
+                              In Development
+                            </span>
+                          </div>
+                        ) : (
+                          <img
+                            src={project.src}
+                            alt={`${project.name} screenshot`}
+                            width={800}
+                            height={600}
+                            loading={idx < 3 ? 'eager' : 'lazy'}
+                            decoding="async"
+                            className="w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]"
+                          />
+                        )}
+                      </Link>
 
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
-        )}
+                      <div className="p-6 pb-4">
+                        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                          <div className="flex flex-wrap gap-1.5">
+                            {(project.categories || []).map((cat) => (
+                              <span
+                                key={cat}
+                                className="px-2.5 py-0.5 rounded-md font-mono text-[11px] font-medium bg-mist text-ink border border-line"
+                              >
+                                {cat}
+                              </span>
+                            ))}
+                          </div>
+                          <span className="font-mono text-xs text-ink-muted tabular-nums">
+                            {project.year}
+                          </span>
+                        </div>
 
-        {!loading && filteredProjects.length === 0 && (
-          <div className="text-center py-20 text-charcoal/50">
-            Tidak ada proyek dalam kategori ini.
-          </div>
-        )}
+                        <h2 className="font-display text-xl font-bold tracking-tight text-ink mb-2">
+                          <Link
+                            to={`/project/${project.slug}`}
+                            className="hover:text-brass transition-colors"
+                          >
+                            {project.name}
+                          </Link>
+                        </h2>
+
+                        <p className="text-sm text-ink-muted leading-relaxed line-clamp-2">
+                          {desc}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="px-6 py-4 border-t border-line flex items-center justify-between gap-3">
+                      <span className="font-mono text-xs text-ink-muted truncate">
+                        {project.client}
+                      </span>
+                      <Link
+                        to={`/project/${project.slug}`}
+                        className="min-h-[44px] inline-flex items-center gap-1.5 text-sm font-semibold text-brass hover:text-brass-hover shrink-0 transition-colors"
+                      >
+                        <span>{t('projects.cta')}</span>
+                        <ArrowRight size={15} aria-hidden="true" />
+                      </Link>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </main>
 
       <Footer />

@@ -6,3 +6,14 @@ dist
 *.md
 .vscode
 .github
+.agents
+.playwright-mcp
+img
+Users
+docs
+plan
+scripts
+lighthouse-*.json
+*.cjs
+screenshot.js
+output.css

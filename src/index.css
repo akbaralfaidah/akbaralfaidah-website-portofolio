@@ -1,80 +1,122 @@
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('/fonts/outfit-variable.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-variable.woff2') format('woff2');
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/poppins-400.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+:root {
+  --color-paper: #FAF8F2;
+  --color-surface: #FFFFFF;
+  --color-mist: #EFECE3;
+  --color-ink: #222428;
+  --color-ink-muted: #55585F;
+  --color-brass: #8A611C;
+  --color-brass-hover: #734F14;
+  --color-on-brass: #FFFFFF;
+  --color-on-ink: #FAF8F2;
+  --color-border: rgba(34, 36, 40, 0.12);
 }
 
-@font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/poppins-500.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/poppins-600.woff2') format('woff2');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/poppins-700.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
+.dark {
+  --color-paper: #161719;
+  --color-surface: #202226;
+  --color-mist: #2B2D32;
+  --color-ink: #F2F0E8;
+  --color-ink-muted: #A9ABB3;
+  --color-brass: #D4A24C;
+  --color-brass-hover: #E0B262;
+  --color-on-brass: #161719;
+  --color-on-ink: #161719;
+  --color-border: rgba(242, 240, 232, 0.12);
 }
 
 @layer base {
-  :root {
-    --color-paper: #FAFAFA;
-    --color-charcoal: #2C2E32;
-    --color-brass: #9E7A3C;
-    --color-mist: #F0F0F0;
-  }
-  
-  .dark {
-    --color-paper: #1A1A1C;
-    --color-charcoal: #F2F0E8;
-    --color-brass: #C9983F;
-    --color-mist: #3A3C41;
-  }
-
   html {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: 'Outfit', system-ui, -apple-system, sans-serif;
     scroll-behavior: smooth;
+    overflow-x: clip;
   }
 
   body {
-    @apply bg-paper text-charcoal font-sans antialiased transition-colors duration-300 overflow-x-clip;
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-display;
+  section[id] {
+    scroll-margin-top: 6rem;
   }
-  
-  *:focus-visible {
-    @apply outline-none ring-2 ring-brass ring-offset-2 ring-offset-paper;
+
+  :focus-visible {
+    outline: 2px solid var(--color-brass);
+    outline-offset: 3px;
+    border-radius: 4px;
   }
 }
 
-/* Fix #4: MeshGradient CSS animations — zero JS overhead */
-@keyframes mesh-float-1 {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  50% { transform: translate3d(30px, 20px, 0) scale(1.1); }
+.bg-architectural-grid {
+  background-image:
+    linear-gradient(to right, rgba(34, 36, 40, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(34, 36, 40, 0.045) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
-@keyframes mesh-float-2 {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  50% { transform: translate3d(-30px, 30px, 0) scale(1.2); }
+
+.dark .bg-architectural-grid {
+  background-image:
+    linear-gradient(to right, rgba(242, 240, 232, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(242, 240, 232, 0.045) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
-.mesh-blob { will-change: transform; }
-.mesh-blob-1 { animation: mesh-float-1 20s ease-in-out infinite; }
-.mesh-blob-2 { animation: mesh-float-2 25s ease-in-out infinite; }
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 32s linear infinite;
+}
+
+.animate-marquee:hover,
+.animate-marquee:focus-within {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-marquee {
+    animation: none !important;
+  }
+}

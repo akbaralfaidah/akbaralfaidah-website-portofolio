@@ -17,6 +17,7 @@ import {
 import { FaWhatsapp } from 'react-icons/fa';
 import { supabase } from '../lib/supabase';
 import { useTheme } from '../hooks/useTheme';
+import BrandLogo from '../components/BrandLogo';
 
 /**
  * Format timestamp into Indonesian locale date string
@@ -124,8 +125,10 @@ export default function ProjectProgress({ fallbackComponent = null }) {
   const [projectData, setProjectData] = useState(null);
   const [shouldFallback, setShouldFallback] = useState(false);
 
-  // Set meta robots (noindex, nofollow) and referrer (no-referrer) exclusively for this page
+  // Set meta robots (noindex, nofollow) and referrer (no-referrer) exclusively when rendering tracker
   useEffect(() => {
+    if (shouldFallback) return undefined;
+
     let robotsMeta = document.querySelector('meta[name="robots"]');
     const prevRobots = robotsMeta ? robotsMeta.getAttribute('content') : null;
     if (!robotsMeta) {
@@ -157,7 +160,7 @@ export default function ProjectProgress({ fallbackComponent = null }) {
         referrerMeta.parentNode.removeChild(referrerMeta);
       }
     };
-  }, []);
+  }, [shouldFallback]);
 
   // Fetch project progress via Supabase RPC get_project_progress using anon key
   useEffect(() => {
@@ -168,6 +171,18 @@ export default function ProjectProgress({ fallbackComponent = null }) {
         if (isMounted) {
           setLoading(false);
           setProjectData(null);
+        }
+        return;
+      }
+
+      if (!supabase) {
+        if (isMounted) {
+          if (fallbackComponent) {
+            setShouldFallback(true);
+          } else {
+            setProjectData(null);
+          }
+          setLoading(false);
         }
         return;
       }
@@ -212,8 +227,9 @@ export default function ProjectProgress({ fallbackComponent = null }) {
     };
   }, [currentToken, fallbackComponent]);
 
-  // Update document title dynamically
+  // Update document title dynamically when active tracker renders
   useEffect(() => {
+    if (shouldFallback) return undefined;
     const originalTitle = document.title;
     if (loading) {
       document.title = 'Memuat Progres Proyek... | Akbar Alfaidah';
@@ -227,7 +243,7 @@ export default function ProjectProgress({ fallbackComponent = null }) {
     return () => {
       document.title = originalTitle;
     };
-  }, [loading, projectData]);
+  }, [loading, projectData, shouldFallback]);
 
   // Safe preview URL resolver (guarantees https:// if missing)
   const previewUrl = useMemo(() => {
@@ -344,13 +360,7 @@ export default function ProjectProgress({ fallbackComponent = null }) {
             to="/"
             className="group flex items-center gap-3 hover:opacity-85 transition-opacity"
           >
-            <img
-              src="/img/unbackground.svg"
-              alt="Akbar Alfaidah Logo"
-              width={32}
-              height={32}
-              className="w-8 h-8 object-contain shrink-0 invert dark:invert-0 transition-transform group-hover:scale-105"
-            />
+            <BrandLogo className="w-8 h-7 text-ink shrink-0 transition-transform group-hover:scale-105" />
             <div className="flex flex-col">
               <span className="font-display font-bold text-sm tracking-tight text-charcoal dark:text-[#F2F0E8]">
                 Akbar Alfaidah

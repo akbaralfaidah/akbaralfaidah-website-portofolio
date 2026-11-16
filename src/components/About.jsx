@@ -1,162 +1,74 @@
-import { motion } from 'framer-motion';
-import { useTranslation, Trans } from 'react-i18next';
-import { FiCheckCircle, FiStar, FiLayers, FiCpu, FiUsers } from 'react-icons/fi';
-
-// Floating animations
-const floatAnimation1 = {
-  y: [-8, 8, -8],
-  transition: { duration: 4, repeat: Infinity, ease: "easeInOut" }
-};
-const floatAnimation2 = {
-  y: [6, -6, 6],
-  transition: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }
-};
-const floatAnimation3 = {
-  y: [-5, 5, -5],
-  transition: { duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 2 }
-};
-const floatAnimation4 = {
-  y: [7, -7, 7],
-  transition: { duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }
-};
+import { Trans, useTranslation } from 'react-i18next';
 
 export default function About() {
   const { t } = useTranslation();
-  
+  const facts = t('about.facts', { returnObjects: true }) || [];
+
   return (
-    <section id="about" className="py-8 md:py-12 lg:py-14 px-6 relative z-10 dark:bg-[#1A1A1C]">
-
-      <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-16 relative z-10">
-
-        {/* Left Side: Photo with Floating Elements */}
-        <motion.div className="w-full md:w-1/2 relative group mt-10 md:mt-0">
-          <div className="absolute top-6 left-6 w-full h-full bg-charcoal dark:bg-[#2A2C30] rounded-2xl transition-transform group-hover:translate-x-2 group-hover:translate-y-2"></div>
-
-          {/* Main Image */}
-          <img
-            src="/img/akbar-4.webp"
-            alt="Akbar Alfaidah - Profile"
-            width={800}
-            height={1000}
-            loading="lazy"
-            className="relative z-10 w-full aspect-[4/5] object-cover rounded-2xl shadow-lg border-2 border-paper dark:border-charcoal"
-          />
-
-          {/* Floating Element 1: Verified (Top Left) */}
-          <motion.div
-            whileInView={floatAnimation1}
-            viewport={{ once: false, margin: "-50px" }}
-            className="absolute z-20 top-8 -left-4 md:-left-12 bg-white/95 dark:bg-[#2C2E32]/95 backdrop-blur-md px-5 py-3 rounded-full shadow-md flex items-center gap-3"
-          >
-            <div className="bg-blue-500 text-white rounded-full p-1 shadow-inner">
-              <FiCheckCircle className="w-4 h-4" />
+    <section id="about" className="py-16 sm:py-24 px-6 bg-paper text-ink border-b border-line">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+        {/* Portrait Frame */}
+        <div className="lg:col-span-5">
+          <div className="max-w-md mx-auto lg:max-w-none rounded-2xl bg-surface border border-line p-3 shadow-sm">
+            <div className="relative aspect-[4/5] rounded-xl overflow-hidden bg-mist">
+              <img
+                src="/img/akbar-2.webp"
+                alt="Akbar Alfaidah — Principal Software Engineer"
+                width={640}
+                height={800}
+                decoding="async"
+                className="w-full h-full object-cover object-[50%_10%] scale-[1.06]"
+              />
             </div>
-            <div>
-              <p className="text-[13px] font-extrabold text-charcoal dark:text-[#F2F0E8] leading-tight tracking-tight">{t('about.trust_highly_trusted')}</p>
-              <div className="flex gap-0.5 mt-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <FiStar key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />
-                ))}
-              </div>
+            <div className="pt-3 px-1 flex items-center justify-between text-xs font-mono text-ink-muted">
+              <span>Akbar Alfaidah</span>
+              <span className="text-brass font-semibold">Jambi, Indonesia</span>
             </div>
-          </motion.div>
+          </div>
+        </div>
 
-          {/* Floating Element 2: Full-Stack Dev (Bottom Right) */}
-          <motion.div
-            whileInView={floatAnimation2}
-            viewport={{ once: false, margin: "-50px" }}
-            className="absolute z-20 bottom-24 -right-4 md:-right-10 bg-white/95 dark:bg-[#2C2E32]/95 backdrop-blur-md px-5 py-3.5 rounded-2xl shadow-md flex items-center gap-3.5"
-          >
-            <div className="bg-indigo-500/10 text-indigo-500 p-2.5 rounded-xl">
-              <FiLayers className="w-5 h-5" />
-            </div>
-            <div className="flex flex-col">
-              <p className="text-[13px] font-extrabold text-charcoal dark:text-[#F2F0E8] leading-tight">{t('about.trust_full_stack')}</p>
-              <p className="text-[10px] text-charcoal/60 dark:text-[#F2F0E8]/60 font-medium tracking-wide mt-0.5">{t('about.trust_web_mobile')}</p>
-            </div>
-          </motion.div>
+        {/* Bio & Facts */}
+        <div className="lg:col-span-7 space-y-6">
+          <div>
+            <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-brass mb-3">
+              {t('about.eyebrow')}
+            </p>
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-[2.75rem] font-bold tracking-tight leading-[1.12] text-ink">
+              {t('about.heading')}
+            </h2>
+          </div>
 
-          {/* Floating Element 3: 10+ Client Card (Bottom Left) */}
-          <motion.div
-            whileInView={floatAnimation3}
-            viewport={{ once: false, margin: "-50px" }}
-            className="absolute z-20 -bottom-4 md:-bottom-8 left-2 md:left-8 bg-white/95 dark:bg-[#2C2E32]/95 backdrop-blur-md px-5 py-3.5 rounded-2xl shadow-md flex items-center gap-3.5"
-          >
-            <div className="bg-emerald-500/10 text-emerald-500 p-2.5 rounded-xl">
-              <FiUsers className="w-5 h-5" />
-            </div>
-            <div className="flex flex-col">
-              <p className="text-[13px] font-extrabold text-charcoal dark:text-[#F2F0E8] leading-tight">{t('about.trust_clients')}</p>
-              <p className="text-[10px] text-charcoal/60 dark:text-[#F2F0E8]/60 font-medium tracking-wide mt-0.5">⭐⭐⭐⭐⭐</p>
-            </div>
-          </motion.div>
-
-          {/* Floating Element 4: AI Integrated (Top Right) */}
-          <motion.div
-            whileInView={floatAnimation4}
-            viewport={{ once: false, margin: "-50px" }}
-            className="absolute z-20 top-40 -right-6 md:-right-12 bg-white/95 dark:bg-[#2C2E32]/95 backdrop-blur-md px-4 py-2.5 rounded-full shadow-md flex items-center gap-3"
-          >
-            <div className="bg-amber-500/15 text-amber-600 dark:text-amber-400 p-1.5 rounded-full">
-              <FiCpu className="w-4 h-4" />
-            </div>
-            <p className="text-[12px] font-extrabold text-charcoal dark:text-[#F2F0E8] pr-1">{t('about.trust_ai')}</p>
-          </motion.div>
-        </motion.div>
-        
-        <motion.div className="w-full md:w-1/2">
-          {/* Heading with background reveal animation */}
-          <motion.h2 
-            className="text-4xl md:text-5xl font-display font-bold text-charcoal dark:text-[#F2F0E8] mb-8 relative inline-block"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5 }}
-          >
-            {/* Animated background highlight */}
-            <motion.span
-              className="absolute inset-0 -inset-x-3 -inset-y-1 bg-brass/10 dark:bg-brass/15 rounded-xl -z-10"
-              initial={{ scaleY: 0, originY: 0 }}
-              whileInView={{ scaleY: 1 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            />
-            {t('about.heading')}
-          </motion.h2>
-
-          <div className="space-y-6 text-lg text-charcoal/80 dark:text-[#F2F0E8]/80 leading-relaxed">
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-            >
-              <Trans 
+          <div className="space-y-4 text-base sm:text-lg text-ink-muted leading-relaxed">
+            <p>
+              <Trans
                 i18nKey="about.desc_1"
                 components={[
-                  <strong key="0" className="text-charcoal dark:text-[#F2F0E8] font-semibold" />,
-                  <span key="1" className="text-brass font-medium" />
+                  <strong key="name" className="font-semibold text-ink" />,
+                  <strong key="agency" className="font-semibold text-brass" />
                 ]}
               />
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.6, delay: 0.25 }}
-            >
-              {t('about.desc_2')}
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-            >
-              {t('about.desc_3')}
-            </motion.p>
+            </p>
+            <p>{t('about.desc_2')}</p>
+            <p>{t('about.desc_3')}</p>
           </div>
-        </motion.div>
+
+          <dl className="grid grid-cols-2 gap-4 pt-4">
+            {Array.isArray(facts) &&
+              facts.map((fact) => (
+                <div
+                  key={fact.label}
+                  className="rounded-xl bg-surface border border-line px-4 py-3.5"
+                >
+                  <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted mb-1">
+                    {fact.label}
+                  </dt>
+                  <dd className="font-display text-sm sm:text-base font-bold text-ink">
+                    {fact.value}
+                  </dd>
+                </div>
+              ))}
+          </dl>
+        </div>
       </div>
     </section>
   );

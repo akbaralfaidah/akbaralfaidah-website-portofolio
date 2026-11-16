@@ -36,3 +36,8 @@ PRD-portofolio (1).md
 
 # Database setup docs (contains schema — should not be public)
 docs/
+Users/
+.playwright-mcp/
+lighthouse-*.json
+img/
+plan/
