@@ -1,9 +1,9 @@
 {
   "meta": {
-    "home_title": "Akbar Alfaidah — Web, Mobile & AI Engineering Studio",
-    "home_description": "Software engineering studio led by Akbar Alfaidah. Custom full-stack web platforms, Flutter & React Native mobile apps, and applied AI shipped cleanly to production.",
-    "projects_title": "Project Archive | Akbar Alfaidah — Tech Agency",
-    "projects_description": "Explore production web platforms, mobile apps, and AI integrations delivered for public agencies, universities, SMEs, and startups."
+    "home_title": "Akbar Alfaidah — Web, Mobile & AI Developer | Tech Agency",
+    "home_description": "Full-stack web, mobile app (Flutter & React Native), and applied AI developer based in Jambi, Indonesia. From interface design to production deployment.",
+    "projects_title": "All Projects | Akbar Alfaidah — Tech Agency",
+    "projects_description": "Selected web platforms, mobile apps, and AI integrations built for organizations, universities, SMEs, and startups."
   },
   "nav": {
     "about": "About",
@@ -13,294 +13,277 @@
     "contact": "Contact"
   },
   "hero": {
-    "badge": "Available for Select Projects",
-    "headline": "Web Systems, Mobile Apps & AI Built From Interface to Production.",
-    "subtitle": "Engineering studio led by Akbar Alfaidah in Jambi, Indonesia — delivering resilient UI systems, relational backends, and cloud infrastructure.",
-    "cta_primary": "Discuss Your Project",
-    "cta_secondary": "View Case Studies",
+    "badge": "Available for new projects",
+    "headline_start": "Websites, Mobile Apps & AI Systems",
+    "headline_accent": "Ready to Ship.",
+    "subtitle": "I'm Akbar Alfaidah — handling design, full-stack coding, mobile apps, and cloud deployment under one roof until it runs smoothly live.",
+    "cta_primary": "Start a Project",
+    "cta_secondary": "View Projects",
     "facts": [
       { "label": "Based In", "value": "Jambi & Remote" },
-      { "label": "Discipline", "value": "Web, Mobile & ML" },
-      { "label": "Track Record", "value": "10+ Shipped Systems" }
+      { "label": "Focus", "value": "Web, Mobile & AI" },
+      { "label": "Delivered", "value": "10+ Live Systems" }
     ],
-    "stage_label": "Featured Work Preview",
-    "stage_action": "Open Case Study"
+    "stage_action": "Projects"
   },
   "capabilities": {
-    "eyebrow": "Engineering Scope",
-    "heading": "One unified workflow from wireframes to production servers.",
-    "subtitle": "Every project is built with clean component architecture, indexed databases, and hardened deployment — without handoff friction across vendors.",
+    "heading": "From Rough Idea to Running Live.",
+    "subtitle": "Design, backend APIs, hardware bridges, and deployment handled end-to-end without bouncing between teams.",
     "pillars": [
       {
         "step": "01",
-        "title": "Interface & Design Systems",
-        "desc": "Consistent visual hierarchy, mobile-first layouts, and accessible component libraries tailored for daily operators."
+        "title": "Clear Interface Design",
+        "desc": "Responsive layouts across phones and desktops that operators understand on day one."
       },
       {
         "step": "02",
-        "title": "Full-Stack Web & APIs",
-        "desc": "Maintainable applications built in React, Next.js, or Laravel with role-based permissions, audit logs, and PDF/Excel exports."
+        "title": "Full-Stack Web & Databases",
+        "desc": "Built with React, Next.js, or Laravel featuring role permissions and clean PDF/Excel exports."
       },
       {
         "step": "03",
         "title": "Mobile Apps & Hardware Bridges",
-        "desc": "Cross-platform Android and mobile tools built with Flutter/React Native supporting GPS geofencing, cameras, barcode scanners, and thermal printers."
+        "desc": "Flutter & React Native apps connecting directly to barcode scanners, thermal printers, and GPS."
       },
       {
         "step": "04",
-        "title": "Applied AI & Deployment",
-        "desc": "Practical Vision/NLP integration, containerized Docker pipelines, and production observability."
+        "title": "AI Automation & Cloud Deploy",
+        "desc": "LLM/Vision integrations packaged in Docker and shipped securely behind HTTPS."
       }
     ],
     "stack_eyebrow": "Core Stack"
   },
   "about": {
-    "eyebrow": "About Studio",
-    "heading": "Digital Solutions, Not Just Code.",
-    "desc_1": "Hi, I'm <0>Akbar Alfaidah</0> — a full-stack web, mobile, and AI engineer leading <1>Akbar Alfaidah Tech Agency</1> from Jambi City, Indonesia.",
-    "desc_2": "Every project is engineered for long-term maintainability: starting from workflow discovery and clean UI design down to secure production deployment.",
-    "desc_3": "Available for in-person discovery in Jambi or seamless remote collaboration across Indonesia and worldwide.",
+    "heading": "Software People Actually Enjoy Using.",
+    "desc_1": "Hi, I'm <0>Akbar Alfaidah</0> — a full-stack web, mobile, and AI developer leading <1>Akbar Alfaidah Tech Agency</1> from Jambi City, Indonesia.",
+    "desc_2": "I work best owning projects from start to finish: mapping the workflow, designing clear interfaces, writing clean code, and deploying reliably to production.",
+    "desc_3": "Happy to meet over coffee if you're in Jambi, or collaborate remotely wherever you're based.",
     "facts": [
-      { "label": "Role", "value": "Principal Engineer" },
-      { "label": "Location", "value": "Jambi City, ID" },
-      { "label": "Focus", "value": "Web • Mobile • ML" },
-      { "label": "Clients", "value": "Public Sector & SMEs" }
+      { "label": "Web & Systems", "value": "Portals, Dashboards & SaaS" },
+      { "label": "Mobile Apps", "value": "Android & Flutter" },
+      { "label": "Applied AI", "value": "Chatbots, NLP & Vision" },
+      { "label": "Location", "value": "Jambi City & Remote" }
     ]
   },
   "services": {
-    "eyebrow": "Core Services",
-    "heading": "What We Build",
-    "subheading": "Custom software systems for enterprises, public institutions, and growing businesses — shipped cleanly end to end.",
-    "deliverables_label": "Key Deliverables",
-    "case_study_cta": "See Reference Project",
-    "book_cta": "Request Proposal",
+    "heading": "Services",
+    "subheading": "Custom-built around your real workflow — never stiff templates forced to fit.",
+    "deliverables_label": "Included Scope",
+    "book_cta": "Discuss This Service",
     "items": [
       {
         "id": "web",
-        "title": "Web Platforms & Custom Systems",
-        "desc": "Internal operational portals, institutional dashboards, and fast marketing websites tailored around your team's real workflow.",
+        "title": "Web Platforms & Portals",
+        "desc": "Fast company sites, internal portals, and operational dashboards tailored cleanly around how your team operates.",
         "timeline": "2 – 8 Weeks",
         "deliverables": [
           "React / Next.js / Laravel architecture",
-          "Role-based access control & PDF/Excel reporting",
-          "Docker deployment & HTTPS hardening"
-        ],
-        "projectSlug": "mpp",
-        "projectName": "MPP Digital"
+          "Role-based permissions & PDF/Excel exports",
+          "Domain setup, HTTPS & production hosting"
+        ]
       },
       {
         "id": "mobile",
-        "title": "Mobile Apps (Android & Cross-Platform)",
-        "desc": "Field-ready applications for retail POS, warehouse stock audits, and GPS-verified attendance through to Google Play release.",
+        "title": "Android & Mobile Apps",
+        "desc": "Dependable field apps for retail POS, warehouse stock control, or GPS attendance through Google Play launch.",
         "timeline": "4 – 10 Weeks",
         "deliverables": [
-          "Flutter / React Native with offline resilience",
-          "Barcode scanner, thermal printer & GPS integration",
-          "End-to-end Google Play Store publishing"
-        ],
-        "projectSlug": "bosdepot",
-        "projectName": "BosDepot"
+          "Flutter / React Native with offline storage",
+          "Barcode scanner, thermal printer & GPS hooks",
+          "Guided launch to Google Play Console"
+        ]
       },
       {
         "id": "ai",
-        "title": "Applied AI & Workflow Automation",
-        "desc": "Practical Machine Learning, NLP parsing, and LLM integrations engineered to eliminate repetitive manual operations.",
+        "title": "Applied AI & Automation",
+        "desc": "Practical AI features that turn unstructured messages into tasks, analyze visuals, or cut repetitive data entry.",
         "timeline": "3 – 8 Weeks",
         "deliverables": [
-          "Chat/document task extraction via NLP & LLMs",
-          "OpenCV / YOLO vision services over FastAPI",
-          "Direct webhook & relational database sync"
-        ],
-        "projectSlug": "peka",
-        "projectName": "PEKA & ChatTask"
+          "NLP chat extraction & Gemini API workflows",
+          "OpenCV / YOLO detection pipelines",
+          "Direct sync to databases & business webhooks"
+        ]
       }
     ]
   },
   "projects": {
-    "eyebrow": "Selected Work",
-    "heading": "Production Case Studies.",
-    "subheading": "Systems built to solve real operational bottlenecks across retail, education, public administration, and AI.",
-    "cta": "Read Case Study",
-    "bottom_cta": "Browse Full Archive",
+    "heading": "Selected Work.",
+    "subheading": "Web portals, mobile POS systems, GPS attendance apps, and AI workflows running in production.",
+    "cta": "View Project",
+    "bottom_cta": "All Projects",
     "archive_heading": "All Projects",
-    "archive_subheading": "Filter shipped platforms across web systems, mobile applications, and machine learning.",
+    "archive_subheading": "Explore web platforms, mobile apps, and applied AI builds shipped cleanly.",
     "filter_all": "All",
     "empty_title": "No projects in this category yet",
-    "empty_desc": "Try another filter or return to view all shipped work.",
-    "back_home": "Back to Home",
+    "empty_desc": "Try selecting another category to view more work.",
+    "back_home": "Home",
     "back_projects": "All Projects",
     "live_preview": "Visit Live Site",
     "client_label": "Client",
     "year_label": "Year",
     "role_label": "Role",
-    "categories_label": "Discipline",
-    "challenge_title": "Context & Challenge",
-    "solution_title": "Architecture & Solution",
-    "highlights_title": "Engineering Highlights",
-    "tech_title": "Technology Stack",
-    "next_cta_title": "Planning a similar build?",
-    "next_cta_desc": "Share your requirements to get a clear architecture proposal and timeline.",
-    "next_cta_button": "Start a Conversation",
-    "bosdepot_desc": "POS & warehouse management app integrated with barcode scanners, thermal receipt printers, and biometrics.",
-    "siskamling_desc": "Geolocation-verified neighborhood watch roster and attendance system with PDF/Excel exports.",
-    "peka_desc": "AI-assisted mood reflection platform powered by Gemini API and Supabase visual exports.",
-    "mpp_desc": "Digitized citizen satisfaction index portal automating survey reporting in real time.",
-    "simppk_desc": "Government personnel management portal streamlining civil servant audits and document exports.",
-    "chattask_desc": "Smart task manager extracting and scheduling WhatsApp work threads using NLP.",
-    "jokipro_desc": "High-performance interactive Vue.js company profile built cleanly under client NDA.",
-    "siabsen_desc": "50-meter GPS geofencing student attendance mobile app backed by Firebase."
+    "categories_label": "Category",
+    "challenge_title": "The Challenge",
+    "solution_title": "Built Solution",
+    "highlights_title": "Key Highlights",
+    "tech_title": "Tech Stack",
+    "next_project_label": "Next Project",
+    "next_cta_title": "Planning a similar system?",
+    "next_cta_desc": "Share what you need and get a practical architecture plan and timeline.",
+    "next_cta_button": "Discuss Project",
+    "bosdepot_desc": "Hardware-connected retail POS & warehouse app featuring barcode scanning, thermal receipt printing, and biometrics.",
+    "siskamling_desc": "Geolocation neighborhood watch scheduler and officer check-in system with PDF/Excel reporting.",
+    "peka_desc": "AI-assisted mood reflection web app powered by Gemini API with visual summary exports.",
+    "mpp_desc": "Digitized citizen satisfaction index portal automating live service quality scoring.",
+    "simppk_desc": "Government staffing management system streamlining employee records and evaluations.",
+    "chattask_desc": "Smart task manager extracting WhatsApp threads into structured schedules with NLP.",
+    "jokipro_desc": "High-performance interactive Vue.js brand site built cleanly under NDA.",
+    "siabsen_desc": "50-meter GPS geofencing student attendance app synced in real time with Firebase."
   },
   "experience": {
-    "eyebrow": "Background",
-    "heading": "Career Journey",
-    "subheading": "Engineering experience across government institutions, national enterprises, and independent studio work.",
-    "github_title": "Daily Commit Activity",
-    "github_subtitle": "Live commit and contribution telemetry from @AkbarAlfaidah",
-    "github_total_all": "All-Time Total",
-    "github_this_year": "{{year}} Year",
+    "heading": "Experience",
+    "subheading": "Hands-on software delivery across government institutions, national enterprises, and independent clients.",
+    "github_title": "GitHub Contributions",
+    "github_subtitle": "Coding activity from @AkbarAlfaidah",
+    "github_total_all": "Total Contributions",
     "github_last_year": "Last 12 Months",
-    "github_active_days": "Active Days ({{year}})",
+    "github_active_days": "Active Days (2026)",
     "github_contributions_unit": "contributions",
     "github_less": "Less",
     "github_more": "More",
-    "github_fallback": "Contribution graph unavailable right now. View commit history directly on GitHub.",
-    "github_cta": "View GitHub Profile",
+    "github_fallback": "Chart unavailable offline. View commit history on GitHub.",
+    "github_cta": "GitHub Profile",
     "items": [
       {
         "role": "Full-Stack Web Developer",
         "company": "Balai Penegakan Hukum Lingkungan Hidup Kota Jambi",
         "period": "August 2026 – Present",
-        "description": "Designed and developed an integrated institutional Web Portal hosting 4 core subsystems: State Asset Management (BMN), Finance, Staffing/HR, and Central Database."
+        "description": "Designed and built a unified web portal uniting 4 core systems: State Asset Management (BMN), Finance, Staffing, and Central Database."
       },
       {
         "role": "Programmer",
         "company": "Depot Kayu & Toko Bangunan Esa",
         "period": "January 2026 – August 2026",
-        "description": "Built a mobile POS and inventory management system (Flutter/Firebase), including stock calculation logic."
+        "description": "Built a mobile POS cashier & inventory system (Flutter/Firebase) plus stock calculation logic."
       },
       {
         "role": "Freelance Web & Mobile Developer",
-        "company": "Akbar Alfaidah Studio",
+        "company": "Akbar Alfaidah Tech Agency",
         "period": "January 2024 – Present",
-        "description": "Delivering end-to-end web systems and mobile applications for SMEs, universities, and organizations."
+        "description": "Delivering end-to-end websites and mobile applications for SMEs, universities, and organizations."
       },
       {
         "role": "IT Operations Intern",
         "company": "PT Telkomsel Regional Sumbagsel",
         "period": "May 2025 – June 2025",
-        "description": "Designed a GitLab CI/CD pipeline prototype and Dev–Staging–Production release workflow."
+        "description": "Designed a GitLab CI/CD pipeline prototype and Dev–Staging–Production release flow."
       },
       {
         "role": "Full-Stack Web Developer",
         "company": "Bidik Karier",
         "period": "August 2024 – November 2024",
-        "description": "Built an end-to-end e-learning platform (LMS) for civil service exam prep using PHP & MySQL."
+        "description": "Built an end-to-end civil-service exam e-learning platform (LMS) using PHP & MySQL."
       },
       {
         "role": "IT Intern",
         "company": "PT PLN UBP Indonesia Power",
         "period": "June 2024 – July 2024",
-        "description": "Developed an internal article portal and company profile to streamline operational information."
+        "description": "Developed an internal article portal and company profile for team communication."
       },
       {
         "role": "Web Developer",
         "company": "INOVASITUS",
         "period": "January 2024 – January 2025",
-        "description": "Delivered 7+ functional, responsive websites for SME clients."
+        "description": "Delivered 7+ responsive business websites for SME clients."
       }
     ]
   },
   "testimonials": {
-    "eyebrow": "Client Feedback",
-    "heading": "In Their Words.",
-    "subheading": "Direct feedback shared by client representatives after system handover and live deployment.",
-    "verified_label": "Verified Delivery",
+    "heading": "Client Words.",
+    "subheading": "Honest feedback shared after systems went live and entered daily team use.",
     "cards": [
       {
-        "clientRole": "Academic Coordinator",
-        "projectName": "SiAbsen (Mobile Geofencing)",
-        "quote": "The service and final app matched our classroom requirements very well. Responsive communication and reliable delivery throughout the build.",
+        "clientRole": "Academic Representative",
+        "projectName": "SiAbsen · Attendance App",
+        "quote": "The service and final app fit our classroom needs very well. Quick responses and dependable execution from start to finish.",
         "date": "May 2026"
       },
       {
-        "clientRole": "Institutional Data Team",
-        "projectName": "SimPPK (Staffing Portal)",
-        "quote": "Completed ahead of schedule with accurate reporting and clean data validation during daily administrative use.",
+        "clientRole": "Personnel Data Team",
+        "projectName": "SimPPK · Staffing Portal",
+        "quote": "Delivered swiftly with accurate data validation and clean reporting during daily administrative tasks.",
         "date": "May 2026"
       },
       {
-        "clientRole": "Public Service Supervisor",
-        "projectName": "MPP Digital (Survey Portal)",
-        "quote": "Digitizing the citizen satisfaction workflow made reporting noticeably faster and removed manual spreadsheet tallying.",
+        "clientRole": "Service Coordinator",
+        "projectName": "MPP Digital · Citizen Survey",
+        "quote": "Digitizing the satisfaction survey made daily score tallies much faster than manual paperwork.",
         "date": "May 2026"
       }
     ]
   },
   "contact": {
-    "eyebrow": "Start a Project",
-    "heading_1": "Let's Build Your",
-    "heading_2": "Next System.",
-    "desc": "Share what you want to launch — from clear scope and UI structure to production launch.",
-    "follow_me": "Connect",
-    "direct_email": "Direct Email",
-    "whatsapp_label": "Studio WhatsApp",
+    "heading_1": "Got a Project",
+    "heading_2": "in Mind?",
+    "desc": "Tell me what you'd like to build or fix—we'll map out a clean solution and timeline together.",
+    "follow_me": "Socials",
+    "direct_email": "Email",
+    "whatsapp_label": "WhatsApp",
     "tab_wa": "Send via WhatsApp",
     "tab_email": "Send via Email",
-    "form_name": "Full Name",
+    "form_name": "Your Name",
     "form_name_placeholder": "e.g., Alex Pratama",
     "form_whatsapp": "WhatsApp Number",
     "form_whatsapp_placeholder": "+62 8xx xxxx xxxx",
     "form_email": "Email Address",
-    "form_email_placeholder": "name@company.com",
+    "form_email_placeholder": "name@email.com",
     "form_deadline": "Target Timeline",
-    "form_deadline_placeholder": "Select Estimated Timeline",
+    "form_deadline_placeholder": "Pick an estimated timeline",
     "form_deadline_options": {
       "cepat": "2 – 4 Weeks (Landing Page / Company Site)",
       "standar": "1 – 2 Months (Business Web App / Portal)",
       "menengah": "2 – 3 Months (Information System / Mobile App)",
-      "kompleks": "> 3 Months (Integrated Multi-Module Platform)",
-      "fleksibel": "Flexible (To Be Discussed)"
+      "kompleks": "> 3 Months (Large Multi-Module Platform)",
+      "fleksibel": "Flexible (Let's Discuss)"
     },
-    "form_message": "Project Brief",
-    "form_message_placeholder": "Briefly describe the product, main users, and operational problem you want to solve...",
+    "form_message": "Project Details",
+    "form_message_placeholder": "Briefly share the key features, target users, and goals...",
     "turnstile_label": "Security Check",
-    "turnstile_hint": "Complete the verification challenge above before submitting via email.",
-    "turnstile_unavailable": "Turnstile challenge is loading or not configured for this environment.",
-    "cta_wa": "Open WhatsApp Now",
-    "cta_email": "Send Email Brief",
+    "turnstile_unavailable": "Verification challenge loading.",
+    "cta_wa": "Open WhatsApp",
+    "cta_email": "Send Email",
     "cta_sending": "Sending...",
-    "map_title": "Studio Location — Jambi City",
-    "map_desc": "Available for on-site meetings in Jambi and remote engineering engagements worldwide.",
-    "map_load": "Load Interactive Map",
+    "map_title": "Location — Jambi City",
+    "map_desc": "Meet in person around Jambi City, or collaborate remotely from anywhere.",
     "map_open_external": "Open in Google Maps",
     "validation": {
       "name": "Please enter your name (at least 2 characters).",
-      "wa_invalid": "WhatsApp number can only contain digits, +, spaces, or hyphens.",
-      "wa_length": "Please enter a valid WhatsApp number (10–15 digits).",
+      "wa_invalid": "WhatsApp number can only include digits, spaces, +, or hyphens.",
+      "wa_length": "Please enter a valid 10–15 digit WhatsApp number.",
       "email_empty": "Email address is required.",
       "email_invalid": "Please enter a valid email address.",
-      "deadline": "Please select an estimated timeline.",
+      "deadline": "Please pick an estimated timeline.",
       "message": "Please share at least 10 characters about your project.",
-      "turnstile": "Please complete the Cloudflare verification challenge first."
+      "turnstile": "Please finish the verification check first."
     },
     "toast": {
-      "wa_success": "WhatsApp opened with your structured project brief.",
-      "email_success": "Your inquiry was sent to Akbar. Expect a reply within one business day.",
-      "email_error": "Email delivery failed. Please retry or reach out directly via WhatsApp."
+      "wa_success": "WhatsApp opened with your project summary.",
+      "email_success": "Message sent to Akbar. I'll reply shortly.",
+      "email_error": "Email failed to send. Retry or reach out on WhatsApp."
     }
   },
   "footer": {
-    "role": "Tech Agency & Full-Stack Engineering Studio",
-    "tagline": "Engineering fast, maintainable web platforms, mobile apps, and AI workflows ready for real production traffic.",
-    "location": "Jambi City, Indonesia — Remote Worldwide",
-    "nav_title": "Navigation",
-    "connect_title": "Connect",
+    "role": "Web, Mobile & AI Developer",
+    "tagline": "Building fast, well-crafted websites, mobile apps, and AI integrations ready for real users.",
+    "location": "Jambi City, Indonesia — Remote Friendly",
+    "nav_title": "Menu",
+    "connect_title": "Links",
     "copyright": "All rights reserved."
   },
   "notFound": {
     "title": "Page Not Found",
-    "description": "The case study or route you requested does not exist or has been moved.",
-    "backHome": "Back to Home",
+    "description": "The project link or route you opened isn't available or has been moved.",
+    "backHome": "Back Home",
     "browseProjects": "Browse Projects"
   }
 }

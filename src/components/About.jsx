@@ -21,7 +21,7 @@ export default function About() {
             <div className="relative aspect-[4/5] rounded-xl overflow-hidden bg-mist group">
               <img
                 src="/img/akbar-2.webp"
-                alt="Akbar Alfaidah — Principal Software Engineer"
+                alt="Akbar Alfaidah — Web, Mobile & AI Developer"
                 width={640}
                 height={800}
                 decoding="async"

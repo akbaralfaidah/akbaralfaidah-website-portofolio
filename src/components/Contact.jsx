@@ -13,8 +13,7 @@ import {
   Briefcase,
   Smartphone,
   Building2,
-  Handshake,
-  Map as MapIcon
+  Handshake
 } from 'lucide-react';
 import { FiGithub, FiLinkedin, FiInstagram } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
@@ -79,7 +78,6 @@ export default function Contact() {
   const [isSending, setIsSending] = useState(false);
   const [honeypot, setHoneypot] = useState('');
   const [turnstileToken, setTurnstileToken] = useState(null);
-  const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const turnstileRef = useRef(null);
@@ -222,7 +220,7 @@ export default function Contact() {
         return false;
       }
     } catch {
-      // Allow if localStorage unavailable
+      // Ignore storage restriction
     }
     return true;
   };
@@ -355,8 +353,10 @@ export default function Contact() {
         <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
       )}
 
-      <section id="contact" className="py-20 sm:py-24 px-6 bg-paper text-ink">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+      <section id="contact" className="relative py-20 sm:py-24 px-6 bg-paper text-ink overflow-hidden">
+        <div className="film-grain pointer-events-none absolute inset-0" aria-hidden="true" />
+
+        <div className="relative z-10 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
           {/* Left Column */}
           <FadeUp className="lg:col-span-5 space-y-8">
             <div>
@@ -392,7 +392,7 @@ export default function Contact() {
                   <MapPin size={20} aria-hidden="true" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-ink-muted">Studio</p>
+                  <p className="text-sm font-medium text-ink-muted">Lokasi</p>
                   <p className="text-base sm:text-lg font-semibold text-ink">Jambi, Indonesia</p>
                 </div>
               </div>
@@ -453,33 +453,18 @@ export default function Contact() {
                 {t('contact.map_desc')}
               </p>
 
-              <div className="aspect-[16/9] rounded-xl overflow-hidden border border-line bg-mist/60 flex items-center justify-center">
-                {isMapLoaded ? (
-                  <iframe
-                    src={MAPS_EMBED_URL}
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen=""
-                    loading="lazy"
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    title="Akbar Alfaidah Studio Location on Google Maps"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setIsMapLoaded(true)}
-                    className="w-full h-full flex flex-col items-center justify-center gap-3 p-4 text-center hover:bg-mist transition-colors cursor-pointer group"
-                  >
-                    <span className="w-11 h-11 rounded-full bg-surface border border-line group-hover:border-accent flex items-center justify-center text-accent shadow-sm transition-colors">
-                      <MapIcon size={20} aria-hidden="true" />
-                    </span>
-                    <span className="text-sm sm:text-base font-semibold text-ink">
-                      {t('contact.map_load')}
-                    </span>
-                  </button>
-                )}
+              <div className="aspect-[16/9] rounded-xl overflow-hidden border border-line bg-mist/60">
+                <iframe
+                  src={MAPS_EMBED_URL}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  title="Lokasi Akbar Alfaidah di Google Maps"
+                  className="w-full h-full object-cover dark:brightness-90 dark:contrast-110"
+                />
               </div>
             </SpotlightCard>
           </FadeUp>

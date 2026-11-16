@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Quote, ShieldCheck } from 'lucide-react';
+import { Quote } from 'lucide-react';
 import { FadeUp, StaggerGroup, StaggerItem } from './ui/MotionPrimitives';
 import SpotlightCard from './ui/SpotlightCard';
 
@@ -10,9 +10,11 @@ export default function TestimonialsSection() {
   return (
     <section
       id="testimonials"
-      className="py-20 sm:py-24 px-6 bg-paper text-ink border-b border-line"
+      className="relative py-20 sm:py-24 px-6 bg-paper text-ink border-b border-line overflow-hidden"
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="film-grain pointer-events-none absolute inset-0" aria-hidden="true" />
+
+      <div className="relative z-10 max-w-6xl mx-auto">
         <FadeUp className="max-w-3xl mb-12 sm:mb-14">
           <h2 className="font-display text-3xl sm:text-5xl lg:text-[3.25rem] font-bold tracking-tight leading-[1.08] text-ink mb-4">
             {t('testimonials.heading')}
@@ -28,18 +30,13 @@ export default function TestimonialsSection() {
               <StaggerItem key={`${card.projectName}-${card.date}`} className="flex">
                 <SpotlightCard
                   as="figure"
+                  tilt
                   className="w-full p-7 sm:p-8 flex flex-col justify-between gap-7"
                 >
                   <div>
-                    <div className="flex items-center justify-between gap-2 mb-6">
-                      <span className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent">
-                        <Quote size={18} aria-hidden="true" />
-                      </span>
-                      <span className="inline-flex items-center gap-1.5 text-sm font-medium px-3 py-1 rounded-lg bg-mist text-ink border border-line">
-                        <ShieldCheck size={15} className="text-accent" aria-hidden="true" />
-                        <span>{t('testimonials.verified_label')}</span>
-                      </span>
-                    </div>
+                    <span className="w-11 h-11 rounded-xl bg-accent/10 border border-accent/20 inline-flex items-center justify-center text-accent mb-6">
+                      <Quote size={20} aria-hidden="true" />
+                    </span>
 
                     <blockquote className="text-base sm:text-lg text-ink leading-relaxed">
                       “{card.quote}”
@@ -55,9 +52,7 @@ export default function TestimonialsSection() {
                         {card.projectName}
                       </div>
                     </div>
-                    <span className="text-sm text-ink-muted shrink-0">
-                      {card.date}
-                    </span>
+                    <span className="text-sm text-ink-muted shrink-0">{card.date}</span>
                   </figcaption>
                 </SpotlightCard>
               </StaggerItem>

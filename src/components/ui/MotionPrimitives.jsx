@@ -5,16 +5,16 @@ export function FadeUp({
   children,
   delay = 0,
   y = 18,
-  duration = 0.52,
+  duration = 0.5,
   className = '',
   as = 'div'
 }) {
   const Component = motion[as] || motion.div;
   return (
     <Component
-      initial={{ opacity: 0, y }}
+      initial={{ opacity: 0.96, y }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.14 }}
+      viewport={{ once: true, amount: 0.01 }}
       transition={{ duration, delay, ease: STUDIO_EASE }}
       className={className}
     >
@@ -23,12 +23,12 @@ export function FadeUp({
   );
 }
 
-export function StaggerGroup({ children, className = '', delayChildren = 0.04, staggerChildren = 0.07 }) {
+export function StaggerGroup({ children, className = '', delayChildren = 0.02, staggerChildren = 0.06 }) {
   return (
     <motion.div
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, amount: 0.1 }}
+      viewport={{ once: true, amount: 0.01 }}
       variants={{
         hidden: {},
         show: {
@@ -45,15 +45,15 @@ export function StaggerGroup({ children, className = '', delayChildren = 0.04, s
   );
 }
 
-export function StaggerItem({ children, className = '', y = 16 }) {
+export function StaggerItem({ children, className = '', y = 18 }) {
   return (
     <motion.div
       variants={{
-        hidden: { opacity: 0, y },
+        hidden: { opacity: 0.96, y },
         show: {
           opacity: 1,
           y: 0,
-          transition: { duration: 0.48, ease: STUDIO_EASE }
+          transition: { duration: 0.45, ease: STUDIO_EASE }
         }
       }}
       className={className}

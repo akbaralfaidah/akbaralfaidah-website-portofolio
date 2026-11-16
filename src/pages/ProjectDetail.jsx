@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowUpRight, ArrowRight, Check } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { fetchProjectBySlug } from '../data/projects';
+import { fetchProjectBySlug, fetchProjects } from '../data/projects';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import BackToTop from '../components/ui/BackToTop';
+import MeshGradient from '../components/ui/MeshGradient';
 import NotFound from './NotFound';
 import { Button } from '../components/ui/Button';
 import { FadeUp } from '../components/ui/MotionPrimitives';
+import { STUDIO_EASE } from '../lib/motion';
 import SpotlightCard from '../components/ui/SpotlightCard';
 import { usePageMeta } from '../hooks/usePageMeta';
 
@@ -17,24 +20,36 @@ export default function ProjectDetail({ initialProject = null }) {
   const { t, i18n } = useTranslation();
 
   const [project, setProject] = useState(initialProject);
+  const [nextProject, setNextProject] = useState(null);
   const [loading, setLoading] = useState(!initialProject);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (initialProject && initialProject.slug === token) {
-      setProject(initialProject);
-      setLoading(false);
-      return undefined;
-    }
-
     let isMounted = true;
-    setLoading(true);
-    fetchProjectBySlug(token).then((data) => {
-      if (isMounted) {
-        setProject(data);
-        setLoading(false);
+
+    const resolve = async () => {
+      let current = initialProject && initialProject.slug === token ? initialProject : null;
+      if (!current) {
+        setLoading(true);
+        current = await fetchProjectBySlug(token);
       }
-    });
+
+      const all = await fetchProjects();
+      if (!isMounted) return;
+
+      setProject(current);
+      setLoading(false);
+
+      if (current && Array.isArray(all) && all.length > 1) {
+        const idx = all.findIndex((p) => p.slug === current.slug);
+        const nextIdx = idx >= 0 ? (idx + 1) % all.length : 0;
+        if (all[nextIdx] && all[nextIdx].slug !== current.slug) {
+          setNextProject(all[nextIdx]);
+        }
+      }
+    };
+
+    resolve();
     return () => {
       isMounted = false;
     };
@@ -49,7 +64,7 @@ export default function ProjectDetail({ initialProject = null }) {
     : '';
 
   usePageMeta({
-    title: project ? `${project.name} — Case Study | Akbar Alfaidah` : 'Case Study | Akbar Alfaidah',
+    title: project ? `${project.name} | Akbar Alfaidah` : 'Proyek | Akbar Alfaidah',
     description: translatedSummary || t('meta.projects_description'),
     path: token ? `/project/${token}` : '/projects',
     robots: project ? 'index,follow' : 'noindex,nofollow'
@@ -62,7 +77,7 @@ export default function ProjectDetail({ initialProject = null }) {
         <main className="flex-1 max-w-5xl w-full mx-auto px-6 pt-32 pb-20 animate-pulse space-y-8">
           <div className="h-5 w-32 bg-mist rounded" />
           <div className="h-12 w-2/3 bg-mist rounded" />
-          <div className="aspect-[16/9] w-full bg-mist rounded-2xl" />
+          <div className="aspect-video w-full bg-mist rounded-2xl" />
         </main>
         <Footer />
       </div>
@@ -88,176 +103,245 @@ export default function ProjectDetail({ initialProject = null }) {
     <div className="min-h-screen flex flex-col bg-paper text-ink transition-colors duration-300">
       <Navbar />
 
-      <main id="main-content" className="flex-1 pt-28 sm:pt-36 pb-20 px-6">
-        <article className="max-w-5xl mx-auto space-y-12">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <Link
-              to="/projects"
-              className="inline-flex items-center gap-2 min-h-[44px] text-base font-medium text-ink-muted hover:text-accent transition-colors"
-            >
-              <ArrowLeft size={17} aria-hidden="true" />
-              <span>{t('projects.back_projects')}</span>
-            </Link>
+      <main id="main-content" className="flex-1">
+        {/* Atmospheric Dark Obsidian Exhibition Stage */}
+        <section className="relative bg-obsidian text-slate-100 pt-28 sm:pt-36 pb-20 sm:pb-24 px-6 border-b border-white/10 overflow-hidden">
+          <MeshGradient dark />
 
-            {project.url && (
-              <Button
-                as="a"
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="outline"
-                size="sm"
+          <div className="relative z-10 max-w-5xl mx-auto space-y-10">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <Link
+                to="/projects"
+                className="inline-flex items-center gap-2 min-h-[44px] text-base font-medium text-slate-300 hover:text-blue-400 transition-colors"
               >
-                <span>{t('projects.live_preview')}</span>
-                <ArrowUpRight size={15} aria-hidden="true" />
-              </Button>
-            )}
-          </div>
+                <ArrowLeft size={17} aria-hidden="true" />
+                <span>{t('projects.back_projects')}</span>
+              </Link>
 
-          <FadeUp className="space-y-4">
-            <div className="flex flex-wrap gap-2">
-              {(project.categories || []).map((cat) => (
-                <span
-                  key={cat}
-                  className="px-3.5 py-1 rounded-lg text-sm font-medium bg-mist text-ink border border-line"
+              {project.url && (
+                <a
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="min-h-[44px] px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm sm:text-base font-semibold inline-flex items-center gap-2 shadow-lg shadow-blue-600/25 transition-all hover:-translate-y-0.5"
                 >
-                  {cat}
-                </span>
-              ))}
+                  <span>{t('projects.live_preview')}</span>
+                  <ArrowUpRight size={16} aria-hidden="true" />
+                </a>
+              )}
             </div>
 
-            <h1 className="font-display text-4xl sm:text-5xl lg:text-[3.5rem] font-extrabold tracking-tight leading-[1.06] text-ink">
-              {project.name}
-            </h1>
-
-            <p className="text-lg sm:text-xl text-ink-muted max-w-3xl leading-relaxed">
-              {translatedSummary}
-            </p>
-          </FadeUp>
-
-          <dl className="grid grid-cols-2 md:grid-cols-4 gap-5 py-6 border-y border-line">
-            <div>
-              <dt className="text-sm font-medium text-ink-muted mb-1">
-                {t('projects.client_label')}
-              </dt>
-              <dd className="text-base sm:text-lg font-semibold text-ink">{project.client}</dd>
-            </div>
-            <div>
-              <dt className="text-sm font-medium text-ink-muted mb-1">
-                {t('projects.year_label')}
-              </dt>
-              <dd className="text-base sm:text-lg font-semibold text-ink tabular-nums">
-                {project.year}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-sm font-medium text-ink-muted mb-1">
-                {t('projects.role_label')}
-              </dt>
-              <dd className="text-base sm:text-lg font-semibold text-ink">{project.role}</dd>
-            </div>
-            <div>
-              <dt className="text-sm font-medium text-ink-muted mb-1">
-                {t('projects.categories_label')}
-              </dt>
-              <dd className="text-base sm:text-lg font-semibold text-ink">
-                {(project.categories || []).join(' / ')}
-              </dd>
-            </div>
-          </dl>
-
-          <FadeUp
-            delay={0.08}
-            className="rounded-2xl bg-surface border border-line p-2 sm:p-3 shadow-lg shadow-ink/[0.04] dark:shadow-black/30"
-          >
-            <div className="aspect-[16/10] sm:aspect-[16/9] rounded-xl overflow-hidden bg-mist">
-              <img
-                src={project.src}
-                alt={`${project.name} showcase`}
-                width={1200}
-                height={675}
-                className="w-full h-full object-cover object-top"
-              />
-            </div>
-          </FadeUp>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <SpotlightCard className="p-7 sm:p-8 space-y-3">
-              <h2 className="font-display text-2xl font-bold text-ink">
-                {t('projects.challenge_title')}
-              </h2>
-              <p className="text-base sm:text-[17px] text-ink-muted leading-relaxed">
-                {challengeText}
-              </p>
-            </SpotlightCard>
-
-            {solutionText && (
-              <SpotlightCard className="p-7 sm:p-8 space-y-3">
-                <h2 className="font-display text-2xl font-bold text-ink">
-                  {t('projects.solution_title')}
-                </h2>
-                <p className="text-base sm:text-[17px] text-ink-muted leading-relaxed">
-                  {solutionText}
-                </p>
-              </SpotlightCard>
-            )}
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-            {highlightsList.length > 0 && (
-              <SpotlightCard className="md:col-span-7 p-7 sm:p-8 space-y-4">
-                <h2 className="font-display text-xl sm:text-2xl font-bold text-ink">
-                  {t('projects.highlights_title')}
-                </h2>
-                <ul className="space-y-3">
-                  {highlightsList.map((point) => (
-                    <li key={point} className="flex items-start gap-2.5 text-base sm:text-[17px] text-ink">
-                      <Check size={17} className="text-accent shrink-0 mt-1" aria-hidden="true" />
-                      <span>{point}</span>
-                    </li>
-                  ))}
-                </ul>
-              </SpotlightCard>
-            )}
-
-            <SpotlightCard
-              className={`${
-                highlightsList.length > 0 ? 'md:col-span-5' : 'md:col-span-12'
-              } p-7 sm:p-8 space-y-4`}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: STUDIO_EASE }}
+              className="space-y-4"
             >
-              <h2 className="font-display text-xl sm:text-2xl font-bold text-ink">
-                {t('projects.tech_title')}
-              </h2>
               <div className="flex flex-wrap gap-2">
-                {(project.techStack || []).map((tech) => (
+                {(project.categories || []).map((cat) => (
                   <span
-                    key={tech}
-                    className="px-3.5 py-1.5 rounded-lg font-mono text-sm font-medium bg-mist text-ink border border-line"
+                    key={cat}
+                    className="px-3.5 py-1 rounded-lg text-sm font-medium bg-white/10 text-blue-300 border border-white/15"
                   >
-                    {tech}
+                    {cat}
                   </span>
                 ))}
               </div>
-            </SpotlightCard>
-          </div>
 
-          <SpotlightCard
-            hoverLift={false}
-            className="p-7 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6"
-          >
-            <div>
-              <h2 className="font-display text-2xl font-bold text-ink mb-1">
-                {t('projects.next_cta_title')}
-              </h2>
-              <p className="text-base text-ink-muted">{t('projects.next_cta_desc')}</p>
+              <h1 className="font-display text-4xl sm:text-6xl lg:text-[4rem] font-extrabold tracking-tight leading-[1.04] text-white">
+                {project.name}
+              </h1>
+
+              <p className="text-lg sm:text-2xl text-slate-300 max-w-3xl leading-relaxed">
+                {translatedSummary}
+              </p>
+            </motion.div>
+
+            {/* Metadata Strip */}
+            <dl className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-6 border-t border-white/10">
+              <div>
+                <dt className="text-sm text-slate-400 mb-1">{t('projects.client_label')}</dt>
+                <dd className="text-base sm:text-lg font-semibold text-white">{project.client}</dd>
+              </div>
+              <div>
+                <dt className="text-sm text-slate-400 mb-1">{t('projects.year_label')}</dt>
+                <dd className="text-base sm:text-lg font-semibold text-white tabular-nums">
+                  {project.year}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm text-slate-400 mb-1">{t('projects.role_label')}</dt>
+                <dd className="text-base sm:text-lg font-semibold text-white">{project.role}</dd>
+              </div>
+              <div>
+                <dt className="text-sm text-slate-400 mb-1">{t('projects.categories_label')}</dt>
+                <dd className="text-base sm:text-lg font-semibold text-white">
+                  {(project.categories || []).join(' / ')}
+                </dd>
+              </div>
+            </dl>
+
+            {/* HD 1920x1080 Showcase Frame */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.97, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.65, delay: 0.12, ease: STUDIO_EASE }}
+              className="rounded-2xl bg-white/5 p-2 sm:p-3 border border-white/15 shadow-2xl"
+            >
+              <div className="aspect-video rounded-xl overflow-hidden bg-slate-900">
+                <img
+                  src={project.src}
+                  alt={`${project.name} HD showcase`}
+                  width={1920}
+                  height={1080}
+                  className="w-full h-full object-cover object-center"
+                />
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Open Editorial Narrative & Specs */}
+        <section className="relative py-20 px-6 bg-paper overflow-hidden">
+          <div className="film-grain pointer-events-none absolute inset-0" aria-hidden="true" />
+
+          <div className="relative z-10 max-w-5xl mx-auto space-y-16">
+            {/* 01 Challenge / 02 Solution Editorial Chapters */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-14 pb-14 border-b border-line">
+              <FadeUp className="border-l-2 border-accent pl-6 space-y-3">
+                <span className="font-mono text-sm font-bold text-accent">01</span>
+                <h2 className="font-display text-2xl sm:text-3xl font-bold text-ink">
+                  {t('projects.challenge_title')}
+                </h2>
+                <p className="text-base sm:text-lg text-ink-muted leading-relaxed">
+                  {challengeText}
+                </p>
+              </FadeUp>
+
+              {solutionText && (
+                <FadeUp delay={0.08} className="border-l-2 border-emerald-500 pl-6 space-y-3">
+                  <span className="font-mono text-sm font-bold text-emerald-600 dark:text-emerald-400">
+                    02
+                  </span>
+                  <h2 className="font-display text-2xl sm:text-3xl font-bold text-ink">
+                    {t('projects.solution_title')}
+                  </h2>
+                  <p className="text-base sm:text-lg text-ink-muted leading-relaxed">
+                    {solutionText}
+                  </p>
+                </FadeUp>
+              )}
             </div>
 
-            <Button as={Link} to="/#contact" variant="accent" size="md" className="shrink-0">
-              <span>{t('projects.next_cta_button')}</span>
-              <ArrowRight size={17} aria-hidden="true" />
-            </Button>
-          </SpotlightCard>
-        </article>
+            {/* Highlights & Stack */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+              {highlightsList.length > 0 && (
+                <FadeUp className="md:col-span-7 space-y-5">
+                  <h2 className="font-display text-2xl sm:text-3xl font-bold text-ink">
+                    {t('projects.highlights_title')}
+                  </h2>
+                  <ul className="space-y-4">
+                    {highlightsList.map((point) => (
+                      <li
+                        key={point}
+                        className="flex items-start gap-3 text-base sm:text-lg text-ink"
+                      >
+                        <span className="w-7 h-7 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center text-accent shrink-0 mt-0.5">
+                          <Check size={16} aria-hidden="true" />
+                        </span>
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </FadeUp>
+              )}
+
+              <FadeUp
+                delay={0.08}
+                className={`${
+                  highlightsList.length > 0 ? 'md:col-span-5' : 'md:col-span-12'
+                }`}
+              >
+                <SpotlightCard hoverLift={false} className="p-6 sm:p-8 space-y-4">
+                  <h2 className="font-display text-xl sm:text-2xl font-bold text-ink">
+                    {t('projects.tech_title')}
+                  </h2>
+                  <div className="flex flex-wrap gap-2">
+                    {(project.techStack || []).map((tech) => (
+                      <span
+                        key={tech}
+                        className="px-3.5 py-1.5 rounded-lg font-mono text-sm font-medium bg-mist text-ink border border-line"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </SpotlightCard>
+              </FadeUp>
+            </div>
+
+            {/* Interactive Next Project Teaser */}
+            {nextProject && (
+              <FadeUp>
+                <Link
+                  to={`/project/${nextProject.slug}`}
+                  className="group block rounded-2xl bg-surface border border-line hover:border-accent/60 p-6 sm:p-8 shadow-sm hover:shadow-xl hover:shadow-accent/[0.06] transition-all"
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                    <div className="md:col-span-7 space-y-2">
+                      <p className="text-sm font-semibold text-accent">
+                        {t('projects.next_project_label')}
+                      </p>
+                      <h2 className="font-display text-2xl sm:text-4xl font-bold text-ink group-hover:text-accent transition-colors inline-flex items-center gap-3">
+                        <span>{nextProject.name}</span>
+                        <ArrowRight
+                          size={24}
+                          className="transition-transform duration-200 group-hover:translate-x-1.5"
+                          aria-hidden="true"
+                        />
+                      </h2>
+                      <p className="text-base text-ink-muted line-clamp-2">
+                        {t(`projects.${nextProject.slug}_desc`, {
+                          defaultValue: nextProject.shortDescription
+                        })}
+                      </p>
+                    </div>
+
+                    <div className="md:col-span-5 aspect-video rounded-xl overflow-hidden bg-mist border border-line">
+                      <img
+                        src={nextProject.src}
+                        alt={`${nextProject.name} preview`}
+                        width={1920}
+                        height={1080}
+                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.04]"
+                      />
+                    </div>
+                  </div>
+                </Link>
+              </FadeUp>
+            )}
+
+            {/* Discussion CTA */}
+            <SpotlightCard
+              hoverLift={false}
+              className="p-7 sm:p-9 flex flex-col sm:flex-row sm:items-center justify-between gap-6"
+            >
+              <div>
+                <h2 className="font-display text-2xl sm:text-3xl font-bold text-ink mb-1.5">
+                  {t('projects.next_cta_title')}
+                </h2>
+                <p className="text-base sm:text-lg text-ink-muted">
+                  {t('projects.next_cta_desc')}
+                </p>
+              </div>
+
+              <Button as={Link} to="/#contact" variant="accent" size="lg" className="shrink-0">
+                <span>{t('projects.next_cta_button')}</span>
+                <ArrowRight size={17} aria-hidden="true" />
+              </Button>
+            </SpotlightCard>
+          </div>
+        </section>
       </main>
 
       <Footer />

@@ -1,305 +1,288 @@
 {
   "meta": {
     "home_title": "Akbar Alfaidah — Jasa Web, Aplikasi Mobile & AI | Tech Agency Jambi",
-    "home_description": "Studio rekayasa perangkat lunak oleh Akbar Alfaidah. Layanan pembuatan aplikasi web full-stack, mobile React Native & Flutter, dan integrasi AI dari desain hingga deployment.",
-    "projects_title": "Arsip Portofolio | Akbar Alfaidah — Tech Agency",
-    "projects_description": "Kumpulan sistem web, aplikasi mobile, dan integrasi AI yang dibangun untuk instansi pemerintah, perguruan tinggi, UMKM, dan produk komersial."
+    "home_description": "Developer full-stack web, aplikasi Android/Flutter, dan integrasi AI di Jambi. Dikerjakan langsung dari desain UI sampai live di server produksi.",
+    "projects_title": "Semua Proyek | Akbar Alfaidah — Tech Agency",
+    "projects_description": "Kumpulan website, aplikasi mobile, dan integrasi AI yang telah dibuat untuk instansi, kampus, UMKM, dan produk bisnis."
   },
   "nav": {
     "about": "Tentang",
     "services": "Layanan",
-    "projects": "Portofolio",
+    "projects": "Proyek",
     "experience": "Pengalaman",
     "contact": "Kontak"
   },
   "hero": {
-    "badge": "Terbuka untuk Proyek Baru",
-    "headline": "Sistem Web, Aplikasi Mobile & AI yang Dibangun Utuh Hingga Produksi.",
-    "subtitle": "Studio rekayasa perangkat lunak di Jambi oleh Akbar Alfaidah — merancang arsitektur antarmuka, backend relasional, hingga deployment server yang stabil.",
+    "badge": "Terbuka untuk proyek baru",
+    "headline_start": "Bikin Website, Aplikasi Mobile & AI yang",
+    "headline_accent": "Siap Pakai.",
+    "subtitle": "Saya Akbar Alfaidah. Dari desain tampilan, koding sistem, sampai live di server—semuanya saya kerjain rapi dari nol sampai jalan.",
     "cta_primary": "Konsultasi Proyek",
-    "cta_secondary": "Lihat Studi Kasus",
+    "cta_secondary": "Lihat Proyek",
     "facts": [
-      { "label": "Berbasis di", "value": "Jambi & Remote" },
-      { "label": "Fokus Utama", "value": "Web, Mobile & ML" },
-      { "label": "Jejak Karya", "value": "10+ Proyek Aktif" }
+      { "label": "Lokasi", "value": "Jambi & Remote" },
+      { "label": "Fokus", "value": "Web, Mobile & AI" },
+      { "label": "Portofolio", "value": "10+ Proyek Selesai" }
     ],
-    "stage_label": "Etalase Karya Pilihan",
-    "stage_action": "Buka Studi Kasus"
+    "stage_action": "Proyek"
   },
   "capabilities": {
-    "eyebrow": "Cakupan Rekayasa",
-    "heading": "Satu alur kerja terpadu dari sketsa hingga produksi.",
-    "subtitle": "Setiap proyek ditangani dengan struktur komponen yang rapi, database terindeks, dan server siap pakai — tanpa lempar tanggung jawab antar vendor.",
+    "heading": "Dari Ide Mentah Sampai Live di Server.",
+    "subtitle": "Desain, koding backend, integrasi alat, sampai deploy berjalan di satu alur—nggak perlu koordinasi sana-sini.",
     "pillars": [
       {
         "step": "01",
-        "title": "Antarmuka & Sistem Desain",
-        "desc": "Pembuatan desain UI yang konsisten, responsif di ponsel hingga desktop, dan mudah dipakai staf operasional."
+        "title": "Desain Antarmuka yang Jelas",
+        "desc": "Tampilan yang rapi di HP maupun laptop, gampang dipahami staf dan pengguna sejak pertama buka."
       },
       {
         "step": "02",
-        "title": "Rekayasa Full-Stack & API",
-        "desc": "Pengembangan web app dengan React, Next.js, atau Laravel, lengkap dengan autentikasi, kontrol akses, dan ekspor dokumen."
+        "title": "Web Full-Stack & Database",
+        "desc": "Dibangun pakai React, Next.js, atau Laravel lengkap dengan login aman, hak akses, dan ekspor PDF/Excel."
       },
       {
         "step": "03",
-        "title": "Aplikasi Mobile & Integrasi Alat",
-        "desc": "Aplikasi Android dan lintas platform berbasis Flutter/React Native dengan dukungan geofencing, kamera, barcode, dan printer thermal."
+        "title": "Aplikasi Android & Koneksi Alat",
+        "desc": "Aplikasi kasir dan operasional pakai Flutter/React Native yang bisa nyambung ke barcode scanner, printer struk, dan GPS."
       },
       {
         "step": "04",
-        "title": "Otomatisasi AI & Deployment",
-        "desc": "Integrasi model Vision/NLP, pipeline CI/CD, container Docker, serta pemantauan performa produksi."
+        "title": "Integrasi AI & Deploy Produksi",
+        "desc": "Tambahin fitur pintar berbasis LLM/Vision, dirapikan dalam container Docker, lalu langsung online dengan HTTPS aman."
       }
     ],
-    "stack_eyebrow": "Teknologi Harian"
+    "stack_eyebrow": "Stack Andalan"
   },
   "about": {
-    "eyebrow": "Tentang Studio",
-    "heading": "Solusi Digital, Bukan Sekadar Kode.",
-    "desc_1": "Halo, saya <0>Akbar Alfaidah</0> — pengembang web full-stack, aplikasi mobile, dan AI Engineer yang memimpin <1>Akbar Alfaidah Tech Agency</1> di Kota Jambi.",
-    "desc_2": "Setiap proyek dibangun di atas kode yang bersih dan dapat dipelihara dalam jangka panjang: mulai dari pemetaan masalah operasional, desain antarmuka, hingga server siap produksi.",
-    "desc_3": "Tersedia untuk diskusi tatap muka di Kota Jambi maupun kerja remote bersama tim di seluruh Indonesia.",
+    "heading": "Bikin Produk Digital yang Enak Dipakai.",
+    "desc_1": "Halo, saya <0>Akbar Alfaidah</0> — developer web, aplikasi mobile, dan AI yang tergabung di <1>Akbar Alfaidah Tech Agency</1>, berbasis di Kota Jambi.",
+    "desc_2": "Saya terbiasa pegang proyek utuh dari awal: nyusun alur fitur biar masuk akal, bikin tampilan yang nyaman dilihat, nulis kode yang rapi, sampai deploy ke server.",
+    "desc_3": "Kalau lagi sama-sama di Jambi kita bisa ketemu langsung buat ngobrolin idenya. Buat klien di luar kota, kerja bareng online juga jalan cepat.",
     "facts": [
-      { "label": "Peran", "value": "Principal Engineer" },
-      { "label": "Domisili", "value": "Kota Jambi, ID" },
-      { "label": "Domain", "value": "Web • Mobile • ML" },
-      { "label": "Kemitraan", "value": "Instansi & UMKM" }
+      { "label": "Web & Sistem", "value": "Portal, Dashboard & SaaS" },
+      { "label": "Aplikasi Mobile", "value": "Android & Flutter" },
+      { "label": "AI & Otomatisasi", "value": "Chatbot, NLP & Vision" },
+      { "label": "Lokasi", "value": "Kota Jambi & Remote" }
     ]
   },
   "services": {
-    "eyebrow": "Bidang Layanan",
-    "heading": "Apa yang Kami Bangun",
-    "subheading": "Solusi perangkat lunak khusus untuk perusahaan, instansi, dan UMKM — dari tahap rancangan hingga publikasi.",
-    "deliverables_label": "Cakupan Utama",
-    "case_study_cta": "Lihat Contoh Karya",
-    "book_cta": "Diskusikan Kebutuhan",
+    "heading": "Layanan",
+    "subheading": "Dibangun custom ngikutin alur bisnis Anda—bukan template kaku yang asal tempel.",
+    "deliverables_label": "Yang Anda Dapatkan",
+    "book_cta": "Diskusikan Proyek",
     "items": [
       {
         "id": "web",
-        "title": "Web Platform & Sistem Informasi",
-        "desc": "Aplikasi web internal, portal instansi, dashboard analitik, dan company profile berkecepatan tinggi yang dibangun khusus sesuai SOP organisasi Anda.",
+        "title": "Website & Sistem Informasi",
+        "desc": "Company profile berkecepatan tinggi, portal instansi, sampai dashboard operasional yang disesuaikan sama alur kerja tim Anda.",
         "timeline": "2 – 8 Minggu",
         "deliverables": [
-          "Arsitektur React / Next.js / Laravel",
-          "Hak akses berjenjang & rekap PDF / Excel",
-          "Setup container Docker & domain HTTPS"
-        ],
-        "projectSlug": "mpp",
-        "projectName": "MPP Digital"
+          "Dibangun dengan React / Next.js / Laravel",
+          "Hak akses berjenjang & laporan PDF/Excel otomatis",
+          "Setup domain, HTTPS, dan server siap pakai"
+        ]
       },
       {
         "id": "mobile",
-        "title": "Aplikasi Mobile (Android & Lintas Platform)",
-        "desc": "Aplikasi lapangan yang tangguh untuk kasir toko, manajemen stok gudang, maupun presensi berbasis lokasi GPS hingga rilis Google Play Store.",
+        "title": "Aplikasi Android & Mobile",
+        "desc": "Aplikasi lapangan yang tangguh buat kasir toko, kontrol stok gudang, atau presensi GPS sampai rilis di Play Store.",
         "timeline": "4 – 10 Minggu",
         "deliverables": [
-          "Flutter / React Native dengan sinkronisasi offline",
-          "Integrasi scanner barcode, printer thermal & GPS",
-          "Pendampingan rilis ke Google Play Console"
-        ],
-        "projectSlug": "bosdepot",
-        "projectName": "BosDepot"
+          "Flutter / React Native dengan penyimpanan offline",
+          "Koneksi scanner barcode, printer thermal & GPS",
+          "Pendampingan rilis sampai masuk Google Play"
+        ]
       },
       {
         "id": "ai",
-        "title": "Integrasi AI & Otomatisasi Cerdas",
-        "desc": "Penerapan model Machine Learning, pemrosesan bahasa alami (NLP), dan integrasi LLM untuk memangkas pekerjaan administratif yang berulang.",
+        "title": "Integrasi AI & Otomatisasi",
+        "desc": "Fitur AI yang beneran kepake untuk merangkum pesan masuk, membaca data otomatis, atau memangkas input manual yang makan waktu.",
         "timeline": "3 – 8 Minggu",
         "deliverables": [
-          "Ekstraksi data pesan / dokumen berbasis NLP & LLM",
-          "Pipeline deteksi visual OpenCV / YOLO via FastAPI",
-          "Integrasi langsung ke database dan webhook bisnis"
-        ],
-        "projectSlug": "peka",
-        "projectName": "PEKA & ChatTask"
+          "Bot & ekstraksi data chat berbasis NLP / Gemini API",
+          "Pipeline deteksi gambar OpenCV / YOLO",
+          "Terhubung langsung ke database & webhook bisnis"
+        ]
       }
     ]
   },
   "projects": {
-    "eyebrow": "Karya Pilihan",
-    "heading": "Studi Kasus & Sistem Terpasang.",
-    "subheading": "Kumpulan sistem yang dibangun untuk memecahkan masalah nyata di ritel, pendidikan, layanan publik, dan otomasi AI.",
-    "cta": "Lihat Studi Kasus",
-    "bottom_cta": "Jelajahi Semua Proyek",
+    "heading": "Karya Pilihan.",
+    "subheading": "Beberapa sistem web, aplikasi kasir, presensi GPS, dan AI yang sudah dipakai di lapangan.",
+    "cta": "Lihat Proyek",
+    "bottom_cta": "Semua Proyek",
     "archive_heading": "Semua Proyek",
-    "archive_subheading": "Telusuri sistem produksi berdasarkan kategori platform dan fokus rekayasa.",
+    "archive_subheading": "Kumpulan website, aplikasi mobile, dan integrasi AI yang pernah dibangun.",
     "filter_all": "Semua",
     "empty_title": "Belum ada proyek di kategori ini",
-    "empty_desc": "Pilih kategori lain atau lihat seluruh portofolio yang tersedia.",
-    "back_home": "Kembali ke Beranda",
+    "empty_desc": "Pilih kategori lain untuk melihat karya lainnya.",
+    "back_home": "Beranda",
     "back_projects": "Semua Proyek",
-    "live_preview": "Buka Situs Live",
+    "live_preview": "Buka Website",
     "client_label": "Klien",
     "year_label": "Tahun",
     "role_label": "Peran",
     "categories_label": "Kategori",
-    "challenge_title": "Latar Masalah & Tantangan",
-    "solution_title": "Arsitektur & Solusi",
-    "highlights_title": "Poin Implementasi Teknis",
-    "tech_title": "Teknologi yang Digunakan",
-    "next_cta_title": "Punya tantangan sistem serupa?",
-    "next_cta_desc": "Ceritakan alur operasional Anda dan dapatkan estimasi arsitektur serta jadwal pengerjaan.",
-    "next_cta_button": "Konsultasikan Proyek Anda",
-    "bosdepot_desc": "Aplikasi POS & manajemen gudang terintegrasi hardware (scanner barcode, printer thermal, biometrik).",
-    "siskamling_desc": "Sistem jadwal ronda dan presensi petugas pos keamanan berbasis geolocation dengan ekspor PDF & Excel.",
-    "peka_desc": "Platform refleksi mood terintegrasi Gemini API dengan ringkasan visual dan penyimpanan Supabase.",
-    "mpp_desc": "Aplikasi survei kepuasan Mal Pelayanan Publik untuk mengotomatiskan indeks kinerja secara real-time.",
-    "simppk_desc": "Sistem informasi kepegawaian pemerintah untuk rekapitulasi berkas dan penilaian PPPK.",
-    "chattask_desc": "Manajemen tugas berbasis web yang mengubah pesan chat WhatsApp menjadi jadwal terstruktur lewat NLP.",
-    "jokipro_desc": "Landing page interaktif berkecepatan tinggi dengan modul komponen Vue.js yang dibuat di bawah NDA.",
-    "siabsen_desc": "Aplikasi presensi mahasiswa berbasis Geofencing radius 50 meter terintegrasi Firebase."
+    "challenge_title": "Masalah Awal",
+    "solution_title": "Solusi yang Dibangun",
+    "highlights_title": "Hal Teknis yang Dikerjakan",
+    "tech_title": "Teknologi",
+    "next_project_label": "Proyek Berikutnya",
+    "next_cta_title": "Punya kebutuhan serupa?",
+    "next_cta_desc": "Ceritain aja idenya, nanti saya bantu susun arsitektur dan estimasi waktunya.",
+    "next_cta_button": "Diskusi Proyek",
+    "bosdepot_desc": "Aplikasi POS kasir & gudang toko bangunan lengkap dengan barcode scanner, printer struk, dan login sidik jari.",
+    "siskamling_desc": "Aplikasi jadwal ronda & presensi petugas pos keamanan berbasis lokasi GPS dengan ekspor PDF dan Excel.",
+    "peka_desc": "Platform pelacakan mood interaktif dengan integrasi Gemini API dan simpan ringkasan visual.",
+    "mpp_desc": "Digitalisasi survei kepuasan warga di Mal Pelayanan Publik dengan rekap skor otomatis.",
+    "simppk_desc": "Sistem informasi kepegawaian pemerintah untuk kelola berkas dan penilaian PPPK.",
+    "chattask_desc": "Web app manajemen tugas yang mengubah obrolan WhatsApp jadi jadwal kerja rapi pakai NLP.",
+    "jokipro_desc": "Landing page profil bisnis interaktif berkecepatan tinggi dengan animasi halus.",
+    "siabsen_desc": "Aplikasi absensi kuliah berbasis radius GPS 50 meter yang terhubung langsung ke Firebase."
   },
   "experience": {
-    "eyebrow": "Rekam Jejak",
-    "heading": "Pengalaman Profesional",
-    "subheading": "Pengalaman rekayasa perangkat lunak di instansi, BUMN telekomunikasi/energi, hingga studio independen.",
-    "github_title": "Aktivitas GitHub Harian",
-    "github_subtitle": "Rekam jejak kontribusi kode langsung dari akun @AkbarAlfaidah",
+    "heading": "Pengalaman Kerja",
+    "subheading": "Pengalaman ngerjain sistem di instansi, BUMN, sampai proyek klien independen.",
+    "github_title": "Kontribusi GitHub",
+    "github_subtitle": "Aktivitas ngoding dari akun @AkbarAlfaidah",
     "github_total_all": "Total Kontribusi",
-    "github_this_year": "Tahun {{year}}",
     "github_last_year": "12 Bulan Terakhir",
-    "github_active_days": "Hari Aktif ({{year}})",
+    "github_active_days": "Hari Aktif (2026)",
     "github_contributions_unit": "kontribusi",
     "github_less": "Sedikit",
     "github_more": "Banyak",
-    "github_fallback": "Grafik kontribusi tidak dapat dimuat saat ini. Lihat aktivitas kode langsung di GitHub.",
-    "github_cta": "Lihat Profil GitHub",
+    "github_fallback": "Grafik tidak termuat. Cek aktivitas langsung lewat GitHub.",
+    "github_cta": "Profil GitHub",
     "items": [
       {
         "role": "Full-Stack Web Developer",
         "company": "Balai Penegakan Hukum Lingkungan Hidup Kota Jambi",
         "period": "Agustus 2026 – Sekarang",
-        "description": "Merancang dan mengembangkan Web Portal terpadu yang mengintegrasikan 4 sistem utama: Pengelolaan BMN (Barang Milik Negara), Keuangan, Kepegawaian, dan Manajemen Database."
+        "description": "Merancang dan membangun portal web terpadu untuk 4 sistem internal: Pengelolaan Barang Milik Negara (BMN), Keuangan, Kepegawaian, dan Database Terpusat."
       },
       {
         "role": "Programmer",
         "company": "Depot Kayu & Toko Bangunan Esa",
         "period": "Januari 2026 – Agustus 2026",
-        "description": "Membangun POS & manajemen inventaris mobile (Flutter/Firebase), serta merancang logika kalkulasi stok gudang."
+        "description": "Membangun aplikasi mobile kasir POS & stok gudang (Flutter/Firebase) beserta logika perhitungan inventaris toko."
       },
       {
         "role": "Freelance Web & Mobile Developer",
-        "company": "Akbar Alfaidah Studio",
+        "company": "Akbar Alfaidah Tech Agency",
         "period": "Januari 2024 – Sekarang",
-        "description": "Menangani proyek web & aplikasi mobile end-to-end untuk klien UMKM, lembaga pendidikan, dan instansi."
+        "description": "Menangani pembuatan website dan aplikasi mobile dari desain sampai rilis untuk UMKM, kampus, dan instansi."
       },
       {
         "role": "Intern IT Operation",
         "company": "PT Telkomsel Regional Sumbagsel",
         "period": "Mei 2025 – Juni 2025",
-        "description": "Merancang prototipe CI/CD Pipeline (GitLab) dan alur kerja Dev–Staging–Production."
+        "description": "Menyusun prototipe pipeline CI/CD di GitLab dan alur rilis Dev–Staging–Production."
       },
       {
         "role": "Full-Stack Web Developer",
         "company": "Bidik Karier",
         "period": "Agustus 2024 – November 2024",
-        "description": "Mengembangkan platform E-Learning (LMS) persiapan CPNS secara end-to-end menggunakan PHP & MySQL."
+        "description": "Membangun platform belajar online (LMS) persiapan CPNS menggunakan PHP & MySQL."
       },
       {
         "role": "Intern IT",
         "company": "PT PLN UBP Indonesia Power",
         "period": "Juni 2024 – Juli 2024",
-        "description": "Mengembangkan portal artikel digital dan profil internal untuk efisiensi penyebaran informasi."
+        "description": "Membuat portal artikel internal dan profil perusahaan untuk memperlancar arus informasi tim."
       },
       {
         "role": "Web Developer",
         "company": "INOVASITUS",
         "period": "Januari 2024 – Januari 2025",
-        "description": "Membangun 7+ website fungsional & responsif untuk klien UMKM."
+        "description": "Membuat 7+ website fungsional dan responsif untuk klien UMKM."
       }
     ]
   },
   "testimonials": {
-    "eyebrow": "Umpan Balik Klien",
-    "heading": "Kesan Setelah Sistem Berjalan.",
-    "subheading": "Catatan langsung dari perwakilan klien setelah proyek diserahkan dan dipakai di lapangan.",
-    "verified_label": "Proyek Terverifikasi",
+    "heading": "Kata Mereka.",
+    "subheading": "Tanggapan langsung dari klien setelah sistemnya selesai dan mulai dipakai kerja harian.",
     "cards": [
       {
-        "clientRole": "Perwakilan Akademik",
-        "projectName": "SiAbsen (Mobile Geofencing)",
+        "clientRole": "Perwakilan Kampus",
+        "projectName": "SiAbsen · Aplikasi Presensi",
         "quote": "Layanan dan hasilnya sangat memuaskan sesuai kebutuhan kelas kami. Terima kasih atas bantuan dan respons cepat selama pengerjaan.",
         "date": "Mei 2026"
       },
       {
-        "clientRole": "Tim Pengelola Data Instansi",
-        "projectName": "SimPPK (Sistem Kepegawaian)",
-        "quote": "Pengerjaan selesai tepat waktu, validasi serta rekap data berjalan tepat dan akurat saat digunakan oleh tim admin.",
+        "clientRole": "Tim Data Kepegawaian",
+        "projectName": "SimPPK · Portal Kepegawaian",
+        "quote": "Kerjanya cepat selesai, validasi dan rekap datanya tepat serta akurat waktu dipakai tim admin kami.",
         "date": "Mei 2026"
       },
       {
-        "clientRole": "Koordinator Layanan Publik",
-        "projectName": "MPP Digital (Survei Indeks)",
-        "quote": "Sangat terbantu dengan sistem digitalisasi survei ini — proses rekapitulasi jauh lebih cepat dibanding pencatatan manual sebelumnya.",
+        "clientRole": "Koordinator Layanan",
+        "projectName": "MPP Digital · Survei Warga",
+        "quote": "Sangat terbantu dengan sistem survei digital ini—proses rekap jauh lebih praktis dibanding hitung manual sebelumnya.",
         "date": "Mei 2026"
       }
     ]
   },
   "contact": {
-    "eyebrow": "Mulai Diskusi",
-    "heading_1": "Siap Membuat",
-    "heading_2": "Aplikasimu?",
-    "desc": "Ceritakan tujuan bisnis dan kebutuhan fitur Anda. Kami bantu susun dari rancangan antarmuka hingga siap dipakai tim.",
-    "follow_me": "Kanal Kontak",
-    "direct_email": "Email Langsung",
-    "whatsapp_label": "WhatsApp Studio",
+    "heading_1": "Siap Mulai",
+    "heading_2": "Proyekmu?",
+    "desc": "Ceritain aja mau bikin apa atau lagi ada kendala apa—nanti kita bahas solusi dan estimasi waktunya.",
+    "follow_me": "Media Sosial",
+    "direct_email": "Email",
+    "whatsapp_label": "WhatsApp",
     "tab_wa": "Kirim via WhatsApp",
     "tab_email": "Kirim via Email",
     "form_name": "Nama Lengkap",
-    "form_name_placeholder": "Contoh: Budi Santoso",
+    "form_name_placeholder": "Nama kamu...",
     "form_whatsapp": "Nomor WhatsApp",
     "form_whatsapp_placeholder": "08xx xxxx xxxx",
-    "form_email": "Alamat Email",
-    "form_email_placeholder": "nama@perusahaan.com",
-    "form_deadline": "Target Waktu Pengerjaan",
-    "form_deadline_placeholder": "Pilih Estimasi Timeline",
+    "form_email": "Email",
+    "form_email_placeholder": "nama@email.com",
+    "form_deadline": "Perkiraan Deadline",
+    "form_deadline_placeholder": "Pilih target waktu",
     "form_deadline_options": {
-      "cepat": "2 – 4 Minggu (Company Profile / Landing Page)",
-      "standar": "1 – 2 Bulan (Web App Bisnis / Portal)",
+      "cepat": "2 – 4 Minggu (Landing Page / Company Profile)",
+      "standar": "1 – 2 Bulan (Website Bisnis / Web App)",
       "menengah": "2 – 3 Bulan (Sistem Informasi / Aplikasi Mobile)",
-      "kompleks": "> 3 Bulan (Platform Terintegrasi / Kompleks)",
-      "fleksibel": "Fleksibel (Didiskusikan Bersama)"
+      "kompleks": "> 3 Bulan (Platform Skala Besar)",
+      "fleksibel": "Fleksibel (Didiskusikan Dulu)"
     },
-    "form_message": "Ceritakan Proyek Anda",
-    "form_message_placeholder": "Jelaskan singkat sistem apa yang ingin dibuat, pengguna utamanya, dan kendala yang ingin diselesaikan...",
-    "turnstile_label": "Verifikasi Keamanan",
-    "turnstile_hint": "Selesaikan verifikasi di atas sebelum mengirim via email.",
-    "turnstile_unavailable": "Verifikasi Turnstile sedang dimuat atau belum terkonfigurasi.",
-    "cta_wa": "Buka WhatsApp Sekarang",
-    "cta_email": "Kirim Pesan Email",
+    "form_message": "Ceritakan Proyekmu",
+    "form_message_placeholder": "Jelasin singkat fitur utama yang dibutuhin, siapa penggunanya, dan target waktunya...",
+    "turnstile_label": "Verifikasi Anti-Spam",
+    "turnstile_unavailable": "Verifikasi keamanan sedang disiapkan.",
+    "cta_wa": "Kirim via WhatsApp",
+    "cta_email": "Kirim Pesan",
     "cta_sending": "Mengirim...",
-    "map_title": "Lokasi Studio — Kota Jambi",
-    "map_desc": "Tersedia pertemuan langsung di area Kota Jambi dan kolaborasi jarak jauh untuk seluruh kota.",
-    "map_load": "Muat Peta Interaktif",
-    "map_open_external": "Buka di Google Maps",
+    "map_title": "Lokasi — Kota Jambi",
+    "map_desc": "Bisa ketemu langsung di Kota Jambi, atau diskusi online dari mana saja.",
+    "map_open_external": "Buka Google Maps",
     "validation": {
-      "name": "Nama wajib diisi minimal 2 karakter.",
-      "wa_invalid": "Nomor WhatsApp hanya boleh berisi angka dan spasi/strip.",
-      "wa_length": "Masukkan nomor WhatsApp yang valid (10–15 digit).",
+      "name": "Isi nama lengkap dulu ya (min. 2 huruf).",
+      "wa_invalid": "Nomor WhatsApp cuma boleh angka, spasi, atau tanda + / -.",
+      "wa_length": "Masukkan nomor WhatsApp yang aktif (10–15 digit).",
       "email_empty": "Alamat email wajib diisi.",
-      "email_invalid": "Format alamat email belum valid.",
-      "deadline": "Pilih estimasi target waktu pengerjaan terlebih dahulu.",
-      "message": "Ceritakan minimal 10 karakter tentang proyek Anda.",
-      "turnstile": "Harap selesaikan verifikasi keamanan terlebih dahulu."
+      "email_invalid": "Format email belum valid nih.",
+      "deadline": "Pilih perkiraan deadline pengerjaannya.",
+      "message": "Ceritain proyeknya minimal 10 karakter ya.",
+      "turnstile": "Centang verifikasi keamanan dulu sebelum kirim email."
     },
     "toast": {
-      "wa_success": "WhatsApp dibuka dengan ringkasan kebutuhan proyek Anda.",
-      "email_success": "Pesan berhasil dikirim ke Akbar. Kami akan membalas maksimal 1x24 jam kerja.",
-      "email_error": "Gagal mengirim email. Silakan coba kembali atau hubungi langsung lewat WhatsApp."
+      "wa_success": "WhatsApp dibuka dengan pesan ringkasan proyekmu.",
+      "email_success": "Pesan terkirim ke Akbar. Akan saya balas secepatnya.",
+      "email_error": "Gagal kirim email. Coba lagi atau langsung hubungi lewat WhatsApp."
     }
   },
   "footer": {
-    "role": "Tech Agency & Full-Stack Engineering Studio",
-    "tagline": "Membangun sistem web, aplikasi mobile, dan integrasi AI yang rapi, cepat, dan siap dipakai dalam skala produksi.",
-    "location": "Kota Jambi, Indonesia — Remote Worldwide",
-    "nav_title": "Navigasi",
+    "role": "Web, Mobile & AI Developer",
+    "tagline": "Bikin website, aplikasi mobile, dan integrasi AI yang rapi, kencang, dan nyaman dipakai.",
+    "location": "Kota Jambi, Indonesia — Melayani Remote",
+    "nav_title": "Menu",
     "connect_title": "Tautan",
-    "copyright": "Hak cipta dilindungi."
+    "copyright": "Semua hak dilindungi."
   },
   "notFound": {
-    "title": "Halaman Tidak Ditemukan",
-    "description": "Tautan studi kasus atau halaman yang Anda buka tidak tersedia atau sudah dipindahkan.",
+    "title": "Halaman Nggak Ditemukan",
+    "description": "Link proyek atau halaman yang kamu cari sudah dipindahkan atau nggak tersedia.",
     "backHome": "Kembali ke Beranda",
     "browseProjects": "Lihat Semua Proyek"
   }

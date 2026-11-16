@@ -39,7 +39,7 @@ export const fallbackProjects = [
     slug: 'chattask',
     name: 'ChatTask',
     src: '/img/chattask.webp',
-    client: 'Internal Studio Product',
+    client: 'Internal Product',
     year: '2026',
     role: 'Fullstack Developer',
     url: 'https://chattask.app',

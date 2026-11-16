@@ -114,9 +114,9 @@ export default function Navbar() {
         aria-label={currentLang === 'en' ? 'Primary navigation' : 'Navigasi utama'}
         className={`pointer-events-auto w-full max-w-6xl rounded-2xl transition-all duration-300 border ${
           scrolled
-            ? 'bg-surface/95 dark:bg-surface/95 backdrop-blur-xl border-line shadow-lg shadow-ink/[0.06] dark:shadow-black/40 px-4 sm:px-6 py-2.5'
-            : 'bg-surface/85 dark:bg-surface/85 backdrop-blur-md border-line/80 px-4 sm:px-6 py-3'
-        } flex items-center justify-between gap-4`}
+            ? 'bg-surface/95 dark:bg-surface/95 backdrop-blur-xl border-line shadow-lg shadow-ink/[0.06] dark:shadow-black/40 px-3.5 sm:px-6 py-2.5'
+            : 'bg-surface/85 dark:bg-surface/85 backdrop-blur-md border-line/80 px-3.5 sm:px-6 py-3'
+        } flex items-center justify-between gap-2 sm:gap-4`}
       >
         {/* Brand */}
         <Link
@@ -126,10 +126,10 @@ export default function Navbar() {
               handleSectionLink(e, 'top');
             }
           }}
-          className="flex items-center min-h-[44px] pr-2 text-ink hover:opacity-85 transition-opacity shrink-0"
+          className="flex items-center min-h-[44px] pr-1 text-ink hover:opacity-85 transition-opacity shrink-0"
           aria-label="Akbar Alfaidah — Home"
         >
-          <BrandLogo className="h-8 w-auto text-ink" showWordmark />
+          <BrandLogo className="h-7 sm:h-8 w-auto text-ink" showWordmark />
         </Link>
 
         {/* Desktop Links */}

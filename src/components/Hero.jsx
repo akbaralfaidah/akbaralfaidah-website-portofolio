@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -17,15 +17,42 @@ import { Button } from './ui/Button';
 import { MeshGradient } from './ui/MeshGradient';
 import { STUDIO_EASE } from '../lib/motion';
 
+const KINETIC_ITEMS_ID = [
+  'Web Full-Stack',
+  'Aplikasi Android & Flutter',
+  'Integrasi AI & Vision',
+  'Desain Antarmuka',
+  'API & Database',
+  'Deploy Cloud Server'
+];
+
+const KINETIC_ITEMS_EN = [
+  'Full-Stack Web',
+  'Android & Flutter',
+  'Applied AI & Vision',
+  'Interface Design',
+  'APIs & Databases',
+  'Cloud Deployment'
+];
+
 export default function Hero() {
   const { t, i18n } = useTranslation();
   const [activeIndex, setActiveIndex] = useState(0);
   const [stageMode, setStageMode] = useState('preview');
   const [isPaused, setIsPaused] = useState(false);
 
+  const stageRef = useRef(null);
+  const mx = useMotionValue(0.5);
+  const my = useMotionValue(0.5);
+  const smoothX = useSpring(mx, { stiffness: 220, damping: 24 });
+  const smoothY = useSpring(my, { stiffness: 220, damping: 24 });
+  const rotateY = useTransform(smoothX, [0, 1], [-4, 4]);
+  const rotateX = useTransform(smoothY, [0, 1], [3, -3]);
+
   const facts = t('hero.facts', { returnObjects: true }) || [];
   const activeProject = heroProjects[activeIndex] || heroProjects[0];
   const isEn = i18n.language === 'en';
+  const ribbonItems = isEn ? KINETIC_ITEMS_EN : KINETIC_ITEMS_ID;
 
   useEffect(() => {
     if (isPaused || stageMode !== 'preview') return undefined;
@@ -40,6 +67,16 @@ export default function Hero() {
 
     return () => window.clearInterval(timer);
   }, [isPaused, stageMode]);
+
+  const handleStageMove = (e) => {
+    const el = stageRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    if (rect.width > 0 && rect.height > 0) {
+      mx.set((e.clientX - rect.left) / rect.width);
+      my.set((e.clientY - rect.top) / rect.height);
+    }
+  };
 
   const handleSelectProject = (index) => {
     setActiveIndex(index);
@@ -63,18 +100,18 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative bg-paper text-ink pt-28 sm:pt-36 lg:pt-40 pb-20 sm:pb-24 px-6 border-b border-line overflow-hidden"
+      className="relative bg-paper text-ink pt-28 sm:pt-36 lg:pt-40 pb-0 border-b border-line overflow-hidden"
     >
       <MeshGradient />
 
-      <div className="relative z-10 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+      <div className="relative z-10 max-w-6xl mx-auto px-6 pb-16 sm:pb-20 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
         {/* Left Column */}
-        <div className="lg:col-span-7 flex flex-col items-start">
+        <div className="lg:col-span-6 flex flex-col items-start">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, ease: STUDIO_EASE }}
-            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-surface border border-line shadow-sm text-sm font-medium text-ink mb-7 whitespace-nowrap"
+            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-surface/90 backdrop-blur-md border border-line shadow-sm text-sm font-medium text-ink mb-7 whitespace-nowrap"
           >
             <span className="relative flex h-2.5 w-2.5" aria-hidden="true">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
@@ -84,19 +121,22 @@ export default function Hero() {
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.06, ease: STUDIO_EASE }}
-            className="font-display text-[2.35rem] sm:text-[3.6rem] lg:text-[4.15rem] font-extrabold tracking-[-0.03em] leading-[1.04] text-ink mb-6"
+            transition={{ duration: 0.58, delay: 0.06, ease: STUDIO_EASE }}
+            className="font-display text-[2.45rem] sm:text-[3.5rem] lg:text-[3.95rem] font-extrabold tracking-[-0.03em] leading-[1.06] text-ink mb-6"
           >
-            {t('hero.headline')}
+            {t('hero.headline_start')}{' '}
+            <span className="bg-gradient-to-r from-accent via-sky-500 to-amber-500 dark:from-blue-400 dark:via-sky-300 dark:to-amber-300 bg-clip-text text-transparent">
+              {t('hero.headline_accent')}
+            </span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.14, ease: STUDIO_EASE }}
-            className="text-lg sm:text-xl text-ink-muted leading-relaxed max-w-2xl mb-9"
+            className="text-lg sm:text-xl text-ink-muted leading-relaxed max-w-xl mb-9"
           >
             {t('hero.subtitle')}
           </motion.p>
@@ -105,7 +145,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.22, ease: STUDIO_EASE }}
-            className="flex flex-wrap items-center gap-4 mb-12 w-full sm:w-auto"
+            className="flex flex-wrap items-center gap-4 mb-11 w-full sm:w-auto"
           >
             <Button
               variant="accent"
@@ -116,7 +156,7 @@ export default function Hero() {
               <span>{t('hero.cta_primary')}</span>
               <ArrowRight
                 size={18}
-                className="transition-transform duration-200 group-hover:translate-x-0.5"
+                className="transition-transform duration-200 group-hover:translate-x-1"
                 aria-hidden="true"
               />
             </Button>
@@ -146,9 +186,7 @@ export default function Hero() {
             {Array.isArray(facts) &&
               facts.map((fact) => (
                 <div key={fact.label}>
-                  <dt className="text-sm font-medium text-ink-muted mb-1">
-                    {fact.label}
-                  </dt>
+                  <dt className="text-sm font-medium text-ink-muted mb-1">{fact.label}</dt>
                   <dd className="font-display text-lg sm:text-xl font-bold text-ink">
                     {fact.value}
                   </dd>
@@ -157,16 +195,23 @@ export default function Hero() {
           </motion.dl>
         </div>
 
-        {/* Right Column — Interactive Project Showcase Stage */}
+        {/* Right Column — 3D Tilt Showcase Stage */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.97, y: 12 }}
+          ref={stageRef}
+          initial={{ opacity: 0, scale: 0.96, y: 16 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.65, delay: 0.16, ease: STUDIO_EASE }}
+          transition={{ duration: 0.7, delay: 0.16, ease: STUDIO_EASE }}
+          style={{ rotateX, rotateY, transformPerspective: 1200 }}
+          onMouseMove={handleStageMove}
           onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-          className="lg:col-span-5"
+          onMouseLeave={() => {
+            setIsPaused(false);
+            mx.set(0.5);
+            my.set(0.5);
+          }}
+          className="lg:col-span-6"
         >
-          <div className="relative rounded-2xl bg-surface border border-line shadow-xl shadow-ink/[0.06] dark:shadow-black/40 overflow-hidden">
+          <div className="relative rounded-2xl bg-surface/95 backdrop-blur-md border border-line shadow-2xl shadow-accent/[0.08] dark:shadow-black/50 overflow-hidden">
             {!isPaused && stageMode === 'preview' && (
               <div
                 key={`progress-${activeProject.slug}`}
@@ -175,7 +220,7 @@ export default function Hero() {
               />
             )}
 
-            {/* Stage Controls */}
+            {/* Top Controls */}
             <div className="px-4 sm:px-5 py-3.5 border-b border-line flex items-center justify-between gap-2 bg-mist/50">
               <div className="flex items-center gap-2.5 min-w-0">
                 <span className="font-mono text-sm font-semibold text-accent tabular-nums">
@@ -254,17 +299,17 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* Viewport */}
-            <div className="relative aspect-[4/3] bg-mist overflow-hidden border-b border-line">
-              <AnimatePresence mode="wait">
+            {/* 16:9 HD Viewport */}
+            <div className="relative aspect-video bg-mist overflow-hidden border-b border-line">
+              <AnimatePresence initial={false}>
                 {stageMode === 'preview' ? (
                   <motion.div
                     key={`img-${activeProject.slug}`}
-                    initial={{ opacity: 0, scale: 1.02 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.99 }}
-                    transition={{ duration: 0.18, ease: STUDIO_EASE }}
-                    className="w-full h-full"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3, ease: STUDIO_EASE }}
+                    className="absolute inset-0"
                   >
                     <Link
                       to={`/project/${activeProject.slug}`}
@@ -273,11 +318,11 @@ export default function Hero() {
                       <img
                         src={activeProject.src}
                         alt={`${activeProject.name} interface preview`}
-                        width={800}
-                        height={600}
+                        width={1920}
+                        height={1080}
                         decoding="async"
                         fetchPriority="high"
-                        className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
                       />
                     </Link>
                   </motion.div>
@@ -287,34 +332,30 @@ export default function Hero() {
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.16, ease: STUDIO_EASE }}
-                    className="w-full h-full bg-obsidian text-slate-100 p-6 flex flex-col justify-between"
+                    transition={{ duration: 0.2, ease: STUDIO_EASE }}
+                    className="absolute inset-0 bg-obsidian text-slate-100 p-6 flex flex-col justify-between"
                   >
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-semibold text-blue-400">
-                          {isEn ? 'Architecture Brief' : 'Ringkasan Arsitektur'}
+                          {activeProject.category}
                         </span>
                         <span className="font-mono text-sm text-slate-400">2026</span>
                       </div>
                       <div>
-                        <h3 className="font-display text-2xl font-bold text-white mb-1.5">
+                        <h3 className="font-display text-2xl font-bold text-white mb-1">
                           {activeProject.name}
                         </h3>
                         <p className="text-base text-slate-300 leading-relaxed">
                           {activeProject.summary}
                         </p>
                       </div>
-                      <div className="pt-3 border-t border-white/10">
-                        <p className="text-sm text-slate-400 mb-0.5">
-                          {t('projects.client_label')}
-                        </p>
-                        <p className="text-base font-medium text-white">{activeProject.client}</p>
-                      </div>
                     </div>
 
-                    <div>
-                      <p className="text-sm text-slate-400 mb-2">Tech Stack</p>
+                    <div className="space-y-3">
+                      <p className="text-sm text-slate-400">
+                        {t('projects.client_label')}: <span className="text-white font-medium">{activeProject.client}</span>
+                      </p>
                       <div className="flex flex-wrap gap-2">
                         {(activeProject.stack || []).map((item) => (
                           <span
@@ -369,20 +410,13 @@ export default function Hero() {
                       role="tab"
                       aria-selected={selected}
                       onClick={() => handleSelectProject(idx)}
-                      className={`relative min-h-[44px] sm:min-h-[38px] min-w-[44px] px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+                      className={`min-h-[44px] sm:min-h-[38px] min-w-[44px] px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
                         selected
-                          ? 'text-on-accent font-semibold'
+                          ? 'bg-accent-solid text-on-accent font-semibold shadow-sm'
                           : 'bg-mist/60 text-ink-muted hover:text-ink hover:bg-mist'
                       }`}
                     >
-                      {selected && (
-                        <motion.span
-                          layoutId="hero-tab-pill"
-                          transition={{ type: 'spring', stiffness: 450, damping: 34 }}
-                          className="absolute inset-0 rounded-lg bg-accent-solid"
-                        />
-                      )}
-                      <span className="relative z-10">{proj.name}</span>
+                      {proj.name}
                     </button>
                   );
                 })}
@@ -390,6 +424,24 @@ export default function Hero() {
             </div>
           </div>
         </motion.div>
+      </div>
+
+      {/* Artistic Kinetic Ticker Ribbon */}
+      <div className="relative z-10 border-t border-line bg-surface/75 backdrop-blur-md py-4 overflow-hidden select-none">
+        <div className="flex w-max animate-marquee gap-8 items-center">
+          {[...ribbonItems, ...ribbonItems].map((label, idx) => (
+            <div
+              key={`${label}-${idx}`}
+              aria-hidden={idx >= ribbonItems.length ? 'true' : undefined}
+              className="flex items-center gap-8 shrink-0"
+            >
+              <span className="font-display text-lg sm:text-xl font-bold tracking-tight text-ink">
+                {label}
+              </span>
+              <span className="w-2 h-2 rounded-full bg-accent shrink-0" aria-hidden="true" />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

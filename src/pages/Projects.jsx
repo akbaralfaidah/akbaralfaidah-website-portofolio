@@ -7,6 +7,7 @@ import { fetchProjects } from '../data/projects';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import BackToTop from '../components/ui/BackToTop';
+import MeshGradient from '../components/ui/MeshGradient';
 import { Button } from '../components/ui/Button';
 import { FadeUp } from '../components/ui/MotionPrimitives';
 import { STUDIO_EASE } from '../lib/motion';
@@ -50,10 +51,11 @@ export default function ProjectsPage() {
   const isEn = i18n.language === 'en';
 
   return (
-    <div className="min-h-screen flex flex-col bg-paper text-ink transition-colors duration-300">
+    <div className="relative min-h-screen flex flex-col bg-paper text-ink transition-colors duration-300 overflow-hidden">
+      <MeshGradient />
       <Navbar />
 
-      <main id="main-content" className="flex-1 pt-28 sm:pt-36 pb-20 px-6">
+      <main id="main-content" className="relative z-10 flex-1 pt-28 sm:pt-36 pb-20 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="mb-8">
             <Link
@@ -65,13 +67,26 @@ export default function ProjectsPage() {
             </Link>
           </div>
 
-          <FadeUp className="mb-10 sm:mb-12">
-            <h1 className="font-display text-4xl sm:text-5xl lg:text-[3.5rem] font-extrabold tracking-tight leading-[1.08] text-ink mb-4">
-              {t('projects.archive_heading')}
-            </h1>
-            <p className="text-lg sm:text-xl text-ink-muted max-w-2xl leading-relaxed">
-              {t('projects.archive_subheading')}
-            </p>
+          <FadeUp className="mb-10 sm:mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+              <h1 className="font-display text-4xl sm:text-5xl lg:text-[3.5rem] font-extrabold tracking-tight leading-[1.06] text-ink mb-4">
+                {t('projects.archive_heading')}
+              </h1>
+              <p className="text-lg sm:text-xl text-ink-muted max-w-2xl leading-relaxed">
+                {t('projects.archive_subheading')}
+              </p>
+            </div>
+
+            {!loading && (
+              <div className="inline-flex items-baseline gap-2 px-4 py-2.5 rounded-xl bg-surface/90 border border-line shadow-sm self-start md:self-auto">
+                <span className="font-display text-2xl font-extrabold text-accent tabular-nums">
+                  {filteredProjects.length}
+                </span>
+                <span className="text-sm font-medium text-ink-muted">
+                  {isEn ? 'Projects' : 'Proyek'}
+                </span>
+              </div>
+            )}
           </FadeUp>
 
           <div
@@ -91,7 +106,7 @@ export default function ProjectsPage() {
                   onClick={() => setSelectedCategory(category)}
                   className={`relative min-h-[44px] px-4 py-2 rounded-xl text-[15px] font-medium transition-colors border ${
                     active
-                      ? 'text-on-ink border-ink'
+                      ? 'text-on-accent border-transparent'
                       : 'bg-surface text-ink-muted border-line hover:text-ink hover:border-accent/40'
                   }`}
                 >
@@ -99,7 +114,7 @@ export default function ProjectsPage() {
                     <motion.span
                       layoutId="archive-projects-filter"
                       transition={{ type: 'spring', stiffness: 420, damping: 32 }}
-                      className="absolute inset-0 rounded-xl bg-ink"
+                      className="absolute inset-0 rounded-xl bg-accent-solid shadow-sm"
                     />
                   )}
                   <span className="relative z-10">{label}</span>
@@ -115,7 +130,7 @@ export default function ProjectsPage() {
                   key={idx}
                   className="rounded-2xl bg-surface border border-line overflow-hidden animate-pulse"
                 >
-                  <div className="aspect-[4/3] bg-mist" />
+                  <div className="aspect-video bg-mist" />
                   <div className="p-6 space-y-3">
                     <div className="h-4 w-24 bg-mist rounded" />
                     <div className="h-6 w-2/3 bg-mist rounded" />
@@ -150,20 +165,25 @@ export default function ProjectsPage() {
                     <motion.div
                       key={project.id || project.slug}
                       layout
-                      initial={{ opacity: 0, scale: 0.97, y: 8 }}
+                      initial={{ opacity: 0, scale: 0.97, y: 10 }}
                       animate={{ opacity: 1, scale: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.14 } }}
-                      transition={{ duration: 0.24, delay: Math.min(idx * 0.03, 0.18), ease: STUDIO_EASE }}
+                      transition={{
+                        duration: 0.25,
+                        delay: Math.min(idx * 0.03, 0.18),
+                        ease: STUDIO_EASE
+                      }}
                       className="flex"
                     >
                       <SpotlightCard
                         as="article"
+                        tilt
                         className="w-full overflow-hidden flex flex-col justify-between group"
                       >
                         <div>
                           <Link
                             to={`/project/${project.slug}`}
-                            className="block relative aspect-[4/3] bg-mist overflow-hidden border-b border-line"
+                            className="block relative aspect-video bg-mist overflow-hidden border-b border-line"
                             aria-label={`${project.name} — ${t('projects.cta')}`}
                           >
                             {isInDevelopment ? (
@@ -175,11 +195,11 @@ export default function ProjectsPage() {
                               <img
                                 src={project.src}
                                 alt={`${project.name} screenshot`}
-                                width={800}
-                                height={600}
+                                width={1920}
+                                height={1080}
                                 loading={idx < 3 ? 'eager' : 'lazy'}
                                 decoding="async"
-                                className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.04]"
+                                className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.04]"
                               />
                             )}
                           </Link>

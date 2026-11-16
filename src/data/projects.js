@@ -193,7 +193,7 @@ export const heroProjects = [
     category: 'Web & NLP',
     summary: 'Next.js, Socket.io & WhatsApp NLP Parser',
     stack: ['Next.js', 'Socket.io', 'PostgreSQL', 'NLP'],
-    client: 'Internal Studio Product',
+    client: 'Internal Product',
     src: '/img/chattask.webp'
   },
   {

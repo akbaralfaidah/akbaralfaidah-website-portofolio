@@ -68,8 +68,10 @@ export default function Projects() {
 
   return (
     <>
-      <section id="projects" className="py-20 sm:py-24 px-6 bg-paper text-ink border-b border-line">
-        <div className="max-w-6xl mx-auto">
+      <section id="projects" className="relative py-20 sm:py-24 px-6 bg-paper text-ink border-b border-line overflow-hidden">
+        <div className="film-grain pointer-events-none absolute inset-0" aria-hidden="true" />
+
+        <div className="relative z-10 max-w-6xl mx-auto">
           <FadeUp className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 sm:mb-10">
             <div className="max-w-2xl">
               <h2 className="font-display text-3xl sm:text-5xl lg:text-[3.25rem] font-bold tracking-tight leading-[1.08] text-ink mb-4">
@@ -92,7 +94,7 @@ export default function Projects() {
             </Button>
           </FadeUp>
 
-          {/* Interactive Filter Tabs */}
+          {/* Filter Tabs */}
           <div
             role="tablist"
             aria-label="Filter showcase by discipline"
@@ -110,7 +112,7 @@ export default function Projects() {
                   onClick={() => setSelectedCategory(category)}
                   className={`relative min-h-[44px] px-4 py-2 rounded-xl text-[15px] font-medium transition-colors border ${
                     active
-                      ? 'text-on-ink border-ink'
+                      ? 'text-on-accent border-transparent'
                       : 'bg-surface text-ink-muted border-line hover:text-ink hover:border-accent/40'
                   }`}
                 >
@@ -118,7 +120,7 @@ export default function Projects() {
                     <motion.span
                       layoutId="home-projects-filter"
                       transition={{ type: 'spring', stiffness: 420, damping: 32 }}
-                      className="absolute inset-0 rounded-xl bg-ink"
+                      className="absolute inset-0 rounded-xl bg-accent-solid shadow-sm"
                     />
                   )}
                   <span className="relative z-10">{label}</span>
@@ -134,7 +136,7 @@ export default function Projects() {
                   key={idx}
                   className="rounded-2xl bg-surface border border-line overflow-hidden animate-pulse"
                 >
-                  <div className="aspect-[4/3] bg-mist" />
+                  <div className="aspect-video bg-mist" />
                   <div className="p-6 space-y-3">
                     <div className="h-4 w-24 bg-mist rounded" />
                     <div className="h-6 w-2/3 bg-mist rounded" />
@@ -150,34 +152,35 @@ export default function Projects() {
                   <motion.div
                     key={project.id || project.slug}
                     layout
-                    initial={{ opacity: 0, scale: 0.97, y: 8 }}
+                    initial={{ opacity: 0, scale: 0.97, y: 10 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.14 } }}
                     transition={{
-                      duration: 0.24,
-                      delay: Math.min(idx * 0.03, 0.15),
+                      duration: 0.25,
+                      delay: Math.min(idx * 0.035, 0.16),
                       ease: STUDIO_EASE
                     }}
                     className="flex"
                   >
                     <SpotlightCard
                       as="article"
+                      tilt
                       className="w-full overflow-hidden flex flex-col justify-between group"
                     >
                       <div>
                         <Link
                           to={`/project/${project.slug}`}
-                          className="block relative aspect-[4/3] bg-mist overflow-hidden border-b border-line"
+                          className="block relative aspect-video bg-mist overflow-hidden border-b border-line"
                           aria-label={`${project.name} — ${t('projects.cta')}`}
                         >
                           <img
                             src={project.src}
                             alt={`${project.name} screenshot`}
-                            width={800}
-                            height={600}
+                            width={1920}
+                            height={1080}
                             loading={idx < 3 ? 'eager' : 'lazy'}
                             decoding="async"
-                            className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.04]"
+                            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.04]"
                           />
                         </Link>
 
@@ -245,7 +248,7 @@ export default function Projects() {
         </div>
       </section>
 
-      {/* Quick Preview Modal */}
+      {/* Quick View Modal */}
       <AnimatePresence>
         {quickProject && (
           <motion.div
@@ -287,11 +290,11 @@ export default function Projects() {
               </div>
 
               <div className="max-h-[75vh] overflow-y-auto p-6 space-y-6">
-                <div className="aspect-[16/9] rounded-xl overflow-hidden bg-mist border border-line">
+                <div className="aspect-video rounded-xl overflow-hidden bg-mist border border-line">
                   <img
                     src={quickProject.src}
                     alt={`${quickProject.name} showcase`}
-                    className="w-full h-full object-cover object-top"
+                    className="w-full h-full object-cover object-center"
                   />
                 </div>
 
@@ -320,7 +323,11 @@ export default function Projects() {
                           : quickProject.highlights
                         ).map((pt) => (
                           <li key={pt} className="flex items-start gap-2.5 text-base text-ink">
-                            <Check size={16} className="text-accent shrink-0 mt-1" aria-hidden="true" />
+                            <Check
+                              size={16}
+                              className="text-accent shrink-0 mt-1"
+                              aria-hidden="true"
+                            />
                             <span>{pt}</span>
                           </li>
                         ))}
@@ -355,12 +362,7 @@ export default function Projects() {
                   <span className="text-sm font-medium text-ink-muted">{quickProject.client}</span>
                 )}
 
-                <Button
-                  as={Link}
-                  to={`/project/${quickProject.slug}`}
-                  variant="accent"
-                  size="md"
-                >
+                <Button as={Link} to={`/project/${quickProject.slug}`} variant="accent" size="md">
                   <span>{t('projects.cta')}</span>
                   <ArrowRight size={16} aria-hidden="true" />
                 </Button>

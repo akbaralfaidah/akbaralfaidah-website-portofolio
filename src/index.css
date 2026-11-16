@@ -19,9 +19,9 @@
 @tailwind utilities;
 
 :root {
-  --color-paper-rgb: 247 249 252;
+  --color-paper-rgb: 244 247 251;
   --color-surface-rgb: 255 255 255;
-  --color-mist-rgb: 235 240 247;
+  --color-mist-rgb: 232 238 247;
   --color-ink-rgb: 15 23 42;
   --color-ink-muted-rgb: 71 85 105;
   --color-accent-rgb: 29 78 216;
@@ -30,17 +30,17 @@
   --color-on-accent-rgb: 255 255 255;
   --color-gold-rgb: 217 119 6;
   --color-on-ink-rgb: 255 255 255;
-  --color-paper: #F7F9FC;
+  --color-paper: #F4F7FB;
   --color-ink: #0F172A;
   --color-accent: #1D4ED8;
   --color-border: rgba(15, 23, 42, 0.11);
-  --spotlight-color: rgba(29, 78, 216, 0.08);
+  --spotlight-color: rgba(29, 78, 216, 0.09);
 }
 
 .dark {
-  --color-paper-rgb: 9 13 22;
-  --color-surface-rgb: 17 24 39;
-  --color-mist-rgb: 27 36 54;
+  --color-paper-rgb: 7 10 18;
+  --color-surface-rgb: 15 21 36;
+  --color-mist-rgb: 24 33 54;
   --color-ink-rgb: 241 245 249;
   --color-ink-muted-rgb: 148 163 184;
   --color-accent-rgb: 96 165 250;
@@ -48,12 +48,12 @@
   --color-accent-hover-rgb: 59 130 246;
   --color-on-accent-rgb: 255 255 255;
   --color-gold-rgb: 251 191 36;
-  --color-on-ink-rgb: 9 13 22;
-  --color-paper: #090D16;
+  --color-on-ink-rgb: 7 10 18;
+  --color-paper: #070A12;
   --color-ink: #F1F5F9;
   --color-accent: #60A5FA;
   --color-border: rgba(241, 245, 249, 0.11);
-  --spotlight-color: rgba(96, 165, 250, 0.12);
+  --spotlight-color: rgba(96, 165, 250, 0.14);
 }
 
 @layer base {
@@ -86,25 +86,8 @@
   }
 }
 
-.bg-architectural-grid {
-  background-image:
-    linear-gradient(to right, rgba(15, 23, 42, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
-  background-size: 48px 48px;
-}
-
-.dark .bg-architectural-grid {
-  background-image:
-    linear-gradient(to right, rgba(148, 163, 184, 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
-  background-size: 48px 48px;
-}
-
-.bg-obsidian-grid {
-  background-image:
-    linear-gradient(to right, rgba(148, 163, 184, 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
-  background-size: 44px 44px;
+.film-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
 }
 
 .spotlight-surface {
@@ -118,9 +101,9 @@
   border-radius: inherit;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 250ms ease;
+  transition: opacity 260ms ease;
   background: radial-gradient(
-    420px circle at var(--mx, 50%) var(--my, 50%),
+    480px circle at var(--mx, 50%) var(--my, 50%),
     var(--spotlight-color),
     transparent 65%
   );
@@ -129,6 +112,12 @@
 
 .spotlight-surface:hover::before {
   opacity: 1;
+}
+
+@keyframes auroraDrift {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(2%, -2%, 0) scale(1.04); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
 }
 
 @keyframes marquee {
@@ -141,8 +130,12 @@
   100% { transform: scaleX(1); }
 }
 
+.animate-aurora {
+  animation: auroraDrift 16s ease-in-out infinite;
+}
+
 .animate-marquee {
-  animation: marquee 30s linear infinite;
+  animation: marquee 32s linear infinite;
 }
 
 .animate-marquee:hover,
@@ -169,6 +162,7 @@
     scroll-behavior: auto !important;
   }
 
+  .animate-aurora,
   .animate-marquee,
   .animate-stage-progress {
     animation: none !important;

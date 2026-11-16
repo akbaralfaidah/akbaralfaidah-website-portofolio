@@ -1,15 +1,15 @@
-# Akbar Alfaidah — Tech Agency & Engineering Studio
-> Principal Software Engineer specializing in Full-Stack Web Platforms, Mobile Apps, and Applied Machine Learning / Computer Vision. Based in Jambi, Indonesia; available worldwide remotely.
+# Akbar Alfaidah — Tech Agency
+> Full-Stack Web, Mobile & AI Developer specializing in custom web portals, Android/Flutter apps, and Applied Machine Learning. Based in Jambi, Indonesia; available remotely worldwide.
 
 ## Core Services
-- **Web Platforms & Custom Systems:** React, Next.js, TypeScript, Laravel, PostgreSQL, Supabase, Docker deployment.
+- **Web Platforms & Portals:** React, Next.js, TypeScript, Laravel, PostgreSQL, Supabase, Docker deployment.
 - **Mobile Applications:** React Native, Flutter, Android & iOS production releases with geolocation, real-time sync, and offline resilience.
 - **Applied AI & Computer Vision:** YOLO detection, BiLSTM / OpenCV pipelines, FastAPI inference services, and automated document extraction.
 
 ## Public Pages
 - Home: https://akbaralfaidah.com/
-- Portfolio Archive: https://akbaralfaidah.com/projects
-- Case Studies: https://akbaralfaidah.com/project/{slug}
+- All Projects: https://akbaralfaidah.com/projects
+- Project Pages: https://akbaralfaidah.com/project/{slug}
 
 ## Contact
 - Website: https://akbaralfaidah.com/#contact
