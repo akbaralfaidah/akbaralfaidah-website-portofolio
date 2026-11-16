@@ -5,6 +5,7 @@ import { Sun, Moon, Menu, X, ArrowUpRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
 import BrandLogo from './BrandLogo';
+import Magnetic from './ui/Magnetic';
 
 const NAV_LINKS = [
   { key: 'projects', target: 'projects' },
@@ -14,6 +15,7 @@ const NAV_LINKS = [
 ];
 
 export default function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
@@ -35,6 +37,8 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
+      setScrolled(window.scrollY > 28);
+
       if (location.pathname !== '/') {
         setActiveSection(location.pathname.startsWith('/project') ? 'projects' : '');
         return;
@@ -99,7 +103,13 @@ export default function Navbar() {
   );
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 h-[72px] bg-paper/90 backdrop-blur-xl border-b border-line transition-colors">
+    <header
+      className={`fixed top-0 left-0 right-0 z-40 h-[72px] transition-all duration-300 ${
+        scrolled
+          ? 'bg-paper/80 backdrop-blur-xl border-b border-line'
+          : 'bg-transparent border-b border-transparent'
+      }`}
+    >
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-6 focus:z-50 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-ink focus:text-on-ink focus:text-sm focus:font-medium"
@@ -111,7 +121,6 @@ export default function Navbar() {
         aria-label={currentLang === 'en' ? 'Primary navigation' : 'Navigasi utama'}
         className="h-full max-w-6xl mx-auto px-5 sm:px-6 flex items-center justify-between gap-4"
       >
-        {/* Brand */}
         <Link
           to="/"
           onClick={(e) => {
@@ -144,7 +153,7 @@ export default function Navbar() {
                   <motion.span
                     layoutId="navbar-active-indicator"
                     transition={{ type: 'spring', stiffness: 450, damping: 36 }}
-                    className="absolute left-4 right-4 bottom-1.5 h-[1.5px] bg-ink"
+                    className="absolute left-4 right-4 bottom-1.5 h-[1.5px] bg-accent"
                   />
                 )}
               </a>
@@ -157,7 +166,7 @@ export default function Navbar() {
           <button
             type="button"
             onClick={toggleLanguage}
-            className="min-h-[40px] min-w-[40px] px-2.5 rounded-lg font-mono text-xs font-semibold uppercase text-ink border border-line hover:border-ink/40 transition-colors whitespace-nowrap"
+            className="min-h-[38px] min-w-[38px] px-2.5 rounded-lg font-mono text-xs font-semibold uppercase text-ink border border-line bg-paper/40 backdrop-blur-sm hover:border-ink/40 transition-colors whitespace-nowrap"
             aria-label={currentLang === 'id' ? 'Switch language to English' : 'Ganti bahasa ke Indonesia'}
           >
             {currentLang === 'id' ? 'ID' : 'EN'}
@@ -166,7 +175,7 @@ export default function Navbar() {
           <button
             type="button"
             onClick={toggleTheme}
-            className="min-h-[40px] min-w-[40px] flex items-center justify-center rounded-lg text-ink border border-line hover:border-ink/40 transition-colors overflow-hidden"
+            className="min-h-[38px] min-w-[38px] flex items-center justify-center rounded-lg text-ink border border-line bg-paper/40 backdrop-blur-sm hover:border-ink/40 transition-colors overflow-hidden"
             aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
           >
             <AnimatePresence mode="wait" initial={false}>
@@ -178,32 +187,34 @@ export default function Navbar() {
                 transition={{ duration: 0.15 }}
               >
                 {theme === 'dark' ? (
-                  <Sun size={17} aria-hidden="true" />
+                  <Sun size={16} aria-hidden="true" />
                 ) : (
-                  <Moon size={17} aria-hidden="true" />
+                  <Moon size={16} aria-hidden="true" />
                 )}
               </motion.span>
             </AnimatePresence>
           </button>
 
-          <a
-            href="/#contact"
-            onClick={(e) => handleSectionLink(e, 'contact')}
-            className="hidden sm:inline-flex items-center gap-1.5 min-h-[40px] px-4 py-2 rounded-lg text-sm font-medium bg-ink text-on-ink hover:opacity-85 transition-opacity whitespace-nowrap"
-          >
-            <span>{t('nav.contact')}</span>
-            <ArrowUpRight size={15} aria-hidden="true" />
-          </a>
+          <Magnetic strength={0.22} className="hidden sm:inline-block">
+            <a
+              href="/#contact"
+              onClick={(e) => handleSectionLink(e, 'contact')}
+              className="inline-flex items-center gap-1.5 min-h-[38px] px-4 py-2 rounded-lg text-sm font-medium bg-ink text-on-ink hover:opacity-90 transition-opacity whitespace-nowrap"
+            >
+              <span>{t('nav.contact')}</span>
+              <ArrowUpRight size={15} aria-hidden="true" />
+            </a>
+          </Magnetic>
 
           <button
             type="button"
             onClick={() => setMobileMenuOpen((open) => !open)}
-            className="lg:hidden min-h-[40px] min-w-[40px] flex items-center justify-center rounded-lg text-ink border border-line hover:border-ink/40 transition-colors"
+            className="lg:hidden min-h-[38px] min-w-[38px] flex items-center justify-center rounded-lg text-ink border border-line bg-paper/40 backdrop-blur-sm hover:border-ink/40 transition-colors"
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-nav-drawer"
             aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
           >
-            {mobileMenuOpen ? <X size={19} aria-hidden="true" /> : <Menu size={19} aria-hidden="true" />}
+            {mobileMenuOpen ? <X size={18} aria-hidden="true" /> : <Menu size={18} aria-hidden="true" />}
           </button>
         </div>
       </nav>
@@ -220,7 +231,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:hidden bg-paper border-b border-line px-5 py-4 flex flex-col divide-y divide-line"
+            className="lg:hidden bg-paper/95 backdrop-blur-xl border-b border-line px-5 py-4 flex flex-col divide-y divide-line"
           >
             {NAV_LINKS.map((item) => (
               <a
@@ -238,7 +249,7 @@ export default function Navbar() {
               <a
                 href="/#contact"
                 onClick={(e) => handleSectionLink(e, 'contact')}
-                className="w-full min-h-[48px] px-4 py-3 rounded-lg bg-ink text-on-ink font-medium text-base flex items-center justify-center gap-2 hover:opacity-85 transition-opacity"
+                className="w-full min-h-[48px] px-4 py-3 rounded-lg bg-ink text-on-ink font-medium text-base flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
               >
                 <span>{t('nav.contact')}</span>
                 <ArrowUpRight size={17} aria-hidden="true" />

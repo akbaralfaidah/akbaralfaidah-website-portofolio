@@ -5,7 +5,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#F9F8F5" />
+    <meta name="theme-color" content="#050608" />
 
     <!-- Security Policy fallback for dev/preview; production HTTP headers in nginx.conf also enforce frame-ancestors & HSTS -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.emailjs.com https://challenges.cloudflare.com https://cloudflareinsights.com https://github-contributions-api.jogruber.de; frame-src https://challenges.cloudflare.com https://www.google.com https://maps.google.com; object-src 'none'; base-uri 'self';" />
@@ -38,18 +38,21 @@
     <meta name="twitter:description" content="Full-stack web platforms, React Native &amp; Flutter apps, and applied AI — built end-to-end from UI to production." />
     <meta name="twitter:image" content="https://akbaralfaidah.com/og-banner.jpg" />
 
-    <!-- Pre-paint theme initialization to prevent light/dark flash -->
+    <!-- Pre-paint theme initialization to prevent flash -->
     <script>
       (function () {
         try {
           var saved = localStorage.getItem('theme');
-          var isDark = saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
-          if (isDark) {
+          var isLight = saved === 'light';
+          if (!isLight) {
             document.documentElement.classList.add('dark');
+          } else {
             var meta = document.querySelector('meta[name="theme-color"]');
-            if (meta) meta.setAttribute('content', '#090A0D');
+            if (meta) meta.setAttribute('content', '#F6F5F0');
           }
-        } catch (e) {}
+        } catch (e) {
+          document.documentElement.classList.add('dark');
+        }
       })();
     </script>
 

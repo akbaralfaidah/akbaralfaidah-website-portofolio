@@ -15,6 +15,22 @@
 }
 
 @font-face {
+  font-family: 'Instrument Serif';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/instrument-serif-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/instrument-serif-400-italic.woff2') format('woff2');
+}
+
+@font-face {
   font-family: 'JetBrains Mono';
   font-style: normal;
   font-weight: 400 700;
@@ -27,41 +43,41 @@
 @tailwind utilities;
 
 :root {
-  --color-paper-rgb: 249 248 245;
+  --color-paper-rgb: 246 245 240;
   --color-surface-rgb: 255 255 255;
-  --color-mist-rgb: 240 238 232;
-  --color-ink-rgb: 19 19 18;
-  --color-ink-muted-rgb: 98 96 90;
-  --color-accent-rgb: 30 64 175;
-  --color-accent-solid-rgb: 19 19 18;
-  --color-accent-hover-rgb: 38 38 36;
-  --color-on-accent-rgb: 255 255 255;
+  --color-mist-rgb: 235 232 224;
+  --color-ink-rgb: 17 17 16;
+  --color-ink-muted-rgb: 92 90 84;
+  --color-accent-rgb: 37 99 235;
+  --color-accent-solid-rgb: 17 17 16;
+  --color-accent-hover-rgb: 39 39 42;
+  --color-on-accent-rgb: 246 245 240;
   --color-gold-rgb: 180 83 9;
-  --color-on-ink-rgb: 249 248 245;
-  --color-paper: #F9F8F5;
-  --color-ink: #131312;
-  --color-accent: #1E40AF;
-  --color-border: rgba(19, 19, 18, 0.11);
-  --spotlight-color: rgba(19, 19, 18, 0.04);
+  --color-on-ink-rgb: 246 245 240;
+  --color-paper: #F6F5F0;
+  --color-ink: #111110;
+  --color-accent: #2563EB;
+  --color-border: rgba(17, 17, 16, 0.12);
+  --spotlight-color: rgba(37, 99, 235, 0.08);
 }
 
 .dark {
-  --color-paper-rgb: 9 10 13;
-  --color-surface-rgb: 17 19 24;
-  --color-mist-rgb: 26 29 37;
-  --color-ink-rgb: 244 244 242;
-  --color-ink-muted-rgb: 156 160 170;
+  --color-paper-rgb: 5 6 8;
+  --color-surface-rgb: 13 15 20;
+  --color-mist-rgb: 22 25 34;
+  --color-ink-rgb: 244 244 240;
+  --color-ink-muted-rgb: 156 161 173;
   --color-accent-rgb: 96 165 250;
-  --color-accent-solid-rgb: 244 244 242;
-  --color-accent-hover-rgb: 220 222 228;
-  --color-on-accent-rgb: 9 10 13;
+  --color-accent-solid-rgb: 244 244 240;
+  --color-accent-hover-rgb: 220 223 230;
+  --color-on-accent-rgb: 5 6 8;
   --color-gold-rgb: 251 191 36;
-  --color-on-ink-rgb: 9 10 13;
-  --color-paper: #090A0D;
-  --color-ink: #F4F4F2;
+  --color-on-ink-rgb: 5 6 8;
+  --color-paper: #050608;
+  --color-ink: #F4F4F0;
   --color-accent: #60A5FA;
-  --color-border: rgba(244, 244, 242, 0.11);
-  --spotlight-color: rgba(255, 255, 255, 0.045);
+  --color-border: rgba(244, 244, 240, 0.11);
+  --spotlight-color: rgba(96, 165, 250, 0.12);
 }
 
 @layer base {
@@ -85,7 +101,7 @@
   }
 
   section[id] {
-    scroll-margin-top: 6rem;
+    scroll-margin-top: 5.5rem;
   }
 
   :focus-visible {
@@ -96,7 +112,7 @@
 }
 
 .film-grain {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
 }
 
 .spotlight-surface {
@@ -112,7 +128,7 @@
   opacity: 0;
   transition: opacity 260ms ease;
   background: radial-gradient(
-    480px circle at var(--mx, 50%) var(--my, 50%),
+    520px circle at var(--mx, 50%) var(--my, 50%),
     var(--spotlight-color),
     transparent 65%
   );
@@ -144,7 +160,7 @@
 }
 
 .animate-marquee {
-  animation: marquee 32s linear infinite;
+  animation: marquee 34s linear infinite;
 }
 
 .animate-marquee:hover,
@@ -154,7 +170,7 @@
 
 .animate-stage-progress {
   transform-origin: left center;
-  animation: stageProgress 4.8s linear forwards;
+  animation: stageProgress 5.2s linear forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {

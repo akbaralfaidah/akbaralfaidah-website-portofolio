@@ -10,7 +10,7 @@ const GITHUB_API_URL = `https://github-contributions-api.jogruber.de/v4/${GITHUB
 function getCellColorClass(level) {
   switch (level) {
     case 1:
-      return 'bg-blue-200 dark:bg-blue-950/90';
+      return 'bg-blue-200 dark:bg-blue-950/85';
     case 2:
       return 'bg-blue-400 dark:bg-blue-700';
     case 3:
@@ -27,6 +27,7 @@ export default function Experience() {
   const [contribData, setContribData] = useState(null);
   const [chartFallbackError, setChartFallbackError] = useState(false);
   const [showAllRoles, setShowAllRoles] = useState(false);
+  const [hoveredDay, setHoveredDay] = useState(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -40,7 +41,7 @@ export default function Experience() {
         }
       })
       .catch(() => {
-        // Fallback to ghchart SVG image silently
+        // Fallback silently
       });
 
     return () => {
@@ -99,12 +100,15 @@ export default function Experience() {
   return (
     <section
       id="experience"
-      className="py-20 sm:py-24 px-5 sm:px-6 bg-paper text-ink border-b border-line"
+      className="py-20 sm:py-28 px-5 sm:px-6 bg-paper text-ink border-b border-line"
     >
       <div className="max-w-6xl mx-auto space-y-16">
         {/* Clean Swiss Hairline Ledger */}
         <div>
           <FadeUp className="max-w-2xl mb-10">
+            <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent mb-3">
+              {isEn ? '04 / Experience' : '04 / Rekam Jejak'}
+            </p>
             <h2 className="font-display text-3xl sm:text-5xl font-semibold tracking-[-0.03em] leading-[1.08] text-ink mb-3">
               {t('experience.heading')}
             </h2>
@@ -163,12 +167,12 @@ export default function Experience() {
           )}
         </div>
 
-        {/* Clean GitHub Telemetry Matrix */}
+        {/* Interactive GitHub Telemetry Matrix */}
         <FadeUp>
           <div className="rounded-xl bg-surface border border-line p-6 sm:p-8 space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-line">
               <div className="flex items-center gap-3">
-                <GitCommitHorizontal size={20} className="text-ink shrink-0" aria-hidden="true" />
+                <GitCommitHorizontal size={20} className="text-accent shrink-0" aria-hidden="true" />
                 <div>
                   <h3 className="font-display text-xl font-semibold text-ink">
                     {t('experience.github_title')}
@@ -224,7 +228,10 @@ export default function Experience() {
                   </div>
                 </dl>
 
-                <div className="overflow-x-auto pb-1">
+                <div
+                  className="overflow-x-auto pb-1"
+                  onMouseLeave={() => setHoveredDay(null)}
+                >
                   <div
                     className="inline-flex gap-[3px] min-w-full justify-between"
                     role="img"
@@ -236,8 +243,9 @@ export default function Experience() {
                           day ? (
                             <span
                               key={day.date}
+                              onMouseEnter={() => setHoveredDay(day)}
                               title={`${day.date}: ${day.count} ${t('experience.github_contributions_unit')}`}
-                              className={`w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-[2px] transition-transform hover:scale-125 ${getCellColorClass(
+                              className={`w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-[2px] transition-transform hover:scale-125 cursor-crosshair ${getCellColorClass(
                                 day.level
                               )}`}
                             />
@@ -250,16 +258,26 @@ export default function Experience() {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-end gap-1.5 font-mono text-xs text-ink-muted">
-                  <span>{t('experience.github_less')}</span>
-                  {[0, 1, 2, 3, 4].map((lvl) => (
-                    <span
-                      key={lvl}
-                      className={`w-3 h-3 rounded-[2px] ${getCellColorClass(lvl)}`}
-                      aria-hidden="true"
-                    />
-                  ))}
-                  <span>{t('experience.github_more')}</span>
+                <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-xs text-ink-muted">
+                  <span className="min-h-[20px]">
+                    {hoveredDay
+                      ? `${hoveredDay.date} — ${hoveredDay.count} ${t('experience.github_contributions_unit')}`
+                      : isEn
+                      ? 'Hover any square to inspect daily commit activity'
+                      : 'Arahkan kursor ke kotak untuk melihat aktivitas harian'}
+                  </span>
+
+                  <div className="flex items-center gap-1.5">
+                    <span>{t('experience.github_less')}</span>
+                    {[0, 1, 2, 3, 4].map((lvl) => (
+                      <span
+                        key={lvl}
+                        className={`w-3 h-3 rounded-[2px] ${getCellColorClass(lvl)}`}
+                        aria-hidden="true"
+                      />
+                    ))}
+                    <span>{t('experience.github_more')}</span>
+                  </div>
                 </div>
               </div>
             ) : chartFallbackError ? (

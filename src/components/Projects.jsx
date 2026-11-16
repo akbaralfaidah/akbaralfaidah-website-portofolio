@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 import { ArrowRight, ArrowUpRight, Eye, X, Check } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { fetchProjects } from '../data/projects';
@@ -16,6 +16,12 @@ export default function Projects() {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [quickProject, setQuickProject] = useState(null);
+  const [hoveredRowProject, setHoveredRowProject] = useState(null);
+
+  const previewX = useMotionValue(0);
+  const previewY = useMotionValue(0);
+  const smoothX = useSpring(previewX, { stiffness: 260, damping: 28, mass: 0.6 });
+  const smoothY = useSpring(previewY, { stiffness: 260, damping: 28, mass: 0.6 });
 
   useEffect(() => {
     let isMounted = true;
@@ -48,11 +54,9 @@ export default function Projects() {
   }, [quickProject]);
 
   const visibleProjects = useMemo(() => {
-    const filtered =
-      selectedCategory === 'All'
-        ? projects
-        : projects.filter((p) => (p.categories || []).includes(selectedCategory));
-    return filtered.slice(0, 6);
+    const completed = projects.filter((p) => !p.status || p.status === 'selesai');
+    if (selectedCategory === 'All') return completed;
+    return completed.filter((p) => (p.categories || []).includes(selectedCategory));
   }, [projects, selectedCategory]);
 
   const isEn = i18n.language === 'en';
@@ -65,20 +69,62 @@ export default function Projects() {
     );
   };
 
-  const flagship = visibleProjects.slice(0, 2);
-  const secondary = visibleProjects.slice(2);
+  const leadProject = visibleProjects[0];
+  const pairProjects = visibleProjects.slice(1, 3);
+  const ledgerProjects = visibleProjects.slice(3, 8);
+
+  const clampCoords = (clientX, clientY) => ({
+    tx: typeof window !== 'undefined' ? Math.min(clientX + 24, window.innerWidth - 384) : clientX + 24,
+    ty:
+      typeof window !== 'undefined'
+        ? Math.max(92, Math.min(clientY - 110, window.innerHeight - 250))
+        : clientY - 110
+  });
+
+  const handleRowPointerEnter = (project, e) => {
+    const { tx, ty } = clampCoords(e.clientX, e.clientY);
+    if (!hoveredRowProject) {
+      previewX.jump(tx);
+      previewY.jump(ty);
+      smoothX.jump(tx);
+      smoothY.jump(ty);
+    } else {
+      previewX.set(tx);
+      previewY.set(ty);
+    }
+    setHoveredRowProject(project);
+  };
+
+  const handleRowPointerMove = (e) => {
+    const { tx, ty } = clampCoords(e.clientX, e.clientY);
+    previewX.set(tx);
+    previewY.set(ty);
+  };
 
   return (
     <>
       <section
         id="projects"
-        className="py-20 sm:py-24 px-5 sm:px-6 bg-paper text-ink border-b border-line"
+        className="relative py-20 sm:py-28 px-5 sm:px-6 bg-paper text-ink border-b border-line"
       >
         <div className="max-w-6xl mx-auto">
-          <FadeUp className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+          <FadeUp className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
             <div className="max-w-2xl">
-              <h2 className="font-display text-3xl sm:text-5xl font-semibold tracking-[-0.03em] leading-[1.08] text-ink mb-3">
-                {t('projects.heading')}
+              <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent mb-3">
+                {isEn ? '01 / Selected Works' : '01 / Karya Pilihan'}
+              </p>
+              <h2 className="font-display text-3xl sm:text-5xl font-semibold tracking-[-0.035em] leading-[1.06] text-ink mb-3">
+                {isEn ? (
+                  <>
+                    Shipped Products{' '}
+                    <span className="font-serif italic font-normal text-accent">&amp; Systems</span>
+                  </>
+                ) : (
+                  <>
+                    Produk &amp; Sistem{' '}
+                    <span className="font-serif italic font-normal text-accent">Terpasang.</span>
+                  </>
+                )}
               </h2>
               <p className="text-base sm:text-lg text-ink-muted leading-relaxed">
                 {t('projects.subheading')}
@@ -89,7 +135,7 @@ export default function Projects() {
               to="/projects"
               className="group self-start md:self-auto inline-flex items-center gap-2 min-h-[44px] text-[15px] font-medium text-ink hover:text-accent transition-colors border-b border-line pb-1"
             >
-              <span>{t('projects.bottom_cta')}</span>
+              <span>{t('projects.bottom_cta')} ({projects.length})</span>
               <ArrowRight
                 size={16}
                 className="transition-transform duration-200 group-hover:translate-x-1"
@@ -98,11 +144,11 @@ export default function Projects() {
             </Link>
           </FadeUp>
 
-          {/* Architectural Hairline Underline Tabs */}
+          {/* Hairline Category Switcher */}
           <div
             role="tablist"
             aria-label="Filter showcase by discipline"
-            className="flex flex-wrap gap-6 mb-10 border-b border-line"
+            className="flex flex-wrap gap-6 mb-12 border-b border-line"
           >
             {FILTER_CATEGORIES.map((category) => {
               const active = selectedCategory === category;
@@ -123,7 +169,7 @@ export default function Projects() {
                     <motion.span
                       layoutId="home-projects-underline"
                       transition={{ type: 'spring', stiffness: 440, damping: 34 }}
-                      className="absolute left-0 right-0 -bottom-[1px] h-[2px] bg-ink"
+                      className="absolute left-0 right-0 -bottom-[1px] h-[2px] bg-accent"
                     />
                   )}
                 </button>
@@ -132,177 +178,162 @@ export default function Projects() {
           </div>
 
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {[0, 1].map((idx) => (
-                <div key={idx} className="space-y-4 animate-pulse">
-                  <div className="aspect-video rounded-xl bg-mist" />
-                  <div className="h-6 w-1/3 bg-mist rounded" />
-                  <div className="h-4 w-2/3 bg-mist rounded" />
-                </div>
-              ))}
+            <div className="space-y-8 animate-pulse">
+              <div className="aspect-video rounded-xl bg-mist" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="aspect-video rounded-xl bg-mist" />
+                <div className="aspect-video rounded-xl bg-mist" />
+              </div>
             </div>
           ) : (
-            <div className="space-y-12">
-              {/* Row 1: Two Flagship Flush Editorial Frames */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
-                <AnimatePresence mode="popLayout">
-                  {flagship.map((project, idx) => (
-                    <motion.article
-                      key={project.id || project.slug}
-                      layout
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, transition: { duration: 0.14 } }}
-                      transition={{
-                        duration: 0.3,
-                        delay: idx * 0.04,
-                        ease: STUDIO_EASE
-                      }}
-                      className="group flex flex-col"
-                    >
+            <div className="space-y-16">
+              {/* Asymmetric Lead Exhibition Split */}
+              {leadProject && (
+                <motion.article
+                  key={`lead-${leadProject.slug}`}
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, ease: STUDIO_EASE }}
+                  className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"
+                >
+                  <Link
+                    to={`/project/${leadProject.slug}`}
+                    data-cursor={isEn ? 'Inspect ↗' : 'Buka Proyek ↗'}
+                    className="lg:col-span-7 group block relative aspect-video rounded-xl bg-[#090B10] border border-line overflow-hidden shadow-xl shadow-black/20"
+                  >
+                    <img
+                      src={leadProject.src}
+                      alt={`${leadProject.name} showcase`}
+                      width={1920}
+                      height={1080}
+                      loading="eager"
+                      decoding="async"
+                      className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]"
+                    />
+                  </Link>
+
+                  <div className="lg:col-span-5 space-y-5">
+                    <div className="flex items-center justify-between font-mono text-xs text-ink-muted border-b border-line pb-3">
+                      <span className="text-accent">01 · {(leadProject.categories || []).join(' / ')}</span>
+                      <span>{leadProject.year}</span>
+                    </div>
+
+                    <h3 className="font-display text-3xl sm:text-4xl font-semibold tracking-[-0.025em] text-ink">
                       <Link
-                        to={`/project/${project.slug}`}
-                        className="block relative aspect-video rounded-xl bg-[#0B0C10] border border-line overflow-hidden"
-                        aria-label={`${project.name} — ${t('projects.cta')}`}
+                        to={`/project/${leadProject.slug}`}
+                        className="hover:text-accent transition-colors"
                       >
-                        <img
-                          src={project.src}
-                          alt={`${project.name} screenshot`}
-                          width={1920}
-                          height={1080}
-                          loading="eager"
-                          decoding="async"
-                          className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.02]"
-                        />
+                        {leadProject.name}
+                      </Link>
+                    </h3>
+
+                    <p className="text-base sm:text-lg text-ink-muted leading-relaxed">
+                      {getLocalizedDesc(leadProject)}
+                    </p>
+
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      {(leadProject.techStack || []).slice(0, 4).map((tech) => (
+                        <span
+                          key={tech}
+                          className="px-2.5 py-1 rounded-md font-mono text-xs bg-surface border border-line text-ink-muted"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="pt-2 flex items-center gap-5">
+                      <Link
+                        to={`/project/${leadProject.slug}`}
+                        className="min-h-[42px] px-4 py-2 rounded-lg bg-ink text-on-ink hover:opacity-90 text-sm font-medium inline-flex items-center gap-2 transition-opacity"
+                      >
+                        <span>{t('projects.cta')}</span>
+                        <ArrowRight size={15} aria-hidden="true" />
                       </Link>
 
-                      <div className="pt-4 flex flex-col gap-2">
-                        <div className="flex items-center justify-between gap-3">
-                          <div className="flex items-baseline gap-2.5 min-w-0">
-                            <h3 className="font-display text-xl sm:text-2xl font-semibold tracking-tight text-ink truncate">
-                              <Link
-                                to={`/project/${project.slug}`}
-                                className="hover:text-accent transition-colors"
-                              >
-                                {project.name}
-                              </Link>
-                            </h3>
-                            <span className="font-mono text-xs text-ink-muted shrink-0">
-                              {(project.categories || []).join(' / ')}
-                            </span>
-                          </div>
-                          <span className="font-mono text-xs text-ink-muted tabular-nums shrink-0">
-                            {project.year}
-                          </span>
-                        </div>
+                      <button
+                        type="button"
+                        onClick={() => setQuickProject(leadProject)}
+                        className="inline-flex items-center gap-1.5 min-h-[40px] text-sm text-ink-muted hover:text-ink transition-colors"
+                      >
+                        <Eye size={15} aria-hidden="true" />
+                        <span>{isEn ? 'Quick View' : 'Ringkasan'}</span>
+                      </button>
+                    </div>
+                  </div>
+                </motion.article>
+              )}
 
-                        <p className="text-base text-ink-muted leading-relaxed line-clamp-2">
-                          {getLocalizedDesc(project)}
-                        </p>
-
-                        <div className="pt-1 flex items-center gap-5">
-                          <Link
-                            to={`/project/${project.slug}`}
-                            className="inline-flex items-center gap-1.5 min-h-[36px] text-sm font-medium text-ink hover:text-accent transition-colors"
-                          >
-                            <span>{t('projects.cta')}</span>
-                            <ArrowRight
-                              size={15}
-                              className="transition-transform duration-200 group-hover:translate-x-1"
-                              aria-hidden="true"
-                            />
-                          </Link>
-
-                          <button
-                            type="button"
-                            onClick={() => setQuickProject(project)}
-                            className="inline-flex items-center gap-1.5 min-h-[36px] text-sm text-ink-muted hover:text-ink transition-colors"
-                            aria-label={`Quick preview ${project.name}`}
-                          >
-                            <Eye size={14} aria-hidden="true" />
-                            <span>{isEn ? 'Quick View' : 'Ringkasan'}</span>
-                          </button>
-                        </div>
-                      </div>
-                    </motion.article>
-                  ))}
-                </AnimatePresence>
-              </div>
-
-              {/* Row 2: Hairline Exhibition Ledger for Remaining Works */}
-              {secondary.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 border-t border-line">
+              {/* Pair Curated Exhibitions */}
+              {pairProjects.length > 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
                   <AnimatePresence mode="popLayout">
-                    {secondary.map((project, idx) => (
+                    {pairProjects.map((project, idx) => (
                       <motion.article
                         key={project.id || project.slug}
                         layout
-                        initial={{ opacity: 0, y: 10 }}
+                        initial={{ opacity: 0, y: 12 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, transition: { duration: 0.14 } }}
-                        transition={{
-                          duration: 0.28,
-                          delay: Math.min(idx * 0.04, 0.16),
-                          ease: STUDIO_EASE
-                        }}
-                        className={`group py-6 border-b border-line flex items-start gap-4 sm:gap-5 ${
-                          idx % 2 === 0 ? 'md:pr-8 lg:border-r lg:border-line' : 'md:pl-8'
-                        }`}
+                        transition={{ duration: 0.35, delay: idx * 0.05, ease: STUDIO_EASE }}
+                        className="group flex flex-col"
                       >
                         <Link
                           to={`/project/${project.slug}`}
-                          className="shrink-0 w-36 sm:w-44 aspect-video rounded-lg bg-[#0B0C10] border border-line overflow-hidden"
-                          aria-label={`${project.name} — ${t('projects.cta')}`}
+                          data-cursor={isEn ? 'Inspect ↗' : 'Buka Proyek ↗'}
+                          className="block relative aspect-video rounded-xl bg-[#090B10] border border-line overflow-hidden"
                         >
                           <img
                             src={project.src}
-                            alt={`${project.name} preview`}
+                            alt={`${project.name} screenshot`}
                             width={1920}
                             height={1080}
-                            loading="lazy"
+                            loading="eager"
                             decoding="async"
-                            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
+                            className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]"
                           />
                         </Link>
 
-                        <div className="min-w-0 flex-1 flex flex-col justify-between gap-1.5">
-                          <div className="flex items-center justify-between gap-2">
-                            <h3 className="font-display text-lg sm:text-xl font-semibold text-ink truncate">
-                              <Link
-                                to={`/project/${project.slug}`}
-                                className="hover:text-accent transition-colors"
-                              >
-                                {project.name}
-                              </Link>
-                            </h3>
-                            <span className="font-mono text-xs text-ink-muted shrink-0">
-                              {project.year}
+                        <div className="pt-4 space-y-2">
+                          <div className="flex items-center justify-between font-mono text-xs text-ink-muted">
+                            <span>
+                              0{idx + 2} · {(project.categories || []).join(' / ')}
                             </span>
+                            <span>{project.year}</span>
                           </div>
 
-                          <p className="font-mono text-xs text-ink-muted">
-                            {(project.categories || []).join(' · ')}
-                          </p>
+                          <h3 className="font-display text-2xl font-semibold tracking-tight text-ink">
+                            <Link
+                              to={`/project/${project.slug}`}
+                              className="hover:text-accent transition-colors"
+                            >
+                              {project.name}
+                            </Link>
+                          </h3>
 
-                          <p className="text-sm sm:text-[15px] text-ink-muted leading-snug line-clamp-2">
+                          <p className="text-base text-ink-muted leading-relaxed line-clamp-2">
                             {getLocalizedDesc(project)}
                           </p>
 
-                          <div className="pt-1 flex items-center gap-4">
+                          <div className="pt-1 flex items-center gap-5">
                             <Link
                               to={`/project/${project.slug}`}
-                              className="inline-flex items-center gap-1 text-sm font-medium text-ink hover:text-accent transition-colors"
+                              className="inline-flex items-center gap-1.5 min-h-[36px] text-sm font-medium text-ink hover:text-accent transition-colors"
                             >
                               <span>{t('projects.cta')}</span>
-                              <ArrowUpRight size={14} aria-hidden="true" />
+                              <ArrowRight
+                                size={15}
+                                className="transition-transform duration-200 group-hover:translate-x-1"
+                                aria-hidden="true"
+                              />
                             </Link>
 
                             <button
                               type="button"
                               onClick={() => setQuickProject(project)}
-                              className="inline-flex items-center gap-1 text-xs sm:text-sm text-ink-muted hover:text-ink transition-colors"
+                              className="inline-flex items-center gap-1.5 min-h-[36px] text-sm text-ink-muted hover:text-ink transition-colors"
                             >
-                              <Eye size={13} aria-hidden="true" />
+                              <Eye size={14} aria-hidden="true" />
                               <span>{isEn ? 'Quick View' : 'Ringkasan'}</span>
                             </button>
                           </div>
@@ -312,10 +343,101 @@ export default function Projects() {
                   </AnimatePresence>
                 </div>
               )}
+
+              {/* Cursor-Tracked Interactive Archive Index Ledger */}
+              {ledgerProjects.length > 0 && (
+                <div
+                  className="pt-4 relative"
+                  onMouseLeave={() => setHoveredRowProject(null)}
+                >
+                  <div className="flex items-center justify-between mb-4 font-mono text-xs uppercase tracking-wider text-ink-muted">
+                    <span>{isEn ? 'Interactive Index' : 'Arsip Proyek Interaktif'}</span>
+                    <span>{isEn ? 'Hover row to preview' : 'Arahkan kursor untuk pratinjau'}</span>
+                  </div>
+
+                  <div className="border-y border-line divide-y divide-line">
+                    {ledgerProjects.map((project, idx) => (
+                      <div
+                        key={project.id || project.slug}
+                        onMouseEnter={(e) => handleRowPointerEnter(project, e)}
+                        onMouseMove={handleRowPointerMove}
+                        className="group relative py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors hover:bg-surface/40 px-2 sm:px-3 -mx-2 sm:-mx-3 rounded-lg"
+                      >
+                        <div className="flex items-center gap-4 min-w-0">
+                          <span className="font-mono text-xs text-ink-muted w-6 shrink-0">
+                            {String(idx + 4).padStart(2, '0')}
+                          </span>
+                          <Link
+                            to={`/project/${project.slug}`}
+                            className="font-display text-xl sm:text-2xl font-semibold text-ink group-hover:text-accent transition-colors truncate"
+                          >
+                            {project.name}
+                          </Link>
+                        </div>
+
+                        <div className="flex items-center justify-between sm:justify-end gap-5 pl-10 sm:pl-0 shrink-0">
+                          <span className="font-mono text-xs text-ink-muted">
+                            {(project.categories || []).join(' · ')}
+                          </span>
+                          <span className="font-mono text-xs text-ink-muted hidden md:inline">
+                            {project.year}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setQuickProject(project)}
+                            className="inline-flex items-center gap-1 text-xs font-mono text-ink-muted hover:text-ink transition-colors"
+                            aria-label={`Quick view ${project.name}`}
+                          >
+                            <Eye size={14} aria-hidden="true" />
+                            <span>{isEn ? 'Brief' : 'Info'}</span>
+                          </button>
+                          <Link
+                            to={`/project/${project.slug}`}
+                            aria-label={`Open ${project.name}`}
+                            className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-line text-ink group-hover:bg-ink group-hover:text-on-ink group-hover:border-ink transition-all"
+                          >
+                            <ArrowUpRight size={15} aria-hidden="true" />
+                          </Link>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
       </section>
+
+      {/* Desktop Floating Cursor-Tracked Preview Card */}
+      <AnimatePresence>
+        {hoveredRowProject && (
+          <motion.div
+            aria-hidden="true"
+            initial={{ opacity: 0, scale: 0.92 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.92 }}
+            transition={{ duration: 0.18, ease: STUDIO_EASE }}
+            style={{
+              x: smoothX,
+              y: smoothY
+            }}
+            className="pointer-events-none fixed top-0 left-0 z-50 hidden lg:block w-[360px] rounded-xl bg-[#090B10] border border-white/20 shadow-[0_28px_70px_rgba(0,0,0,0.65)] overflow-hidden"
+          >
+            <div className="aspect-video overflow-hidden">
+              <img
+                src={hoveredRowProject.src}
+                alt=""
+                className="w-full h-full object-cover object-center"
+              />
+            </div>
+            <div className="px-3.5 py-2.5 bg-[#0F1118] border-t border-white/10 flex items-center justify-between font-mono text-xs text-slate-300">
+              <span className="truncate">{hoveredRowProject.name}</span>
+              <span className="text-blue-400 shrink-0">View ↗</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Quick View Modal */}
       <AnimatePresence>
@@ -325,7 +447,7 @@ export default function Projects() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm p-4 sm:p-6 flex items-center justify-center overflow-y-auto"
+            className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm p-4 sm:p-6 flex items-center justify-center overflow-y-auto"
             onClick={() => setQuickProject(null)}
           >
             <motion.div

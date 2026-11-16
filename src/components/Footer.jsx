@@ -30,9 +30,9 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-[#0B0C10] text-slate-200 border-t border-white/10 py-14 sm:py-16 px-5 sm:px-6">
+    <footer className="bg-[#050608] text-slate-200 border-t border-white/10 pt-16 sm:pt-20 pb-8 px-5 sm:px-6 overflow-hidden">
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-10 border-b border-white/10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-white/10">
           <div className="md:col-span-5 flex flex-col gap-4">
             <Link
               to="/"
@@ -100,7 +100,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="pt-7 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-sm text-slate-400">
+        <div className="py-7 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-sm text-slate-400">
           <p>
             © {year} Akbar Alfaidah — {t('footer.role')}.
           </p>
@@ -113,6 +113,13 @@ export default function Footer() {
             <span>{isEn ? 'Back to top' : 'Kembali ke atas'}</span>
             <ArrowUp size={14} aria-hidden="true" />
           </button>
+        </div>
+
+        {/* Monumental Architectural Wordmark Floor */}
+        <div className="pt-6 border-t border-white/10 select-none overflow-hidden" aria-hidden="true">
+          <p className="font-display font-semibold tracking-[-0.045em] leading-[0.86] text-[clamp(2.4rem,10.8vw,8.6rem)] text-white/[0.06] whitespace-nowrap">
+            AKBAR ALFAIDAH
+          </p>
         </div>
       </div>
     </footer>

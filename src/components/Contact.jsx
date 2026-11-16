@@ -22,6 +22,7 @@ import { Turnstile } from '@marsidev/react-turnstile';
 import { useTheme } from '../hooks/useTheme';
 import { Button } from './ui/Button';
 import { FadeUp } from './ui/MotionPrimitives';
+import Magnetic from './ui/Magnetic';
 import { STUDIO_EASE } from '../lib/motion';
 import Toast from './ui/Toast';
 
@@ -357,8 +358,14 @@ export default function Contact() {
           {/* Left Editorial Contact & Clean Map */}
           <FadeUp className="lg:col-span-5 space-y-8">
             <div>
+              <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent mb-3">
+                {i18n.language === 'en' ? '05 / Inquiry' : '05 / Kontak'}
+              </p>
               <h2 className="font-display text-3xl sm:text-5xl font-semibold tracking-[-0.03em] leading-[1.08] text-ink mb-3">
-                {t('contact.heading_1')} {t('contact.heading_2')}
+                {t('contact.heading_1')}{' '}
+                <span className="font-serif italic font-normal text-accent">
+                  {t('contact.heading_2')}
+                </span>
               </h2>
               <p className="text-base sm:text-lg text-ink-muted leading-relaxed">
                 {t('contact.desc')}
@@ -455,7 +462,7 @@ export default function Contact() {
                   loading="lazy"
                   referrerPolicy="strict-origin-when-cross-origin"
                   title="Lokasi Akbar Alfaidah di Google Maps"
-                  className="w-full h-full object-cover grayscale-[25%] hover:grayscale-0 transition-all duration-300 dark:brightness-90 dark:contrast-110"
+                  className="w-full h-full object-cover grayscale-[25%] hover:grayscale-0 transition-all duration-300 dark:invert-[0.9] dark:hue-rotate-180 dark:contrast-95 dark:brightness-95"
                 />
               </div>
             </div>
@@ -849,25 +856,27 @@ export default function Contact() {
                   </div>
                 )}
 
-                <Button
-                  type="submit"
-                  variant="primary"
-                  size="lg"
-                  disabled={isSending}
-                  className="w-full sm:w-auto"
-                >
-                  {mode === 'wa' ? (
-                    <>
-                      <FaWhatsapp size={18} aria-hidden="true" />
-                      <span>{t('contact.cta_wa')}</span>
-                    </>
-                  ) : (
-                    <>
-                      <Send size={16} aria-hidden="true" />
-                      <span>{isSending ? t('contact.cta_sending') : t('contact.cta_email')}</span>
-                    </>
-                  )}
-                </Button>
+                <Magnetic strength={0.22} className="w-full sm:w-auto">
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    size="lg"
+                    disabled={isSending}
+                    className="w-full sm:w-auto"
+                  >
+                    {mode === 'wa' ? (
+                      <>
+                        <FaWhatsapp size={18} aria-hidden="true" />
+                        <span>{t('contact.cta_wa')}</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send size={16} aria-hidden="true" />
+                        <span>{isSending ? t('contact.cta_sending') : t('contact.cta_email')}</span>
+                      </>
+                    )}
+                  </Button>
+                </Magnetic>
               </form>
             </div>
           </FadeUp>

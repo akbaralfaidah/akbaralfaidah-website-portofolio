@@ -2,15 +2,14 @@ import { useEffect, useState, useCallback } from 'react';
 import { ThemeContext } from './theme-context';
 
 function getInitialTheme() {
-  if (typeof window === 'undefined') return 'light';
+  if (typeof window === 'undefined') return 'dark';
   try {
     const saved = window.localStorage.getItem('theme');
     if (saved === 'light' || saved === 'dark') return saved;
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
   } catch {
     // Ignore storage restriction
   }
-  return 'light';
+  return 'dark';
 }
 
 export function ThemeProvider({ children }) {
@@ -29,7 +28,7 @@ export function ThemeProvider({ children }) {
 
     const themeColorMeta = document.querySelector('meta[name="theme-color"]');
     if (themeColorMeta) {
-      themeColorMeta.setAttribute('content', isDark ? '#090D16' : '#F7F9FC');
+      themeColorMeta.setAttribute('content', isDark ? '#050608' : '#F6F5F0');
     }
   }, [theme]);
 
