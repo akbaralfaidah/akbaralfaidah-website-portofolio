@@ -6,10 +6,10 @@ import {
   Server,
   Smartphone,
   Cpu,
-  CheckCircle2,
   ArrowRight,
   Radio,
-  Terminal
+  Terminal,
+  Check
 } from 'lucide-react';
 import TechLogoMarquee from './ui/TechLogoMarquee';
 import MeshGradient from './ui/MeshGradient';
@@ -19,27 +19,21 @@ import { STUDIO_EASE } from '../lib/motion';
 function StepVisualWidget({ stepIndex, isEn }) {
   if (stepIndex === 0) {
     return (
-      <div className="rounded-xl bg-[#0B101B] border border-white/10 p-4 space-y-3">
-        <div className="flex items-center justify-between text-xs text-slate-400">
-          <span>Responsive Layout</span>
-          <span className="text-blue-400 font-mono">375px · 768px · 1440px</span>
+      <div className="rounded-lg bg-[#090A0D] border border-white/10 p-4 font-mono text-xs space-y-2.5">
+        <div className="flex items-center justify-between text-slate-400 pb-2 border-b border-white/10">
+          <span>design-tokens.css</span>
+          <span className="text-slate-300">375 · 768 · 1440px</span>
         </div>
-        <div className="grid grid-cols-3 gap-2">
-          <div className="rounded-lg bg-white/[0.06] border border-white/10 p-3 space-y-1.5">
-            <span className="block w-6 h-2 rounded bg-blue-500" />
-            <span className="block w-full h-2 rounded bg-white/20" />
-            <span className="block w-2/3 h-2 rounded bg-white/10" />
-          </div>
-          <div className="rounded-lg bg-white/[0.06] border border-white/10 p-3 space-y-1.5">
-            <span className="block w-8 h-2 rounded bg-sky-400" />
-            <span className="block w-full h-2 rounded bg-white/20" />
-            <span className="block w-4/5 h-2 rounded bg-white/10" />
-          </div>
-          <div className="rounded-lg bg-white/[0.06] border border-white/10 p-3 space-y-1.5">
-            <span className="block w-5 h-2 rounded bg-amber-400" />
-            <span className="block w-full h-2 rounded bg-white/20" />
-            <span className="block w-1/2 h-2 rounded bg-white/10" />
-          </div>
+        <div className="space-y-1 text-slate-300">
+          <p>
+            <span className="text-blue-400">--font-display</span>: &apos;Plus Jakarta Sans&apos;;
+          </p>
+          <p>
+            <span className="text-blue-400">--font-sans</span>: &apos;Inter&apos;;
+          </p>
+          <p>
+            <span className="text-blue-400">--contrast-ink</span>: 14.2:1 (AAA);
+          </p>
         </div>
       </div>
     );
@@ -47,11 +41,11 @@ function StepVisualWidget({ stepIndex, isEn }) {
 
   if (stepIndex === 1) {
     return (
-      <div className="rounded-xl bg-[#0B101B] border border-white/10 p-4 font-mono text-xs sm:text-sm space-y-2">
+      <div className="rounded-lg bg-[#090A0D] border border-white/10 p-4 font-mono text-xs sm:text-sm space-y-2">
         <div className="flex items-center gap-2 text-slate-400 pb-2 border-b border-white/10">
           <Terminal size={14} className="text-blue-400" aria-hidden="true" />
-          <span>api/v1/reports/export</span>
-          <span className="ml-auto px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-xs">
+          <span>POST /api/v1/reports/export</span>
+          <span className="ml-auto px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 text-xs">
             200 OK
           </span>
         </div>
@@ -67,15 +61,15 @@ function StepVisualWidget({ stepIndex, isEn }) {
 
   if (stepIndex === 2) {
     return (
-      <div className="rounded-xl bg-[#0B101B] border border-white/10 p-4 flex items-center justify-between gap-4">
+      <div className="rounded-lg bg-[#090A0D] border border-white/10 p-4 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <span className="relative flex h-9 w-9 items-center justify-center rounded-full bg-blue-500/15 border border-blue-400/30 text-blue-400">
-            <Radio size={18} className="animate-pulse" aria-hidden="true" />
+          <span className="relative flex h-9 w-9 items-center justify-center rounded-full bg-blue-500/10 border border-blue-400/25 text-blue-400">
+            <Radio size={17} aria-hidden="true" />
           </span>
           <div>
-            <p className="text-sm font-semibold text-white">GPS Geofence · Radius 50m</p>
+            <p className="text-sm font-medium text-white">GPS Geofence · Radius 50m</p>
             <p className="text-xs text-slate-400">
-              {isEn ? 'Scanner & Thermal ESC/POS paired' : 'Scanner & Printer Struk terhubung'}
+              {isEn ? 'Scanner & Thermal ESC/POS paired' : 'Scanner Barcode & Printer Thermal'}
             </p>
           </div>
         </div>
@@ -87,21 +81,15 @@ function StepVisualWidget({ stepIndex, isEn }) {
   }
 
   return (
-    <div className="rounded-xl bg-[#0B101B] border border-white/10 p-4 space-y-2.5">
-      <div className="flex items-center justify-between text-xs text-slate-400">
-        <span>Build → Container → Live</span>
-        <span className="text-emerald-300 font-semibold">HTTPS Active</span>
+    <div className="rounded-lg bg-[#090A0D] border border-white/10 p-4 font-mono text-xs space-y-2.5">
+      <div className="flex items-center justify-between text-slate-400 pb-2 border-b border-white/10">
+        <span>docker-compose.prod.yml</span>
+        <span className="text-emerald-300">HTTPS · Nginx</span>
       </div>
-      <div className="grid grid-cols-3 gap-2 font-mono text-xs text-center">
-        <div className="rounded-lg bg-blue-500/15 border border-blue-400/30 py-2 text-blue-200">
-          AI / NLP
-        </div>
-        <div className="rounded-lg bg-white/[0.06] border border-white/15 py-2 text-slate-200">
-          Docker
-        </div>
-        <div className="rounded-lg bg-emerald-500/15 border border-emerald-400/30 py-2 text-emerald-200">
-          Nginx Edge
-        </div>
+      <div className="grid grid-cols-3 gap-2 text-center text-slate-200">
+        <div className="rounded bg-white/[0.04] border border-white/10 py-1.5">AI / NLP</div>
+        <div className="rounded bg-white/[0.04] border border-white/10 py-1.5">Docker</div>
+        <div className="rounded bg-white/[0.04] border border-white/10 py-1.5">Coolify CI</div>
       </div>
     </div>
   );
@@ -114,7 +102,7 @@ const PIPELINE_SPECS = [
     badgeEn: 'UI & Design System',
     rows: [
       { key: 'Responsif', value: 'HP · Tablet · Desktop' },
-      { key: 'Standar Baca', value: 'Kontras Tinggi & Mudah Dipakai' }
+      { key: 'Standar Baca', value: 'Kontras Tinggi & Bersih' }
     ]
   },
   {
@@ -151,29 +139,33 @@ export default function Capabilities() {
   const [activeStep, setActiveStep] = useState(0);
 
   const pillars = t('capabilities.pillars', { returnObjects: true }) || [];
+  const serviceItems = t('services.items', { returnObjects: true }) || [];
   const activePillar = pillars[activeStep] || pillars[0];
   const activeSpec = PIPELINE_SPECS[activeStep] || PIPELINE_SPECS[0];
   const SpecIcon = activeSpec.icon;
   const isEn = i18n.language === 'en';
 
   return (
-    <section className="relative py-20 sm:py-24 px-6 bg-obsidian text-slate-100 border-b border-white/10 overflow-hidden">
+    <section
+      id="capabilities"
+      className="relative py-16 sm:py-20 px-5 sm:px-6 bg-[#0B0C10] text-slate-100 border-b border-white/10 overflow-hidden"
+    >
       <MeshGradient dark />
 
       <div className="relative z-10 max-w-6xl mx-auto">
-        <FadeUp className="max-w-3xl mb-12 sm:mb-14">
-          <h2 className="font-display text-3xl sm:text-5xl lg:text-[3.25rem] font-bold tracking-tight leading-[1.08] text-white mb-4">
+        <FadeUp className="max-w-3xl mb-12">
+          <h2 className="font-display text-3xl sm:text-5xl font-semibold tracking-[-0.03em] leading-[1.08] text-white mb-4">
             {t('capabilities.heading')}
           </h2>
-          <p className="text-lg sm:text-xl text-slate-300 leading-relaxed">
+          <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
             {t('capabilities.subtitle')}
           </p>
         </FadeUp>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start mb-14">
-          {/* Left: Interactive 4-Step Tabs */}
+        {/* Hairline Workflow Matrix */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start mb-16">
           <div
-            className="lg:col-span-6 space-y-3"
+            className="lg:col-span-6 border-y border-white/10 divide-y divide-white/10"
             role="tablist"
             aria-label="Engineering workflow steps"
           >
@@ -188,46 +180,39 @@ export default function Capabilities() {
                     role="tab"
                     aria-selected={isSelected}
                     onClick={() => setActiveStep(idx)}
-                    className={`relative w-full text-left rounded-2xl p-5 border transition-colors ${
-                      isSelected
-                        ? 'border-blue-400/50 text-white'
-                        : 'border-white/10 bg-white/[0.03] text-slate-300 hover:bg-white/[0.06] hover:border-white/20'
+                    className={`group relative w-full text-left py-5 px-3 sm:px-4 transition-colors ${
+                      isSelected ? 'text-white bg-white/[0.03]' : 'text-slate-400 hover:text-slate-200'
                     }`}
                   >
                     {isSelected && (
                       <motion.span
-                        layoutId="capability-active-bg"
-                        transition={{ type: 'spring', stiffness: 380, damping: 32 }}
-                        className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-600/25 to-sky-500/10 border border-blue-400/40 -z-0"
+                        layoutId="capability-active-bar"
+                        transition={{ type: 'spring', stiffness: 420, damping: 34 }}
+                        className="absolute left-0 top-3 bottom-3 w-[2px] bg-blue-400"
                       />
                     )}
-                    <div className="relative z-10 flex items-start gap-4">
+                    <div className="flex items-start gap-4">
                       <span
-                        className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border transition-colors ${
-                          isSelected
-                            ? 'bg-blue-600 text-white border-blue-400/60'
-                            : 'bg-white/5 text-blue-400 border-white/10'
+                        className={`font-mono text-sm font-semibold pt-0.5 transition-colors ${
+                          isSelected ? 'text-blue-400' : 'text-slate-500 group-hover:text-slate-300'
                         }`}
                       >
-                        <Icon size={20} aria-hidden="true" />
+                        {item.step}
                       </span>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 mb-1">
-                          <span className="font-mono text-sm font-bold text-blue-400">
-                            {item.step}
-                          </span>
-                          {isSelected && (
-                            <ArrowRight
-                              size={16}
-                              className="text-blue-400 shrink-0"
-                              aria-hidden="true"
-                            />
-                          )}
+                          <h3 className="font-display text-lg sm:text-xl font-semibold text-white">
+                            {item.title}
+                          </h3>
+                          <Icon
+                            size={17}
+                            className={isSelected ? 'text-blue-400 shrink-0' : 'text-slate-600 shrink-0'}
+                            aria-hidden="true"
+                          />
                         </div>
-                        <h3 className="font-display text-lg sm:text-xl font-bold text-white leading-snug mb-1">
-                          {item.title}
-                        </h3>
-                        <p className="text-base text-slate-300 leading-relaxed">{item.desc}</p>
+                        <p className="text-sm sm:text-base text-slate-400 leading-relaxed">
+                          {item.desc}
+                        </p>
                       </div>
                     </div>
                   </button>
@@ -235,70 +220,124 @@ export default function Capabilities() {
               })}
           </div>
 
-          {/* Right: Compact Proportional Detail Card (NO empty dead vertical void!) */}
-          <div className="lg:col-span-6 lg:sticky lg:top-28">
-            <div className="w-full rounded-2xl bg-[#111827]/95 backdrop-blur-md border border-white/15 shadow-2xl p-6 sm:p-8">
+          <div className="lg:col-span-6 lg:sticky lg:top-24">
+            <div className="w-full rounded-xl bg-[#12141B] border border-white/15 p-6 sm:p-8">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={`pipeline-panel-${activeStep}`}
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.22, ease: STUDIO_EASE }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.2, ease: STUDIO_EASE }}
                   className="space-y-6"
                 >
                   <div className="flex items-center justify-between gap-3 pb-4 border-b border-white/10">
-                    <span className="inline-flex items-center gap-2 text-sm font-semibold text-blue-400">
-                      <SpecIcon size={17} aria-hidden="true" />
+                    <span className="inline-flex items-center gap-2 font-mono text-xs sm:text-sm text-blue-400">
+                      <SpecIcon size={16} aria-hidden="true" />
                       <span>{isEn ? activeSpec.badgeEn : activeSpec.badge}</span>
                     </span>
-                    <span className="font-mono text-sm px-3 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 border border-emerald-500/25">
-                      {activePillar?.step}
+                    <span className="font-mono text-xs text-slate-400">
+                      Step {activePillar?.step}
                     </span>
                   </div>
 
                   <div>
-                    <h3 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight mb-2.5">
+                    <h3 className="font-display text-2xl sm:text-3xl font-semibold text-white mb-2.5 leading-tight">
                       {activePillar?.title}
                     </h3>
-                    <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
+                    <p className="text-base text-slate-300 leading-relaxed">
                       {activePillar?.desc}
                     </p>
                   </div>
 
                   <StepVisualWidget stepIndex={activeStep} isEn={isEn} />
 
-                  <div className="space-y-2.5">
+                  <dl className="divide-y divide-white/10 border-t border-white/10">
                     {activeSpec.rows.map((row) => (
                       <div
                         key={row.key}
-                        className="rounded-xl bg-white/[0.04] border border-white/10 px-4 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1.5"
+                        className="py-3 flex flex-wrap items-center justify-between gap-2 text-sm"
                       >
-                        <div className="flex items-center gap-2 text-sm font-medium text-slate-300">
-                          <CheckCircle2
-                            size={16}
-                            className="text-blue-400 shrink-0"
-                            aria-hidden="true"
-                          />
-                          <span>{row.key}</span>
-                        </div>
-                        <span className="font-mono text-sm font-medium text-white">
-                          {row.value}
-                        </span>
+                        <dt className="text-slate-400">{row.key}</dt>
+                        <dd className="font-mono text-slate-200 font-medium">{row.value}</dd>
                       </div>
                     ))}
-                  </div>
+                  </dl>
                 </motion.div>
               </AnimatePresence>
             </div>
           </div>
         </div>
 
-        {/* Stack Marquee */}
-        <div className="pt-8 border-t border-white/10">
-          <p className="text-sm font-semibold text-slate-300 mb-4">
-            {t('capabilities.stack_eyebrow')}
-          </p>
+        {/* Hairline Service Scopes Ledger (Replaces SaaS pricing card boxes) */}
+        <div id="services" className="scroll-mt-24 pt-12 border-t border-white/10">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+            <div>
+              <h3 className="font-display text-2xl sm:text-3xl font-semibold text-white mb-2">
+                {t('services.heading')}
+              </h3>
+              <p className="text-base text-slate-400 max-w-2xl">{t('services.subheading')}</p>
+            </div>
+          </div>
+
+          <div className="border-y border-white/10 divide-y divide-white/10">
+            {Array.isArray(serviceItems) &&
+              serviceItems.map((service) => (
+                <div
+                  key={service.id}
+                  className="py-6 sm:py-7 grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8 items-start"
+                >
+                  <div className="lg:col-span-4 space-y-1.5">
+                    <span className="font-mono text-xs text-blue-400">{service.timeline}</span>
+                    <h4 className="font-display text-xl font-semibold text-white">
+                      {service.title}
+                    </h4>
+                  </div>
+
+                  <p className="lg:col-span-4 text-sm sm:text-base text-slate-300 leading-relaxed">
+                    {service.desc}
+                  </p>
+
+                  <div className="lg:col-span-4 flex flex-col justify-between gap-4">
+                    <ul className="space-y-1.5">
+                      {Array.isArray(service.deliverables) &&
+                        service.deliverables.map((line) => (
+                          <li key={line} className="flex items-start gap-2 text-sm text-slate-300">
+                            <Check
+                              size={15}
+                              className="text-blue-400 shrink-0 mt-0.5"
+                              aria-hidden="true"
+                            />
+                            <span>{line}</span>
+                          </li>
+                        ))}
+                    </ul>
+
+                    <a
+                      href="#contact"
+                      className="group self-start inline-flex items-center gap-1.5 min-h-[36px] text-sm font-medium text-white hover:text-blue-400 transition-colors"
+                    >
+                      <span>{t('services.book_cta')}</span>
+                      <ArrowRight
+                        size={15}
+                        className="transition-transform duration-200 group-hover:translate-x-1"
+                        aria-hidden="true"
+                      />
+                    </a>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+
+        {/* Clean Borderless Technology Stack Marquee */}
+        <div className="pt-12">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+            <span className="font-mono text-xs uppercase tracking-wider text-slate-400">
+              {t('capabilities.stack_eyebrow')}
+            </span>
+            <span className="font-mono text-xs text-slate-500">Web · Mobile · AI · DevOps</span>
+          </div>
           <TechLogoMarquee darkSurface />
         </div>
       </div>

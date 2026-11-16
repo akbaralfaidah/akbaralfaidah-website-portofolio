@@ -1,9 +1,17 @@
 @font-face {
-  font-family: 'Outfit';
+  font-family: 'Plus Jakarta Sans';
   font-style: normal;
   font-weight: 400 800;
   font-display: swap;
-  src: url('/fonts/outfit-variable.woff2') format('woff2');
+  src: url('/fonts/plus-jakarta-sans-variable.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/inter-variable.woff2') format('woff2');
 }
 
 @font-face {
@@ -19,48 +27,49 @@
 @tailwind utilities;
 
 :root {
-  --color-paper-rgb: 244 247 251;
+  --color-paper-rgb: 249 248 245;
   --color-surface-rgb: 255 255 255;
-  --color-mist-rgb: 232 238 247;
-  --color-ink-rgb: 15 23 42;
-  --color-ink-muted-rgb: 71 85 105;
-  --color-accent-rgb: 29 78 216;
-  --color-accent-solid-rgb: 29 78 216;
-  --color-accent-hover-rgb: 30 64 175;
+  --color-mist-rgb: 240 238 232;
+  --color-ink-rgb: 19 19 18;
+  --color-ink-muted-rgb: 98 96 90;
+  --color-accent-rgb: 30 64 175;
+  --color-accent-solid-rgb: 19 19 18;
+  --color-accent-hover-rgb: 38 38 36;
   --color-on-accent-rgb: 255 255 255;
-  --color-gold-rgb: 217 119 6;
-  --color-on-ink-rgb: 255 255 255;
-  --color-paper: #F4F7FB;
-  --color-ink: #0F172A;
-  --color-accent: #1D4ED8;
-  --color-border: rgba(15, 23, 42, 0.11);
-  --spotlight-color: rgba(29, 78, 216, 0.09);
+  --color-gold-rgb: 180 83 9;
+  --color-on-ink-rgb: 249 248 245;
+  --color-paper: #F9F8F5;
+  --color-ink: #131312;
+  --color-accent: #1E40AF;
+  --color-border: rgba(19, 19, 18, 0.11);
+  --spotlight-color: rgba(19, 19, 18, 0.04);
 }
 
 .dark {
-  --color-paper-rgb: 7 10 18;
-  --color-surface-rgb: 15 21 36;
-  --color-mist-rgb: 24 33 54;
-  --color-ink-rgb: 241 245 249;
-  --color-ink-muted-rgb: 148 163 184;
+  --color-paper-rgb: 9 10 13;
+  --color-surface-rgb: 17 19 24;
+  --color-mist-rgb: 26 29 37;
+  --color-ink-rgb: 244 244 242;
+  --color-ink-muted-rgb: 156 160 170;
   --color-accent-rgb: 96 165 250;
-  --color-accent-solid-rgb: 37 99 235;
-  --color-accent-hover-rgb: 59 130 246;
-  --color-on-accent-rgb: 255 255 255;
+  --color-accent-solid-rgb: 244 244 242;
+  --color-accent-hover-rgb: 220 222 228;
+  --color-on-accent-rgb: 9 10 13;
   --color-gold-rgb: 251 191 36;
-  --color-on-ink-rgb: 7 10 18;
-  --color-paper: #070A12;
-  --color-ink: #F1F5F9;
+  --color-on-ink-rgb: 9 10 13;
+  --color-paper: #090A0D;
+  --color-ink: #F4F4F2;
   --color-accent: #60A5FA;
-  --color-border: rgba(241, 245, 249, 0.11);
-  --spotlight-color: rgba(96, 165, 250, 0.14);
+  --color-border: rgba(244, 244, 242, 0.11);
+  --spotlight-color: rgba(255, 255, 255, 0.045);
 }
 
 @layer base {
   html {
     background-color: var(--color-paper);
     color: var(--color-ink);
-    font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
     scroll-behavior: smooth;
     overflow-x: clip;
   }

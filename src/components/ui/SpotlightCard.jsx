@@ -49,10 +49,10 @@ export function SpotlightCard({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={tilt ? { rotateX, rotateY, transformPerspective: 1000 } : undefined}
-      whileHover={hoverLift ? { y: -4 } : undefined}
-      transition={{ duration: 0.22, ease: STUDIO_EASE }}
+      whileHover={hoverLift ? { y: -2 } : undefined}
+      transition={{ duration: 0.2, ease: STUDIO_EASE }}
       className={cn(
-        'spotlight-surface rounded-2xl bg-surface/90 backdrop-blur-sm border border-line hover:border-accent/50 hover:shadow-xl hover:shadow-accent/[0.06] dark:hover:shadow-black/40 transition-[border-color,box-shadow] duration-250',
+        'spotlight-surface rounded-xl bg-surface border border-line hover:border-ink/25 transition-[border-color,box-shadow] duration-200',
         className
       )}
       {...props}

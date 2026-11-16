@@ -23,7 +23,6 @@ import { useTheme } from '../hooks/useTheme';
 import { Button } from './ui/Button';
 import { FadeUp } from './ui/MotionPrimitives';
 import { STUDIO_EASE } from '../lib/motion';
-import SpotlightCard from './ui/SpotlightCard';
 import Toast from './ui/Toast';
 
 const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
@@ -353,107 +352,100 @@ export default function Contact() {
         <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
       )}
 
-      <section id="contact" className="relative py-20 sm:py-24 px-6 bg-paper text-ink overflow-hidden">
-        <div className="film-grain pointer-events-none absolute inset-0" aria-hidden="true" />
-
-        <div className="relative z-10 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
-          {/* Left Column */}
+      <section id="contact" className="py-20 sm:py-24 px-5 sm:px-6 bg-paper text-ink">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+          {/* Left Editorial Contact & Clean Map */}
           <FadeUp className="lg:col-span-5 space-y-8">
             <div>
-              <h2 className="font-display text-3xl sm:text-5xl lg:text-[3.25rem] font-bold tracking-tight leading-[1.08] text-ink mb-4">
-                {t('contact.heading_1')}{' '}
-                <span className="text-accent">{t('contact.heading_2')}</span>
+              <h2 className="font-display text-3xl sm:text-5xl font-semibold tracking-[-0.03em] leading-[1.08] text-ink mb-3">
+                {t('contact.heading_1')} {t('contact.heading_2')}
               </h2>
-              <p className="text-lg sm:text-xl text-ink-muted leading-relaxed">
+              <p className="text-base sm:text-lg text-ink-muted leading-relaxed">
                 {t('contact.desc')}
               </p>
             </div>
 
-            <div className="space-y-4 pt-2">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent shrink-0">
-                  <Mail size={20} aria-hidden="true" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-sm font-medium text-ink-muted">
-                    {t('contact.direct_email')}
-                  </p>
+            <dl className="divide-y divide-line border-y border-line">
+              <div className="py-4 flex items-center justify-between gap-4">
+                <dt className="font-mono text-xs text-ink-muted flex items-center gap-2 shrink-0">
+                  <Mail size={14} aria-hidden="true" />
+                  <span>{t('contact.direct_email')}</span>
+                </dt>
+                <dd className="text-right min-w-0">
                   <a
                     href={`mailto:${DISPLAY_EMAIL}`}
-                    className="text-base sm:text-lg font-semibold text-ink hover:text-accent transition-colors break-all"
+                    className="text-sm sm:text-base font-medium text-ink hover:text-accent transition-colors break-all"
                   >
                     {DISPLAY_EMAIL}
                   </a>
-                </div>
+                </dd>
               </div>
 
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent shrink-0">
-                  <MapPin size={20} aria-hidden="true" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-ink-muted">Lokasi</p>
-                  <p className="text-base sm:text-lg font-semibold text-ink">Jambi, Indonesia</p>
-                </div>
+              <div className="py-4 flex items-center justify-between gap-4">
+                <dt className="font-mono text-xs text-ink-muted flex items-center gap-2 shrink-0">
+                  <MapPin size={14} aria-hidden="true" />
+                  <span>Lokasi</span>
+                </dt>
+                <dd className="text-sm sm:text-base font-medium text-ink text-right">
+                  Jambi, Indonesia
+                </dd>
               </div>
-            </div>
 
-            <div>
-              <p className="text-sm font-semibold text-ink-muted mb-3">
-                {t('contact.follow_me')}
-              </p>
-              <div className="flex items-center gap-3">
-                <a
-                  href="https://github.com/AkbarAlfaidah"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="GitHub Akbar Alfaidah"
-                  className="w-12 h-12 rounded-xl bg-surface border border-line flex items-center justify-center text-ink hover:border-accent hover:text-accent hover:-translate-y-0.5 transition-all"
-                >
-                  <FiGithub size={20} aria-hidden="true" />
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/akbar-alfaidah/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="LinkedIn Akbar Alfaidah"
-                  className="w-12 h-12 rounded-xl bg-surface border border-line flex items-center justify-center text-ink hover:border-accent hover:text-accent hover:-translate-y-0.5 transition-all"
-                >
-                  <FiLinkedin size={20} aria-hidden="true" />
-                </a>
-                <a
-                  href="https://www.instagram.com/akbralf._/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Instagram Akbar Alfaidah"
-                  className="w-12 h-12 rounded-xl bg-surface border border-line flex items-center justify-center text-ink hover:border-accent hover:text-accent hover:-translate-y-0.5 transition-all"
-                >
-                  <FiInstagram size={20} aria-hidden="true" />
-                </a>
+              <div className="py-4 flex flex-wrap items-center justify-between gap-4">
+                <dt className="font-mono text-xs text-ink-muted shrink-0">
+                  {t('contact.follow_me')}
+                </dt>
+                <dd className="flex items-center gap-4 text-sm font-medium">
+                  <a
+                    href="https://github.com/AkbarAlfaidah"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-ink hover:text-accent transition-colors"
+                  >
+                    <FiGithub size={14} aria-hidden="true" />
+                    <span>GitHub</span>
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/in/akbar-alfaidah/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-ink hover:text-accent transition-colors"
+                  >
+                    <FiLinkedin size={14} aria-hidden="true" />
+                    <span>LinkedIn</span>
+                  </a>
+                  <a
+                    href="https://www.instagram.com/akbralf._/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-ink hover:text-accent transition-colors"
+                  >
+                    <FiInstagram size={14} aria-hidden="true" />
+                    <span>Instagram</span>
+                  </a>
+                </dd>
               </div>
-            </div>
+            </dl>
 
-            <SpotlightCard hoverLift={false} className="p-6 space-y-3">
+            <div className="space-y-3">
               <div className="flex items-center justify-between gap-2">
-                <h3 className="font-display text-base sm:text-lg font-bold text-ink">
+                <h3 className="font-display text-base font-semibold text-ink">
                   {t('contact.map_title')}
                 </h3>
                 <a
                   href={MAPS_DIRECT_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="min-h-[44px] inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:underline shrink-0"
+                  className="inline-flex items-center gap-1 text-sm font-medium text-ink-muted hover:text-accent shrink-0 transition-colors"
                 >
                   <span>{t('contact.map_open_external')}</span>
-                  <ExternalLink size={14} aria-hidden="true" />
+                  <ExternalLink size={13} aria-hidden="true" />
                 </a>
               </div>
 
-              <p className="text-sm sm:text-base text-ink-muted leading-relaxed">
-                {t('contact.map_desc')}
-              </p>
+              <p className="text-sm text-ink-muted leading-relaxed">{t('contact.map_desc')}</p>
 
-              <div className="aspect-[16/9] rounded-xl overflow-hidden border border-line bg-mist/60">
+              <div className="aspect-[16/9] rounded-xl overflow-hidden border border-line bg-mist">
                 <iframe
                   src={MAPS_EMBED_URL}
                   width="100%"
@@ -463,22 +455,19 @@ export default function Contact() {
                   loading="lazy"
                   referrerPolicy="strict-origin-when-cross-origin"
                   title="Lokasi Akbar Alfaidah di Google Maps"
-                  className="w-full h-full object-cover dark:brightness-90 dark:contrast-110"
+                  className="w-full h-full object-cover grayscale-[25%] hover:grayscale-0 transition-all duration-300 dark:brightness-90 dark:contrast-110"
                 />
               </div>
-            </SpotlightCard>
+            </div>
           </FadeUp>
 
-          {/* Right Column */}
-          <FadeUp delay={0.08} className="lg:col-span-7">
-            <SpotlightCard
-              hoverLift={false}
-              className="p-6 sm:p-8 lg:p-10 shadow-lg shadow-ink/[0.04] dark:shadow-black/30"
-            >
+          {/* Right Column: Clean Minimalist Inquiry Surface */}
+          <FadeUp delay={0.06} className="lg:col-span-7">
+            <div className="rounded-xl bg-surface border border-line p-6 sm:p-8 lg:p-10">
               <div
                 role="tablist"
                 aria-label="Contact channel"
-                className="relative grid grid-cols-2 gap-1.5 p-1.5 rounded-xl bg-mist border border-line mb-8"
+                className="flex border-b border-line gap-6 mb-8"
               >
                 <button
                   type="button"
@@ -488,19 +477,19 @@ export default function Contact() {
                     setMode('wa');
                     setErrors({});
                   }}
-                  className={`relative min-h-[48px] px-4 py-2.5 rounded-lg text-sm sm:text-base font-semibold inline-flex items-center justify-center gap-2 transition-colors ${
-                    mode === 'wa' ? 'text-white' : 'text-ink-muted hover:text-ink'
+                  className={`relative min-h-[44px] pb-3 text-sm sm:text-base font-medium inline-flex items-center gap-2 transition-colors ${
+                    mode === 'wa' ? 'text-ink' : 'text-ink-muted hover:text-ink'
                   }`}
                 >
+                  <FaWhatsapp size={17} aria-hidden="true" />
+                  <span>{t('contact.tab_wa')}</span>
                   {mode === 'wa' && (
                     <motion.span
-                      layoutId="contact-tab-pill"
-                      transition={{ type: 'spring', stiffness: 420, damping: 32 }}
-                      className="absolute inset-0 rounded-lg bg-emerald-700 shadow-sm"
+                      layoutId="contact-tab-line"
+                      transition={{ type: 'spring', stiffness: 440, damping: 34 }}
+                      className="absolute left-0 right-0 -bottom-[1px] h-[2px] bg-ink"
                     />
                   )}
-                  <FaWhatsapp size={18} className="relative z-10" aria-hidden="true" />
-                  <span className="relative z-10">{t('contact.tab_wa')}</span>
                 </button>
 
                 <button
@@ -511,19 +500,19 @@ export default function Contact() {
                     setMode('email');
                     setErrors({});
                   }}
-                  className={`relative min-h-[48px] px-4 py-2.5 rounded-lg text-sm sm:text-base font-semibold inline-flex items-center justify-center gap-2 transition-colors ${
-                    mode === 'email' ? 'text-on-accent' : 'text-ink-muted hover:text-ink'
+                  className={`relative min-h-[44px] pb-3 text-sm sm:text-base font-medium inline-flex items-center gap-2 transition-colors ${
+                    mode === 'email' ? 'text-ink' : 'text-ink-muted hover:text-ink'
                   }`}
                 >
+                  <Mail size={16} aria-hidden="true" />
+                  <span>{t('contact.tab_email')}</span>
                   {mode === 'email' && (
                     <motion.span
-                      layoutId="contact-tab-pill"
-                      transition={{ type: 'spring', stiffness: 420, damping: 32 }}
-                      className="absolute inset-0 rounded-lg bg-accent-solid shadow-sm"
+                      layoutId="contact-tab-line"
+                      transition={{ type: 'spring', stiffness: 440, damping: 34 }}
+                      className="absolute left-0 right-0 -bottom-[1px] h-[2px] bg-ink"
                     />
                   )}
-                  <Mail size={18} className="relative z-10" aria-hidden="true" />
-                  <span className="relative z-10">{t('contact.tab_email')}</span>
                 </button>
               </div>
 
@@ -862,25 +851,25 @@ export default function Contact() {
 
                 <Button
                   type="submit"
-                  variant={mode === 'wa' ? 'whatsapp' : 'accent'}
+                  variant="primary"
                   size="lg"
                   disabled={isSending}
                   className="w-full sm:w-auto"
                 >
                   {mode === 'wa' ? (
                     <>
-                      <FaWhatsapp size={19} aria-hidden="true" />
+                      <FaWhatsapp size={18} aria-hidden="true" />
                       <span>{t('contact.cta_wa')}</span>
                     </>
                   ) : (
                     <>
-                      <Send size={17} aria-hidden="true" />
+                      <Send size={16} aria-hidden="true" />
                       <span>{isSending ? t('contact.cta_sending') : t('contact.cta_email')}</span>
                     </>
                   )}
                 </Button>
               </form>
-            </SpotlightCard>
+            </div>
           </FadeUp>
         </div>
       </section>

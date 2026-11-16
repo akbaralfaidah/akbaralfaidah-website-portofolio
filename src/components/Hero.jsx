@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -17,42 +17,14 @@ import { Button } from './ui/Button';
 import { MeshGradient } from './ui/MeshGradient';
 import { STUDIO_EASE } from '../lib/motion';
 
-const KINETIC_ITEMS_ID = [
-  'Web Full-Stack',
-  'Aplikasi Android & Flutter',
-  'Integrasi AI & Vision',
-  'Desain Antarmuka',
-  'API & Database',
-  'Deploy Cloud Server'
-];
-
-const KINETIC_ITEMS_EN = [
-  'Full-Stack Web',
-  'Android & Flutter',
-  'Applied AI & Vision',
-  'Interface Design',
-  'APIs & Databases',
-  'Cloud Deployment'
-];
-
 export default function Hero() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [activeIndex, setActiveIndex] = useState(0);
   const [stageMode, setStageMode] = useState('preview');
   const [isPaused, setIsPaused] = useState(false);
 
-  const stageRef = useRef(null);
-  const mx = useMotionValue(0.5);
-  const my = useMotionValue(0.5);
-  const smoothX = useSpring(mx, { stiffness: 220, damping: 24 });
-  const smoothY = useSpring(my, { stiffness: 220, damping: 24 });
-  const rotateY = useTransform(smoothX, [0, 1], [-4, 4]);
-  const rotateX = useTransform(smoothY, [0, 1], [3, -3]);
-
   const facts = t('hero.facts', { returnObjects: true }) || [];
   const activeProject = heroProjects[activeIndex] || heroProjects[0];
-  const isEn = i18n.language === 'en';
-  const ribbonItems = isEn ? KINETIC_ITEMS_EN : KINETIC_ITEMS_ID;
 
   useEffect(() => {
     if (isPaused || stageMode !== 'preview') return undefined;
@@ -67,16 +39,6 @@ export default function Hero() {
 
     return () => window.clearInterval(timer);
   }, [isPaused, stageMode]);
-
-  const handleStageMove = (e) => {
-    const el = stageRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    if (rect.width > 0 && rect.height > 0) {
-      mx.set((e.clientX - rect.left) / rect.width);
-      my.set((e.clientY - rect.top) / rect.height);
-    }
-  };
 
   const handleSelectProject = (index) => {
     setActiveIndex(index);
@@ -100,62 +62,59 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative bg-paper text-ink pt-28 sm:pt-36 lg:pt-40 pb-0 border-b border-line overflow-hidden"
+      className="relative bg-paper text-ink pt-28 sm:pt-32 lg:pt-36 pb-12 sm:pb-16 lg:pb-20 border-b border-line overflow-hidden"
     >
       <MeshGradient />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6 pb-16 sm:pb-20 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
-        {/* Left Column */}
-        <div className="lg:col-span-6 flex flex-col items-start">
+      <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+        {/* Left Editorial Claim (5 cols) */}
+        <div className="lg:col-span-5 flex flex-col items-start">
           <motion.div
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, ease: STUDIO_EASE }}
-            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-surface/90 backdrop-blur-md border border-line shadow-sm text-sm font-medium text-ink mb-7 whitespace-nowrap"
+            transition={{ duration: 0.4, ease: STUDIO_EASE }}
+            className="inline-flex items-center gap-2.5 text-sm font-mono text-ink-muted mb-6"
           >
-            <span className="relative flex h-2.5 w-2.5" aria-hidden="true">
+            <span className="relative flex h-2 w-2 shrink-0" aria-hidden="true">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-600 dark:bg-emerald-400" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
             </span>
             <span>{t('hero.badge')}</span>
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.58, delay: 0.06, ease: STUDIO_EASE }}
-            className="font-display text-[2.45rem] sm:text-[3.5rem] lg:text-[3.95rem] font-extrabold tracking-[-0.03em] leading-[1.06] text-ink mb-6"
+            transition={{ duration: 0.52, delay: 0.05, ease: STUDIO_EASE }}
+            className="font-display text-[2.25rem] sm:text-5xl lg:text-[3.35rem] font-semibold tracking-[-0.035em] leading-[1.06] text-ink mb-5"
           >
-            {t('hero.headline_start')}{' '}
-            <span className="bg-gradient-to-r from-accent via-sky-500 to-amber-500 dark:from-blue-400 dark:via-sky-300 dark:to-amber-300 bg-clip-text text-transparent">
-              {t('hero.headline_accent')}
-            </span>
+            {t('hero.headline_start')} {t('hero.headline_accent')}
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 14 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.14, ease: STUDIO_EASE }}
-            className="text-lg sm:text-xl text-ink-muted leading-relaxed max-w-xl mb-9"
+            transition={{ duration: 0.48, delay: 0.12, ease: STUDIO_EASE }}
+            className="text-base sm:text-lg text-ink-muted leading-relaxed mb-8"
           >
             {t('hero.subtitle')}
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 14 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.22, ease: STUDIO_EASE }}
-            className="flex flex-wrap items-center gap-4 mb-11 w-full sm:w-auto"
+            transition={{ duration: 0.45, delay: 0.18, ease: STUDIO_EASE }}
+            className="flex flex-wrap items-center gap-3 mb-10 w-full sm:w-auto"
           >
             <Button
-              variant="accent"
+              variant="primary"
               size="lg"
               onClick={scrollToContact}
               className="w-full sm:w-auto"
             >
               <span>{t('hero.cta_primary')}</span>
               <ArrowRight
-                size={18}
+                size={17}
                 className="transition-transform duration-200 group-hover:translate-x-1"
                 aria-hidden="true"
               />
@@ -170,7 +129,7 @@ export default function Hero() {
             >
               <span>{t('hero.cta_secondary')}</span>
               <ArrowUpRight
-                size={18}
+                size={17}
                 className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                 aria-hidden="true"
               />
@@ -178,100 +137,81 @@ export default function Hero() {
           </motion.div>
 
           <motion.dl
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3, ease: STUDIO_EASE }}
-            className="w-full grid grid-cols-2 sm:grid-cols-3 gap-6 pt-7 border-t border-line"
+            transition={{ duration: 0.45, delay: 0.24, ease: STUDIO_EASE }}
+            className="w-full grid grid-cols-3 gap-4 pt-6 border-t border-line"
           >
             {Array.isArray(facts) &&
               facts.map((fact) => (
                 <div key={fact.label}>
-                  <dt className="text-sm font-medium text-ink-muted mb-1">{fact.label}</dt>
-                  <dd className="font-display text-lg sm:text-xl font-bold text-ink">
-                    {fact.value}
-                  </dd>
+                  <dt className="font-mono text-xs text-ink-muted mb-1">{fact.label}</dt>
+                  <dd className="text-sm sm:text-base font-semibold text-ink">{fact.value}</dd>
                 </div>
               ))}
           </motion.dl>
         </div>
 
-        {/* Right Column — 3D Tilt Showcase Stage */}
+        {/* Right Architectural Exhibition Stage (7 cols, Unified Obsidian Hardware Frame) */}
         <motion.div
-          ref={stageRef}
-          initial={{ opacity: 0, scale: 0.96, y: 16 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.16, ease: STUDIO_EASE }}
-          style={{ rotateX, rotateY, transformPerspective: 1200 }}
-          onMouseMove={handleStageMove}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.65, delay: 0.14, ease: STUDIO_EASE }}
           onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => {
-            setIsPaused(false);
-            mx.set(0.5);
-            my.set(0.5);
-          }}
-          className="lg:col-span-6"
+          onMouseLeave={() => setIsPaused(false)}
+          className="lg:col-span-7"
         >
-          <div className="relative rounded-2xl bg-surface/95 backdrop-blur-md border border-line shadow-2xl shadow-accent/[0.08] dark:shadow-black/50 overflow-hidden">
+          <div className="relative rounded-xl bg-[#0B0C10] text-slate-100 border border-line dark:border-white/15 shadow-2xl shadow-black/20 dark:shadow-black/60 overflow-hidden">
             {!isPaused && stageMode === 'preview' && (
               <div
                 key={`progress-${activeProject.slug}`}
-                className="h-0.5 w-full bg-accent animate-stage-progress"
+                className="h-[2px] w-full bg-blue-500 animate-stage-progress"
                 aria-hidden="true"
               />
             )}
 
-            {/* Top Controls */}
-            <div className="px-4 sm:px-5 py-3.5 border-b border-line flex items-center justify-between gap-2 bg-mist/50">
-              <div className="flex items-center gap-2.5 min-w-0">
-                <span className="font-mono text-sm font-semibold text-accent tabular-nums">
+            {/* Minimal Studio Chrome */}
+            <div className="px-3.5 sm:px-5 py-3 border-b border-white/10 flex items-center justify-between gap-2 bg-[#111319]">
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                <span className="font-mono text-xs font-medium text-slate-400 tabular-nums whitespace-nowrap shrink-0">
                   {String(activeIndex + 1).padStart(2, '0')} /{' '}
                   {String(heroProjects.length).padStart(2, '0')}
                 </span>
 
-                <div className="inline-flex items-center p-0.5 rounded-xl bg-surface border border-line">
+                <div className="inline-flex items-center p-0.5 rounded-md bg-white/[0.06] border border-white/10 shrink-0">
                   <button
                     type="button"
                     onClick={() => setStageMode('preview')}
-                    className={`relative min-h-[36px] px-3 py-1 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 transition-colors ${
-                      stageMode === 'preview' ? 'text-on-accent' : 'text-ink-muted hover:text-ink'
+                    className={`min-h-[28px] px-2 sm:px-2.5 rounded text-xs font-medium inline-flex items-center gap-1 transition-colors ${
+                      stageMode === 'preview'
+                        ? 'bg-white text-[#0B0C10]'
+                        : 'text-slate-400 hover:text-white'
                     }`}
                   >
-                    {stageMode === 'preview' && (
-                      <motion.span
-                        layoutId="hero-stage-mode"
-                        transition={{ type: 'spring', stiffness: 450, damping: 35 }}
-                        className="absolute inset-0 rounded-lg bg-accent-solid"
-                      />
-                    )}
-                    <Monitor size={13} className="relative z-10" aria-hidden="true" />
-                    <span className="relative z-10">UI</span>
+                    <Monitor size={12} aria-hidden="true" />
+                    <span>UI</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => setStageMode('spec')}
-                    className={`relative min-h-[36px] px-3 py-1 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 transition-colors ${
-                      stageMode === 'spec' ? 'text-on-accent' : 'text-ink-muted hover:text-ink'
+                    className={`min-h-[28px] px-2 sm:px-2.5 rounded text-xs font-medium inline-flex items-center gap-1 transition-colors ${
+                      stageMode === 'spec'
+                        ? 'bg-white text-[#0B0C10]'
+                        : 'text-slate-400 hover:text-white'
                     }`}
                   >
-                    {stageMode === 'spec' && (
-                      <motion.span
-                        layoutId="hero-stage-mode"
-                        transition={{ type: 'spring', stiffness: 450, damping: 35 }}
-                        className="absolute inset-0 rounded-lg bg-accent-solid"
-                      />
-                    )}
-                    <Layers size={13} className="relative z-10" aria-hidden="true" />
-                    <span className="relative z-10">Spec</span>
+                    <Layers size={12} aria-hidden="true" />
+                    <span>Spec</span>
                   </button>
                 </div>
               </div>
 
-              <div className="flex items-center gap-1.5 shrink-0">
+              <div className="flex items-center gap-0.5 sm:gap-1 shrink-0">
                 <button
                   type="button"
                   onClick={() => setIsPaused((p) => !p)}
-                  className="min-w-[40px] min-h-[40px] sm:min-w-[38px] sm:min-h-[38px] flex items-center justify-center rounded-lg border border-line bg-surface text-ink-muted hover:text-accent hover:border-accent transition-colors"
+                  className="hidden sm:flex min-w-[34px] min-h-[34px] items-center justify-center rounded-md text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
                   aria-label={isPaused ? 'Resume project showcase' : 'Pause project showcase'}
                 >
                   {isPaused ? (
@@ -283,7 +223,7 @@ export default function Hero() {
                 <button
                   type="button"
                   onClick={handlePrev}
-                  className="min-w-[44px] min-h-[44px] sm:min-w-[38px] sm:min-h-[38px] flex items-center justify-center rounded-lg border border-line bg-surface text-ink hover:border-accent hover:text-accent transition-colors"
+                  className="min-w-[36px] min-h-[36px] flex items-center justify-center rounded-md text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
                   aria-label="Previous project preview"
                 >
                   <ChevronLeft size={16} aria-hidden="true" />
@@ -291,7 +231,7 @@ export default function Hero() {
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="min-w-[44px] min-h-[44px] sm:min-w-[38px] sm:min-h-[38px] flex items-center justify-center rounded-lg border border-line bg-surface text-ink hover:border-accent hover:text-accent transition-colors"
+                  className="min-w-[36px] min-h-[36px] flex items-center justify-center rounded-md text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
                   aria-label="Next project preview"
                 >
                   <ChevronRight size={16} aria-hidden="true" />
@@ -299,8 +239,8 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* 16:9 HD Viewport */}
-            <div className="relative aspect-video bg-mist overflow-hidden border-b border-line">
+            {/* 16:9 Studio Real-UI Frame */}
+            <div className="relative aspect-video bg-[#0B0C10] overflow-hidden border-b border-white/10">
               <AnimatePresence initial={false}>
                 {stageMode === 'preview' ? (
                   <motion.div
@@ -322,45 +262,46 @@ export default function Hero() {
                         height={1080}
                         decoding="async"
                         fetchPriority="high"
-                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
+                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.02]"
                       />
                     </Link>
                   </motion.div>
                 ) : (
                   <motion.div
                     key={`spec-${activeProject.slug}`}
-                    initial={{ opacity: 0, y: 8 }}
+                    initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
+                    exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.2, ease: STUDIO_EASE }}
-                    className="absolute inset-0 bg-obsidian text-slate-100 p-6 flex flex-col justify-between"
+                    className="absolute inset-0 bg-[#0D0F15] p-6 sm:p-8 flex flex-col justify-between"
                   >
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-sm font-semibold text-blue-400">
+                        <span className="font-mono text-xs uppercase tracking-wider text-blue-400">
                           {activeProject.category}
                         </span>
-                        <span className="font-mono text-sm text-slate-400">2026</span>
+                        <span className="font-mono text-xs text-slate-400">2026</span>
                       </div>
                       <div>
-                        <h3 className="font-display text-2xl font-bold text-white mb-1">
+                        <h3 className="font-display text-2xl sm:text-3xl font-semibold text-white mb-2">
                           {activeProject.name}
                         </h3>
-                        <p className="text-base text-slate-300 leading-relaxed">
+                        <p className="text-base text-slate-300 leading-relaxed max-w-xl">
                           {activeProject.summary}
                         </p>
                       </div>
                     </div>
 
-                    <div className="space-y-3">
+                    <div className="space-y-3 pt-4 border-t border-white/10">
                       <p className="text-sm text-slate-400">
-                        {t('projects.client_label')}: <span className="text-white font-medium">{activeProject.client}</span>
+                        {t('projects.client_label')}:{' '}
+                        <span className="text-white font-medium">{activeProject.client}</span>
                       </p>
                       <div className="flex flex-wrap gap-2">
                         {(activeProject.stack || []).map((item) => (
                           <span
                             key={item}
-                            className="px-3 py-1 rounded-lg bg-white/10 border border-white/15 font-mono text-sm text-slate-100"
+                            className="px-3 py-1 rounded-md bg-white/[0.06] border border-white/10 font-mono text-xs text-slate-200"
                           >
                             {item}
                           </span>
@@ -372,34 +313,34 @@ export default function Hero() {
               </AnimatePresence>
             </div>
 
-            {/* Footer & Tabs */}
-            <div className="p-5 space-y-4">
-              <div className="flex items-start justify-between gap-3">
+            {/* Clean Meta Strip & Minimal Project Switcher */}
+            <div className="p-4 sm:px-5 sm:py-4 bg-[#111319] flex flex-col gap-3.5">
+              <div className="flex items-center justify-between gap-4">
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold text-accent mb-1">
-                    {activeProject.category}
-                  </p>
-                  <h2 className="font-display text-xl sm:text-2xl font-bold text-ink truncate">
-                    {activeProject.name}
-                  </h2>
-                  <p className="text-sm sm:text-base text-ink-muted line-clamp-2 mt-1">
-                    {activeProject.summary}
-                  </p>
+                  <div className="flex items-center gap-2.5">
+                    <h2 className="font-display text-lg sm:text-xl font-semibold text-white truncate">
+                      {activeProject.name}
+                    </h2>
+                    <span className="font-mono text-xs text-slate-400 hidden sm:inline">
+                      · {activeProject.category}
+                    </span>
+                  </div>
+                  <p className="text-sm text-slate-400 truncate mt-0.5">{activeProject.summary}</p>
                 </div>
 
                 <Link
                   to={`/project/${activeProject.slug}`}
-                  className="shrink-0 min-h-[44px] px-4 py-2 rounded-xl border border-line bg-paper text-sm font-semibold text-ink hover:border-accent hover:text-accent inline-flex items-center gap-1.5 transition-colors"
+                  className="shrink-0 min-h-[38px] px-3.5 py-1.5 rounded-lg bg-white text-[#0B0C10] hover:bg-slate-200 text-sm font-medium inline-flex items-center gap-1.5 transition-colors"
                 >
                   <span>{t('hero.stage_action')}</span>
-                  <ArrowUpRight size={15} aria-hidden="true" />
+                  <ArrowUpRight size={14} aria-hidden="true" />
                 </Link>
               </div>
 
               <div
                 role="tablist"
                 aria-label="Featured projects selector"
-                className="flex flex-wrap gap-1.5 pt-3 border-t border-line"
+                className="flex flex-wrap gap-1 pt-3 border-t border-white/10"
               >
                 {heroProjects.map((proj, idx) => {
                   const selected = idx === activeIndex;
@@ -410,10 +351,10 @@ export default function Hero() {
                       role="tab"
                       aria-selected={selected}
                       onClick={() => handleSelectProject(idx)}
-                      className={`min-h-[44px] sm:min-h-[38px] min-w-[44px] px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+                      className={`min-h-[36px] px-3 py-1 rounded-md text-xs sm:text-sm font-medium whitespace-nowrap transition-colors ${
                         selected
-                          ? 'bg-accent-solid text-on-accent font-semibold shadow-sm'
-                          : 'bg-mist/60 text-ink-muted hover:text-ink hover:bg-mist'
+                          ? 'bg-white/15 text-white'
+                          : 'text-slate-400 hover:text-white hover:bg-white/[0.06]'
                       }`}
                     >
                       {proj.name}
@@ -424,24 +365,6 @@ export default function Hero() {
             </div>
           </div>
         </motion.div>
-      </div>
-
-      {/* Artistic Kinetic Ticker Ribbon */}
-      <div className="relative z-10 border-t border-line bg-surface/75 backdrop-blur-md py-4 overflow-hidden select-none">
-        <div className="flex w-max animate-marquee gap-8 items-center">
-          {[...ribbonItems, ...ribbonItems].map((label, idx) => (
-            <div
-              key={`${label}-${idx}`}
-              aria-hidden={idx >= ribbonItems.length ? 'true' : undefined}
-              className="flex items-center gap-8 shrink-0"
-            >
-              <span className="font-display text-lg sm:text-xl font-bold tracking-tight text-ink">
-                {label}
-              </span>
-              <span className="w-2 h-2 rounded-full bg-accent shrink-0" aria-hidden="true" />
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   );

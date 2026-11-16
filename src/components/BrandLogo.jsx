@@ -1,4 +1,4 @@
-export function BrandLogo({ className = 'h-9 w-auto', showWordmark = false }) {
+export function BrandLogo({ className = 'h-9 w-auto', showWordmark = false, inverted = false }) {
   return (
     <span className="inline-flex items-center gap-3 select-none">
       <svg
@@ -16,14 +16,18 @@ export function BrandLogo({ className = 'h-9 w-auto', showWordmark = false }) {
           d="M24 4H40L38 9.5H29.5L27.5 15H36L34 20.5H25.5L21.5 32H15L24 4Z"
           fill="currentColor"
         />
-        <path d="M18 4H24L20.5 13H14.5L18 4Z" fill="#1D4ED8" className="dark:fill-[#60A5FA]" />
+        <path
+          d="M18 4H24L20.5 13H14.5L18 4Z"
+          fill={inverted ? '#60A5FA' : '#1E40AF'}
+          className="dark:fill-[#60A5FA]"
+        />
       </svg>
       {showWordmark && (
         <span className="flex flex-col leading-tight">
-          <span className="font-display text-base sm:text-lg font-bold tracking-tight text-ink">
+          <span className="font-display text-base sm:text-lg font-semibold tracking-tight text-current">
             Akbar Alfaidah
           </span>
-          <span className="text-xs font-medium text-ink-muted">
+          <span className="text-xs font-medium text-current opacity-65">
             Tech Agency
           </span>
         </span>

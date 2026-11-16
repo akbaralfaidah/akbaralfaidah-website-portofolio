@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { MapPin, ArrowUpRight } from 'lucide-react';
+import { MapPin, ArrowUpRight, ArrowUp } from 'lucide-react';
 import BrandLogo from './BrandLogo';
 
 const FOOTER_SECTIONS = [
-  { key: 'about', href: '/#about' },
-  { key: 'services', href: '/#services' },
   { key: 'projects', href: '/#projects' },
+  { key: 'services', href: '/#capabilities' },
+  { key: 'about', href: '/#about' },
   { key: 'experience', href: '/#experience' },
   { key: 'contact', href: '/#contact' }
 ];
@@ -21,31 +21,36 @@ const EXTERNAL_LINKS = [
 ];
 
 export default function Footer() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const year = new Date().getFullYear();
+  const isEn = i18n.language === 'en';
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
-    <footer className="bg-surface border-t border-line py-16 px-6">
+    <footer className="bg-[#0B0C10] text-slate-200 border-t border-white/10 py-14 sm:py-16 px-5 sm:px-6">
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-10 border-b border-line">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-10 border-b border-white/10">
           <div className="md:col-span-5 flex flex-col gap-4">
             <Link
               to="/"
-              className="inline-flex items-center min-h-[44px] self-start hover:opacity-85 transition-opacity"
+              className="inline-flex items-center min-h-[44px] self-start text-white hover:opacity-85 transition-opacity"
             >
-              <BrandLogo className="h-8 w-auto text-ink" showWordmark />
+              <BrandLogo className="h-8 w-auto text-white" showWordmark inverted />
             </Link>
-            <p className="text-base text-ink-muted max-w-sm leading-relaxed">
+            <p className="text-base text-slate-400 max-w-sm leading-relaxed">
               {t('footer.tagline')}
             </p>
-            <p className="inline-flex items-center gap-2 text-sm text-ink-muted pt-1">
-              <MapPin size={16} className="text-accent shrink-0" aria-hidden="true" />
+            <p className="inline-flex items-center gap-2 font-mono text-xs text-slate-400 pt-1">
+              <MapPin size={14} className="text-blue-400 shrink-0" aria-hidden="true" />
               <span>{t('footer.location')}</span>
             </p>
           </div>
 
           <div className="md:col-span-3">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-ink mb-4">
+            <h3 className="font-mono text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">
               {t('footer.nav_title')}
             </h3>
             <ul className="space-y-1">
@@ -53,7 +58,7 @@ export default function Footer() {
                 <li key={item.key}>
                   <a
                     href={item.href}
-                    className="inline-flex items-center min-h-[44px] text-base text-ink-muted hover:text-accent transition-colors"
+                    className="inline-flex items-center min-h-[38px] text-sm sm:text-base text-slate-300 hover:text-white transition-colors"
                   >
                     {t(`nav.${item.key}`)}
                   </a>
@@ -62,7 +67,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/projects"
-                  className="inline-flex items-center min-h-[44px] text-base text-ink-muted hover:text-accent transition-colors"
+                  className="inline-flex items-center min-h-[38px] text-sm sm:text-base text-slate-300 hover:text-white transition-colors"
                 >
                   {t('projects.back_projects')}
                 </Link>
@@ -71,7 +76,7 @@ export default function Footer() {
           </div>
 
           <div className="md:col-span-4">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-ink mb-4">
+            <h3 className="font-mono text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">
               {t('footer.connect_title')}
             </h3>
             <ul className="space-y-1">
@@ -83,10 +88,10 @@ export default function Footer() {
                       href={item.href}
                       target={isExternal ? '_blank' : undefined}
                       rel={isExternal ? 'noopener noreferrer' : undefined}
-                      className="inline-flex items-center gap-1.5 min-h-[44px] text-base text-ink-muted hover:text-accent transition-colors break-all"
+                      className="inline-flex items-center gap-1.5 min-h-[38px] text-sm sm:text-base text-slate-300 hover:text-white transition-colors break-all"
                     >
                       <span>{item.label}</span>
-                      {isExternal && <ArrowUpRight size={15} aria-hidden="true" />}
+                      {isExternal && <ArrowUpRight size={14} aria-hidden="true" />}
                     </a>
                   </li>
                 );
@@ -95,11 +100,19 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-sm sm:text-base text-ink-muted">
+        <div className="pt-7 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-sm text-slate-400">
           <p>
             © {year} Akbar Alfaidah — {t('footer.role')}.
           </p>
-          <p>{t('footer.copyright')}</p>
+
+          <button
+            type="button"
+            onClick={scrollToTop}
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-300 hover:text-white transition-colors"
+          >
+            <span>{isEn ? 'Back to top' : 'Kembali ke atas'}</span>
+            <ArrowUp size={14} aria-hidden="true" />
+          </button>
         </div>
       </div>
     </footer>

@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { fetchProjectBySlug, fetchProjects } from '../data/projects';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import BackToTop from '../components/ui/BackToTop';
 import MeshGradient from '../components/ui/MeshGradient';
 import NotFound from './NotFound';
 import { Button } from '../components/ui/Button';
@@ -105,16 +104,16 @@ export default function ProjectDetail({ initialProject = null }) {
 
       <main id="main-content" className="flex-1">
         {/* Atmospheric Dark Obsidian Exhibition Stage */}
-        <section className="relative bg-obsidian text-slate-100 pt-28 sm:pt-36 pb-20 sm:pb-24 px-6 border-b border-white/10 overflow-hidden">
+        <section className="relative bg-[#0B0C10] text-slate-100 pt-28 sm:pt-36 pb-20 sm:pb-24 px-5 sm:px-6 border-b border-white/10 overflow-hidden">
           <MeshGradient dark />
 
           <div className="relative z-10 max-w-5xl mx-auto space-y-10">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <Link
                 to="/projects"
-                className="inline-flex items-center gap-2 min-h-[44px] text-base font-medium text-slate-300 hover:text-blue-400 transition-colors"
+                className="inline-flex items-center gap-2 min-h-[44px] text-sm font-medium text-slate-300 hover:text-white transition-colors"
               >
-                <ArrowLeft size={17} aria-hidden="true" />
+                <ArrowLeft size={16} aria-hidden="true" />
                 <span>{t('projects.back_projects')}</span>
               </Link>
 
@@ -123,36 +122,29 @@ export default function ProjectDetail({ initialProject = null }) {
                   href={project.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="min-h-[44px] px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm sm:text-base font-semibold inline-flex items-center gap-2 shadow-lg shadow-blue-600/25 transition-all hover:-translate-y-0.5"
+                  className="min-h-[40px] px-4 py-2 rounded-lg bg-white text-[#0B0C10] hover:bg-slate-200 text-sm font-medium inline-flex items-center gap-1.5 transition-colors"
                 >
                   <span>{t('projects.live_preview')}</span>
-                  <ArrowUpRight size={16} aria-hidden="true" />
+                  <ArrowUpRight size={15} aria-hidden="true" />
                 </a>
               )}
             </div>
 
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: STUDIO_EASE }}
+              transition={{ duration: 0.45, ease: STUDIO_EASE }}
               className="space-y-4"
             >
-              <div className="flex flex-wrap gap-2">
-                {(project.categories || []).map((cat) => (
-                  <span
-                    key={cat}
-                    className="px-3.5 py-1 rounded-lg text-sm font-medium bg-white/10 text-blue-300 border border-white/15"
-                  >
-                    {cat}
-                  </span>
-                ))}
+              <div className="flex flex-wrap gap-3 font-mono text-xs uppercase tracking-wider text-blue-400">
+                {(project.categories || []).join(' · ')}
               </div>
 
-              <h1 className="font-display text-4xl sm:text-6xl lg:text-[4rem] font-extrabold tracking-tight leading-[1.04] text-white">
+              <h1 className="font-display text-4xl sm:text-6xl font-semibold tracking-[-0.03em] leading-[1.04] text-white">
                 {project.name}
               </h1>
 
-              <p className="text-lg sm:text-2xl text-slate-300 max-w-3xl leading-relaxed">
+              <p className="text-lg sm:text-xl text-slate-300 max-w-3xl leading-relaxed">
                 {translatedSummary}
               </p>
             </motion.div>
@@ -345,7 +337,6 @@ export default function ProjectDetail({ initialProject = null }) {
       </main>
 
       <Footer />
-      <BackToTop />
     </div>
   );
 }

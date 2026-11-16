@@ -23,13 +23,13 @@ export default {
         gold: 'rgb(var(--color-gold-rgb) / <alpha-value>)',
         'on-ink': 'rgb(var(--color-on-ink-rgb) / <alpha-value>)',
         line: 'var(--color-border)',
-        obsidian: '#0B101B',
-        'obsidian-surface': '#131A29',
+        obsidian: '#0B0C10',
+        'obsidian-surface': '#14161D',
         charcoal: 'rgb(var(--color-ink-rgb) / <alpha-value>)'
       },
       fontFamily: {
-        sans: ['Outfit', 'system-ui', '-apple-system', 'sans-serif'],
-        display: ['Outfit', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace']
       }
     }

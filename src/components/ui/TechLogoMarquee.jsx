@@ -64,7 +64,7 @@ function MarqueeTrack({ items, reverse = false, darkSurface = false }) {
       }}
     >
       <div
-        className="flex gap-3 w-max animate-marquee"
+        className="flex gap-8 w-max animate-marquee"
         style={reverse ? { animationDirection: 'reverse' } : undefined}
       >
         {repeated.map((item, idx) => {
@@ -74,13 +74,13 @@ function MarqueeTrack({ items, reverse = false, darkSurface = false }) {
             <div
               key={`${item.name}-${idx}`}
               aria-hidden={isDuplicate ? 'true' : undefined}
-              className={`inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl border shrink-0 transition-colors ${
+              className={`inline-flex items-center gap-2.5 py-2 shrink-0 transition-opacity ${
                 darkSurface
-                  ? 'bg-white/[0.04] border-white/10 text-slate-100 hover:border-blue-400/50'
-                  : 'bg-surface border-line text-ink hover:border-accent/50'
+                  ? 'text-slate-300 opacity-85 hover:opacity-100'
+                  : 'text-ink-muted opacity-85 hover:opacity-100'
               }`}
             >
-              <Icon size={18} style={{ color: item.color }} aria-hidden="true" />
+              <Icon size={19} style={{ color: item.color }} aria-hidden="true" />
               <span className="font-mono text-sm font-medium tracking-tight whitespace-nowrap">
                 {item.name}
               </span>
