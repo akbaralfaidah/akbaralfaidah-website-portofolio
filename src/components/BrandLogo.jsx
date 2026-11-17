@@ -2,6 +2,8 @@ export function BrandLogo({ className = 'h-9 w-auto', showWordmark = false, inve
   return (
     <span className="inline-flex items-center gap-3 select-none">
       <svg
+        width={44}
+        height={36}
         viewBox="0 0 44 36"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
