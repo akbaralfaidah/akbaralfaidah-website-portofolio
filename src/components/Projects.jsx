@@ -14,7 +14,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { fetchProjects } from '../data/projects';
 import { Button } from './ui/Button';
-import { FadeUp } from './ui/MotionPrimitives';
+import { FadeUp, ParallaxLayer, ParallaxWatermark } from './ui/MotionPrimitives';
 import { STUDIO_EASE } from '../lib/motion';
 
 const FILTER_CATEGORIES = ['All', 'Website', 'Mobile Apps', 'Machine Learning'];
@@ -189,15 +189,24 @@ export default function Projects() {
         id="projects"
         className="relative py-20 sm:py-28 px-5 sm:px-6 bg-paper text-ink border-b border-line overflow-hidden"
       >
-        {/* Soft studio skylight bloom behind the 3D carousel */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute top-28 left-1/2 -translate-x-1/2 w-[920px] h-[520px] rounded-full blur-3xl opacity-70 dark:opacity-25"
-          style={{
-            background:
-              'radial-gradient(ellipse at center, rgba(56,189,248,0.16) 0%, rgba(37,99,235,0.06) 52%, transparent 76%)'
-          }}
-        />
+          className="pointer-events-none absolute top-28 left-1/2 -translate-x-1/2 w-[920px] h-[520px]"
+        >
+          <ParallaxLayer
+            yRange={[-45, 45]}
+            className="w-full h-full rounded-full blur-3xl opacity-70 dark:opacity-25"
+          >
+            <div
+              className="w-full h-full rounded-full"
+              style={{
+                background:
+                  'radial-gradient(ellipse at center, rgba(56,189,248,0.16) 0%, rgba(37,99,235,0.06) 52%, transparent 76%)'
+              }}
+            />
+          </ParallaxLayer>
+        </div>
+        <ParallaxWatermark text="SELECTED WORKS" direction={-1} className="mb-2" />
 
         <div className="relative z-10 max-w-6xl mx-auto">
           <FadeUp className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
@@ -288,11 +297,12 @@ export default function Projects() {
             </div>
           ) : (
             <div className="space-y-8">
-              {/* Interactive 3D Spatial Coverflow Exhibition Stage */}
-              <div
-                className="relative h-[240px] sm:h-[360px] lg:h-[430px] flex items-center justify-center"
-                style={{ perspective: '1500px', transformStyle: 'preserve-3d' }}
-              >
+              {/* Interactive 3D Spatial Coverflow Exhibition Stage with Scroll Depth */}
+              <ParallaxLayer yRange={[26, -26]} scaleRange={[0.97, 1.02]}>
+                <div
+                  className="relative h-[240px] sm:h-[360px] lg:h-[430px] flex items-center justify-center"
+                  style={{ perspective: '1500px', transformStyle: 'preserve-3d' }}
+                >
                 {visibleProjects.map((project, idx) => {
                   const offset = getRelativeOffset(idx);
                   const absOffset = Math.abs(offset);
@@ -376,10 +386,12 @@ export default function Projects() {
                     </button>
                   </>
                 )}
-              </div>
+                </div>
+              </ParallaxLayer>
 
               {/* Integrated Live Active Project Spec Console */}
-              <div className="rounded-2xl bg-surface/95 border border-line p-6 sm:p-8 shadow-[0_18px_50px_-18px_rgba(37,99,235,0.12),0_8px_24px_-12px_rgba(15,23,42,0.06)]">
+              <ParallaxLayer yRange={[14, -14]}>
+                <div className="rounded-2xl bg-surface/95 border border-line p-6 sm:p-8 shadow-[0_18px_50px_-18px_rgba(37,99,235,0.12),0_8px_24px_-12px_rgba(15,23,42,0.06)]">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={focusedProject.slug}
@@ -464,7 +476,8 @@ export default function Projects() {
                     </div>
                   </motion.div>
                 </AnimatePresence>
-              </div>
+                </div>
+              </ParallaxLayer>
 
               {/* Interactive Visual Miniature Switcher Dock (All Visible Filtered Works) */}
               {count > 1 && (

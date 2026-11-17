@@ -21,7 +21,7 @@ import emailjs from '@emailjs/browser';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { useTheme } from '../hooks/useTheme';
 import { Button } from './ui/Button';
-import { FadeUp } from './ui/MotionPrimitives';
+import { FadeUp, ParallaxLayer, ParallaxWatermark } from './ui/MotionPrimitives';
 import Magnetic from './ui/Magnetic';
 import { STUDIO_EASE } from '../lib/motion';
 import Toast from './ui/Toast';
@@ -353,10 +353,13 @@ export default function Contact() {
         <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
       )}
 
-      <section id="contact" className="py-20 sm:py-24 px-5 sm:px-6 bg-paper text-ink">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+      <section id="contact" className="relative py-20 sm:py-24 px-5 sm:px-6 bg-paper text-ink overflow-hidden">
+        <ParallaxWatermark text="START PROJECT" direction={1} className="mb-4" />
+
+        <div className="relative z-10 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           {/* Left Editorial Contact & Clean Map */}
-          <FadeUp className="lg:col-span-5 space-y-8">
+          <ParallaxLayer yRange={[24, -24]} className="lg:col-span-5">
+            <FadeUp className="space-y-8">
             <div>
               <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent mb-3">
                 {i18n.language === 'en' ? '05 / Inquiry' : '05 / Kontak'}
@@ -466,11 +469,13 @@ export default function Contact() {
                 />
               </div>
             </div>
-          </FadeUp>
+            </FadeUp>
+          </ParallaxLayer>
 
           {/* Right Column: Clean Minimalist Inquiry Surface */}
-          <FadeUp delay={0.06} className="lg:col-span-7">
-            <div className="rounded-xl bg-surface border border-line p-6 sm:p-8 lg:p-10">
+          <ParallaxLayer yRange={[-18, 18]} className="lg:col-span-7">
+            <FadeUp delay={0.06}>
+              <div className="rounded-2xl bg-surface border border-line p-6 sm:p-8 lg:p-10 shadow-[0_20px_50px_-18px_rgba(37,99,235,0.1)]">
               <div
                 role="tablist"
                 aria-label="Contact channel"
@@ -859,7 +864,7 @@ export default function Contact() {
                 <Magnetic strength={0.22} className="w-full sm:w-auto">
                   <Button
                     type="submit"
-                    variant="primary"
+                    variant={mode === 'wa' ? 'whatsapp' : 'accent'}
                     size="lg"
                     disabled={isSending}
                     className="w-full sm:w-auto"
@@ -877,9 +882,10 @@ export default function Contact() {
                     )}
                   </Button>
                 </Magnetic>
-              </form>
-            </div>
-          </FadeUp>
+                </form>
+              </div>
+            </FadeUp>
+          </ParallaxLayer>
         </div>
       </section>
     </>

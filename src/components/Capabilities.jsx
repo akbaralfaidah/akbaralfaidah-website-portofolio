@@ -12,6 +12,7 @@ import {
   Activity
 } from 'lucide-react';
 import TechLogoMarquee from './ui/TechLogoMarquee';
+import { ParallaxLayer, ParallaxWatermark } from './ui/MotionPrimitives';
 import { useTheme } from '../hooks/useTheme';
 import { STUDIO_EASE } from '../lib/motion';
 
@@ -149,9 +150,9 @@ export default function Capabilities() {
   return (
     <section
       id="capabilities"
-      className="relative py-20 sm:py-24 px-5 sm:px-6 bg-[#F1F5FA] dark:bg-[#080B12] text-ink border-b border-line overflow-hidden"
+      className="relative py-20 sm:py-24 px-5 sm:px-6 bg-[#F1F5FA] dark:bg-[#080B12] text-ink border-b border-line overflow-x-clip"
     >
-      {/* Subtle luminous radial glow */}
+      {/* Subtle luminous radial glow & horizontal Parallax Watermark */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 w-[900px] h-[420px] rounded-full blur-3xl opacity-75 dark:opacity-25"
@@ -160,6 +161,7 @@ export default function Capabilities() {
             'radial-gradient(ellipse at center, rgba(56,189,248,0.16) 0%, rgba(37,99,235,0.06) 50%, transparent 75%)'
         }}
       />
+      <ParallaxWatermark text="ARCHITECTURE" direction={1} className="mb-2" />
 
       <div className="relative z-10 max-w-6xl mx-auto">
         {/* Scroll-Scrubbed Kinetic Serif Statement */}
@@ -167,11 +169,11 @@ export default function Capabilities() {
 
         {/* Interactive Systems Workbench */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start mb-16">
-          <div
+          <ParallaxLayer
+            yRange={[20, -20]}
             className="lg:col-span-5 border-y border-line divide-y divide-line"
-            role="tablist"
-            aria-label="Engineering workflow steps"
           >
+            <div role="tablist" aria-label="Engineering workflow steps" className="divide-y divide-line">
             {Array.isArray(pillars) &&
               pillars.map((item, idx) => {
                 const isSelected = idx === activeStep;
@@ -216,10 +218,12 @@ export default function Capabilities() {
                   </button>
                 );
               })}
-          </div>
+            </div>
+          </ParallaxLayer>
 
           <div className="lg:col-span-7 lg:sticky lg:top-24">
-            <div className="rounded-2xl bg-white dark:bg-[#0D1017] border border-slate-200/90 dark:border-white/15 overflow-hidden shadow-[0_22px_55px_-16px_rgba(37,99,235,0.14),0_8px_24px_-10px_rgba(15,23,42,0.06)] dark:shadow-2xl dark:shadow-black/50">
+            <ParallaxLayer yRange={[-16, 16]}>
+              <div className="rounded-2xl bg-white dark:bg-[#0D1017] border border-slate-200/90 dark:border-white/15 overflow-hidden shadow-[0_22px_55px_-16px_rgba(37,99,235,0.14),0_8px_24px_-10px_rgba(15,23,42,0.06)] dark:shadow-2xl dark:shadow-black/50">
               <div className="px-5 py-3.5 bg-slate-50/90 dark:bg-[#121620] border-b border-slate-200 dark:border-white/10 flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center gap-2.5 font-mono text-xs font-medium text-ink">
                   <SpecIcon size={15} className="text-accent" aria-hidden="true" />
@@ -288,7 +292,8 @@ export default function Capabilities() {
                   </AnimatePresence>
                 </div>
               </div>
-            </div>
+              </div>
+            </ParallaxLayer>
           </div>
         </div>
 

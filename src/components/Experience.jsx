@@ -1,8 +1,20 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useSpring, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { GitCommitHorizontal, ArrowUpRight, ChevronDown } from 'lucide-react';
-import { FadeUp } from './ui/MotionPrimitives';
+import {
+  GitCommitHorizontal,
+  ArrowUpRight,
+  Building2,
+  Landmark,
+  Rocket,
+  Briefcase,
+  Calendar,
+  Sparkles
+} from 'lucide-react';
+import { FadeUp, ParallaxLayer, ParallaxWatermark } from './ui/MotionPrimitives';
 import { CountUp } from './ui/CountUp';
+import SpotlightCard from './ui/SpotlightCard';
+import { STUDIO_EASE } from '../lib/motion';
 
 const GITHUB_USER = 'AkbarAlfaidah';
 const GITHUB_API_URL = `https://github-contributions-api.jogruber.de/v4/${GITHUB_USER}`;
@@ -22,12 +34,104 @@ function getCellColorClass(level) {
   }
 }
 
+function enrichExperienceItem(item, isEn) {
+  const company = item?.company || '';
+  const period = item?.period || '';
+  const isCurrent = /sekarang|present/i.test(period);
+
+  if (company.includes('Balai Penegakan')) {
+    return {
+      sectorGroup: 'institution',
+      sectorLabel: isEn ? 'Government Agency' : 'Instansi Pemerintah',
+      badgeClass:
+        'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/15 dark:text-emerald-300 dark:border-emerald-500/30',
+      icon: Landmark,
+      tags: ['BMN', isEn ? 'Finance' : 'Keuangan', isEn ? 'Staffing' : 'Kepegawaian', '4-in-1 Portal'],
+      isCurrent
+    };
+  }
+  if (company.includes('Telkomsel')) {
+    return {
+      sectorGroup: 'institution',
+      sectorLabel: isEn ? 'Enterprise (SOE)' : 'BUMN Telekomunikasi',
+      badgeClass:
+        'bg-sky-50 text-sky-700 border-sky-200 dark:bg-sky-500/15 dark:text-sky-300 dark:border-sky-500/30',
+      icon: Building2,
+      tags: ['GitLab CI/CD', 'Dev–Staging–Prod', 'IT Ops'],
+      isCurrent
+    };
+  }
+  if (company.includes('PLN')) {
+    return {
+      sectorGroup: 'institution',
+      sectorLabel: isEn ? 'Energy (SOE)' : 'BUMN Energi',
+      badgeClass:
+        'bg-sky-50 text-sky-700 border-sky-200 dark:bg-sky-500/15 dark:text-sky-300 dark:border-sky-500/30',
+      icon: Building2,
+      tags: ['Internal Portal', 'Company Profile', 'Web App'],
+      isCurrent
+    };
+  }
+  if (company.includes('Depot') || company.includes('Bos')) {
+    return {
+      sectorGroup: 'client',
+      sectorLabel: isEn ? 'Retail Tech' : 'Sistem Bisnis',
+      badgeClass:
+        'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-500/15 dark:text-amber-300 dark:border-amber-500/30',
+      icon: Briefcase,
+      tags: ['Flutter', 'Firebase', 'POS & Gudang'],
+      isCurrent
+    };
+  }
+  if (company.includes('Bidik Karier')) {
+    return {
+      sectorGroup: 'client',
+      sectorLabel: isEn ? 'EdTech Platform' : 'Platform Edukasi',
+      badgeClass:
+        'bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-500/15 dark:text-indigo-300 dark:border-indigo-500/30',
+      icon: Briefcase,
+      tags: ['LMS CPNS', 'PHP', 'MySQL'],
+      isCurrent
+    };
+  }
+  if (company.includes('INOVASITUS')) {
+    return {
+      sectorGroup: 'client',
+      sectorLabel: isEn ? 'SME Digitalization' : 'Klien UMKM',
+      badgeClass:
+        'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-500/15 dark:text-blue-300 dark:border-blue-500/30',
+      icon: Briefcase,
+      tags: ['7+ Websites', 'Responsive UI', 'Production'],
+      isCurrent
+    };
+  }
+
+  return {
+    sectorGroup: 'client',
+    sectorLabel: isEn ? 'Independent Agency' : 'Agensi Independen',
+    badgeClass:
+      'bg-blue-50 text-accent border-blue-200 dark:bg-blue-500/15 dark:text-blue-300 dark:border-blue-500/30',
+    icon: Rocket,
+    tags: ['Web Platform', 'Mobile Apps', 'End-to-End'],
+    isCurrent
+  };
+}
+
 export default function Experience() {
   const { t, i18n } = useTranslation();
   const [contribData, setContribData] = useState(null);
   const [chartFallbackError, setChartFallbackError] = useState(false);
-  const [showAllRoles, setShowAllRoles] = useState(false);
   const [hoveredDay, setHoveredDay] = useState(null);
+  const [sectorFilter, setSectorFilter] = useState('all');
+  const [activeCardIdx, setActiveCardIdx] = useState(0);
+
+  const spineRef = useRef(null);
+  const prefersReduced = useReducedMotion();
+  const { scrollYProgress: spineScroll } = useScroll({
+    target: spineRef,
+    offset: ['start 78%', 'end 70%']
+  });
+  const spineScaleY = useSpring(spineScroll, { stiffness: 200, damping: 28 });
 
   useEffect(() => {
     let isMounted = true;
@@ -92,84 +196,241 @@ export default function Experience() {
   }, [contribData]);
 
   const rawItems = t('experience.items', { returnObjects: true });
-  const experiences = Array.isArray(rawItems) ? rawItems : [];
-  const visibleExperiences = showAllRoles ? experiences : experiences.slice(0, 4);
   const isEn = i18n.language === 'en';
   const locale = isEn ? 'en-US' : 'id-ID';
+
+  const enrichedExperiences = useMemo(() => {
+    const base = Array.isArray(rawItems) ? rawItems : [];
+    return base.map((item) => ({
+      ...item,
+      meta: enrichExperienceItem(item, isEn)
+    }));
+  }, [rawItems, isEn]);
+
+  const visibleExperiences = useMemo(() => {
+    if (sectorFilter === 'all') return enrichedExperiences;
+    return enrichedExperiences.filter((item) => item.meta.sectorGroup === sectorFilter);
+  }, [enrichedExperiences, sectorFilter]);
+
+  const filterTabs = [
+    { id: 'all', label: isEn ? 'All' : 'Semua', count: enrichedExperiences.length },
+    {
+      id: 'institution',
+      label: isEn ? 'Gov & SOE' : 'Instansi & BUMN',
+      count: enrichedExperiences.filter((e) => e.meta.sectorGroup === 'institution').length
+    },
+    {
+      id: 'client',
+      label: isEn ? 'Agency & Retail' : 'Klien & Produk',
+      count: enrichedExperiences.filter((e) => e.meta.sectorGroup === 'client').length
+    }
+  ];
 
   return (
     <section
       id="experience"
-      className="py-20 sm:py-28 px-5 sm:px-6 bg-paper text-ink border-b border-line"
+      className="relative py-20 sm:py-28 px-5 sm:px-6 bg-gradient-to-b from-paper via-[#F3F7FD]/75 to-paper dark:from-paper dark:via-[#0B0F1A]/65 dark:to-paper text-ink border-b border-line overflow-x-clip"
     >
-      <div className="max-w-6xl mx-auto space-y-16">
-        {/* Clean Swiss Hairline Ledger */}
-        <div>
-          <FadeUp className="max-w-2xl mb-10">
-            <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent mb-3">
-              {isEn ? '04 / Experience' : '04 / Rekam Jejak'}
-            </p>
-            <h2 className="font-display text-3xl sm:text-5xl font-semibold tracking-[-0.03em] leading-[1.08] text-ink mb-3">
-              {t('experience.heading')}
-            </h2>
-            <p className="text-base sm:text-lg text-ink-muted leading-relaxed">
-              {t('experience.subheading')}
-            </p>
-          </FadeUp>
+      {/* Parallax Ambient Glow & Watermark */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-24 left-[-10%] w-[640px] h-[640px] rounded-full blur-3xl opacity-75 dark:opacity-25"
+        style={{
+          background:
+            'radial-gradient(circle, rgba(37,99,235,0.12) 0%, rgba(16,185,129,0.06) 50%, transparent 74%)'
+        }}
+      />
+      <ParallaxWatermark text="CAREER & CODE" direction={1} className="mb-4" />
 
-          <ol className="border-y border-line divide-y divide-line">
-            {visibleExperiences.map((exp) => (
-              <li
-                key={`${exp.company}-${exp.period}`}
-                className="py-6 grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-8 items-start"
-              >
-                <div className="lg:col-span-4 space-y-1">
-                  <h3 className="font-display text-lg sm:text-xl font-semibold text-ink">
-                    {exp.role}
-                  </h3>
-                  <p className="text-sm sm:text-base font-medium text-accent">{exp.company}</p>
-                </div>
-
-                <p className="lg:col-span-6 text-base text-ink-muted leading-relaxed">
-                  {exp.description}
+      <div className="relative z-10 max-w-6xl mx-auto space-y-20">
+        {/* Interactive Split Sticky Career Track + Glowing Parallax Spine */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+          {/* Sticky Left Control Column */}
+          <div className="lg:col-span-4 lg:sticky lg:top-24 space-y-6">
+            <ParallaxLayer yRange={[16, -16]}>
+              <FadeUp className="space-y-4">
+                <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent font-semibold">
+                  {isEn ? '04 / Experience' : '04 / Rekam Jejak'}
                 </p>
+                <h2 className="font-display text-3xl sm:text-5xl font-semibold tracking-[-0.035em] leading-[1.06] text-ink">
+                  {isEn ? (
+                    <>
+                      Hands-On{' '}
+                      <span className="font-serif italic font-normal text-accent">Track Record.</span>
+                    </>
+                  ) : (
+                    <>
+                      Pengalaman{' '}
+                      <span className="font-serif italic font-normal text-accent">Kerja.</span>
+                    </>
+                  )}
+                </h2>
+                <p className="text-base text-ink-muted leading-relaxed">
+                  {t('experience.subheading')}
+                </p>
+              </FadeUp>
+            </ParallaxLayer>
 
-                <span className="lg:col-span-2 lg:text-right font-mono text-xs sm:text-sm text-ink-muted whitespace-nowrap">
-                  {exp.period}
-                </span>
-              </li>
-            ))}
-          </ol>
-
-          {experiences.length > 4 && (
-            <div className="pt-5">
-              <button
-                type="button"
-                onClick={() => setShowAllRoles((s) => !s)}
-                className="inline-flex items-center gap-2 min-h-[40px] text-sm font-medium text-ink hover:text-accent transition-colors"
-              >
-                <span>
-                  {showAllRoles
-                    ? isEn
-                      ? 'Show fewer'
-                      : 'Tampilkan lebih sedikit'
-                    : isEn
-                    ? `Show all roles (${experiences.length})`
-                    : `Lihat semua riwayat (${experiences.length})`}
-                </span>
-                <ChevronDown
-                  size={16}
-                  className={`transition-transform duration-200 ${showAllRoles ? 'rotate-180' : ''}`}
-                  aria-hidden="true"
-                />
-              </button>
+            {/* Interactive Sector Switcher Pills */}
+            <div
+              role="tablist"
+              aria-label="Filter career sectors"
+              className="flex flex-wrap gap-2"
+            >
+              {filterTabs.map((tab) => {
+                const isSelected = sectorFilter === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={isSelected}
+                    onClick={() => {
+                      setSectorFilter(tab.id);
+                      setActiveCardIdx(0);
+                    }}
+                    className={`min-h-[38px] px-3.5 py-1.5 rounded-full text-xs font-medium inline-flex items-center gap-1.5 border transition-all ${
+                      isSelected
+                        ? 'bg-accent text-white border-accent shadow-sm shadow-blue-600/25'
+                        : 'bg-surface/90 text-ink-muted border-line hover:border-accent/50 hover:text-ink'
+                    }`}
+                  >
+                    <span>{tab.label}</span>
+                    <span
+                      className={`font-mono text-[11px] px-1.5 rounded-full ${
+                        isSelected ? 'bg-white/20 text-white' : 'bg-mist text-ink-muted'
+                      }`}
+                    >
+                      {tab.count}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
-          )}
+
+            {/* Compact Sector Coverage Snapshot */}
+            <div className="rounded-2xl bg-white/90 dark:bg-surface border border-line p-4 space-y-2.5 shadow-sm">
+              <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-accent font-semibold">
+                <Sparkles size={13} aria-hidden="true" />
+                <span>{isEn ? 'Sector Coverage' : 'Lintas Sektor'}</span>
+              </div>
+              <p className="text-sm text-ink-muted leading-relaxed">
+                {isEn
+                  ? 'Shipping production portals across government offices, national enterprises (SOEs), & fast-moving commercial builds.'
+                  : 'Teruji membangun sistem untuk birokrasi instansi pemerintah, operasional BUMN, hingga aplikasi bisnis ritel & agensi.'}
+              </p>
+            </div>
+          </div>
+
+          {/* Right: Glowing Scroll-Driven Parallax Timeline Spine */}
+          <div ref={spineRef} className="lg:col-span-8 relative pl-6 sm:pl-9">
+            {/* Background static spine track */}
+            <div
+              aria-hidden="true"
+              className="absolute left-[7px] sm:left-[11px] top-3 bottom-3 w-[2px] bg-line rounded-full"
+            />
+            {/* Glowing active scroll-progress laser beam */}
+            <motion.div
+              aria-hidden="true"
+              style={prefersReduced ? undefined : { scaleY: spineScaleY }}
+              className="absolute left-[7px] sm:left-[11px] top-3 bottom-3 w-[2px] origin-top rounded-full bg-gradient-to-b from-sky-400 via-accent to-emerald-500"
+            />
+
+            <div className="space-y-5">
+              <AnimatePresence mode="popLayout">
+                {visibleExperiences.map((exp, idx) => {
+                  const SectorIcon = exp.meta.icon;
+                  const isFocused = idx === activeCardIdx;
+                  const parallaxY = idx % 2 === 0 ? [18, -18] : [28, -28];
+
+                  return (
+                    <motion.div
+                      key={`${exp.company}-${exp.period}`}
+                      layout
+                      initial={{ opacity: 0, y: 14 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
+                      transition={{ duration: 0.25, delay: idx * 0.03, ease: STUDIO_EASE }}
+                      className="relative"
+                    >
+                      {/* Animated spine milestone node dot */}
+                      <span
+                        aria-hidden="true"
+                        className={`absolute -left-[22px] sm:-left-[30px] top-7 w-3.5 h-3.5 rounded-full border-2 transition-all duration-300 ${
+                          exp.meta.isCurrent
+                            ? 'bg-emerald-500 border-white dark:border-[#0B0F1A] ring-4 ring-emerald-500/20'
+                            : isFocused
+                            ? 'bg-accent border-white dark:border-[#0B0F1A] ring-4 ring-accent/20'
+                            : 'bg-surface border-accent/60'
+                        }`}
+                      />
+
+                      <ParallaxLayer yRange={parallaxY}>
+                        <SpotlightCard
+                          onClick={() => setActiveCardIdx(idx)}
+                          onMouseEnter={() => setActiveCardIdx(idx)}
+                          className={`p-5 sm:p-6 cursor-pointer transition-all ${
+                            isFocused
+                              ? 'border-accent/60 shadow-[0_20px_48px_-16px_rgba(37,99,235,0.14)]'
+                              : 'hover:border-accent/40 shadow-sm'
+                          }`}
+                        >
+                          <div className="flex flex-wrap items-center justify-between gap-2.5 mb-3">
+                            <span
+                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-mono text-[11px] font-semibold border ${exp.meta.badgeClass}`}
+                            >
+                              <SectorIcon size={12} aria-hidden="true" />
+                              <span>{exp.meta.sectorLabel}</span>
+                            </span>
+
+                            <span className="inline-flex items-center gap-1.5 font-mono text-xs text-ink-muted">
+                              {exp.meta.isCurrent && (
+                                <span
+                                  className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"
+                                  aria-hidden="true"
+                                />
+                              )}
+                              <Calendar size={12} aria-hidden="true" />
+                              <span>{exp.period}</span>
+                            </span>
+                          </div>
+
+                          <div className="space-y-1.5 mb-4">
+                            <h3 className="font-display text-lg sm:text-xl font-semibold text-ink">
+                              {exp.role}
+                            </h3>
+                            <p className="text-sm sm:text-base font-semibold text-accent">
+                              {exp.company}
+                            </p>
+                          </div>
+
+                          <p className="text-sm sm:text-base text-ink-muted leading-relaxed mb-4">
+                            {exp.description}
+                          </p>
+
+                          <div className="flex flex-wrap gap-1.5 pt-3 border-t border-line/80">
+                            {exp.meta.tags.map((tag) => (
+                              <span
+                                key={tag}
+                                className="px-2.5 py-0.5 rounded-md bg-mist text-ink-muted font-mono text-[11px] border border-line/70"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        </SpotlightCard>
+                      </ParallaxLayer>
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
+            </div>
+          </div>
         </div>
 
-        {/* Interactive GitHub Telemetry Matrix */}
-        <FadeUp>
-          <div className="rounded-xl bg-surface border border-line p-6 sm:p-8 space-y-6">
+        {/* Interactive GitHub Telemetry Matrix wrapped in Parallax Depth */}
+        <ParallaxLayer yRange={[24, -24]}>
+          <div className="rounded-2xl bg-white/95 dark:bg-surface border border-line p-6 sm:p-8 space-y-6 shadow-[0_22px_55px_-18px_rgba(37,99,235,0.12)]">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-line">
               <div className="flex items-center gap-3">
                 <GitCommitHorizontal size={20} className="text-accent shrink-0" aria-hidden="true" />
@@ -187,7 +448,7 @@ export default function Experience() {
                 href={`https://github.com/${GITHUB_USER}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="self-start sm:self-auto min-h-[40px] px-4 py-2 rounded-lg border border-line text-sm font-medium text-ink hover:border-ink/40 inline-flex items-center gap-1.5 transition-colors"
+                className="self-start sm:self-auto min-h-[40px] px-4 py-2 rounded-lg border border-line bg-paper/70 hover:border-accent/60 hover:text-accent text-sm font-medium text-ink inline-flex items-center gap-1.5 transition-colors"
               >
                 <span>{t('experience.github_cta')}</span>
                 <ArrowUpRight size={15} aria-hidden="true" />
@@ -296,7 +557,7 @@ export default function Experience() {
               </div>
             )}
           </div>
-        </FadeUp>
+        </ParallaxLayer>
       </div>
     </section>
   );

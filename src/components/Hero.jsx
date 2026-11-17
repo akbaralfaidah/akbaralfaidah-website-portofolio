@@ -1,6 +1,6 @@
-import { useState, lazy, Suspense } from 'react';
+import { useState, useRef, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -55,6 +55,17 @@ export default function Hero() {
   const [radarMetrics, setRadarMetrics] = useState({ meters: 22.5, inside: true });
   const [radarTarget, setRadarTarget] = useState(null);
 
+  const heroRef = useRef(null);
+  const prefersReduced = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start']
+  });
+  const yBg = useTransform(scrollYProgress, [0, 1], [0, 130]);
+  const yText = useTransform(scrollYProgress, [0, 1], [0, -52]);
+  const yStage = useTransform(scrollYProgress, [0, 1], [0, 68]);
+  const scaleStage = useTransform(scrollYProgress, [0, 1], [1, 0.95]);
+
   const isEn = i18n.language === 'en';
   const isDark = theme === 'dark';
   const facts = t('hero.facts', { returnObjects: true }) || [];
@@ -66,33 +77,41 @@ export default function Hero() {
 
   return (
     <section
+      ref={heroRef}
       id="hero"
       className="relative min-h-[100svh] flex items-center bg-paper text-ink pt-24 pb-12 sm:pt-28 sm:pb-14 border-b border-line overflow-hidden"
     >
-      {/* Luminous Daylight Radial Atmosphere */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div
-          className="absolute -top-32 right-[-8%] w-[700px] h-[700px] rounded-full blur-3xl opacity-90 dark:opacity-35"
-          style={{
-            background:
-              'radial-gradient(circle, rgba(56,189,248,0.24) 0%, rgba(37,99,235,0.10) 45%, transparent 72%)'
-          }}
-        />
-        <div
-          className="absolute -bottom-36 left-[-8%] w-[580px] h-[580px] rounded-full blur-3xl opacity-85 dark:opacity-30"
-          style={{
-            background:
-              'radial-gradient(circle, rgba(16,185,129,0.16) 0%, rgba(14,165,233,0.08) 48%, transparent 74%)'
-          }}
-        />
-      </div>
+      {/* Parallax Depth Layer 1: Luminous Daylight Radial Atmosphere + Vector Ribbons */}
+      <motion.div
+        style={prefersReduced ? undefined : { y: yBg }}
+        className="pointer-events-none absolute inset-0"
+      >
+        <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
+          <div
+            className="absolute -top-32 right-[-8%] w-[700px] h-[700px] rounded-full blur-3xl opacity-90 dark:opacity-35"
+            style={{
+              background:
+                'radial-gradient(circle, rgba(56,189,248,0.24) 0%, rgba(37,99,235,0.10) 45%, transparent 72%)'
+            }}
+          />
+          <div
+            className="absolute -bottom-36 left-[-8%] w-[580px] h-[580px] rounded-full blur-3xl opacity-85 dark:opacity-30"
+            style={{
+              background:
+                'radial-gradient(circle, rgba(16,185,129,0.16) 0%, rgba(14,165,233,0.08) 48%, transparent 74%)'
+            }}
+          />
+        </div>
 
-      {/* Interactive Vector Silk Harmonics, Constellation & Click Ripples */}
-      <HeroCanvas />
+        <HeroCanvas />
+      </motion.div>
 
       <div className="relative z-10 max-w-6xl w-full mx-auto px-5 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
-        {/* Left: Sculptural Editorial Claim */}
-        <div className="lg:col-span-6 flex flex-col items-start">
+        {/* Parallax Depth Layer 2: Sculptural Editorial Claim */}
+        <motion.div
+          style={prefersReduced ? undefined : { y: yText }}
+          className="lg:col-span-6 flex flex-col items-start"
+        >
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -189,12 +208,13 @@ export default function Hero() {
                 </div>
               ))}
           </motion.dl>
-        </div>
+        </motion.div>
 
-        {/* Right: Open Floating Interactive 3D Engineering Stage (Three.js) */}
+        {/* Parallax Depth Layer 3: Open Floating Interactive 3D Engineering Stage (Three.js) */}
         <motion.div
           initial={{ opacity: 0, scale: 0.96, y: 14 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
+          style={prefersReduced ? undefined : { y: yStage, scale: scaleStage }}
           transition={{ duration: 0.72, delay: 0.14, ease: STUDIO_EASE }}
           className="lg:col-span-6 relative h-[410px] sm:h-[480px] lg:h-[520px] flex flex-col justify-between"
         >

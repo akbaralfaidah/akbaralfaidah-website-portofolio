@@ -8,6 +8,7 @@ import Experience from '../components/Experience';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
 import CursorFollower from '../components/ui/CursorFollower';
+import { ScrollProgressBar } from '../components/ui/MotionPrimitives';
 import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function HomePage() {
@@ -22,6 +23,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-paper text-ink selection:bg-accent/25 transition-colors duration-300">
+      <ScrollProgressBar />
       <CursorFollower />
       <Navbar />
       <main id="main-content">
