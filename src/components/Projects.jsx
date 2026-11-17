@@ -1,7 +1,16 @@
-import { useState, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, Eye, X, Check } from 'lucide-react';
+import { useState, useEffect, useMemo, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import {
+  ArrowRight,
+  ArrowUpRight,
+  ChevronLeft,
+  ChevronRight,
+  Eye,
+  X,
+  Check,
+  Sparkles
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { fetchProjects } from '../data/projects';
 import { Button } from './ui/Button';
@@ -10,18 +19,102 @@ import { STUDIO_EASE } from '../lib/motion';
 
 const FILTER_CATEGORIES = ['All', 'Website', 'Mobile Apps', 'Machine Learning'];
 
+function TiltCenterCard({ project, isEn, ctaLabel, onDragPrev, onDragNext }) {
+  const navigate = useNavigate();
+  const cardRef = useRef(null);
+  const pointerDownPos = useRef({ x: 0, y: 0 });
+
+  const mx = useMotionValue(0.5);
+  const my = useMotionValue(0.5);
+  const smoothX = useSpring(mx, { stiffness: 280, damping: 24 });
+  const smoothY = useSpring(my, { stiffness: 280, damping: 24 });
+
+  const rotateY = useTransform(smoothX, [0, 1], [-8, 8]);
+  const rotateX = useTransform(smoothY, [0, 1], [6, -6]);
+  const gleamBg = useTransform(
+    [smoothX, smoothY],
+    ([x, y]) =>
+      `radial-gradient(520px circle at ${(x * 100).toFixed(1)}% ${(y * 100).toFixed(
+        1
+      )}%, rgba(255,255,255,0.22), transparent 55%)`
+  );
+
+  const handlePointerMove = (e) => {
+    const el = cardRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) return;
+    mx.set(Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width)));
+    my.set(Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height)));
+  };
+
+  const handlePointerLeave = () => {
+    mx.set(0.5);
+    my.set(0.5);
+  };
+
+  return (
+    <motion.div
+      ref={cardRef}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
+      onPointerDown={(e) => {
+        pointerDownPos.current = { x: e.clientX, y: e.clientY };
+      }}
+      onPointerUp={(e) => {
+        const dx = e.clientX - pointerDownPos.current.x;
+        const dy = e.clientY - pointerDownPos.current.y;
+        if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy)) {
+          if (dx < 0) onDragNext();
+          else onDragPrev();
+          return;
+        }
+        if (Math.hypot(dx, dy) < 8) {
+          navigate(`/project/${project.slug}`);
+        }
+      }}
+      style={{ rotateX, rotateY, transformPerspective: 1200, transformStyle: 'preserve-3d' }}
+      whileHover={{ scale: 1.018 }}
+      transition={{ duration: 0.25, ease: STUDIO_EASE }}
+      data-cursor={isEn ? 'Open Case ↗' : `${ctaLabel} ↗`}
+      className="group relative w-full aspect-video rounded-2xl p-1.5 sm:p-2 bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 ring-1 ring-black/15 dark:ring-white/20 shadow-[0_32px_70px_-16px_rgba(37,99,235,0.28),0_18px_38px_-14px_rgba(15,23,42,0.3)] cursor-pointer select-none overflow-hidden"
+    >
+      <div className="relative w-full h-full rounded-xl overflow-hidden bg-slate-950">
+        <img
+          src={project.src}
+          alt={`${project.name} showcase`}
+          width={1920}
+          height={1080}
+          loading="eager"
+          decoding="async"
+          draggable={false}
+          className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]"
+        />
+
+        {/* Cursor-tracked specular gloss sheen */}
+        <motion.div
+          aria-hidden="true"
+          style={{ background: gleamBg }}
+          className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        />
+
+        {/* Subtle interactive corner prompt */}
+        <div className="pointer-events-none absolute top-3.5 right-3.5 px-3 py-1.5 rounded-full bg-white/90 text-slate-900 font-mono text-[11px] font-semibold shadow-md backdrop-blur-md opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 inline-flex items-center gap-1">
+          <span>{isEn ? 'Explore 3D Case' : 'Buka Detail'}</span>
+          <ArrowUpRight size={13} aria-hidden="true" />
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 export default function Projects() {
   const { t, i18n } = useTranslation();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [activeIndex, setActiveIndex] = useState(0);
   const [quickProject, setQuickProject] = useState(null);
-  const [hoveredRowProject, setHoveredRowProject] = useState(null);
-
-  const previewX = useMotionValue(0);
-  const previewY = useMotionValue(0);
-  const smoothX = useSpring(previewX, { stiffness: 260, damping: 28, mass: 0.6 });
-  const smoothY = useSpring(previewY, { stiffness: 260, damping: 28, mass: 0.6 });
 
   useEffect(() => {
     let isMounted = true;
@@ -59,9 +152,13 @@ export default function Projects() {
     return completed.filter((p) => (p.categories || []).includes(selectedCategory));
   }, [projects, selectedCategory]);
 
+  const count = visibleProjects.length;
+  const safeIndex = count > 0 ? ((activeIndex % count) + count) % count : 0;
+  const focusedProject = visibleProjects[safeIndex] || null;
   const isEn = i18n.language === 'en';
 
   const getLocalizedDesc = (project) => {
+    if (!project) return '';
     const translated = t(`projects.${project.slug}_desc`, { defaultValue: '' });
     return (
       translated ||
@@ -69,48 +166,43 @@ export default function Projects() {
     );
   };
 
-  const leadProject = visibleProjects[0];
-  const pairProjects = visibleProjects.slice(1, 3);
-  const ledgerProjects = visibleProjects.slice(3, 8);
-
-  const clampCoords = (clientX, clientY) => ({
-    tx: typeof window !== 'undefined' ? Math.min(clientX + 24, window.innerWidth - 384) : clientX + 24,
-    ty:
-      typeof window !== 'undefined'
-        ? Math.max(92, Math.min(clientY - 110, window.innerHeight - 250))
-        : clientY - 110
-  });
-
-  const handleRowPointerEnter = (project, e) => {
-    const { tx, ty } = clampCoords(e.clientX, e.clientY);
-    if (!hoveredRowProject) {
-      previewX.jump(tx);
-      previewY.jump(ty);
-      smoothX.jump(tx);
-      smoothY.jump(ty);
-    } else {
-      previewX.set(tx);
-      previewY.set(ty);
-    }
-    setHoveredRowProject(project);
+  const goPrev = () => {
+    if (count > 1) setActiveIndex((prev) => (prev - 1 + count) % count);
   };
 
-  const handleRowPointerMove = (e) => {
-    const { tx, ty } = clampCoords(e.clientX, e.clientY);
-    previewX.set(tx);
-    previewY.set(ty);
+  const goNext = () => {
+    if (count > 1) setActiveIndex((prev) => (prev + 1) % count);
+  };
+
+  // Compute circular shortest offset [-floor(n/2) .. +floor(n/2)] for 3D Coverflow ring
+  const getRelativeOffset = (idx) => {
+    if (count <= 1) return 0;
+    let diff = idx - safeIndex;
+    if (diff > count / 2) diff -= count;
+    if (diff < -count / 2) diff += count;
+    return diff;
   };
 
   return (
     <>
       <section
         id="projects"
-        className="relative py-20 sm:py-28 px-5 sm:px-6 bg-paper text-ink border-b border-line"
+        className="relative py-20 sm:py-28 px-5 sm:px-6 bg-paper text-ink border-b border-line overflow-hidden"
       >
-        <div className="max-w-6xl mx-auto">
+        {/* Soft studio skylight bloom behind the 3D carousel */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute top-28 left-1/2 -translate-x-1/2 w-[920px] h-[520px] rounded-full blur-3xl opacity-70 dark:opacity-25"
+          style={{
+            background:
+              'radial-gradient(ellipse at center, rgba(56,189,248,0.16) 0%, rgba(37,99,235,0.06) 52%, transparent 76%)'
+          }}
+        />
+
+        <div className="relative z-10 max-w-6xl mx-auto">
           <FadeUp className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
             <div className="max-w-2xl">
-              <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent mb-3">
+              <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent font-semibold mb-3">
                 {isEn ? '01 / Selected Works' : '01 / Karya Pilihan'}
               </p>
               <h2 className="font-display text-3xl sm:text-5xl font-semibold tracking-[-0.035em] leading-[1.06] text-ink mb-3">
@@ -135,7 +227,9 @@ export default function Projects() {
               to="/projects"
               className="group self-start md:self-auto inline-flex items-center gap-2 min-h-[44px] text-[15px] font-medium text-ink hover:text-accent transition-colors border-b border-line pb-1"
             >
-              <span>{t('projects.bottom_cta')} ({projects.length})</span>
+              <span>
+                {t('projects.bottom_cta')} ({projects.length})
+              </span>
               <ArrowRight
                 size={16}
                 className="transition-transform duration-200 group-hover:translate-x-1"
@@ -144,300 +238,301 @@ export default function Projects() {
             </Link>
           </FadeUp>
 
-          {/* Hairline Category Switcher */}
-          <div
-            role="tablist"
-            aria-label="Filter showcase by discipline"
-            className="flex flex-wrap gap-6 mb-12 border-b border-line"
-          >
-            {FILTER_CATEGORIES.map((category) => {
-              const active = selectedCategory === category;
-              const label = category === 'All' ? t('projects.filter_all') : category;
-              return (
-                <button
-                  key={category}
-                  type="button"
-                  role="tab"
-                  aria-selected={active}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`relative min-h-[44px] pb-3 text-[15px] font-medium transition-colors ${
-                    active ? 'text-ink' : 'text-ink-muted hover:text-ink'
-                  }`}
-                >
-                  <span>{label}</span>
-                  {active && (
-                    <motion.span
-                      layoutId="home-projects-underline"
-                      transition={{ type: 'spring', stiffness: 440, damping: 34 }}
-                      className="absolute left-0 right-0 -bottom-[1px] h-[2px] bg-accent"
-                    />
-                  )}
-                </button>
-              );
-            })}
+          {/* Hairline Category Filter Tabs */}
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-10 border-b border-line">
+            <div role="tablist" aria-label="Filter showcase by discipline" className="flex flex-wrap gap-6">
+              {FILTER_CATEGORIES.map((category) => {
+                const active = selectedCategory === category;
+                const label = category === 'All' ? t('projects.filter_all') : category;
+                return (
+                  <button
+                    key={category}
+                    type="button"
+                    role="tab"
+                    aria-selected={active}
+                    onClick={() => {
+                      setSelectedCategory(category);
+                      setActiveIndex(0);
+                    }}
+                    className={`relative min-h-[44px] pb-3 text-[15px] font-medium transition-colors ${
+                      active ? 'text-ink' : 'text-ink-muted hover:text-ink'
+                    }`}
+                  >
+                    <span>{label}</span>
+                    {active && (
+                      <motion.span
+                        layoutId="home-projects-underline"
+                        transition={{ type: 'spring', stiffness: 440, damping: 34 }}
+                        className="absolute left-0 right-0 -bottom-[1px] h-[2px] bg-accent"
+                      />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            <span className="hidden sm:inline-flex items-center gap-1.5 font-mono text-xs text-ink-muted pb-3">
+              <Sparkles size={13} className="text-accent" aria-hidden="true" />
+              <span>
+                {isEn
+                  ? '3D Spatial Deck · Drag, hover or click cards'
+                  : 'Stage 3D Interaktif · Geser, arahkan kursor, atau klik karya'}
+              </span>
+            </span>
           </div>
 
-          {loading ? (
+          {loading || !focusedProject ? (
             <div className="space-y-8 animate-pulse">
-              <div className="aspect-video rounded-xl bg-mist" />
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="aspect-video rounded-xl bg-mist" />
-                <div className="aspect-video rounded-xl bg-mist" />
-              </div>
+              <div className="aspect-video max-w-3xl mx-auto rounded-2xl bg-mist" />
+              <div className="h-32 rounded-2xl bg-mist" />
             </div>
           ) : (
-            <div className="space-y-16">
-              {/* Asymmetric Lead Exhibition Split */}
-              {leadProject && (
-                <motion.article
-                  key={`lead-${leadProject.slug}`}
-                  initial={{ opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.45, ease: STUDIO_EASE }}
-                  className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"
-                >
-                  <Link
-                    to={`/project/${leadProject.slug}`}
-                    data-cursor={isEn ? 'Inspect ↗' : 'Buka Proyek ↗'}
-                    className="lg:col-span-7 group block relative aspect-video rounded-xl bg-mist dark:bg-[#0D1017] border border-line hover:border-accent/40 overflow-hidden shadow-[0_20px_50px_-15px_rgba(37,99,235,0.14)] dark:shadow-xl dark:shadow-black/20 transition-all"
-                  >
-                    <img
-                      src={leadProject.src}
-                      alt={`${leadProject.name} showcase`}
-                      width={1920}
-                      height={1080}
-                      loading="eager"
-                      decoding="async"
-                      className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]"
-                    />
-                  </Link>
+            <div className="space-y-8">
+              {/* Interactive 3D Spatial Coverflow Exhibition Stage */}
+              <div
+                className="relative h-[240px] sm:h-[360px] lg:h-[430px] flex items-center justify-center"
+                style={{ perspective: '1500px', transformStyle: 'preserve-3d' }}
+              >
+                {visibleProjects.map((project, idx) => {
+                  const offset = getRelativeOffset(idx);
+                  const absOffset = Math.abs(offset);
+                  const isVisibleSide = absOffset <= 2;
+                  const isCenter = offset === 0;
 
-                  <div className="lg:col-span-5 space-y-5">
-                    <div className="flex items-center justify-between font-mono text-xs text-ink-muted border-b border-line pb-3">
-                      <span className="text-accent">01 · {(leadProject.categories || []).join(' / ')}</span>
-                      <span>{leadProject.year}</span>
-                    </div>
+                  if (!isVisibleSide) return null;
 
-                    <h3 className="font-display text-3xl sm:text-4xl font-semibold tracking-[-0.025em] text-ink">
-                      <Link
-                        to={`/project/${leadProject.slug}`}
-                        className="hover:text-accent transition-colors"
-                      >
-                        {leadProject.name}
-                      </Link>
-                    </h3>
+                  // Desktop/tablet spatial coordinates
+                  const translateX = offset * 48; // % of card width
+                  const translateZ = -absOffset * 150;
+                  const rotateYDeg = offset * -24;
+                  const scaleVal = isCenter ? 1 : Math.max(0.68, 0.84 - (absOffset - 1) * 0.14);
+                  const opacityVal = isCenter ? 1 : absOffset === 1 ? 0.72 : 0.34;
+                  const zIndexVal = 30 - absOffset * 10;
 
-                    <p className="text-base sm:text-lg text-ink-muted leading-relaxed">
-                      {getLocalizedDesc(leadProject)}
-                    </p>
-
-                    <div className="flex flex-wrap gap-2 pt-1">
-                      {(leadProject.techStack || []).slice(0, 4).map((tech) => (
-                        <span
-                          key={tech}
-                          className="px-2.5 py-1 rounded-md font-mono text-xs bg-surface border border-line text-ink-muted"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className="pt-2 flex items-center gap-5">
-                      <Link
-                        to={`/project/${leadProject.slug}`}
-                        className="min-h-[42px] px-4 py-2 rounded-lg bg-accent-solid text-on-accent hover:bg-accent-hover text-sm font-medium inline-flex items-center gap-2 transition-colors shadow-sm shadow-blue-600/20"
-                      >
-                        <span>{t('projects.cta')}</span>
-                        <ArrowRight size={15} aria-hidden="true" />
-                      </Link>
-
-                      <button
-                        type="button"
-                        onClick={() => setQuickProject(leadProject)}
-                        className="inline-flex items-center gap-1.5 min-h-[40px] text-sm text-ink-muted hover:text-ink transition-colors"
-                      >
-                        <Eye size={15} aria-hidden="true" />
-                        <span>{isEn ? 'Quick View' : 'Ringkasan'}</span>
-                      </button>
-                    </div>
-                  </div>
-                </motion.article>
-              )}
-
-              {/* Pair Curated Exhibitions */}
-              {pairProjects.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
-                  <AnimatePresence mode="popLayout">
-                    {pairProjects.map((project, idx) => (
-                      <motion.article
-                        key={project.id || project.slug}
-                        layout
-                        initial={{ opacity: 0, y: 12 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, transition: { duration: 0.14 } }}
-                        transition={{ duration: 0.35, delay: idx * 0.05, ease: STUDIO_EASE }}
-                        className="group flex flex-col"
-                      >
-                        <Link
-                          to={`/project/${project.slug}`}
-                          data-cursor={isEn ? 'Inspect ↗' : 'Buka Proyek ↗'}
-                          className="block relative aspect-video rounded-xl bg-mist dark:bg-[#0D1017] border border-line hover:border-accent/40 overflow-hidden shadow-[0_14px_38px_-14px_rgba(15,23,42,0.1)] dark:shadow-none transition-all"
-                        >
+                  return (
+                    <motion.div
+                      key={project.id || project.slug}
+                      initial={false}
+                      animate={{
+                        x: `${translateX}%`,
+                        z: translateZ,
+                        rotateY: rotateYDeg,
+                        scale: scaleVal,
+                        opacity: opacityVal
+                      }}
+                      transition={{ type: 'spring', stiffness: 260, damping: 28, mass: 0.9 }}
+                      style={{
+                        zIndex: zIndexVal,
+                        transformStyle: 'preserve-3d'
+                      }}
+                      className={`absolute w-[92%] sm:w-[70%] lg:w-[62%] max-w-[700px] ${
+                        isCenter ? 'block' : 'hidden sm:block cursor-pointer'
+                      }`}
+                      onClick={!isCenter ? () => setActiveIndex(idx) : undefined}
+                    >
+                      {isCenter ? (
+                        <TiltCenterCard
+                          project={project}
+                          isEn={isEn}
+                          ctaLabel={t('projects.cta')}
+                          onDragPrev={goPrev}
+                          onDragNext={goNext}
+                        />
+                      ) : (
+                        <div className="aspect-video rounded-2xl p-1.5 bg-gradient-to-br from-slate-800 to-slate-950 ring-1 ring-black/15 dark:ring-white/15 shadow-xl overflow-hidden hover:ring-accent/60 transition-all">
                           <img
                             src={project.src}
-                            alt={`${project.name} screenshot`}
+                            alt={`${project.name} preview`}
                             width={1920}
                             height={1080}
-                            loading="eager"
+                            loading="lazy"
                             decoding="async"
-                            className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]"
+                            className="w-full h-full object-cover object-center rounded-xl brightness-90 hover:brightness-100 transition-all"
                           />
-                        </Link>
-
-                        <div className="pt-4 space-y-2">
-                          <div className="flex items-center justify-between font-mono text-xs text-ink-muted">
-                            <span>
-                              0{idx + 2} · {(project.categories || []).join(' / ')}
-                            </span>
-                            <span>{project.year}</span>
-                          </div>
-
-                          <h3 className="font-display text-2xl font-semibold tracking-tight text-ink">
-                            <Link
-                              to={`/project/${project.slug}`}
-                              className="hover:text-accent transition-colors"
-                            >
-                              {project.name}
-                            </Link>
-                          </h3>
-
-                          <p className="text-base text-ink-muted leading-relaxed line-clamp-2">
-                            {getLocalizedDesc(project)}
-                          </p>
-
-                          <div className="pt-1 flex items-center gap-5">
-                            <Link
-                              to={`/project/${project.slug}`}
-                              className="inline-flex items-center gap-1.5 min-h-[36px] text-sm font-medium text-ink hover:text-accent transition-colors"
-                            >
-                              <span>{t('projects.cta')}</span>
-                              <ArrowRight
-                                size={15}
-                                className="transition-transform duration-200 group-hover:translate-x-1"
-                                aria-hidden="true"
-                              />
-                            </Link>
-
-                            <button
-                              type="button"
-                              onClick={() => setQuickProject(project)}
-                              className="inline-flex items-center gap-1.5 min-h-[36px] text-sm text-ink-muted hover:text-ink transition-colors"
-                            >
-                              <Eye size={14} aria-hidden="true" />
-                              <span>{isEn ? 'Quick View' : 'Ringkasan'}</span>
-                            </button>
-                          </div>
                         </div>
-                      </motion.article>
-                    ))}
-                  </AnimatePresence>
-                </div>
-              )}
+                      )}
+                    </motion.div>
+                  );
+                })}
 
-              {/* Cursor-Tracked Interactive Archive Index Ledger */}
-              {ledgerProjects.length > 0 && (
-                <div
-                  className="pt-4 relative"
-                  onMouseLeave={() => setHoveredRowProject(null)}
-                >
-                  <div className="flex items-center justify-between mb-4 font-mono text-xs uppercase tracking-wider text-ink-muted">
-                    <span>{isEn ? 'Interactive Index' : 'Arsip Proyek Interaktif'}</span>
-                    <span>{isEn ? 'Hover row to preview' : 'Arahkan kursor untuk pratinjau'}</span>
-                  </div>
+                {/* Stage Prev / Next Spherical Controls */}
+                {count > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={goPrev}
+                      aria-label={isEn ? 'Previous project' : 'Proyek sebelumnya'}
+                      className="absolute left-0 sm:left-2 top-1/2 -translate-y-1/2 z-40 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/95 dark:bg-[#0D1017]/95 text-ink border border-line hover:border-accent hover:text-accent shadow-lg backdrop-blur-md flex items-center justify-center transition-all hover:scale-105"
+                    >
+                      <ChevronLeft size={19} aria-hidden="true" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={goNext}
+                      aria-label={isEn ? 'Next project' : 'Proyek berikutnya'}
+                      className="absolute right-0 sm:right-2 top-1/2 -translate-y-1/2 z-40 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/95 dark:bg-[#0D1017]/95 text-ink border border-line hover:border-accent hover:text-accent shadow-lg backdrop-blur-md flex items-center justify-center transition-all hover:scale-105"
+                    >
+                      <ChevronRight size={19} aria-hidden="true" />
+                    </button>
+                  </>
+                )}
+              </div>
 
-                  <div className="border-y border-line divide-y divide-line">
-                    {ledgerProjects.map((project, idx) => (
-                      <div
-                        key={project.id || project.slug}
-                        onMouseEnter={(e) => handleRowPointerEnter(project, e)}
-                        onMouseMove={handleRowPointerMove}
-                        className="group relative py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors hover:bg-surface/40 px-2 sm:px-3 -mx-2 sm:-mx-3 rounded-lg"
-                      >
-                        <div className="flex items-center gap-4 min-w-0">
-                          <span className="font-mono text-xs text-ink-muted w-6 shrink-0">
-                            {String(idx + 4).padStart(2, '0')}
-                          </span>
-                          <Link
-                            to={`/project/${project.slug}`}
-                            className="font-display text-xl sm:text-2xl font-semibold text-ink group-hover:text-accent transition-colors truncate"
-                          >
-                            {project.name}
-                          </Link>
-                        </div>
-
-                        <div className="flex items-center justify-between sm:justify-end gap-5 pl-10 sm:pl-0 shrink-0">
-                          <span className="font-mono text-xs text-ink-muted">
-                            {(project.categories || []).join(' · ')}
-                          </span>
-                          <span className="font-mono text-xs text-ink-muted hidden md:inline">
-                            {project.year}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => setQuickProject(project)}
-                            className="inline-flex items-center gap-1 text-xs font-mono text-ink-muted hover:text-ink transition-colors"
-                            aria-label={`Quick view ${project.name}`}
-                          >
-                            <Eye size={14} aria-hidden="true" />
-                            <span>{isEn ? 'Brief' : 'Info'}</span>
-                          </button>
-                          <Link
-                            to={`/project/${project.slug}`}
-                            aria-label={`Open ${project.name}`}
-                            className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-line text-ink group-hover:bg-ink group-hover:text-on-ink group-hover:border-ink transition-all"
-                          >
-                            <ArrowUpRight size={15} aria-hidden="true" />
-                          </Link>
-                        </div>
+              {/* Integrated Live Active Project Spec Console */}
+              <div className="rounded-2xl bg-surface/95 border border-line p-6 sm:p-8 shadow-[0_18px_50px_-18px_rgba(37,99,235,0.12),0_8px_24px_-12px_rgba(15,23,42,0.06)]">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={focusedProject.slug}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.2, ease: STUDIO_EASE }}
+                    className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center"
+                  >
+                    <div className="lg:col-span-8 space-y-3">
+                      <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-ink-muted">
+                        <span className="px-2.5 py-0.5 rounded-full bg-accent/10 text-accent font-semibold">
+                          {String(safeIndex + 1).padStart(2, '0')} / {String(count).padStart(2, '0')}
+                        </span>
+                        <span>{(focusedProject.categories || []).join(' · ')}</span>
+                        <span>·</span>
+                        <span>{focusedProject.client}</span>
+                        <span>·</span>
+                        <span className="tabular-nums">{focusedProject.year}</span>
                       </div>
-                    ))}
-                  </div>
+
+                      <h3 className="font-display text-2xl sm:text-4xl font-semibold tracking-[-0.025em] text-ink">
+                        <Link
+                          to={`/project/${focusedProject.slug}`}
+                          className="hover:text-accent transition-colors"
+                        >
+                          {focusedProject.name}
+                        </Link>
+                      </h3>
+
+                      <p className="text-base sm:text-lg text-ink-muted leading-relaxed">
+                        {getLocalizedDesc(focusedProject)}
+                      </p>
+
+                      <div className="flex flex-wrap gap-2 pt-1">
+                        {(focusedProject.techStack || []).slice(0, 5).map((tech) => (
+                          <span
+                            key={tech}
+                            className="px-2.5 py-1 rounded-md font-mono text-xs bg-mist border border-line text-ink-muted"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="lg:col-span-4 flex flex-wrap lg:flex-col lg:items-end justify-start gap-3">
+                      <Button
+                        as={Link}
+                        to={`/project/${focusedProject.slug}`}
+                        variant="accent"
+                        size="lg"
+                        className="w-full sm:w-auto lg:w-full"
+                      >
+                        <span>{t('projects.cta')}</span>
+                        <ArrowRight size={16} aria-hidden="true" />
+                      </Button>
+
+                      <div className="flex items-center gap-2.5 w-full sm:w-auto lg:w-full">
+                        <button
+                          type="button"
+                          onClick={() => setQuickProject(focusedProject)}
+                          className="flex-1 min-h-[42px] px-4 py-2 rounded-lg border border-line bg-paper/60 hover:border-accent/50 hover:text-accent text-sm font-medium text-ink inline-flex items-center justify-center gap-1.5 transition-colors"
+                        >
+                          <Eye size={15} aria-hidden="true" />
+                          <span>{isEn ? 'Quick View' : 'Ringkasan'}</span>
+                        </button>
+
+                        {focusedProject.url && (
+                          <a
+                            href={focusedProject.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="min-h-[42px] px-4 py-2 rounded-lg border border-line bg-paper/60 hover:border-accent/50 hover:text-accent text-sm font-medium text-ink inline-flex items-center justify-center gap-1.5 transition-colors"
+                            aria-label={`Open live ${focusedProject.name}`}
+                          >
+                            <span>Live</span>
+                            <ArrowUpRight size={15} aria-hidden="true" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              {/* Interactive Visual Miniature Switcher Dock (All Visible Filtered Works) */}
+              {count > 1 && (
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 pt-2">
+                  {visibleProjects.map((proj, idx) => {
+                    const isActive = idx === safeIndex;
+                    return (
+                      <div
+                        key={proj.id || proj.slug}
+                        className={`group relative rounded-xl border p-2 transition-all duration-200 ${
+                          isActive
+                            ? 'bg-white dark:bg-surface border-accent ring-2 ring-accent/20 shadow-md -translate-y-0.5'
+                            : 'bg-surface/70 border-line hover:border-accent/45 hover:bg-surface hover:-translate-y-0.5'
+                        }`}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setActiveIndex(idx)}
+                          className="w-full text-left focus:outline-none"
+                          aria-pressed={isActive}
+                          aria-label={`Inspect ${proj.name} in 3D deck`}
+                        >
+                          <div className="aspect-video rounded-lg overflow-hidden bg-slate-900 mb-2 border border-black/10">
+                            <img
+                              src={proj.src}
+                              alt={`${proj.name} thumbnail`}
+                              width={640}
+                              height={360}
+                              loading="lazy"
+                              decoding="async"
+                              className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+                            />
+                          </div>
+                          <div className="flex items-center justify-between gap-2 px-0.5">
+                            <div className="min-w-0">
+                              <p
+                                className={`font-display text-sm font-semibold truncate ${
+                                  isActive ? 'text-accent' : 'text-ink'
+                                }`}
+                              >
+                                {proj.name}
+                              </p>
+                              <p className="font-mono text-[11px] text-ink-muted truncate">
+                                {(proj.categories || [])[0] || 'System'}
+                              </p>
+                            </div>
+                            <span className="font-mono text-[10px] text-ink-muted shrink-0">
+                              {String(idx + 1).padStart(2, '0')}
+                            </span>
+                          </div>
+                        </button>
+
+                        <Link
+                          to={`/project/${proj.slug}`}
+                          aria-label={`Open ${proj.name} detail`}
+                          className="absolute top-3.5 right-3.5 w-7 h-7 rounded-full bg-white/95 text-slate-900 shadow-sm opacity-0 group-hover:opacity-100 hover:bg-accent hover:text-white flex items-center justify-center transition-all"
+                        >
+                          <ArrowUpRight size={13} aria-hidden="true" />
+                        </Link>
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>
           )}
         </div>
       </section>
-
-      {/* Desktop Floating Cursor-Tracked Preview Card */}
-      <AnimatePresence>
-        {hoveredRowProject && (
-          <motion.div
-            aria-hidden="true"
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.92 }}
-            transition={{ duration: 0.18, ease: STUDIO_EASE }}
-            style={{
-              x: smoothX,
-              y: smoothY
-            }}
-            className="pointer-events-none fixed top-0 left-0 z-50 hidden lg:block w-[360px] rounded-xl bg-white dark:bg-[#0E1118] border border-slate-200 dark:border-white/20 shadow-[0_24px_60px_rgba(15,23,42,0.18)] dark:shadow-[0_28px_70px_rgba(0,0,0,0.65)] overflow-hidden"
-          >
-            <div className="aspect-video overflow-hidden">
-              <img
-                src={hoveredRowProject.src}
-                alt=""
-                className="w-full h-full object-cover object-center"
-              />
-            </div>
-            <div className="px-3.5 py-2.5 bg-slate-50 dark:bg-[#121620] border-t border-slate-200 dark:border-white/10 flex items-center justify-between font-mono text-xs text-ink">
-              <span className="truncate">{hoveredRowProject.name}</span>
-              <span className="text-accent font-semibold shrink-0">View ↗</span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Quick View Modal */}
       <AnimatePresence>
@@ -553,7 +648,7 @@ export default function Projects() {
                   <span className="text-sm font-medium text-ink-muted">{quickProject.client}</span>
                 )}
 
-                <Button as={Link} to={`/project/${quickProject.slug}`} variant="primary" size="md">
+                <Button as={Link} to={`/project/${quickProject.slug}`} variant="accent" size="md">
                   <span>{t('projects.cta')}</span>
                   <ArrowRight size={16} aria-hidden="true" />
                 </Button>
