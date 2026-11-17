@@ -1,16 +1,45 @@
 import { supabase } from '../lib/supabase';
 import { fallbackProjects } from './fallbackProjects';
 
-const LOCAL_WEBP_SLUGS = new Set([
-  'bosdepot',
-  'chattask',
-  'siabsen',
-  'mpp',
-  'jokipro',
-  'peka',
-  'siskamling',
-  'simppk'
-]);
+const SLUG_TO_BANNER = {
+  bosdepot: '/img/banners/bosdepot.webp',
+  'bos-depot': '/img/banners/bosdepot.webp',
+  chattask: '/img/banners/chattask.webp',
+  'chat-task': '/img/banners/chattask.webp',
+  siabsen: '/img/banners/siabsen.webp',
+  'si-absen': '/img/banners/siabsen.webp',
+  mpp: '/img/banners/mpp.webp',
+  'mpp-digital': '/img/banners/mpp.webp',
+  jokipro: '/img/banners/jokipro.webp',
+  'joki-pro': '/img/banners/jokipro.webp',
+  peka: '/img/banners/peka.webp',
+  siskamling: '/img/banners/siskamling.webp',
+  simppk: '/img/banners/simppk.webp',
+  'sim-ppk': '/img/banners/simppk.webp',
+  caterly: '/img/banners/caterly.webp',
+  'minum-vr9': '/img/banners/minumvr9.webp',
+  minumvr9: '/img/banners/minumvr9.webp',
+  vr9: '/img/banners/minumvr9.webp'
+};
+
+function resolveProjectBanner(slug, title, remoteUrl) {
+  const s = String(slug || '').toLowerCase().trim();
+  if (SLUG_TO_BANNER[s]) return SLUG_TO_BANNER[s];
+
+  const t = String(title || '').toLowerCase();
+  if (t.includes('bos') && t.includes('depot')) return '/img/banners/bosdepot.webp';
+  if (t.includes('chattask') || t.includes('chat task')) return '/img/banners/chattask.webp';
+  if (t.includes('siabsen') || t.includes('si absen')) return '/img/banners/siabsen.webp';
+  if (t.includes('mpp') || t.includes('pelayanan')) return '/img/banners/mpp.webp';
+  if (t.includes('joki')) return '/img/banners/jokipro.webp';
+  if (t.includes('peka')) return '/img/banners/peka.webp';
+  if (t.includes('siskamling')) return '/img/banners/siskamling.webp';
+  if (t.includes('sim') && t.includes('ppk')) return '/img/banners/simppk.webp';
+  if (t.includes('caterly')) return '/img/banners/caterly.webp';
+  if (t.includes('vr9') || t.includes('minum')) return '/img/banners/minumvr9.webp';
+
+  return remoteUrl || `/img/${s}.webp`;
+}
 
 const FALLBACK_BY_SLUG = new Map(fallbackProjects.map((p) => [p.slug, p]));
 
@@ -57,9 +86,7 @@ function normalizeTechStack(stack) {
 function mapSupabaseRow(row) {
   const slug = row.slug;
   const fallback = FALLBACK_BY_SLUG.get(slug);
-  const resolvedImage = LOCAL_WEBP_SLUGS.has(slug)
-    ? `/img/showcases/${slug}.webp`
-    : row.gambar_url || `/img/${slug}.webp`;
+  const resolvedImage = resolveProjectBanner(slug, row.judul, row.gambar_url);
 
   return {
     id: row.id || slug,
@@ -180,7 +207,7 @@ export const heroProjects = [
     summary: 'Flutter POS, Barcode Scanner & Offline SQLite',
     stack: ['Flutter', 'Firebase', 'GetX', 'SQLite'],
     client: 'Depot Kayu & Toko Bangunan Esa',
-    src: '/img/showcases/bosdepot.webp'
+    src: '/img/banners/bosdepot.webp'
   },
   {
     name: 'ChatTask',
@@ -189,7 +216,7 @@ export const heroProjects = [
     summary: 'Next.js, Socket.io & WhatsApp NLP Parser',
     stack: ['Next.js', 'Socket.io', 'PostgreSQL', 'NLP'],
     client: 'Internal Product',
-    src: '/img/showcases/chattask.webp'
+    src: '/img/banners/chattask.webp'
   },
   {
     name: 'PEKA',
@@ -198,7 +225,7 @@ export const heroProjects = [
     summary: 'React, Supabase & Gemini AI Reflection',
     stack: ['React', 'Supabase', 'Gemini API', 'Tailwind CSS'],
     client: 'Top 33 Indonesia Next',
-    src: '/img/showcases/peka.webp'
+    src: '/img/banners/peka.webp'
   },
   {
     name: 'MPP',
@@ -207,7 +234,7 @@ export const heroProjects = [
     summary: 'TypeScript Real-Time Survey Index Engine',
     stack: ['React', 'TypeScript', 'Material UI'],
     client: 'Instansi Pemerintah Daerah',
-    src: '/img/showcases/mpp.webp'
+    src: '/img/banners/mpp.webp'
   },
   {
     name: 'SiAbsen',
@@ -216,6 +243,6 @@ export const heroProjects = [
     summary: 'Flutter 50m GPS Geofencing Attendance',
     stack: ['Flutter', 'Firebase', 'Geofencing'],
     client: 'Perguruan Tinggi Daerah',
-    src: '/img/showcases/siabsen.webp'
+    src: '/img/banners/siabsen.webp'
   }
 ];

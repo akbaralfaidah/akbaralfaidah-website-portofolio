@@ -77,9 +77,9 @@ function TiltCenterCard({ project, isEn, ctaLabel, onDragPrev, onDragNext }) {
       whileHover={{ scale: 1.018 }}
       transition={{ duration: 0.25, ease: STUDIO_EASE }}
       data-cursor={isEn ? 'Open Case ↗' : `${ctaLabel} ↗`}
-      className="group relative w-full aspect-video rounded-2xl p-1.5 sm:p-2 bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 ring-1 ring-black/15 dark:ring-white/20 shadow-[0_32px_70px_-16px_rgba(37,99,235,0.28),0_18px_38px_-14px_rgba(15,23,42,0.3)] cursor-pointer select-none overflow-hidden"
+      className="group relative w-full aspect-video rounded-2xl p-1.5 sm:p-2 bg-white/95 dark:bg-slate-900 ring-1 ring-slate-200/90 dark:ring-white/15 shadow-[0_32px_70px_-16px_rgba(37,99,235,0.22),0_16px_36px_-14px_rgba(15,23,42,0.14)] cursor-pointer select-none overflow-hidden"
     >
-      <div className="relative w-full h-full rounded-xl overflow-hidden bg-slate-950">
+      <div className="relative w-full h-full rounded-xl overflow-hidden bg-white dark:bg-slate-950">
         <img
           src={project.src}
           alt={`${project.name} showcase`}
@@ -339,7 +339,7 @@ export default function Projects() {
                           onDragNext={goNext}
                         />
                       ) : (
-                        <div className="aspect-video rounded-2xl p-1.5 bg-gradient-to-br from-slate-800 to-slate-950 ring-1 ring-black/15 dark:ring-white/15 shadow-xl overflow-hidden hover:ring-accent/60 transition-all">
+                        <div className="aspect-video rounded-2xl p-1.5 bg-white/90 dark:bg-slate-900 ring-1 ring-slate-200/85 dark:ring-white/15 shadow-xl overflow-hidden hover:ring-accent/60 transition-all">
                           <img
                             src={project.src}
                             alt={`${project.name} preview`}
@@ -347,7 +347,7 @@ export default function Projects() {
                             height={1080}
                             loading="lazy"
                             decoding="async"
-                            className="w-full h-full object-cover object-center rounded-xl brightness-90 hover:brightness-100 transition-all"
+                            className="w-full h-full object-cover object-center rounded-xl brightness-95 hover:brightness-100 transition-all"
                           />
                         </div>
                       )}
@@ -487,7 +487,7 @@ export default function Projects() {
                           aria-pressed={isActive}
                           aria-label={`Inspect ${proj.name} in 3D deck`}
                         >
-                          <div className="aspect-video rounded-lg overflow-hidden bg-slate-900 mb-2 border border-black/10">
+                          <div className="aspect-video rounded-lg overflow-hidden bg-white dark:bg-slate-900 mb-2 border border-line">
                             <img
                               src={proj.src}
                               alt={`${proj.name} thumbnail`}
