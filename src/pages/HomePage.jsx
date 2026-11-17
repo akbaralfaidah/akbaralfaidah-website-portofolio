@@ -1,3 +1,6 @@
+import { useEffect } from 'react';
+import Lenis from 'lenis';
+import { useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
@@ -14,6 +17,29 @@ import { usePageMeta } from '../hooks/usePageMeta';
 export default function HomePage() {
   const { t, i18n } = useTranslation();
   const isEn = i18n.language === 'en';
+  const prefersReduced = useReducedMotion();
+
+  useEffect(() => {
+    if (prefersReduced) return undefined;
+
+    const lenis = new Lenis({
+      autoRaf: true,
+      lerp: 0.085,
+      smoothWheel: true,
+      wheelMultiplier: 0.95,
+      touchMultiplier: 1.1,
+      anchors: { offset: -72 },
+      respectReducedMotion: true
+    });
+
+    window.__lenis = lenis;
+    return () => {
+      if (window.__lenis === lenis) {
+        delete window.__lenis;
+      }
+      lenis.destroy();
+    };
+  }, [prefersReduced]);
 
   usePageMeta({
     title: t('meta.home_title'),

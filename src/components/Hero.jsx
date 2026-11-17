@@ -1,6 +1,6 @@
 import { useState, useRef, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, useSpring, useReducedMotion } from 'framer-motion';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -61,10 +61,11 @@ export default function Hero() {
     target: heroRef,
     offset: ['start start', 'end start']
   });
-  const yBg = useTransform(scrollYProgress, [0, 1], [0, 210]);
-  const yText = useTransform(scrollYProgress, [0, 1], [0, -105]);
-  const yStage = useTransform(scrollYProgress, [0, 1], [0, 125]);
-  const scaleStage = useTransform(scrollYProgress, [0, 1], [1, 0.88]);
+  const smoothScroll = useSpring(scrollYProgress, { stiffness: 120, damping: 24, restDelta: 0.0005 });
+  const yBg = useTransform(smoothScroll, [0, 1], [0, 210]);
+  const yText = useTransform(smoothScroll, [0, 1], [0, -105]);
+  const yStage = useTransform(smoothScroll, [0, 1], [0, 125]);
+  const scaleStage = useTransform(smoothScroll, [0, 1], [1, 0.88]);
 
   const isEn = i18n.language === 'en';
   const isDark = theme === 'dark';
@@ -72,7 +73,13 @@ export default function Hero() {
   const activeProject = heroProjects[activeSlide] || heroProjects[0];
 
   const scrollToContact = () => {
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+    const el = document.getElementById('contact');
+    if (!el) return;
+    if (window.__lenis) {
+      window.__lenis.scrollTo(el, { offset: -72, duration: 1.15 });
+    } else {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -88,17 +95,17 @@ export default function Hero() {
       >
         <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
           <div
-            className="absolute -top-32 right-[-8%] w-[700px] h-[700px] rounded-full blur-3xl opacity-90 dark:opacity-35"
+            className="absolute -top-32 right-[-8%] w-[700px] h-[700px] rounded-full opacity-95 dark:opacity-35"
             style={{
               background:
-                'radial-gradient(circle, rgba(56,189,248,0.24) 0%, rgba(37,99,235,0.10) 45%, transparent 72%)'
+                'radial-gradient(circle, rgba(56,189,248,0.20) 0%, rgba(37,99,235,0.08) 45%, transparent 72%)'
             }}
           />
           <div
-            className="absolute -bottom-36 left-[-8%] w-[580px] h-[580px] rounded-full blur-3xl opacity-85 dark:opacity-30"
+            className="absolute -bottom-36 left-[-8%] w-[580px] h-[580px] rounded-full opacity-90 dark:opacity-30"
             style={{
               background:
-                'radial-gradient(circle, rgba(16,185,129,0.16) 0%, rgba(14,165,233,0.08) 48%, transparent 74%)'
+                'radial-gradient(circle, rgba(16,185,129,0.14) 0%, rgba(14,165,233,0.06) 48%, transparent 74%)'
             }}
           />
         </div>

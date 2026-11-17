@@ -195,7 +195,7 @@ export default function Projects() {
         >
           <ParallaxLayer
             yRange={[-45, 45]}
-            className="w-full h-full rounded-full blur-3xl opacity-70 dark:opacity-25"
+            className="w-full h-full rounded-full opacity-75 dark:opacity-25"
           >
             <div
               className="w-full h-full rounded-full"
@@ -559,6 +559,7 @@ export default function Projects() {
       <AnimatePresence>
         {quickProject && (
           <motion.div
+            data-lenis-prevent
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

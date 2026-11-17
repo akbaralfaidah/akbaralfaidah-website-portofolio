@@ -26,6 +26,8 @@ export function ScrollProgressBar() {
  * Multi-axis GPU scroll parallax container supporting vertical/horizontal shift,
  * 3D perspective tilt (rotateX), zoom (scale), and fade without layout thrashing.
  */
+const SPRING_SCROLL_CONFIG = { stiffness: 120, damping: 24, restDelta: 0.0005 };
+
 export function ParallaxLayer({
   children,
   className = '',
@@ -43,12 +45,13 @@ export function ParallaxLayer({
     target: ref,
     offset
   });
+  const smoothProgress = useSpring(scrollYProgress, SPRING_SCROLL_CONFIG);
 
-  const y = useTransform(scrollYProgress, [0, 1], yRange || [0, 0]);
-  const x = useTransform(scrollYProgress, [0, 1], xRange || [0, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], scaleRange || [1, 1]);
-  const rotate = useTransform(scrollYProgress, [0, 1], rotateRange || [0, 0]);
-  const rotateX = useTransform(scrollYProgress, [0, 1], rotateXRange || [0, 0]);
+  const y = useTransform(smoothProgress, [0, 1], yRange || [0, 0]);
+  const x = useTransform(smoothProgress, [0, 1], xRange || [0, 0]);
+  const scale = useTransform(smoothProgress, [0, 1], scaleRange || [1, 1]);
+  const rotate = useTransform(smoothProgress, [0, 1], rotateRange || [0, 0]);
+  const rotateX = useTransform(smoothProgress, [0, 1], rotateXRange || [0, 0]);
 
   const Component = motion[as] || motion.div;
 
@@ -85,9 +88,10 @@ export function ParallaxRibbon({ items = [], direction = 1, className = '' }) {
     target: ref,
     offset: ['start end', 'end start']
   });
+  const smoothProgress = useSpring(scrollYProgress, SPRING_SCROLL_CONFIG);
 
   const x = useTransform(
-    scrollYProgress,
+    smoothProgress,
     [0, 1],
     direction > 0 ? [-220, 220] : [220, -220]
   );
@@ -98,7 +102,7 @@ export function ParallaxRibbon({ items = [], direction = 1, className = '' }) {
     <div
       ref={ref}
       aria-hidden="true"
-      className={`relative py-4 sm:py-5 border-b border-line bg-surface/80 backdrop-blur-sm overflow-hidden select-none ${className}`}
+      className={`relative py-4 sm:py-5 border-b border-line bg-surface/95 overflow-hidden select-none ${className}`}
     >
       <motion.div
         style={prefersReduced ? undefined : { x }}
@@ -127,9 +131,10 @@ export function ParallaxWatermark({ text, className = '', direction = 1 }) {
     target: ref,
     offset: ['start end', 'end start']
   });
+  const smoothProgress = useSpring(scrollYProgress, SPRING_SCROLL_CONFIG);
 
   const x = useTransform(
-    scrollYProgress,
+    smoothProgress,
     [0, 1],
     direction > 0 ? [-160, 160] : [160, -160]
   );
@@ -142,7 +147,7 @@ export function ParallaxWatermark({ text, className = '', direction = 1 }) {
     >
       <motion.p
         style={prefersReduced ? undefined : { x }}
-        className="font-display font-bold uppercase tracking-[-0.04em] whitespace-nowrap leading-none text-[clamp(4.5rem,13vw,11rem)] text-ink/[0.035] dark:text-white/[0.04]"
+        className="font-display font-bold uppercase tracking-[-0.04em] whitespace-nowrap leading-none text-[clamp(4.5rem,13vw,11rem)] text-ink/[0.035] dark:text-white/[0.04] will-change-transform"
       >
         {text}
       </motion.p>
@@ -153,8 +158,8 @@ export function ParallaxWatermark({ text, className = '', direction = 1 }) {
 export function FadeUp({
   children,
   delay = 0,
-  y = 18,
-  duration = 0.5,
+  y = 14,
+  duration = 0.55,
   className = '',
   as = 'div'
 }) {
@@ -163,7 +168,7 @@ export function FadeUp({
     <Component
       initial={{ opacity: 0.96, y }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.01 }}
+      viewport={{ once: true, amount: 0.08 }}
       transition={{ duration, delay, ease: STUDIO_EASE }}
       className={className}
     >

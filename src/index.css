@@ -139,6 +139,24 @@
   opacity: 1;
 }
 
+/* Lenis smooth scroll base integration without blocking nested modals or iframes */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
 @keyframes auroraDrift {
   0% { transform: translate3d(0, 0, 0) scale(1); }
   50% { transform: translate3d(2%, -2%, 0) scale(1.04); }

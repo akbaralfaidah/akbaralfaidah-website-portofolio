@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useReducedMotion } from 'framer-motion';
 import { Trans, useTranslation } from 'react-i18next';
 import { MapPin } from 'lucide-react';
 import { FadeUp, ParallaxLayer, ParallaxWatermark } from './ui/MotionPrimitives';
@@ -15,7 +15,8 @@ export default function About() {
     target: photoRef,
     offset: ['start end', 'end start']
   });
-  const photoY = useTransform(scrollYProgress, [0, 1], [-56, 56]);
+  const smoothScroll = useSpring(scrollYProgress, { stiffness: 120, damping: 24, restDelta: 0.0005 });
+  const photoY = useTransform(smoothScroll, [0, 1], [-56, 56]);
 
   return (
     <section

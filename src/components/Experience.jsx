@@ -234,7 +234,7 @@ export default function Experience() {
       {/* Parallax Ambient Glow & Watermark */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-24 left-[-10%] w-[640px] h-[640px] rounded-full blur-3xl opacity-75 dark:opacity-25"
+        className="pointer-events-none absolute top-24 left-[-10%] w-[640px] h-[640px] rounded-full opacity-80 dark:opacity-25"
         style={{
           background:
             'radial-gradient(circle, rgba(37,99,235,0.12) 0%, rgba(16,185,129,0.06) 50%, transparent 74%)'
