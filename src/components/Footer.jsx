@@ -135,7 +135,7 @@ export default function Footer() {
           className="pt-6 border-t border-line select-none overflow-hidden"
           aria-hidden="true"
         >
-          <ParallaxLayer yRange={[36, -6]} scaleRange={[0.96, 1]}>
+          <ParallaxLayer yRange={[78, -6]} scaleRange={[0.92, 1]}>
             <p className="font-display font-semibold tracking-[-0.045em] leading-[0.86] text-[clamp(2.4rem,10.8vw,8.6rem)] text-ink/[0.045] dark:text-white/[0.06] whitespace-nowrap">
               AKBAR ALFAIDAH
             </p>

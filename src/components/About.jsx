@@ -15,7 +15,7 @@ export default function About() {
     target: photoRef,
     offset: ['start end', 'end start']
   });
-  const photoY = useTransform(scrollYProgress, [0, 1], [-28, 28]);
+  const photoY = useTransform(scrollYProgress, [0, 1], [-56, 56]);
 
   return (
     <section
@@ -30,25 +30,32 @@ export default function About() {
           <figure ref={photoRef} className="relative max-w-md mx-auto lg:max-w-none space-y-3">
             {/* Background floating parallax architectural plate */}
             <ParallaxLayer
-              yRange={[44, -44]}
-              className="pointer-events-none absolute -inset-3 rounded-2xl bg-gradient-to-br from-sky-100/70 via-transparent to-emerald-100/60 dark:from-blue-500/10 dark:to-emerald-500/10 border border-accent/15 -z-10"
+              yRange={[78, -78]}
+              className="pointer-events-none absolute -inset-3 rounded-2xl bg-gradient-to-br from-sky-100/75 via-transparent to-emerald-100/65 dark:from-blue-500/10 dark:to-emerald-500/10 border border-accent/20 -z-10"
             />
 
-            <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-mist border border-line shadow-[0_24px_60px_-18px_rgba(37,99,235,0.16)]">
+            <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-mist border border-line shadow-[0_24px_60px_-18px_rgba(37,99,235,0.18)]">
               <motion.img
                 style={prefersReduced ? undefined : { y: photoY }}
                 src="/img/akbar-2.webp"
-                alt="Akbar Alfaidah — Web, Mobile & AI Developer"
+                alt="Akbar Alfaidah - Web, Mobile & AI Developer"
                 width={640}
                 height={800}
                 decoding="async"
-                className="w-full h-full object-cover object-[50%_10%] scale-[1.12]"
+                className="w-full h-full object-cover object-[50%_10%] scale-[1.22]"
               />
             </div>
 
-            {/* Counter-parallax floating coordinate glass tag */}
+            {/* Opposing floating parallax glass chips */}
             <ParallaxLayer
-              yRange={[-28, 28]}
+              yRange={[64, -64]}
+              className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/95 dark:bg-[#0D1017]/95 backdrop-blur-md border border-line shadow-lg font-mono text-xs text-accent font-semibold absolute -left-5 top-10"
+            >
+              <span>Web · Mobile · AI</span>
+            </ParallaxLayer>
+
+            <ParallaxLayer
+              yRange={[-52, 52]}
               className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/95 dark:bg-[#0D1017]/95 backdrop-blur-md border border-line shadow-lg font-mono text-xs text-ink absolute -right-4 bottom-14"
             >
               <MapPin size={14} className="text-accent shrink-0" aria-hidden="true" />
@@ -63,7 +70,7 @@ export default function About() {
         </FadeUp>
 
         {/* Bio & Hairline 2x2 Index gliding at distinct speed */}
-        <ParallaxLayer yRange={[24, -24]} className="lg:col-span-7 space-y-7">
+        <ParallaxLayer yRange={[44, -44]} className="lg:col-span-7 space-y-7">
           <FadeUp>
             <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent font-semibold mb-3">
               {isEn ? '03 / The Engineer' : '03 / Profil'}

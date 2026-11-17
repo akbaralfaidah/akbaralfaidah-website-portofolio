@@ -17,21 +17,23 @@ export function ScrollProgressBar() {
     <motion.div
       aria-hidden="true"
       style={{ scaleX }}
-      className="fixed top-0 left-0 right-0 h-[2.5px] origin-left z-50 pointer-events-none bg-gradient-to-r from-sky-400 via-accent to-emerald-500"
+      className="fixed top-0 left-0 right-0 h-[3px] origin-left z-50 pointer-events-none bg-gradient-to-r from-sky-400 via-accent to-emerald-500"
     />
   );
 }
 
 /**
- * Multi-axis GPU scroll parallax container.
- * Gracefully disables displacement when user prefers reduced motion.
+ * Multi-axis GPU scroll parallax container supporting vertical/horizontal shift,
+ * 3D perspective tilt (rotateX), zoom (scale), and fade without layout thrashing.
  */
 export function ParallaxLayer({
   children,
   className = '',
-  yRange = [32, -32],
+  yRange = [48, -48],
   xRange = null,
   scaleRange = null,
+  rotateRange = null,
+  rotateXRange = null,
   offset = ['start end', 'end start'],
   as = 'div'
 }) {
@@ -45,6 +47,8 @@ export function ParallaxLayer({
   const y = useTransform(scrollYProgress, [0, 1], yRange || [0, 0]);
   const x = useTransform(scrollYProgress, [0, 1], xRange || [0, 0]);
   const scale = useTransform(scrollYProgress, [0, 1], scaleRange || [1, 1]);
+  const rotate = useTransform(scrollYProgress, [0, 1], rotateRange || [0, 0]);
+  const rotateX = useTransform(scrollYProgress, [0, 1], rotateXRange || [0, 0]);
 
   const Component = motion[as] || motion.div;
 
@@ -58,7 +62,10 @@ export function ParallaxLayer({
       style={{
         y: yRange ? y : undefined,
         x: xRange ? x : undefined,
-        scale: scaleRange ? scale : undefined
+        scale: scaleRange ? scale : undefined,
+        rotate: rotateRange ? rotate : undefined,
+        rotateX: rotateXRange ? rotateX : undefined,
+        transformPerspective: rotateXRange ? 1200 : undefined
       }}
       className={className}
     >
@@ -68,7 +75,50 @@ export function ParallaxLayer({
 }
 
 /**
- * Ambient ghost typography drifting horizontally across scroll to emphasize optical depth.
+ * Scroll-linked horizontal kinetic marquee band. Moves left/right strictly tied
+ * to vertical scrollwheel position for immediate parallax feedback.
+ */
+export function ParallaxRibbon({ items = [], direction = 1, className = '' }) {
+  const ref = useRef(null);
+  const prefersReduced = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start']
+  });
+
+  const x = useTransform(
+    scrollYProgress,
+    [0, 1],
+    direction > 0 ? [-220, 220] : [220, -220]
+  );
+
+  const repeated = [...items, ...items, ...items];
+
+  return (
+    <div
+      ref={ref}
+      aria-hidden="true"
+      className={`relative py-4 sm:py-5 border-b border-line bg-surface/80 backdrop-blur-sm overflow-hidden select-none ${className}`}
+    >
+      <motion.div
+        style={prefersReduced ? undefined : { x }}
+        className="flex items-center gap-6 sm:gap-10 w-max will-change-transform"
+      >
+        {repeated.map((label, idx) => (
+          <div key={`${label}-${idx}`} className="inline-flex items-center gap-6 sm:gap-10 shrink-0">
+            <span className="font-display text-sm sm:text-base font-semibold tracking-tight text-ink">
+              {label}
+            </span>
+            <span className="w-2 h-2 rounded-full bg-accent/60" />
+          </div>
+        ))}
+      </motion.div>
+    </div>
+  );
+}
+
+/**
+ * Ambient ghost typography drifting strongly horizontally across scroll.
  */
 export function ParallaxWatermark({ text, className = '', direction = 1 }) {
   const ref = useRef(null);
@@ -81,7 +131,7 @@ export function ParallaxWatermark({ text, className = '', direction = 1 }) {
   const x = useTransform(
     scrollYProgress,
     [0, 1],
-    direction > 0 ? [-90, 90] : [90, -90]
+    direction > 0 ? [-160, 160] : [160, -160]
   );
 
   return (
@@ -92,7 +142,7 @@ export function ParallaxWatermark({ text, className = '', direction = 1 }) {
     >
       <motion.p
         style={prefersReduced ? undefined : { x }}
-        className="font-display font-bold uppercase tracking-[-0.04em] whitespace-nowrap leading-none text-[clamp(4.5rem,13vw,11rem)] text-ink/[0.03] dark:text-white/[0.035]"
+        className="font-display font-bold uppercase tracking-[-0.04em] whitespace-nowrap leading-none text-[clamp(4.5rem,13vw,11rem)] text-ink/[0.035] dark:text-white/[0.04]"
       >
         {text}
       </motion.p>

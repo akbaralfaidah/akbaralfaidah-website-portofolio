@@ -61,10 +61,10 @@ export default function Hero() {
     target: heroRef,
     offset: ['start start', 'end start']
   });
-  const yBg = useTransform(scrollYProgress, [0, 1], [0, 130]);
-  const yText = useTransform(scrollYProgress, [0, 1], [0, -52]);
-  const yStage = useTransform(scrollYProgress, [0, 1], [0, 68]);
-  const scaleStage = useTransform(scrollYProgress, [0, 1], [1, 0.95]);
+  const yBg = useTransform(scrollYProgress, [0, 1], [0, 210]);
+  const yText = useTransform(scrollYProgress, [0, 1], [0, -105]);
+  const yStage = useTransform(scrollYProgress, [0, 1], [0, 125]);
+  const scaleStage = useTransform(scrollYProgress, [0, 1], [1, 0.88]);
 
   const isEn = i18n.language === 'en';
   const isDark = theme === 'dark';

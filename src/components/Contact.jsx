@@ -358,7 +358,7 @@ export default function Contact() {
 
         <div className="relative z-10 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           {/* Left Editorial Contact & Clean Map */}
-          <ParallaxLayer yRange={[24, -24]} className="lg:col-span-5">
+          <ParallaxLayer yRange={[48, -48]} className="lg:col-span-5">
             <FadeUp className="space-y-8">
             <div>
               <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent mb-3">
@@ -456,24 +456,26 @@ export default function Contact() {
               <p className="text-sm text-ink-muted leading-relaxed">{t('contact.map_desc')}</p>
 
               <div className="aspect-[16/9] rounded-xl overflow-hidden border border-line bg-mist">
-                <iframe
-                  src={MAPS_EMBED_URL}
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen=""
-                  loading="lazy"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  title="Lokasi Akbar Alfaidah di Google Maps"
-                  className="w-full h-full object-cover grayscale-[25%] hover:grayscale-0 transition-all duration-300 dark:invert-[0.9] dark:hue-rotate-180 dark:contrast-95 dark:brightness-95"
-                />
+                <ParallaxLayer yRange={[-24, 24]} scaleRange={[1.08, 1.08]} className="w-full h-full">
+                  <iframe
+                    src={MAPS_EMBED_URL}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    title="Lokasi Akbar Alfaidah di Google Maps"
+                    className="w-full h-full object-cover grayscale-[25%] hover:grayscale-0 transition-all duration-300 dark:invert-[0.9] dark:hue-rotate-180 dark:contrast-95 dark:brightness-95"
+                  />
+                </ParallaxLayer>
               </div>
             </div>
             </FadeUp>
           </ParallaxLayer>
 
           {/* Right Column: Clean Minimalist Inquiry Surface */}
-          <ParallaxLayer yRange={[-18, 18]} className="lg:col-span-7">
+          <ParallaxLayer yRange={[-40, 40]} className="lg:col-span-7">
             <FadeUp delay={0.06}>
               <div className="rounded-2xl bg-surface border border-line p-6 sm:p-8 lg:p-10 shadow-[0_20px_50px_-18px_rgba(37,99,235,0.1)]">
               <div

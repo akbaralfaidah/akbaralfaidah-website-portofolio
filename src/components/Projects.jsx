@@ -297,8 +297,12 @@ export default function Projects() {
             </div>
           ) : (
             <div className="space-y-8">
-              {/* Interactive 3D Spatial Coverflow Exhibition Stage with Scroll Depth */}
-              <ParallaxLayer yRange={[26, -26]} scaleRange={[0.97, 1.02]}>
+              {/* Interactive 3D Spatial Coverflow Exhibition Stage with Deep Camera Unfold Parallax */}
+              <ParallaxLayer
+                yRange={[75, -55]}
+                scaleRange={[0.88, 1.03]}
+                rotateXRange={[14, -4]}
+              >
                 <div
                   className="relative h-[240px] sm:h-[360px] lg:h-[430px] flex items-center justify-center"
                   style={{ perspective: '1500px', transformStyle: 'preserve-3d' }}
@@ -479,20 +483,23 @@ export default function Projects() {
                 </div>
               </ParallaxLayer>
 
-              {/* Interactive Visual Miniature Switcher Dock (All Visible Filtered Works) */}
+              {/* Interactive Visual Miniature Switcher Dock (Staggered Depth Grid) */}
               {count > 1 && (
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 pt-2">
                   {visibleProjects.map((proj, idx) => {
                     const isActive = idx === safeIndex;
                     return (
-                      <div
+                      <ParallaxLayer
                         key={proj.id || proj.slug}
-                        className={`group relative rounded-xl border p-2 transition-all duration-200 ${
-                          isActive
-                            ? 'bg-white dark:bg-surface border-accent ring-2 ring-accent/20 shadow-md -translate-y-0.5'
-                            : 'bg-surface/70 border-line hover:border-accent/45 hover:bg-surface hover:-translate-y-0.5'
-                        }`}
+                        yRange={idx % 2 === 0 ? [24, -24] : [52, -52]}
                       >
+                        <div
+                          className={`group relative rounded-xl border p-2 transition-all duration-200 ${
+                            isActive
+                              ? 'bg-white dark:bg-surface border-accent ring-2 ring-accent/20 shadow-md -translate-y-0.5'
+                              : 'bg-surface/70 border-line hover:border-accent/45 hover:bg-surface hover:-translate-y-0.5'
+                          }`}
+                        >
                         <button
                           type="button"
                           onClick={() => setActiveIndex(idx)}
@@ -537,7 +544,8 @@ export default function Projects() {
                         >
                           <ArrowUpRight size={13} aria-hidden="true" />
                         </Link>
-                      </div>
+                        </div>
+                      </ParallaxLayer>
                     );
                   })}
                 </div>

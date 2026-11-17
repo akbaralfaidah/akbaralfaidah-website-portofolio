@@ -341,7 +341,7 @@ export default function Experience() {
                 {visibleExperiences.map((exp, idx) => {
                   const SectorIcon = exp.meta.icon;
                   const isFocused = idx === activeCardIdx;
-                  const parallaxY = idx % 2 === 0 ? [18, -18] : [28, -28];
+                  const parallaxY = idx % 2 === 0 ? [34, -34] : [64, -64];
 
                   return (
                     <motion.div
@@ -429,7 +429,7 @@ export default function Experience() {
         </div>
 
         {/* Interactive GitHub Telemetry Matrix wrapped in Parallax Depth */}
-        <ParallaxLayer yRange={[24, -24]}>
+        <ParallaxLayer yRange={[56, -48]} scaleRange={[0.96, 1.01]}>
           <div className="rounded-2xl bg-white/95 dark:bg-surface border border-line p-6 sm:p-8 space-y-6 shadow-[0_22px_55px_-18px_rgba(37,99,235,0.12)]">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-line">
               <div className="flex items-center gap-3">
