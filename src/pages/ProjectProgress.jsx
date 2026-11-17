@@ -1,6 +1,6 @@
-import { useEffect, useState, useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { useEffect, useState, useMemo } from "react";
+import { useParams, Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   FiCheck,
   FiClock,
@@ -12,12 +12,12 @@ import {
   FiRefreshCw,
   FiActivity,
   FiSun,
-  FiMoon
-} from 'react-icons/fi';
-import { FaWhatsapp } from 'react-icons/fa';
-import { supabase } from '../lib/supabase';
-import { useTheme } from '../hooks/useTheme';
-import BrandLogo from '../components/BrandLogo';
+  FiMoon,
+} from "react-icons/fi";
+import { FaWhatsapp } from "react-icons/fa";
+import { supabase } from "../lib/supabase";
+import { useTheme } from "../hooks/useTheme";
+import BrandLogo from "../components/BrandLogo";
 
 /**
  * Format timestamp into Indonesian locale date string
@@ -28,10 +28,10 @@ function formatDate(dateString) {
   try {
     const date = new Date(dateString);
     if (isNaN(date.getTime())) return dateString;
-    return new Intl.DateTimeFormat('id-ID', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
+    return new Intl.DateTimeFormat("id-ID", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
     }).format(date);
   } catch {
     return dateString;
@@ -42,40 +42,53 @@ function formatDate(dateString) {
  * Map status to visual metadata
  */
 function getStageStatusMeta(status) {
-  const norm = (status || '').toLowerCase().trim();
-  if (['done', 'selesai', 'completed'].includes(norm)) {
+  const norm = (status || "").toLowerCase().trim();
+  if (["done", "selesai", "completed"].includes(norm)) {
     return {
-      key: 'done',
-      label: 'Selesai',
-      badgeClass: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/25',
-      nodeBg: 'bg-emerald-500 text-white shadow-md shadow-emerald-500/25',
-      cardBorder: 'border-emerald-500/15 dark:border-emerald-500/20',
+      key: "done",
+      label: "Selesai",
+      badgeClass:
+        "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/25",
+      nodeBg: "bg-emerald-500 text-white shadow-md shadow-emerald-500/25",
+      cardBorder: "border-emerald-500/15 dark:border-emerald-500/20",
       isDone: true,
       isInProgress: false,
-      isPending: false
+      isPending: false,
     };
   }
-  if (['in_progress', 'sedang berjalan', 'ongoing', 'proses', 'progress'].includes(norm)) {
+  if (
+    [
+      "in_progress",
+      "sedang berjalan",
+      "ongoing",
+      "proses",
+      "progress",
+    ].includes(norm)
+  ) {
     return {
-      key: 'in_progress',
-      label: 'Sedang Berjalan',
-      badgeClass: 'bg-brass/15 text-brass dark:text-[#E0B566] border-brass/35 font-semibold',
-      nodeBg: 'bg-gradient-to-br from-brass to-amber-600 text-white shadow-lg shadow-brass/35',
-      cardBorder: 'border-brass/40 dark:border-brass/40 ring-1 ring-brass/25',
+      key: "in_progress",
+      label: "Sedang Berjalan",
+      badgeClass:
+        "bg-brass/15 text-brass dark:text-[#E0B566] border-brass/35 font-semibold",
+      nodeBg:
+        "bg-gradient-to-br from-brass to-amber-600 text-white shadow-lg shadow-brass/35",
+      cardBorder: "border-brass/40 dark:border-brass/40 ring-1 ring-brass/25",
       isDone: false,
       isInProgress: true,
-      isPending: false
+      isPending: false,
     };
   }
   return {
-    key: 'pending',
-    label: 'Belum',
-    badgeClass: 'bg-charcoal/5 dark:bg-white/5 text-charcoal/50 dark:text-[#F2F0E8]/50 border-charcoal/10 dark:border-white/10',
-    nodeBg: 'bg-white dark:bg-[#222428] border-2 border-neutral-300 dark:border-zinc-700 text-charcoal/70 dark:text-white/60 font-semibold shadow-sm',
-    cardBorder: 'border-charcoal/10 dark:border-white/10 opacity-85',
+    key: "pending",
+    label: "Belum",
+    badgeClass:
+      "bg-charcoal/5 dark:bg-white/5 text-charcoal/50 dark:text-[#F2F0E8]/50 border-charcoal/10 dark:border-white/10",
+    nodeBg:
+      "bg-white dark:bg-[#222428] border-2 border-neutral-300 dark:border-zinc-700 text-charcoal/70 dark:text-white/60 font-semibold shadow-sm",
+    cardBorder: "border-charcoal/10 dark:border-white/10 opacity-85",
     isDone: false,
     isInProgress: false,
-    isPending: true
+    isPending: true,
   };
 }
 
@@ -86,34 +99,56 @@ function getStageStatusMeta(status) {
 function getConnectorState(idx, stages) {
   const current = stages[idx];
   const next = stages[idx + 1];
-  if (!next) return 'none';
+  if (!next) return "none";
 
-  const isCurrentDone = ['done', 'selesai', 'completed'].includes((current.status || '').toLowerCase().trim());
-  const isCurrentInProgress = ['in_progress', 'sedang berjalan', 'ongoing', 'proses', 'progress'].includes((current.status || '').toLowerCase().trim());
-  const isNextDone = ['done', 'selesai', 'completed'].includes((next.status || '').toLowerCase().trim());
-  const isNextInProgress = ['in_progress', 'sedang berjalan', 'ongoing', 'proses', 'progress'].includes((next.status || '').toLowerCase().trim());
+  const isCurrentDone = ["done", "selesai", "completed"].includes(
+    (current.status || "").toLowerCase().trim(),
+  );
+  const isCurrentInProgress = [
+    "in_progress",
+    "sedang berjalan",
+    "ongoing",
+    "proses",
+    "progress",
+  ].includes((current.status || "").toLowerCase().trim());
+  const isNextDone = ["done", "selesai", "completed"].includes(
+    (next.status || "").toLowerCase().trim(),
+  );
+  const isNextInProgress = [
+    "in_progress",
+    "sedang berjalan",
+    "ongoing",
+    "proses",
+    "progress",
+  ].includes((next.status || "").toLowerCase().trim());
 
   // 1. If current stage is in_progress, the line flowing to next stage is ACTIVE FLOW
   if (isCurrentInProgress) {
-    return 'active_flow';
+    return "active_flow";
   }
 
   // 2. If both current and next are done (or next is in_progress), line is COMPLETED (solid green, no motion)
   if (isCurrentDone && (isNextDone || isNextInProgress)) {
-    return 'completed';
+    return "completed";
   }
 
   // 3. If current is done and next is NOT done, but NO stage in the whole list is marked in_progress:
   // Then this transition is the leading edge of progress -> active flow
-  const hasInProgress = stages.some(s =>
-    ['in_progress', 'sedang berjalan', 'ongoing', 'proses', 'progress'].includes((s.status || '').toLowerCase().trim())
+  const hasInProgress = stages.some((s) =>
+    [
+      "in_progress",
+      "sedang berjalan",
+      "ongoing",
+      "proses",
+      "progress",
+    ].includes((s.status || "").toLowerCase().trim()),
   );
   if (isCurrentDone && !isNextDone && !hasInProgress) {
-    return 'active_flow';
+    return "active_flow";
   }
 
   // 4. In all other cases (e.g. stage 5 -> 6, 6 -> 7, ...), it's PENDING (solid gray, clearly visible)
-  return 'pending';
+  return "pending";
 }
 
 export default function ProjectProgress({ fallbackComponent = null }) {
@@ -130,32 +165,34 @@ export default function ProjectProgress({ fallbackComponent = null }) {
     if (shouldFallback) return undefined;
 
     let robotsMeta = document.querySelector('meta[name="robots"]');
-    const prevRobots = robotsMeta ? robotsMeta.getAttribute('content') : null;
+    const prevRobots = robotsMeta ? robotsMeta.getAttribute("content") : null;
     if (!robotsMeta) {
-      robotsMeta = document.createElement('meta');
-      robotsMeta.setAttribute('name', 'robots');
+      robotsMeta = document.createElement("meta");
+      robotsMeta.setAttribute("name", "robots");
       document.head.appendChild(robotsMeta);
     }
-    robotsMeta.setAttribute('content', 'noindex,nofollow');
+    robotsMeta.setAttribute("content", "noindex,nofollow");
 
     let referrerMeta = document.querySelector('meta[name="referrer"]');
-    const prevReferrer = referrerMeta ? referrerMeta.getAttribute('content') : null;
+    const prevReferrer = referrerMeta
+      ? referrerMeta.getAttribute("content")
+      : null;
     if (!referrerMeta) {
-      referrerMeta = document.createElement('meta');
-      referrerMeta.setAttribute('name', 'referrer');
+      referrerMeta = document.createElement("meta");
+      referrerMeta.setAttribute("name", "referrer");
       document.head.appendChild(referrerMeta);
     }
-    referrerMeta.setAttribute('content', 'no-referrer');
+    referrerMeta.setAttribute("content", "no-referrer");
 
     return () => {
       if (prevRobots) {
-        robotsMeta.setAttribute('content', prevRobots);
+        robotsMeta.setAttribute("content", prevRobots);
       } else if (robotsMeta && robotsMeta.parentNode) {
         robotsMeta.parentNode.removeChild(robotsMeta);
       }
 
       if (prevReferrer) {
-        referrerMeta.setAttribute('content', prevReferrer);
+        referrerMeta.setAttribute("content", prevReferrer);
       } else if (referrerMeta && referrerMeta.parentNode) {
         referrerMeta.parentNode.removeChild(referrerMeta);
       }
@@ -190,8 +227,8 @@ export default function ProjectProgress({ fallbackComponent = null }) {
       setLoading(true);
 
       try {
-        const { data, error } = await supabase.rpc('get_project_progress', {
-          p_token: currentToken.trim()
+        const { data, error } = await supabase.rpc("get_project_progress", {
+          p_token: currentToken.trim(),
         });
 
         if (!isMounted) return;
@@ -232,12 +269,12 @@ export default function ProjectProgress({ fallbackComponent = null }) {
     if (shouldFallback) return undefined;
     const originalTitle = document.title;
     if (loading) {
-      document.title = 'Memuat Progres Proyek... | Akbar Alfaidah';
+      document.title = "Memuat Progres Proyek... | Akbar Alfaidah";
     } else if (projectData) {
-      const name = projectData.name || projectData.judul || 'Proyek';
-      document.title = `${name} — Progres Pengerjaan | Akbar Alfaidah`;
+      const name = projectData.name || projectData.judul || "Proyek";
+      document.title = `${name} - Progres Pengerjaan | Akbar Alfaidah`;
     } else {
-      document.title = 'Halaman Tidak Ditemukan | Akbar Alfaidah';
+      document.title = "Halaman Tidak Ditemukan | Akbar Alfaidah";
     }
 
     return () => {
@@ -256,21 +293,29 @@ export default function ProjectProgress({ fallbackComponent = null }) {
   // Sort stages by position
   const sortedStages = useMemo(() => {
     if (!projectData?.stages || !Array.isArray(projectData.stages)) return [];
-    return [...projectData.stages].sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+    return [...projectData.stages].sort(
+      (a, b) => (a.position ?? 0) - (b.position ?? 0),
+    );
   }, [projectData]);
 
   // Find currently active stage (in_progress, or first pending)
   const activeStageInfo = useMemo(() => {
     if (!sortedStages.length) return null;
-    const inProgress = sortedStages.find(s => {
-      const norm = (s.status || '').toLowerCase().trim();
-      return ['in_progress', 'sedang berjalan', 'ongoing', 'proses', 'progress'].includes(norm);
+    const inProgress = sortedStages.find((s) => {
+      const norm = (s.status || "").toLowerCase().trim();
+      return [
+        "in_progress",
+        "sedang berjalan",
+        "ongoing",
+        "proses",
+        "progress",
+      ].includes(norm);
     });
     if (inProgress) return inProgress;
 
-    const firstPending = sortedStages.find(s => {
-      const norm = (s.status || '').toLowerCase().trim();
-      return !['done', 'selesai', 'completed'].includes(norm);
+    const firstPending = sortedStages.find((s) => {
+      const norm = (s.status || "").toLowerCase().trim();
+      return !["done", "selesai", "completed"].includes(norm);
     });
     return firstPending || sortedStages[sortedStages.length - 1];
   }, [sortedStages]);
@@ -280,8 +325,9 @@ export default function ProjectProgress({ fallbackComponent = null }) {
     return fallbackComponent;
   }
 
-  const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '62881080245045';
-  const projectName = projectData?.name || projectData?.judul || 'Proyek';
+  const whatsappNumber =
+    import.meta.env.VITE_WHATSAPP_NUMBER || "62881080245045";
+  const projectName = projectData?.name || projectData?.judul || "Proyek";
 
   // 1. Loading State (Polished responsive skeleton)
   if (loading) {
@@ -301,7 +347,10 @@ export default function ProjectProgress({ fallbackComponent = null }) {
             </div>
             <div className="lg:col-span-7 space-y-4">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-24 bg-charcoal/5 dark:bg-white/5 rounded-3xl animate-pulse" />
+                <div
+                  key={i}
+                  className="h-24 bg-charcoal/5 dark:bg-white/5 rounded-3xl animate-pulse"
+                />
               ))}
             </div>
           </div>
@@ -329,7 +378,8 @@ export default function ProjectProgress({ fallbackComponent = null }) {
           </h1>
 
           <p className="text-sm sm:text-base text-charcoal/70 dark:text-[#F2F0E8]/70 leading-relaxed mb-8">
-            Halaman yang Anda tuju tidak tersedia, tautan pelacak tidak valid, atau pemantauan progres proyek telah dinonaktifkan.
+            Halaman yang Anda tuju tidak tersedia, tautan pelacak tidak valid,
+            atau pemantauan progres proyek telah dinonaktifkan.
           </p>
 
           <Link
@@ -347,7 +397,6 @@ export default function ProjectProgress({ fallbackComponent = null }) {
   // 3. Main Project Progress Tracker View
   return (
     <div className="min-h-screen bg-paper dark:bg-[#1A1A1C] text-charcoal dark:text-[#F2F0E8] py-6 sm:py-10 px-4 sm:px-6 md:px-8 selection:bg-charcoal dark:selection:bg-[#F2F0E8] selection:text-paper dark:selection:text-charcoal transition-colors duration-300">
-      
       {/* Top Header & Navigation */}
       <header className="max-w-5xl mx-auto mb-8 sm:mb-12">
         <motion.div
@@ -384,8 +433,14 @@ export default function ProjectProgress({ fallbackComponent = null }) {
               title="Ganti Tema"
               aria-label="Toggle theme"
             >
-              {theme === 'dark' ? <FiSun size={15} className="text-amber-400" /> : <FiMoon size={15} />}
-              <span className="hidden sm:inline">{theme === 'dark' ? 'Light' : 'Dark'}</span>
+              {theme === "dark" ? (
+                <FiSun size={15} className="text-amber-400" />
+              ) : (
+                <FiMoon size={15} />
+              )}
+              <span className="hidden sm:inline">
+                {theme === "dark" ? "Light" : "Dark"}
+              </span>
             </button>
           </div>
         </motion.div>
@@ -394,7 +449,6 @@ export default function ProjectProgress({ fallbackComponent = null }) {
       {/* Main Content Layout (Responsive 2-column on desktop, single column on mobile) */}
       <main className="max-w-5xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          
           {/* LEFT COLUMN: Sticky Project Overview (Desktop) */}
           <motion.aside
             initial={{ opacity: 0, y: 15 }}
@@ -404,7 +458,6 @@ export default function ProjectProgress({ fallbackComponent = null }) {
           >
             {/* Project Summary Card */}
             <div className="bg-white/80 dark:bg-[#222428]/80 backdrop-blur-xl rounded-[2rem] p-6 sm:p-7 border border-charcoal/10 dark:border-white/10 shadow-sm relative overflow-hidden">
-              
               {/* Subtle ambient light gradient background */}
               <div className="absolute -top-24 -right-24 w-48 h-48 bg-brass/10 dark:bg-brass/15 rounded-full blur-3xl pointer-events-none" />
 
@@ -413,7 +466,9 @@ export default function ProjectProgress({ fallbackComponent = null }) {
                 <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-brass/15 text-brass dark:text-[#E0B566] border border-brass/25">
                   Proyek Klien
                 </span>
-                <span className="text-xs text-charcoal/40 dark:text-white/40">&bull;</span>
+                <span className="text-xs text-charcoal/40 dark:text-white/40">
+                  &bull;
+                </span>
                 <span className="text-xs text-charcoal/60 dark:text-[#F2F0E8]/60 font-medium">
                   {sortedStages.length} Tahap Pengerjaan
                 </span>
@@ -443,7 +498,6 @@ export default function ProjectProgress({ fallbackComponent = null }) {
 
               {/* Metadata Items: Estimasi Selesai & Terakhir Diperbarui */}
               <div className="space-y-3 pt-1 border-t border-charcoal/5 dark:border-white/5">
-                
                 {/* Estimasi Selesai */}
                 <div className="flex items-center justify-between p-3.5 rounded-2xl bg-charcoal/[0.03] dark:bg-white/[0.03] border border-charcoal/5 dark:border-white/5">
                   <div className="flex items-center gap-3">
@@ -455,9 +509,10 @@ export default function ProjectProgress({ fallbackComponent = null }) {
                         Estimasi Selesai
                       </span>
                       <span className="text-sm font-semibold text-charcoal dark:text-[#F2F0E8]">
-                        {projectData.tracker_estimate && projectData.tracker_estimate.trim()
+                        {projectData.tracker_estimate &&
+                        projectData.tracker_estimate.trim()
                           ? projectData.tracker_estimate.trim()
-                          : 'Sesuai linimasa'}
+                          : "Sesuai linimasa"}
                       </span>
                     </div>
                   </div>
@@ -474,12 +529,12 @@ export default function ProjectProgress({ fallbackComponent = null }) {
                         Terakhir Diperbarui
                       </span>
                       <span className="text-sm font-semibold text-charcoal dark:text-[#F2F0E8]">
-                        {formatDate(projectData.tracker_updated_at) || 'Hari ini'}
+                        {formatDate(projectData.tracker_updated_at) ||
+                          "Hari ini"}
                       </span>
                     </div>
                   </div>
                 </div>
-
               </div>
 
               {/* Preview Link (Tautan Preview jika ada) */}
@@ -492,11 +547,13 @@ export default function ProjectProgress({ fallbackComponent = null }) {
                     className="inline-flex items-center justify-center gap-2.5 w-full py-3.5 px-5 rounded-2xl bg-charcoal dark:bg-[#F2F0E8] text-paper dark:text-charcoal hover:bg-brass dark:hover:bg-brass dark:hover:text-white font-semibold text-sm transition-all duration-300 shadow-sm group"
                   >
                     <span>Buka Demo / Staging Preview</span>
-                    <FiExternalLink size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    <FiExternalLink
+                      size={16}
+                      className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    />
                   </a>
                 </div>
               )}
-
             </div>
 
             {/* Quick Contact & Reassurance Box */}
@@ -506,13 +563,14 @@ export default function ProjectProgress({ fallbackComponent = null }) {
                   Perlu Koordinasi atau Revisi?
                 </h3>
                 <p className="text-xs text-charcoal/60 dark:text-[#F2F0E8]/60 mt-0.5 leading-relaxed">
-                  Hubungi langsung pengembang untuk mendiskusikan penyesuaian pengerjaan.
+                  Hubungi langsung pengembang untuk mendiskusikan penyesuaian
+                  pengerjaan.
                 </p>
               </div>
 
               <a
                 href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-                  `Halo Mas Akbar, saya ingin koordinasi terkait update progres proyek "${projectName}".`
+                  `Halo Mas Akbar, saya ingin koordinasi terkait update progres proyek "${projectName}".`,
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -525,14 +583,13 @@ export default function ProjectProgress({ fallbackComponent = null }) {
 
             {/* Minimal Copyright */}
             <div className="hidden lg:block text-xs text-charcoal/40 dark:text-[#F2F0E8]/40 pt-2">
-              © {new Date().getFullYear()} Akbar Alfaidah. Dokumen privat pelacakan proyek klien.
+              © {new Date().getFullYear()} Akbar Alfaidah. Dokumen privat
+              pelacakan proyek klien.
             </div>
-
           </motion.aside>
 
           {/* RIGHT COLUMN: Interactive Animated Timeline */}
           <section className="lg:col-span-7 xl:col-span-7 space-y-6">
-            
             {/* Section Header */}
             <div className="flex items-center justify-between px-1">
               <div>
@@ -556,7 +613,6 @@ export default function ProjectProgress({ fallbackComponent = null }) {
               </div>
             ) : (
               <div className="relative pl-2 sm:pl-4 space-y-4">
-                
                 {sortedStages.map((stage, idx) => {
                   const meta = getStageStatusMeta(stage.status);
                   const isLast = idx === sortedStages.length - 1;
@@ -572,7 +628,6 @@ export default function ProjectProgress({ fallbackComponent = null }) {
                     >
                       {/* Vertical Spine (Node + Connecting line with flowing animation) */}
                       <div className="flex flex-col items-center shrink-0 relative">
-                        
                         {/* Node Container with Active Pulse/Ping */}
                         <div className="relative z-10 flex items-center justify-center">
                           {/* Active radar ping beacon on the In-Progress stage */}
@@ -593,76 +648,87 @@ export default function ProjectProgress({ fallbackComponent = null }) {
                             ) : meta.isInProgress ? (
                               <FiClock size={18} className="stroke-[2.2]" />
                             ) : (
-                              <span className="text-xs font-mono font-medium">{stage.position ?? idx + 1}</span>
+                              <span className="text-xs font-mono font-medium">
+                                {stage.position ?? idx + 1}
+                              </span>
                             )}
                           </div>
                         </div>
 
                         {/* Vertical Connector Line (Custom states based on progress) */}
-                        {!isLast && (() => {
-                          const lineState = getConnectorState(idx, sortedStages);
-
-                          if (lineState === 'completed') {
-                            // 1. Completed milestone line: Solid green, ZERO motion/animation
-                            return (
-                              <div className="relative w-1 flex-1 min-h-[4.5rem] my-1 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.3)]" />
+                        {!isLast &&
+                          (() => {
+                            const lineState = getConnectorState(
+                              idx,
+                              sortedStages,
                             );
-                          }
 
-                          if (lineState === 'active_flow') {
-                            // 2. Active working segment (e.g. Stage 4 -> Stage 5): Prominent animated traveling beam
+                            if (lineState === "completed") {
+                              // 1. Completed milestone line: Solid green, ZERO motion/animation
+                              return (
+                                <div className="relative w-1 flex-1 min-h-[4.5rem] my-1 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.3)]" />
+                              );
+                            }
+
+                            if (lineState === "active_flow") {
+                              // 2. Active working segment (e.g. Stage 4 -> Stage 5): Prominent animated traveling beam
+                              return (
+                                <div className="relative w-1 sm:w-1.5 flex-1 min-h-[5rem] my-1 rounded-full bg-neutral-300 dark:bg-zinc-700/80 overflow-hidden shadow-[0_0_10px_rgba(201,152,63,0.4)]">
+                                  {/* Ambient highlight on the active path */}
+                                  <div className="absolute inset-0 bg-brass/25 dark:bg-brass/35" />
+
+                                  {/* High-intensity traveling laser beam */}
+                                  <motion.div
+                                    className="absolute left-0 right-0 h-16 rounded-full bg-gradient-to-b from-transparent via-amber-400 to-amber-200 dark:via-[#F5D061] dark:to-yellow-200 shadow-[0_0_14px_rgba(245,158,11,1)]"
+                                    animate={{
+                                      top: ["-100%", "100%"],
+                                    }}
+                                    transition={{
+                                      duration: 1.4,
+                                      repeat: Infinity,
+                                      ease: "easeInOut",
+                                    }}
+                                  />
+
+                                  {/* Bright leading spark traveling down */}
+                                  <motion.div
+                                    className="absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_10px_rgba(251,191,36,1)]"
+                                    animate={{
+                                      top: ["-15%", "100%"],
+                                    }}
+                                    transition={{
+                                      duration: 1.4,
+                                      repeat: Infinity,
+                                      ease: "easeInOut",
+                                    }}
+                                  />
+                                </div>
+                              );
+                            }
+
+                            // 3. Pending/Inactive line: Solid gray, clearly visible in both light & dark mode, zero animation
                             return (
-                              <div className="relative w-1 sm:w-1.5 flex-1 min-h-[5rem] my-1 rounded-full bg-neutral-300 dark:bg-zinc-700/80 overflow-hidden shadow-[0_0_10px_rgba(201,152,63,0.4)]">
-                                {/* Ambient highlight on the active path */}
-                                <div className="absolute inset-0 bg-brass/25 dark:bg-brass/35" />
-                                
-                                {/* High-intensity traveling laser beam */}
-                                <motion.div
-                                  className="absolute left-0 right-0 h-16 rounded-full bg-gradient-to-b from-transparent via-amber-400 to-amber-200 dark:via-[#F5D061] dark:to-yellow-200 shadow-[0_0_14px_rgba(245,158,11,1)]"
-                                  animate={{
-                                    top: ['-100%', '100%']
-                                  }}
-                                  transition={{
-                                    duration: 1.4,
-                                    repeat: Infinity,
-                                    ease: 'easeInOut'
-                                  }}
-                                />
-
-                                {/* Bright leading spark traveling down */}
-                                <motion.div
-                                  className="absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_10px_rgba(251,191,36,1)]"
-                                  animate={{
-                                    top: ['-15%', '100%']
-                                  }}
-                                  transition={{
-                                    duration: 1.4,
-                                    repeat: Infinity,
-                                    ease: 'easeInOut'
-                                  }}
-                                />
-                              </div>
+                              <div className="relative w-1 flex-1 min-h-[4.5rem] my-1 rounded-full bg-neutral-300 dark:bg-zinc-700" />
                             );
-                          }
-
-                          // 3. Pending/Inactive line: Solid gray, clearly visible in both light & dark mode, zero animation
-                          return (
-                            <div className="relative w-1 flex-1 min-h-[4.5rem] my-1 rounded-full bg-neutral-300 dark:bg-zinc-700" />
-                          );
-                        })()}
+                          })()}
                       </div>
 
                       {/* Right Stage Card */}
-                      <div className={`flex-1 min-w-0 ${isLast ? 'pb-2' : 'pb-5'}`}>
-                        <div className={`p-4 sm:p-5 rounded-3xl bg-white/80 dark:bg-[#222428]/80 backdrop-blur-md border ${meta.cardBorder} shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5`}>
-                          
+                      <div
+                        className={`flex-1 min-w-0 ${isLast ? "pb-2" : "pb-5"}`}
+                      >
+                        <div
+                          className={`p-4 sm:p-5 rounded-3xl bg-white/80 dark:bg-[#222428]/80 backdrop-blur-md border ${meta.cardBorder} shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5`}
+                        >
                           {/* Card Header: Position & Status Badge */}
                           <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                             <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-charcoal/50 dark:text-[#F2F0E8]/50">
                               Tahap {stage.position || idx + 1}
                             </span>
 
-                            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border ${meta.badgeClass}`}>
+                            <span
+                              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border ${meta.badgeClass}`}
+                            >
                               {meta.isInProgress && (
                                 <span className="w-1.5 h-1.5 rounded-full bg-brass animate-pulse" />
                               )}
@@ -671,13 +737,15 @@ export default function ProjectProgress({ fallbackComponent = null }) {
                           </div>
 
                           {/* Stage Name / Headline */}
-                          <h3 className={`text-base sm:text-lg font-display font-semibold leading-snug mb-1.5 ${
-                            meta.isInProgress
-                              ? 'text-charcoal dark:text-[#F2F0E8] font-bold'
-                              : meta.isDone
-                              ? 'text-charcoal dark:text-[#F2F0E8]'
-                              : 'text-charcoal/70 dark:text-[#F2F0E8]/70'
-                          }`}>
+                          <h3
+                            className={`text-base sm:text-lg font-display font-semibold leading-snug mb-1.5 ${
+                              meta.isInProgress
+                                ? "text-charcoal dark:text-[#F2F0E8] font-bold"
+                                : meta.isDone
+                                  ? "text-charcoal dark:text-[#F2F0E8]"
+                                  : "text-charcoal/70 dark:text-[#F2F0E8]/70"
+                            }`}
+                          >
                             {stage.name}
                           </h3>
 
@@ -691,38 +759,40 @@ export default function ProjectProgress({ fallbackComponent = null }) {
 
                           {/* Stage Note (Catatan singkat tahapan) */}
                           {stage.note && stage.note.trim() && (
-                            <div className={`mt-3 p-3.5 rounded-2xl text-xs sm:text-sm leading-relaxed ${
-                              meta.isInProgress
-                                ? 'bg-brass/[0.08] dark:bg-brass/[0.12] border border-brass/25 text-charcoal dark:text-[#F2F0E8]'
-                                : 'bg-charcoal/[0.03] dark:bg-white/[0.03] border border-charcoal/5 dark:border-white/5 text-charcoal/80 dark:text-[#F2F0E8]/80'
-                            }`}>
+                            <div
+                              className={`mt-3 p-3.5 rounded-2xl text-xs sm:text-sm leading-relaxed ${
+                                meta.isInProgress
+                                  ? "bg-brass/[0.08] dark:bg-brass/[0.12] border border-brass/25 text-charcoal dark:text-[#F2F0E8]"
+                                  : "bg-charcoal/[0.03] dark:bg-white/[0.03] border border-charcoal/5 dark:border-white/5 text-charcoal/80 dark:text-[#F2F0E8]/80"
+                              }`}
+                            >
                               <div className="flex items-start gap-2.5">
-                                <FiMessageSquare size={14} className="shrink-0 mt-0.5 text-charcoal/40 dark:text-white/40" />
-                                <p className="whitespace-pre-line">{stage.note.trim()}</p>
+                                <FiMessageSquare
+                                  size={14}
+                                  className="shrink-0 mt-0.5 text-charcoal/40 dark:text-white/40"
+                                />
+                                <p className="whitespace-pre-line">
+                                  {stage.note.trim()}
+                                </p>
                               </div>
                             </div>
                           )}
-
                         </div>
                       </div>
-
                     </motion.div>
                   );
                 })}
-
               </div>
             )}
 
             {/* Mobile Copyright */}
             <div className="block lg:hidden text-center text-xs text-charcoal/40 dark:text-[#F2F0E8]/40 pt-6 pb-4">
-              © {new Date().getFullYear()} Akbar Alfaidah. Dokumen privat pelacakan proyek klien.
+              © {new Date().getFullYear()} Akbar Alfaidah. Dokumen privat
+              pelacakan proyek klien.
             </div>
-
           </section>
-
         </div>
       </main>
-
     </div>
   );
 }

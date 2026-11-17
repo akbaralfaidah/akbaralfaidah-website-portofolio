@@ -1,8 +1,8 @@
 {
   "meta": {
-    "home_title": "Akbar Alfaidah — Jasa Web, Aplikasi Mobile & AI | Tech Agency Jambi",
+    "home_title": "Akbar Alfaidah - Jasa Web, Aplikasi Mobile & AI | Tech Agency Jambi",
     "home_description": "Developer full-stack web, aplikasi Android/Flutter, dan integrasi AI di Jambi. Dikerjakan langsung dari desain UI sampai live di server produksi.",
-    "projects_title": "Semua Proyek | Akbar Alfaidah — Tech Agency",
+    "projects_title": "Semua Proyek | Akbar Alfaidah - Tech Agency",
     "projects_description": "Kumpulan website, aplikasi mobile, dan integrasi AI yang telah dibuat untuk instansi, kampus, UMKM, dan produk bisnis."
   },
   "nav": {
@@ -16,7 +16,7 @@
     "badge": "Terbuka untuk proyek baru",
     "headline_start": "Bikin Website, Aplikasi Mobile & AI yang",
     "headline_accent": "Siap Pakai.",
-    "subtitle": "Saya Akbar Alfaidah. Dari desain tampilan, koding sistem, sampai live di server—semuanya saya kerjain rapi dari nol sampai jalan.",
+    "subtitle": "Saya Akbar Alfaidah. Dari desain tampilan, koding sistem, sampai live di server-semuanya saya kerjain rapi dari nol sampai jalan.",
     "cta_primary": "Konsultasi Proyek",
     "cta_secondary": "Lihat Proyek",
     "facts": [
@@ -28,7 +28,7 @@
   },
   "capabilities": {
     "heading": "Dari Ide Mentah Sampai Live di Server.",
-    "subtitle": "Desain, koding backend, integrasi alat, sampai deploy berjalan di satu alur—nggak perlu koordinasi sana-sini.",
+    "subtitle": "Desain, koding backend, integrasi alat, sampai deploy berjalan di satu alur-nggak perlu koordinasi sana-sini.",
     "pillars": [
       {
         "step": "01",
@@ -55,7 +55,7 @@
   },
   "about": {
     "heading": "Bikin Produk Digital yang Enak Dipakai.",
-    "desc_1": "Halo, saya <0>Akbar Alfaidah</0> — developer web, aplikasi mobile, dan AI yang tergabung di <1>Akbar Alfaidah Tech Agency</1>, berbasis di Kota Jambi.",
+    "desc_1": "Halo, saya <0>Akbar Alfaidah</0> - developer web, aplikasi mobile, dan AI yang tergabung di <1>Akbar Alfaidah Tech Agency</1>, berbasis di Kota Jambi.",
     "desc_2": "Saya terbiasa pegang proyek utuh dari awal: nyusun alur fitur biar masuk akal, bikin tampilan yang nyaman dilihat, nulis kode yang rapi, sampai deploy ke server.",
     "desc_3": "Kalau lagi sama-sama di Jambi kita bisa ketemu langsung buat ngobrolin idenya. Buat klien di luar kota, kerja bareng online juga jalan cepat.",
     "facts": [
@@ -67,7 +67,7 @@
   },
   "services": {
     "heading": "Layanan",
-    "subheading": "Dibangun custom ngikutin alur bisnis Anda—bukan template kaku yang asal tempel.",
+    "subheading": "Dibangun custom ngikutin alur bisnis Anda-bukan template kaku yang asal tempel.",
     "deliverables_label": "Yang Anda Dapatkan",
     "book_cta": "Diskusikan Proyek",
     "items": [
@@ -217,7 +217,7 @@
       {
         "clientRole": "Koordinator Layanan",
         "projectName": "MPP Digital · Survei Warga",
-        "quote": "Sangat terbantu dengan sistem survei digital ini—proses rekap jauh lebih praktis dibanding hitung manual sebelumnya.",
+        "quote": "Sangat terbantu dengan sistem survei digital ini-proses rekap jauh lebih praktis dibanding hitung manual sebelumnya.",
         "date": "Mei 2026"
       }
     ]
@@ -225,7 +225,7 @@
   "contact": {
     "heading_1": "Siap Mulai",
     "heading_2": "Proyekmu?",
-    "desc": "Ceritain aja mau bikin apa atau lagi ada kendala apa—nanti kita bahas solusi dan estimasi waktunya.",
+    "desc": "Ceritain aja mau bikin apa atau lagi ada kendala apa-nanti kita bahas solusi dan estimasi waktunya.",
     "follow_me": "Media Sosial",
     "direct_email": "Email",
     "whatsapp_label": "WhatsApp",
@@ -253,7 +253,7 @@
     "cta_wa": "Kirim via WhatsApp",
     "cta_email": "Kirim Pesan",
     "cta_sending": "Mengirim...",
-    "map_title": "Lokasi — Kota Jambi",
+    "map_title": "Lokasi - Kota Jambi",
     "map_desc": "Bisa ketemu langsung di Kota Jambi, atau diskusi online dari mana saja.",
     "map_open_external": "Buka Google Maps",
     "validation": {
@@ -275,7 +275,7 @@
   "footer": {
     "role": "Web, Mobile & AI Developer",
     "tagline": "Bikin website, aplikasi mobile, dan integrasi AI yang rapi, kencang, dan nyaman dipakai.",
-    "location": "Kota Jambi, Indonesia — Melayani Remote",
+    "location": "Kota Jambi, Indonesia - Melayani Remote",
     "nav_title": "Menu",
     "connect_title": "Tautan",
     "copyright": "Semua hak dilindungi."

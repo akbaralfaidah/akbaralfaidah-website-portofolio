@@ -1,6 +1,12 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useSpring, useReducedMotion } from 'framer-motion';
-import { useTranslation } from 'react-i18next';
+import { useState, useEffect, useMemo, useRef } from "react";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useSpring,
+  useReducedMotion,
+} from "framer-motion";
+import { useTranslation } from "react-i18next";
 import {
   GitCommitHorizontal,
   ArrowUpRight,
@@ -9,111 +15,120 @@ import {
   Rocket,
   Briefcase,
   Calendar,
-  Sparkles
-} from 'lucide-react';
-import { FadeUp, ParallaxLayer, ParallaxWatermark } from './ui/MotionPrimitives';
-import { CountUp } from './ui/CountUp';
-import SpotlightCard from './ui/SpotlightCard';
-import { STUDIO_EASE } from '../lib/motion';
+  Sparkles,
+} from "lucide-react";
+import {
+  FadeUp,
+  ParallaxLayer,
+  ParallaxWatermark,
+} from "./ui/MotionPrimitives";
+import { CountUp } from "./ui/CountUp";
+import SpotlightCard from "./ui/SpotlightCard";
+import { STUDIO_EASE } from "../lib/motion";
 
-const GITHUB_USER = 'AkbarAlfaidah';
+const GITHUB_USER = "AkbarAlfaidah";
 const GITHUB_API_URL = `https://github-contributions-api.jogruber.de/v4/${GITHUB_USER}`;
 
 function getCellColorClass(level) {
   switch (level) {
     case 1:
-      return 'bg-blue-200 dark:bg-blue-950/85';
+      return "bg-blue-200 dark:bg-blue-950/85";
     case 2:
-      return 'bg-blue-400 dark:bg-blue-700';
+      return "bg-blue-400 dark:bg-blue-700";
     case 3:
-      return 'bg-blue-600 dark:bg-blue-500';
+      return "bg-blue-600 dark:bg-blue-500";
     case 4:
-      return 'bg-blue-800 dark:bg-blue-400';
+      return "bg-blue-800 dark:bg-blue-400";
     default:
-      return 'bg-mist border border-line/60';
+      return "bg-mist border border-line/60";
   }
 }
 
 function enrichExperienceItem(item, isEn) {
-  const company = item?.company || '';
-  const period = item?.period || '';
+  const company = item?.company || "";
+  const period = item?.period || "";
   const isCurrent = /sekarang|present/i.test(period);
 
-  if (company.includes('Balai Penegakan')) {
+  if (company.includes("Balai Penegakan")) {
     return {
-      sectorGroup: 'institution',
-      sectorLabel: isEn ? 'Government Agency' : 'Instansi Pemerintah',
+      sectorGroup: "institution",
+      sectorLabel: isEn ? "Government Agency" : "Instansi Pemerintah",
       badgeClass:
-        'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/15 dark:text-emerald-300 dark:border-emerald-500/30',
+        "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/15 dark:text-emerald-300 dark:border-emerald-500/30",
       icon: Landmark,
-      tags: ['BMN', isEn ? 'Finance' : 'Keuangan', isEn ? 'Staffing' : 'Kepegawaian', '4-in-1 Portal'],
-      isCurrent
+      tags: [
+        "BMN",
+        isEn ? "Finance" : "Keuangan",
+        isEn ? "Staffing" : "Kepegawaian",
+        "4-in-1 Portal",
+      ],
+      isCurrent,
     };
   }
-  if (company.includes('Telkomsel')) {
+  if (company.includes("Telkomsel")) {
     return {
-      sectorGroup: 'institution',
-      sectorLabel: isEn ? 'Enterprise (SOE)' : 'BUMN Telekomunikasi',
+      sectorGroup: "institution",
+      sectorLabel: isEn ? "Enterprise (SOE)" : "BUMN Telekomunikasi",
       badgeClass:
-        'bg-sky-50 text-sky-700 border-sky-200 dark:bg-sky-500/15 dark:text-sky-300 dark:border-sky-500/30',
+        "bg-sky-50 text-sky-700 border-sky-200 dark:bg-sky-500/15 dark:text-sky-300 dark:border-sky-500/30",
       icon: Building2,
-      tags: ['GitLab CI/CD', 'Dev–Staging–Prod', 'IT Ops'],
-      isCurrent
+      tags: ["GitLab CI/CD", "Dev–Staging–Prod", "IT Ops"],
+      isCurrent,
     };
   }
-  if (company.includes('PLN')) {
+  if (company.includes("PLN")) {
     return {
-      sectorGroup: 'institution',
-      sectorLabel: isEn ? 'Energy (SOE)' : 'BUMN Energi',
+      sectorGroup: "institution",
+      sectorLabel: isEn ? "Energy (SOE)" : "BUMN Energi",
       badgeClass:
-        'bg-sky-50 text-sky-700 border-sky-200 dark:bg-sky-500/15 dark:text-sky-300 dark:border-sky-500/30',
+        "bg-sky-50 text-sky-700 border-sky-200 dark:bg-sky-500/15 dark:text-sky-300 dark:border-sky-500/30",
       icon: Building2,
-      tags: ['Internal Portal', 'Company Profile', 'Web App'],
-      isCurrent
+      tags: ["Internal Portal", "Company Profile", "Web App"],
+      isCurrent,
     };
   }
-  if (company.includes('Depot') || company.includes('Bos')) {
+  if (company.includes("Depot") || company.includes("Bos")) {
     return {
-      sectorGroup: 'client',
-      sectorLabel: isEn ? 'Retail Tech' : 'Sistem Bisnis',
+      sectorGroup: "client",
+      sectorLabel: isEn ? "Retail Tech" : "Sistem Bisnis",
       badgeClass:
-        'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-500/15 dark:text-amber-300 dark:border-amber-500/30',
+        "bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-500/15 dark:text-amber-300 dark:border-amber-500/30",
       icon: Briefcase,
-      tags: ['Flutter', 'Firebase', 'POS & Gudang'],
-      isCurrent
+      tags: ["Flutter", "Firebase", "POS & Gudang"],
+      isCurrent,
     };
   }
-  if (company.includes('Bidik Karier')) {
+  if (company.includes("Bidik Karier")) {
     return {
-      sectorGroup: 'client',
-      sectorLabel: isEn ? 'EdTech Platform' : 'Platform Edukasi',
+      sectorGroup: "client",
+      sectorLabel: isEn ? "EdTech Platform" : "Platform Edukasi",
       badgeClass:
-        'bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-500/15 dark:text-indigo-300 dark:border-indigo-500/30',
+        "bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-500/15 dark:text-indigo-300 dark:border-indigo-500/30",
       icon: Briefcase,
-      tags: ['LMS CPNS', 'PHP', 'MySQL'],
-      isCurrent
+      tags: ["LMS CPNS", "PHP", "MySQL"],
+      isCurrent,
     };
   }
-  if (company.includes('INOVASITUS')) {
+  if (company.includes("INOVASITUS")) {
     return {
-      sectorGroup: 'client',
-      sectorLabel: isEn ? 'SME Digitalization' : 'Klien UMKM',
+      sectorGroup: "client",
+      sectorLabel: isEn ? "SME Digitalization" : "Klien UMKM",
       badgeClass:
-        'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-500/15 dark:text-blue-300 dark:border-blue-500/30',
+        "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-500/15 dark:text-blue-300 dark:border-blue-500/30",
       icon: Briefcase,
-      tags: ['7+ Websites', 'Responsive UI', 'Production'],
-      isCurrent
+      tags: ["7+ Websites", "Responsive UI", "Production"],
+      isCurrent,
     };
   }
 
   return {
-    sectorGroup: 'client',
-    sectorLabel: isEn ? 'Independent Agency' : 'Agensi Independen',
+    sectorGroup: "client",
+    sectorLabel: isEn ? "Independent Agency" : "Agensi Independen",
     badgeClass:
-      'bg-blue-50 text-accent border-blue-200 dark:bg-blue-500/15 dark:text-blue-300 dark:border-blue-500/30',
+      "bg-blue-50 text-accent border-blue-200 dark:bg-blue-500/15 dark:text-blue-300 dark:border-blue-500/30",
     icon: Rocket,
-    tags: ['Web Platform', 'Mobile Apps', 'End-to-End'],
-    isCurrent
+    tags: ["Web Platform", "Mobile Apps", "End-to-End"],
+    isCurrent,
   };
 }
 
@@ -122,14 +137,14 @@ export default function Experience() {
   const [contribData, setContribData] = useState(null);
   const [chartFallbackError, setChartFallbackError] = useState(false);
   const [hoveredDay, setHoveredDay] = useState(null);
-  const [sectorFilter, setSectorFilter] = useState('all');
+  const [sectorFilter, setSectorFilter] = useState("all");
   const [activeCardIdx, setActiveCardIdx] = useState(0);
 
   const spineRef = useRef(null);
   const prefersReduced = useReducedMotion();
   const { scrollYProgress: spineScroll } = useScroll({
     target: spineRef,
-    offset: ['start 78%', 'end 70%']
+    offset: ["start 78%", "end 70%"],
   });
   const spineScaleY = useSpring(spineScroll, { stiffness: 200, damping: 28 });
 
@@ -138,7 +153,9 @@ export default function Experience() {
     const controller = new AbortController();
 
     fetch(GITHUB_API_URL, { signal: controller.signal })
-      .then((res) => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`))))
+      .then((res) =>
+        res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`)),
+      )
       .then((data) => {
         if (isMounted && data?.total && Array.isArray(data?.contributions)) {
           setContribData(data);
@@ -158,7 +175,10 @@ export default function Experience() {
     if (!contribData) return null;
 
     const totalByYear = contribData.total || {};
-    const allTimeTotal = Object.values(totalByYear).reduce((acc, n) => acc + Number(n || 0), 0);
+    const allTimeTotal = Object.values(totalByYear).reduce(
+      (acc, n) => acc + Number(n || 0),
+      0,
+    );
 
     const allDays = contribData.contributions || [];
     const today = new Date();
@@ -166,13 +186,18 @@ export default function Experience() {
     cutoff.setFullYear(cutoff.getFullYear() - 1);
     const cutoffStr = cutoff.toISOString().slice(0, 10);
     const todayStr = today.toISOString().slice(0, 10);
-    const lastYearDays = allDays.filter((d) => d.date >= cutoffStr && d.date <= todayStr);
+    const lastYearDays = allDays.filter(
+      (d) => d.date >= cutoffStr && d.date <= todayStr,
+    );
 
-    const lastYearTotal = lastYearDays.reduce((acc, d) => acc + (d.count || 0), 0);
+    const lastYearTotal = lastYearDays.reduce(
+      (acc, d) => acc + (d.count || 0),
+      0,
+    );
     const currentYear = String(today.getFullYear());
-    const activeDaysCurrentYear = allDays
-      .filter((d) => d.date.startsWith(`${currentYear}-`) && (d.count || 0) > 0)
-      .length;
+    const activeDaysCurrentYear = allDays.filter(
+      (d) => d.date.startsWith(`${currentYear}-`) && (d.count || 0) > 0,
+    ).length;
 
     const weeks = [];
     if (lastYearDays.length > 0) {
@@ -180,7 +205,7 @@ export default function Experience() {
       const leadingBlanks = firstDate.getUTCDay();
       const padded = [
         ...Array.from({ length: leadingBlanks }, () => null),
-        ...lastYearDays
+        ...lastYearDays,
       ];
       for (let i = 0; i < padded.length; i += 7) {
         weeks.push(padded.slice(i, i + 7));
@@ -191,39 +216,48 @@ export default function Experience() {
       allTimeTotal,
       lastYearTotal,
       activeDaysCurrentYear,
-      weeks
+      weeks,
     };
   }, [contribData]);
 
-  const rawItems = t('experience.items', { returnObjects: true });
-  const isEn = i18n.language === 'en';
-  const locale = isEn ? 'en-US' : 'id-ID';
+  const rawItems = t("experience.items", { returnObjects: true });
+  const isEn = i18n.language === "en";
+  const locale = isEn ? "en-US" : "id-ID";
 
   const enrichedExperiences = useMemo(() => {
     const base = Array.isArray(rawItems) ? rawItems : [];
     return base.map((item) => ({
       ...item,
-      meta: enrichExperienceItem(item, isEn)
+      meta: enrichExperienceItem(item, isEn),
     }));
   }, [rawItems, isEn]);
 
   const visibleExperiences = useMemo(() => {
-    if (sectorFilter === 'all') return enrichedExperiences;
-    return enrichedExperiences.filter((item) => item.meta.sectorGroup === sectorFilter);
+    if (sectorFilter === "all") return enrichedExperiences;
+    return enrichedExperiences.filter(
+      (item) => item.meta.sectorGroup === sectorFilter,
+    );
   }, [enrichedExperiences, sectorFilter]);
 
   const filterTabs = [
-    { id: 'all', label: isEn ? 'All' : 'Semua', count: enrichedExperiences.length },
     {
-      id: 'institution',
-      label: isEn ? 'Gov & SOE' : 'Instansi & BUMN',
-      count: enrichedExperiences.filter((e) => e.meta.sectorGroup === 'institution').length
+      id: "all",
+      label: isEn ? "All" : "Semua",
+      count: enrichedExperiences.length,
     },
     {
-      id: 'client',
-      label: isEn ? 'Agency & Retail' : 'Klien & Produk',
-      count: enrichedExperiences.filter((e) => e.meta.sectorGroup === 'client').length
-    }
+      id: "institution",
+      label: isEn ? "Gov & SOE" : "Instansi & BUMN",
+      count: enrichedExperiences.filter(
+        (e) => e.meta.sectorGroup === "institution",
+      ).length,
+    },
+    {
+      id: "client",
+      label: isEn ? "Agency & Retail" : "Klien & Produk",
+      count: enrichedExperiences.filter((e) => e.meta.sectorGroup === "client")
+        .length,
+    },
   ];
 
   return (
@@ -237,7 +271,7 @@ export default function Experience() {
         className="pointer-events-none absolute top-24 left-[-10%] w-[640px] h-[640px] rounded-full opacity-80 dark:opacity-25"
         style={{
           background:
-            'radial-gradient(circle, rgba(37,99,235,0.12) 0%, rgba(16,185,129,0.06) 50%, transparent 74%)'
+            "radial-gradient(circle, rgba(37,99,235,0.12) 0%, rgba(16,185,129,0.06) 50%, transparent 74%)",
         }}
       />
       <ParallaxWatermark text="CAREER & CODE" direction={1} className="mb-4" />
@@ -250,23 +284,27 @@ export default function Experience() {
             <ParallaxLayer yRange={[16, -16]}>
               <FadeUp className="space-y-4">
                 <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent font-semibold">
-                  {isEn ? '04 / Experience' : '04 / Rekam Jejak'}
+                  {isEn ? "04 / Experience" : "04 / Rekam Jejak"}
                 </p>
                 <h2 className="font-display text-3xl sm:text-5xl font-semibold tracking-[-0.035em] leading-[1.06] text-ink">
                   {isEn ? (
                     <>
-                      Hands-On{' '}
-                      <span className="font-serif italic font-normal text-accent">Track Record.</span>
+                      Hands-On{" "}
+                      <span className="font-serif italic font-normal text-accent">
+                        Track Record.
+                      </span>
                     </>
                   ) : (
                     <>
-                      Pengalaman{' '}
-                      <span className="font-serif italic font-normal text-accent">Kerja.</span>
+                      Pengalaman{" "}
+                      <span className="font-serif italic font-normal text-accent">
+                        Kerja.
+                      </span>
                     </>
                   )}
                 </h2>
                 <p className="text-base text-ink-muted leading-relaxed">
-                  {t('experience.subheading')}
+                  {t("experience.subheading")}
                 </p>
               </FadeUp>
             </ParallaxLayer>
@@ -291,14 +329,16 @@ export default function Experience() {
                     }}
                     className={`min-h-[38px] px-3.5 py-1.5 rounded-full text-xs font-medium inline-flex items-center gap-1.5 border transition-all ${
                       isSelected
-                        ? 'bg-accent text-white border-accent shadow-sm shadow-blue-600/25'
-                        : 'bg-surface/90 text-ink-muted border-line hover:border-accent/50 hover:text-ink'
+                        ? "bg-accent text-white border-accent shadow-sm shadow-blue-600/25"
+                        : "bg-surface/90 text-ink-muted border-line hover:border-accent/50 hover:text-ink"
                     }`}
                   >
                     <span>{tab.label}</span>
                     <span
                       className={`font-mono text-[11px] px-1.5 rounded-full ${
-                        isSelected ? 'bg-white/20 text-white' : 'bg-mist text-ink-muted'
+                        isSelected
+                          ? "bg-white/20 text-white"
+                          : "bg-mist text-ink-muted"
                       }`}
                     >
                       {tab.count}
@@ -312,12 +352,12 @@ export default function Experience() {
             <div className="rounded-2xl bg-white/90 dark:bg-surface border border-line p-4 space-y-2.5 shadow-sm">
               <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-accent font-semibold">
                 <Sparkles size={13} aria-hidden="true" />
-                <span>{isEn ? 'Sector Coverage' : 'Lintas Sektor'}</span>
+                <span>{isEn ? "Sector Coverage" : "Lintas Sektor"}</span>
               </div>
               <p className="text-sm text-ink-muted leading-relaxed">
                 {isEn
-                  ? 'Shipping production portals across government offices, national enterprises (SOEs), & fast-moving commercial builds.'
-                  : 'Teruji membangun sistem untuk birokrasi instansi pemerintah, operasional BUMN, hingga aplikasi bisnis ritel & agensi.'}
+                  ? "Shipping production portals across government offices, national enterprises (SOEs), & fast-moving commercial builds."
+                  : "Teruji membangun sistem untuk birokrasi instansi pemerintah, operasional BUMN, hingga aplikasi bisnis ritel & agensi."}
               </p>
             </div>
           </div>
@@ -350,7 +390,11 @@ export default function Experience() {
                       initial={{ opacity: 0, y: 14 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.98 }}
-                      transition={{ duration: 0.25, delay: idx * 0.03, ease: STUDIO_EASE }}
+                      transition={{
+                        duration: 0.25,
+                        delay: idx * 0.03,
+                        ease: STUDIO_EASE,
+                      }}
                       className="relative"
                     >
                       {/* Animated spine milestone node dot */}
@@ -358,10 +402,10 @@ export default function Experience() {
                         aria-hidden="true"
                         className={`absolute -left-[22px] sm:-left-[30px] top-7 w-3.5 h-3.5 rounded-full border-2 transition-all duration-300 ${
                           exp.meta.isCurrent
-                            ? 'bg-emerald-500 border-white dark:border-[#0B0F1A] ring-4 ring-emerald-500/20'
+                            ? "bg-emerald-500 border-white dark:border-[#0B0F1A] ring-4 ring-emerald-500/20"
                             : isFocused
-                            ? 'bg-accent border-white dark:border-[#0B0F1A] ring-4 ring-accent/20'
-                            : 'bg-surface border-accent/60'
+                              ? "bg-accent border-white dark:border-[#0B0F1A] ring-4 ring-accent/20"
+                              : "bg-surface border-accent/60"
                         }`}
                       />
 
@@ -371,8 +415,8 @@ export default function Experience() {
                           onMouseEnter={() => setActiveCardIdx(idx)}
                           className={`p-5 sm:p-6 cursor-pointer transition-all ${
                             isFocused
-                              ? 'border-accent/60 shadow-[0_20px_48px_-16px_rgba(37,99,235,0.14)]'
-                              : 'hover:border-accent/40 shadow-sm'
+                              ? "border-accent/60 shadow-[0_20px_48px_-16px_rgba(37,99,235,0.14)]"
+                              : "hover:border-accent/40 shadow-sm"
                           }`}
                         >
                           <div className="flex flex-wrap items-center justify-between gap-2.5 mb-3">
@@ -433,13 +477,17 @@ export default function Experience() {
           <div className="rounded-2xl bg-white/95 dark:bg-surface border border-line p-6 sm:p-8 space-y-6 shadow-[0_22px_55px_-18px_rgba(37,99,235,0.12)]">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-line">
               <div className="flex items-center gap-3">
-                <GitCommitHorizontal size={20} className="text-accent shrink-0" aria-hidden="true" />
+                <GitCommitHorizontal
+                  size={20}
+                  className="text-accent shrink-0"
+                  aria-hidden="true"
+                />
                 <div>
                   <h3 className="font-display text-xl font-semibold text-ink">
-                    {t('experience.github_title')}
+                    {t("experience.github_title")}
                   </h3>
                   <p className="font-mono text-xs text-ink-muted">
-                    {t('experience.github_subtitle')}
+                    {t("experience.github_subtitle")}
                   </p>
                 </div>
               </div>
@@ -450,7 +498,7 @@ export default function Experience() {
                 rel="noopener noreferrer"
                 className="self-start sm:self-auto min-h-[40px] px-4 py-2 rounded-lg border border-line bg-paper/70 hover:border-accent/60 hover:text-accent text-sm font-medium text-ink inline-flex items-center gap-1.5 transition-colors"
               >
-                <span>{t('experience.github_cta')}</span>
+                <span>{t("experience.github_cta")}</span>
                 <ArrowUpRight size={15} aria-hidden="true" />
               </a>
             </div>
@@ -460,7 +508,7 @@ export default function Experience() {
                 <dl className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 pb-5 border-b border-line">
                   <div>
                     <dt className="font-mono text-xs text-ink-muted mb-1">
-                      {t('experience.github_total_all')}
+                      {t("experience.github_total_all")}
                     </dt>
                     <dd className="font-display text-3xl sm:text-4xl font-semibold text-ink tabular-nums">
                       <CountUp value={stats.allTimeTotal} locale={locale} />
@@ -469,7 +517,7 @@ export default function Experience() {
 
                   <div>
                     <dt className="font-mono text-xs text-ink-muted mb-1">
-                      {t('experience.github_last_year')}
+                      {t("experience.github_last_year")}
                     </dt>
                     <dd className="font-display text-3xl sm:text-4xl font-semibold text-accent tabular-nums">
                       <CountUp value={stats.lastYearTotal} locale={locale} />
@@ -478,12 +526,15 @@ export default function Experience() {
 
                   <div>
                     <dt className="font-mono text-xs text-ink-muted mb-1">
-                      {t('experience.github_active_days')}
+                      {t("experience.github_active_days")}
                     </dt>
                     <dd className="font-display text-3xl sm:text-4xl font-semibold text-ink tabular-nums">
-                      <CountUp value={stats.activeDaysCurrentYear} locale={locale} />{' '}
+                      <CountUp
+                        value={stats.activeDaysCurrentYear}
+                        locale={locale}
+                      />{" "}
                       <span className="text-sm font-normal text-ink-muted">
-                        {isEn ? 'days' : 'hari'}
+                        {isEn ? "days" : "hari"}
                       </span>
                     </dd>
                   </div>
@@ -499,20 +550,26 @@ export default function Experience() {
                     aria-label={`${stats.lastYearTotal} GitHub contributions over the last 12 months`}
                   >
                     {stats.weeks.map((week, wIdx) => (
-                      <div key={wIdx} className="flex flex-col gap-[3px] shrink-0">
+                      <div
+                        key={wIdx}
+                        className="flex flex-col gap-[3px] shrink-0"
+                      >
                         {week.map((day, dIdx) =>
                           day ? (
                             <span
                               key={day.date}
                               onMouseEnter={() => setHoveredDay(day)}
-                              title={`${day.date}: ${day.count} ${t('experience.github_contributions_unit')}`}
+                              title={`${day.date}: ${day.count} ${t("experience.github_contributions_unit")}`}
                               className={`w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-[2px] transition-transform hover:scale-125 cursor-crosshair ${getCellColorClass(
-                                day.level
+                                day.level,
                               )}`}
                             />
                           ) : (
-                            <span key={`blank-${wIdx}-${dIdx}`} className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                          )
+                            <span
+                              key={`blank-${wIdx}-${dIdx}`}
+                              className="w-3 h-3 sm:w-3.5 sm:h-3.5"
+                            />
+                          ),
                         )}
                       </div>
                     ))}
@@ -522,14 +579,14 @@ export default function Experience() {
                 <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-xs text-ink-muted">
                   <span className="min-h-[20px]">
                     {hoveredDay
-                      ? `${hoveredDay.date} — ${hoveredDay.count} ${t('experience.github_contributions_unit')}`
+                      ? `${hoveredDay.date} - ${hoveredDay.count} ${t("experience.github_contributions_unit")}`
                       : isEn
-                      ? 'Hover any square to inspect daily commit activity'
-                      : 'Arahkan kursor ke kotak untuk melihat aktivitas harian'}
+                        ? "Hover any square to inspect daily commit activity"
+                        : "Arahkan kursor ke kotak untuk melihat aktivitas harian"}
                   </span>
 
                   <div className="flex items-center gap-1.5">
-                    <span>{t('experience.github_less')}</span>
+                    <span>{t("experience.github_less")}</span>
                     {[0, 1, 2, 3, 4].map((lvl) => (
                       <span
                         key={lvl}
@@ -537,12 +594,14 @@ export default function Experience() {
                         aria-hidden="true"
                       />
                     ))}
-                    <span>{t('experience.github_more')}</span>
+                    <span>{t("experience.github_more")}</span>
                   </div>
                 </div>
               </div>
             ) : chartFallbackError ? (
-              <p className="text-sm text-ink-muted">{t('experience.github_fallback')}</p>
+              <p className="text-sm text-ink-muted">
+                {t("experience.github_fallback")}
+              </p>
             ) : (
               <div className="overflow-x-auto">
                 <img

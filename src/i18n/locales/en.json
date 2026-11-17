@@ -1,8 +1,8 @@
 {
   "meta": {
-    "home_title": "Akbar Alfaidah — Web, Mobile & AI Developer | Tech Agency",
+    "home_title": "Akbar Alfaidah - Web, Mobile & AI Developer | Tech Agency",
     "home_description": "Full-stack web, mobile app (Flutter & React Native), and applied AI developer based in Jambi, Indonesia. From interface design to production deployment.",
-    "projects_title": "All Projects | Akbar Alfaidah — Tech Agency",
+    "projects_title": "All Projects | Akbar Alfaidah - Tech Agency",
     "projects_description": "Selected web platforms, mobile apps, and AI integrations built for organizations, universities, SMEs, and startups."
   },
   "nav": {
@@ -16,7 +16,7 @@
     "badge": "Available for new projects",
     "headline_start": "Websites, Mobile Apps & AI Systems",
     "headline_accent": "Ready to Ship.",
-    "subtitle": "I'm Akbar Alfaidah — handling design, full-stack coding, mobile apps, and cloud deployment under one roof until it runs smoothly live.",
+    "subtitle": "I'm Akbar Alfaidah - handling design, full-stack coding, mobile apps, and cloud deployment under one roof until it runs smoothly live.",
     "cta_primary": "Start a Project",
     "cta_secondary": "View Projects",
     "facts": [
@@ -55,7 +55,7 @@
   },
   "about": {
     "heading": "Software People Actually Enjoy Using.",
-    "desc_1": "Hi, I'm <0>Akbar Alfaidah</0> — a full-stack web, mobile, and AI developer leading <1>Akbar Alfaidah Tech Agency</1> from Jambi City, Indonesia.",
+    "desc_1": "Hi, I'm <0>Akbar Alfaidah</0> - a full-stack web, mobile, and AI developer leading <1>Akbar Alfaidah Tech Agency</1> from Jambi City, Indonesia.",
     "desc_2": "I work best owning projects from start to finish: mapping the workflow, designing clear interfaces, writing clean code, and deploying reliably to production.",
     "desc_3": "Happy to meet over coffee if you're in Jambi, or collaborate remotely wherever you're based.",
     "facts": [
@@ -67,7 +67,7 @@
   },
   "services": {
     "heading": "Services",
-    "subheading": "Custom-built around your real workflow — never stiff templates forced to fit.",
+    "subheading": "Custom-built around your real workflow - never stiff templates forced to fit.",
     "deliverables_label": "Included Scope",
     "book_cta": "Discuss This Service",
     "items": [
@@ -225,7 +225,7 @@
   "contact": {
     "heading_1": "Got a Project",
     "heading_2": "in Mind?",
-    "desc": "Tell me what you'd like to build or fix—we'll map out a clean solution and timeline together.",
+    "desc": "Tell me what you'd like to build or fix-we'll map out a clean solution and timeline together.",
     "follow_me": "Socials",
     "direct_email": "Email",
     "whatsapp_label": "WhatsApp",
@@ -253,7 +253,7 @@
     "cta_wa": "Open WhatsApp",
     "cta_email": "Send Email",
     "cta_sending": "Sending...",
-    "map_title": "Location — Jambi City",
+    "map_title": "Location - Jambi City",
     "map_desc": "Meet in person around Jambi City, or collaborate remotely from anywhere.",
     "map_open_external": "Open in Google Maps",
     "validation": {
@@ -275,7 +275,7 @@
   "footer": {
     "role": "Web, Mobile & AI Developer",
     "tagline": "Building fast, well-crafted websites, mobile apps, and AI integrations ready for real users.",
-    "location": "Jambi City, Indonesia — Remote Friendly",
+    "location": "Jambi City, Indonesia - Remote Friendly",
     "nav_title": "Menu",
     "connect_title": "Links",
     "copyright": "All rights reserved."

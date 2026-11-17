@@ -1,4 +1,4 @@
-# Akbar Alfaidah — Tech Agency
+# Akbar Alfaidah - Tech Agency
 > Full-Stack Web, Mobile & AI Developer specializing in custom web portals, Android/Flutter apps, and Applied Machine Learning. Based in Jambi, Indonesia; available remotely worldwide.
 
 ## Core Services

@@ -1,5 +1,5 @@
 # ========================================
-# Stage 1: Build — Vite membutuhkan semua VITE_* env vars saat build time
+# Stage 1: Build - Vite membutuhkan semua VITE_* env vars saat build time
 # ========================================
 FROM node:22-alpine AS build
 
@@ -16,7 +16,7 @@ ARG VITE_WHATSAPP_NUMBER
 ARG VITE_CONTACT_EMAIL
 
 # "Turunkan" ARG jadi ENV agar Vite bisa membacanya saat npm run build
-# (ARG saja TIDAK cukup — proses di dalam RUN tidak bisa lihat ARG)
+# (ARG saja TIDAK cukup - proses di dalam RUN tidak bisa lihat ARG)
 ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL \
     VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY \
     VITE_EMAILJS_SERVICE_ID=$VITE_EMAILJS_SERVICE_ID \
@@ -33,7 +33,7 @@ COPY . .
 RUN npm run build
 
 # ========================================
-# Stage 2: Serve — Nginx melayani file statis hasil build
+# Stage 2: Serve - Nginx melayani file statis hasil build
 # ========================================
 FROM nginx:alpine AS production
 
