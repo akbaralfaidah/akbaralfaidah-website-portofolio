@@ -1,50 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { heroProjects } from '../../data/projects';
-
-function createStudioEnvTexture(renderer, isDark) {
-  const canvas = document.createElement('canvas');
-  canvas.width = 256;
-  canvas.height = 128;
-  const ctx = canvas.getContext('2d');
-
-  if (ctx) {
-    const grad = ctx.createLinearGradient(0, 0, 0, 128);
-    if (isDark) {
-      grad.addColorStop(0, '#bae6fd');
-      grad.addColorStop(0.35, '#1e3a8a');
-      grad.addColorStop(0.65, '#0f172a');
-      grad.addColorStop(1, '#1e293b');
-    } else {
-      grad.addColorStop(0, '#ffffff');
-      grad.addColorStop(0.3, '#e0f2fe');
-      grad.addColorStop(0.6, '#f8fafc');
-      grad.addColorStop(1, '#dbeafe');
-    }
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, 256, 128);
-
-    // Crisp luminous softbox highlights for glossy clearcoat reflections
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-    ctx.fillRect(26, 14, 72, 26);
-    ctx.fillRect(154, 22, 64, 18);
-
-    ctx.fillStyle = 'rgba(56, 189, 248, 0.55)';
-    ctx.fillRect(108, 76, 80, 16);
-  }
-
-  const equirectTex = new THREE.CanvasTexture(canvas);
-  equirectTex.mapping = THREE.EquirectangularReflectionMapping;
-  equirectTex.colorSpace = THREE.SRGBColorSpace;
-
-  const pmrem = new THREE.PMREMGenerator(renderer);
-  pmrem.compileEquirectangularShader();
-  const envRT = pmrem.fromEquirectangular(equirectTex);
-
-  equirectTex.dispose();
-  pmrem.dispose();
-  return envRT;
-}
+import { heroProjects } from '../../data/heroProjects';
 
 export function Hero3DCanvas({
   mode = 'core',
@@ -100,32 +56,30 @@ export function Hero3DCanvas({
       return undefined;
     }
 
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.18;
+    renderer.toneMappingExposure = 1.22;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
 
     const scene = new THREE.Scene();
     let currentEnvDark = stateRef.current.isDark;
-    let envRT = createStudioEnvTexture(renderer, currentEnvDark);
-    scene.environment = envRT.texture;
 
     const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
     camera.position.set(0, 0.25, 6.4);
 
-    // Bright studio lighting rig
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xdbeafe, 1.35);
+    // Bright studio lighting rig (lightweight PBR without blocking PMREM shader compilation)
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xdbeafe, 1.65);
     scene.add(hemiLight);
 
-    const keyLight = new THREE.DirectionalLight(0xffffff, 2.2);
+    const keyLight = new THREE.DirectionalLight(0xffffff, 2.4);
     keyLight.position.set(5, 7, 6);
     scene.add(keyLight);
 
-    const fillLight = new THREE.DirectionalLight(0x38bdf8, 1.25);
+    const fillLight = new THREE.DirectionalLight(0x38bdf8, 1.35);
     fillLight.position.set(-6, -2, 4);
     scene.add(fillLight);
 
-    const rimLight = new THREE.DirectionalLight(0x10b981, 0.9);
+    const rimLight = new THREE.DirectionalLight(0x10b981, 0.95);
     rimLight.position.set(0, 4, -6);
     scene.add(rimLight);
 
@@ -144,14 +98,12 @@ export function Hero3DCanvas({
 
     const coreGeom = track(new THREE.IcosahedronGeometry(0.95, 1));
     const coreMat = track(
-      new THREE.MeshPhysicalMaterial({
+      new THREE.MeshStandardMaterial({
         color: 0x2563eb,
         emissive: 0x1d4ed8,
-        emissiveIntensity: 0.14,
-        roughness: 0.12,
-        metalness: 0.18,
-        clearcoat: 1.0,
-        clearcoatRoughness: 0.06,
+        emissiveIntensity: 0.2,
+        roughness: 0.22,
+        metalness: 0.28,
         flatShading: true
       })
     );
@@ -172,14 +124,12 @@ export function Hero3DCanvas({
       { radius: 2.02, tube: 0.028, color: 0x10b981, rx: 1.15, ry: -0.4 }
     ];
     const gyros = gyroConfigs.map((cfg) => {
-      const gGeom = track(new THREE.TorusGeometry(cfg.radius, cfg.tube, 20, 96));
+      const gGeom = track(new THREE.TorusGeometry(cfg.radius, cfg.tube, 14, 60));
       const gMat = track(
-        new THREE.MeshPhysicalMaterial({
+        new THREE.MeshStandardMaterial({
           color: cfg.color,
-          roughness: 0.18,
-          metalness: 0.45,
-          clearcoat: 0.95,
-          clearcoatRoughness: 0.1
+          roughness: 0.24,
+          metalness: 0.48
         })
       );
       const mesh = new THREE.Mesh(gGeom, gMat);
@@ -197,11 +147,10 @@ export function Hero3DCanvas({
 
     for (let i = 0; i < 6; i++) {
       const mat = track(
-        new THREE.MeshPhysicalMaterial({
+        new THREE.MeshStandardMaterial({
           color: satColors[i],
-          roughness: 0.16,
-          metalness: 0.22,
-          clearcoat: 1.0
+          roughness: 0.24,
+          metalness: 0.28
         })
       );
       const mesh = new THREE.Mesh(i % 2 === 0 ? satGeomCube : satGeomOct, mat);
@@ -228,13 +177,12 @@ export function Hero3DCanvas({
     ].map((cfg) => {
       const group = new THREE.Group();
       const mat = track(
-        new THREE.MeshPhysicalMaterial({
+        new THREE.MeshStandardMaterial({
           color: cfg.color,
-          roughness: 0.08,
-          metalness: 0.05,
+          roughness: 0.18,
+          metalness: 0.1,
           transparent: true,
-          opacity: 0.82,
-          clearcoat: 1.0
+          opacity: 0.86
         })
       );
       const card = new THREE.Mesh(plateGeom, mat);
@@ -268,13 +216,12 @@ export function Hero3DCanvas({
     radarGroup.visible = false;
     scene.add(radarGroup);
 
-    const dishGeom = track(new THREE.CylinderGeometry(2.15, 2.22, 0.12, 64));
+    const dishGeom = track(new THREE.CylinderGeometry(2.15, 2.22, 0.12, 42));
     const dishMat = track(
-      new THREE.MeshPhysicalMaterial({
+      new THREE.MeshStandardMaterial({
         color: 0xf8fafc,
-        roughness: 0.16,
-        metalness: 0.08,
-        clearcoat: 0.85,
+        roughness: 0.24,
+        metalness: 0.1,
         transparent: true,
         opacity: 0.94
       })
@@ -316,8 +263,8 @@ export function Hero3DCanvas({
     radarGroup.add(geofenceWall);
 
     // Center school/campus beacon
-    const anchorGeom = track(new THREE.CylinderGeometry(0.1, 0.14, 0.35, 24));
-    const anchorMat = track(new THREE.MeshPhysicalMaterial({ color: 0x2563eb, roughness: 0.2, clearcoat: 1 }));
+    const anchorGeom = track(new THREE.CylinderGeometry(0.1, 0.14, 0.35, 18));
+    const anchorMat = track(new THREE.MeshStandardMaterial({ color: 0x2563eb, roughness: 0.25, metalness: 0.2 }));
     const anchorMesh = new THREE.Mesh(anchorGeom, anchorMat);
     anchorMesh.position.y = 0.175;
     radarGroup.add(anchorMesh);
@@ -340,15 +287,15 @@ export function Hero3DCanvas({
 
     // Draggable 3D User Locator Pin
     const pinGroup = new THREE.Group();
-    const pinHeadGeom = track(new THREE.SphereGeometry(0.17, 24, 24));
-    const pinStemGeom = track(new THREE.ConeGeometry(0.11, 0.34, 24));
+    const pinHeadGeom = track(new THREE.SphereGeometry(0.17, 18, 18));
+    const pinStemGeom = track(new THREE.ConeGeometry(0.11, 0.34, 18));
     const pinMat = track(
-      new THREE.MeshPhysicalMaterial({
+      new THREE.MeshStandardMaterial({
         color: 0x10b981,
         emissive: 0x059669,
-        emissiveIntensity: 0.2,
-        roughness: 0.15,
-        clearcoat: 1
+        emissiveIntensity: 0.22,
+        roughness: 0.2,
+        metalness: 0.15
       })
     );
     const pinHead = new THREE.Mesh(pinHeadGeom, pinMat);
@@ -390,42 +337,47 @@ export function Hero3DCanvas({
     radarGroup.add(radarHitPlane);
 
     // =========================================================================
-    // MODE 3: 3D Project Showcase Orbit Gallery (Textured WebP Slabs)
+    // MODE 3: 3D Project Showcase Orbit Gallery (Lazy-loaded WebP Slabs)
     // =========================================================================
     const deckGroup = new THREE.Group();
     deckGroup.visible = false;
     scene.add(deckGroup);
 
-    const texLoader = new THREE.TextureLoader();
-    const cardGeom = track(new THREE.PlaneGeometry(2.35, 1.32));
-    const bezelGeom = track(new THREE.BoxGeometry(2.47, 1.44, 0.07));
     const deckCards = [];
+    let deckBuilt = false;
+    const ensureDeckBuilt = () => {
+      if (deckBuilt) return;
+      deckBuilt = true;
+      const texLoader = new THREE.TextureLoader();
+      const cardGeom = track(new THREE.PlaneGeometry(2.35, 1.32));
+      const bezelGeom = track(new THREE.BoxGeometry(2.47, 1.44, 0.07));
+      const bezelColor = stateRef.current.isDark ? 0x1e293b : 0xffffff;
 
-    heroProjects.forEach((proj, idx) => {
-      const cardContainer = new THREE.Group();
-      const bezelMat = track(
-        new THREE.MeshPhysicalMaterial({
-          color: 0xffffff,
-          roughness: 0.16,
-          metalness: 0.1,
-          clearcoat: 0.9
-        })
-      );
-      const bezel = new THREE.Mesh(bezelGeom, bezelMat);
-      bezel.position.z = -0.045;
-      cardContainer.add(bezel);
+      heroProjects.forEach((proj, idx) => {
+        const cardContainer = new THREE.Group();
+        const bezelMat = track(
+          new THREE.MeshStandardMaterial({
+            color: bezelColor,
+            roughness: 0.22,
+            metalness: 0.12
+          })
+        );
+        const bezel = new THREE.Mesh(bezelGeom, bezelMat);
+        bezel.position.z = -0.045;
+        cardContainer.add(bezel);
 
-      const tex = track(texLoader.load(proj.src));
-      tex.colorSpace = THREE.SRGBColorSpace;
-      const screenMat = track(new THREE.MeshBasicMaterial({ map: tex }));
-      const screen = new THREE.Mesh(cardGeom, screenMat);
-      screen.userData = { projectIndex: idx };
-      cardContainer.add(screen);
+        const tex = track(texLoader.load(proj.src));
+        tex.colorSpace = THREE.SRGBColorSpace;
+        const screenMat = track(new THREE.MeshBasicMaterial({ map: tex }));
+        const screen = new THREE.Mesh(cardGeom, screenMat);
+        screen.userData = { projectIndex: idx };
+        cardContainer.add(screen);
 
-      cardContainer.userData = { index: idx };
-      deckGroup.add(cardContainer);
-      deckCards.push(cardContainer);
-    });
+        cardContainer.userData = { index: idx };
+        deckGroup.add(cardContainer);
+        deckCards.push(cardContainer);
+      });
+    };
 
     // =========================================================================
     // Shared Pointer Dragging & Raycasting Physics
@@ -604,9 +556,6 @@ export function Hero3DCanvas({
 
       if (darkNow !== currentEnvDark) {
         currentEnvDark = darkNow;
-        envRT.dispose();
-        envRT = createStudioEnvTexture(renderer, currentEnvDark);
-        scene.environment = envRT.texture;
         dishMat.color.setHex(darkNow ? 0x0f172a : 0xf8fafc);
         deckCards.forEach((c) => {
           c.children[0].material.color.setHex(darkNow ? 0x1e293b : 0xffffff);
@@ -690,6 +639,7 @@ export function Hero3DCanvas({
       }
 
       if (activeMode === 'deck') {
+        ensureDeckBuilt();
         deckGroup.rotation.y = dragState.hoverX * 0.14;
         deckGroup.rotation.x = -dragState.hoverY * 0.08;
 
@@ -731,7 +681,6 @@ export function Hero3DCanvas({
           item.dispose();
         }
       });
-      envRT.dispose();
       renderer.dispose();
     };
   }, []);

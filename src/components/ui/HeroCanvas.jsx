@@ -55,7 +55,7 @@ export function HeroCanvas({ className = '' }) {
     const waves = [];
 
     const buildParticles = () => {
-      const count = width < 640 ? 34 : 68;
+      const count = width < 768 ? 16 : 42;
       particles = Array.from({ length: count }, (_, idx) => ({
         x: Math.random() * width,
         y: Math.random() * height,
@@ -68,7 +68,7 @@ export function HeroCanvas({ className = '' }) {
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       width = Math.max(1, rect.width);
       height = Math.max(1, rect.height);
       canvas.width = Math.floor(width * dpr);
@@ -282,7 +282,7 @@ export function HeroCanvas({ className = '' }) {
         }
       }
 
-      if (!prefersReduced) {
+      if (!prefersReduced && width >= 768) {
         rafId = window.requestAnimationFrame(tick);
       }
     };

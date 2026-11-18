@@ -91,7 +91,7 @@ export default function ProjectsPage() {
           </FadeUp>
 
           <div
-            role="tablist"
+            role="group"
             aria-label="Filter projects by category"
             className="flex flex-wrap gap-6 mb-10 border-b border-line"
           >
@@ -103,8 +103,7 @@ export default function ProjectsPage() {
                 <button
                   key={category}
                   type="button"
-                  role="tab"
-                  aria-selected={active}
+                  aria-pressed={active}
                   onClick={() => setSelectedCategory(category)}
                   className={`relative min-h-[44px] pb-3 text-[15px] font-medium transition-colors ${
                     active ? "text-ink" : "text-ink-muted hover:text-ink"

@@ -42,6 +42,7 @@ export default function About() {
                 alt="Akbar Alfaidah - Web, Mobile & AI Developer"
                 width={640}
                 height={800}
+                loading="lazy"
                 decoding="async"
                 className="w-full h-full object-cover object-[50%_10%] scale-[1.22]"
               />

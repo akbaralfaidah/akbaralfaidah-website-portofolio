@@ -210,10 +210,10 @@ function AppleHighlightsBand({ isEn, prefersReduced }) {
                     setIsPlaying(false);
                   }
                 }}
-                className={`w-[88vw] sm:w-[82vw] md:w-[86%] max-w-[980px] shrink-0 rounded-[28px] sm:rounded-[34px] bg-white dark:bg-[#111522] border border-black/[0.06] dark:border-white/10 shadow-[0_24px_60px_-24px_rgba(15,23,42,0.08)] overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-center transition-opacity duration-300 ${
+                className={`w-[88vw] sm:w-[82vw] md:w-[86%] max-w-[980px] shrink-0 rounded-[28px] sm:rounded-[34px] bg-white dark:bg-[#111522] border shadow-[0_24px_60px_-24px_rgba(15,23,42,0.08)] overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-center transition-all duration-300 ${
                   isCurrent
-                    ? "opacity-100"
-                    : "opacity-60 hover:opacity-85 cursor-pointer"
+                    ? "border-black/[0.08] dark:border-white/15"
+                    : "border-black/[0.04] dark:border-white/[0.06] hover:border-black/15 cursor-pointer"
                 }`}
               >
                 <div className="lg:col-span-5 p-7 sm:p-11 flex flex-col justify-between gap-6">
@@ -232,9 +232,11 @@ function AppleHighlightsBand({ isEn, prefersReduced }) {
                       alt={slide.alt}
                       width={1024}
                       height={576}
-                      loading="eager"
+                      loading={idx === 0 ? "eager" : "lazy"}
                       decoding="async"
-                      className="w-full h-full object-cover object-center"
+                      className={`w-full h-full object-cover object-center transition-opacity duration-300 ${
+                        isCurrent ? "opacity-100" : "opacity-85"
+                      }`}
                     />
                   </div>
                 </div>
@@ -262,7 +264,7 @@ function AppleHighlightsBand({ isEn, prefersReduced }) {
         </button>
 
         <div
-          role="tablist"
+          role="group"
           aria-label="Highlight slides"
           className="rounded-full bg-white dark:bg-[#161B26] border border-black/[0.08] dark:border-white/15 shadow-sm px-4 py-3.5 flex items-center gap-2.5"
         >
@@ -272,8 +274,7 @@ function AppleHighlightsBand({ isEn, prefersReduced }) {
               <button
                 key={slide.src}
                 type="button"
-                role="tab"
-                aria-selected={active}
+                aria-pressed={active}
                 aria-label={`Slide ${idx + 1}: ${isEn ? slide.tagEn : slide.tagId}`}
                 onClick={() => {
                   setActiveSlide(idx);
@@ -471,22 +472,23 @@ export default function Capabilities() {
 
             <div
               className="flex flex-col items-start gap-2.5 flex-1"
-              role="tablist"
+              role="region"
               aria-label="Detail pengerjaan sistem"
             >
               {pillars.map((item, idx) => {
                 const isSelected = idx === activeStep;
+                const panelId = `capability-detail-${item.step}`;
                 if (isSelected) {
                   return (
                     <motion.div
                       key={item.step}
+                      id={panelId}
                       layout={prefersReduced ? false : "position"}
                       transition={{
                         type: "spring",
                         stiffness: 260,
                         damping: 28,
                       }}
-                      role="tabpanel"
                       className="w-full max-w-[340px] rounded-[24px] bg-[#F5F5F7] dark:bg-white/[0.1] p-5 text-left"
                     >
                       <p className="text-sm sm:text-[15px] leading-relaxed text-ink-muted">
@@ -504,8 +506,8 @@ export default function Capabilities() {
                     key={item.step}
                     layout={prefersReduced ? false : "position"}
                     type="button"
-                    role="tab"
-                    aria-selected={false}
+                    aria-expanded={false}
+                    aria-controls={panelId}
                     onClick={() => setActiveStep(idx)}
                     className="w-fit max-w-full rounded-full bg-[#F5F5F7] dark:bg-white/[0.08] hover:bg-[#EAEAF0] dark:hover:bg-white/[0.14] px-4 py-2.5 inline-flex items-center gap-2.5 text-left transition-colors"
                   >

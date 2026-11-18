@@ -1,18 +1,17 @@
 # Akbar Alfaidah - Tech Agency
+
 > Full-Stack Web, Mobile & AI Developer specializing in custom web portals, Android/Flutter apps, and Applied Machine Learning. Based in Jambi, Indonesia; available remotely worldwide.
 
 ## Core Services
-- **Web Platforms & Portals:** React, Next.js, TypeScript, Laravel, PostgreSQL, Supabase, Docker deployment.
-- **Mobile Applications:** React Native, Flutter, Android & iOS production releases with geolocation, real-time sync, and offline resilience.
-- **Applied AI & Computer Vision:** YOLO detection, BiLSTM / OpenCV pipelines, FastAPI inference services, and automated document extraction.
 
-## Public Pages
-- Home: https://akbaralfaidah.com/
-- All Projects: https://akbaralfaidah.com/projects
-- Project Pages: https://akbaralfaidah.com/project/{slug}
+- [Website & Information Systems](https://akbaralfaidah.com/#services): Custom React, Next.js, Laravel, PostgreSQL, and Docker production platforms tailored to team workflows.
+- [Android & Mobile Applications](https://akbaralfaidah.com/#services): Flutter and React Native apps with offline storage, barcode scanner, thermal receipt printer, and GPS geofencing.
+- [Applied AI & Automation](https://akbaralfaidah.com/#services): NLP task extraction, OpenCV/YOLO computer vision pipelines, and webhook business automation.
 
-## Contact
-- Website: https://akbaralfaidah.com/#contact
-- Email: akbaralfaidah667@gmail.com
-- GitHub: https://github.com/AkbarAlfaidah
-- LinkedIn: https://www.linkedin.com/in/akbar-alfaidah/
+## Public Directory
+
+- [Akbar Alfaidah - Portfolio & Overview](https://akbaralfaidah.com/): Main portfolio, shipped software showcase, engineering experience, and inquiry form.
+- [Projects Catalog](https://akbaralfaidah.com/projects): Complete archive of deployed web, mobile, and AI systems.
+- [BosDepot Case Study](https://akbaralfaidah.com/project/bosdepot): Point-of-sale and warehouse management mobile system.
+- [MPP Digital Case Study](https://akbaralfaidah.com/project/mpp): Public service information portal and real-time satisfaction analytics.
+- [Contact & Consultation](https://akbaralfaidah.com/#contact): Direct inquiry via WhatsApp or Email with timeline and scope selection.

@@ -311,7 +311,7 @@ export default function Experience() {
 
             {/* Interactive Sector Switcher Pills */}
             <div
-              role="tablist"
+              role="group"
               aria-label="Filter career sectors"
               className="flex flex-wrap gap-2"
             >
@@ -321,8 +321,7 @@ export default function Experience() {
                   <button
                     key={tab.id}
                     type="button"
-                    role="tab"
-                    aria-selected={isSelected}
+                    aria-pressed={isSelected}
                     onClick={() => {
                       setSectorFilter(tab.id);
                       setActiveCardIdx(0);
@@ -541,7 +540,14 @@ export default function Experience() {
                 </dl>
 
                 <div
-                  className="overflow-x-auto pb-1"
+                  tabIndex={0}
+                  role="region"
+                  aria-label={
+                    isEn
+                      ? "GitHub contribution activity heatmap"
+                      : "Grafik aktivitas kontribusi GitHub"
+                  }
+                  className="overflow-x-auto pb-1 focus-visible:outline-accent"
                   onMouseLeave={() => setHoveredDay(null)}
                 >
                   <div

@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
 import { Sun, Moon, Menu, X, ArrowUpRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../hooks/useTheme";
@@ -92,6 +91,15 @@ export default function Navbar() {
       e.preventDefault();
       setMobileMenuOpen(false);
 
+      const scrollToEl = (el) => {
+        const lenis = window.__lenis;
+        if (lenis) {
+          lenis.scrollTo(el, { offset: -72, duration: 1.15 });
+        } else {
+          el.scrollIntoView({ behavior: "smooth" });
+        }
+      };
+
       const scrollToTarget = () => {
         const lenis = window.__lenis;
         if (targetId === "top") {
@@ -102,13 +110,23 @@ export default function Navbar() {
           }
           return;
         }
-        const el = document.getElementById(targetId);
-        if (!el) return;
-        if (lenis) {
-          lenis.scrollTo(el, { offset: -72, duration: 1.15 });
-        } else {
-          el.scrollIntoView({ behavior: "smooth" });
+        window.dispatchEvent(new CustomEvent("app:preload-sections"));
+        const immediate = document.getElementById(targetId);
+        if (immediate) {
+          scrollToEl(immediate);
+          return;
         }
+        let attempts = 0;
+        const timer = window.setInterval(() => {
+          attempts += 1;
+          const lateEl = document.getElementById(targetId);
+          if (lateEl) {
+            window.clearInterval(timer);
+            scrollToEl(lateEl);
+          } else if (attempts >= 25) {
+            window.clearInterval(timer);
+          }
+        }, 60);
       };
 
       if (location.pathname !== "/") {
@@ -174,11 +192,7 @@ export default function Navbar() {
               >
                 <span>{t(`nav.${item.key}`)}</span>
                 {isActive && (
-                  <motion.span
-                    layoutId="navbar-active-indicator"
-                    transition={{ type: "spring", stiffness: 450, damping: 36 }}
-                    className="absolute left-4 right-4 bottom-1.5 h-[1.5px] bg-accent"
-                  />
+                  <span className="absolute left-4 right-4 bottom-1.5 h-[1.5px] bg-accent transition-all duration-200" />
                 )}
               </a>
             );
@@ -210,21 +224,13 @@ export default function Navbar() {
                 : "Switch to dark theme"
             }
           >
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.span
-                key={theme}
-                initial={{ rotate: -25, opacity: 0, scale: 0.75 }}
-                animate={{ rotate: 0, opacity: 1, scale: 1 }}
-                exit={{ rotate: 25, opacity: 0, scale: 0.75 }}
-                transition={{ duration: 0.15 }}
-              >
-                {theme === "dark" ? (
-                  <Sun size={16} aria-hidden="true" />
-                ) : (
-                  <Moon size={16} aria-hidden="true" />
-                )}
-              </motion.span>
-            </AnimatePresence>
+            <span className="transition-transform duration-200">
+              {theme === "dark" ? (
+                <Sun size={16} aria-hidden="true" />
+              ) : (
+                <Moon size={16} aria-hidden="true" />
+              )}
+            </span>
           </button>
 
           <Magnetic strength={0.22} className="hidden sm:inline-block">
@@ -258,52 +264,44 @@ export default function Navbar() {
       </nav>
 
       {/* Mobile Drawer */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            id="mobile-nav-drawer"
-            role="dialog"
-            aria-modal="true"
-            aria-label={
-              currentLang === "en"
-                ? "Mobile navigation"
-                : "Menu navigasi mobile"
-            }
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:hidden bg-paper/95 backdrop-blur-xl border-b border-line px-5 py-4 flex flex-col divide-y divide-line"
-          >
-            {NAV_LINKS.map((item) => (
-              <a
-                key={item.key}
-                href={`/#${item.target}`}
-                onClick={(e) => handleSectionLink(e, item.target)}
-                className="min-h-[48px] py-3 text-base font-medium text-ink hover:text-accent flex items-center justify-between transition-colors"
-              >
-                <span>{t(`nav.${item.key}`)}</span>
-                <ArrowUpRight
-                  size={17}
-                  className="text-ink-muted"
-                  aria-hidden="true"
-                />
-              </a>
-            ))}
+      {mobileMenuOpen && (
+        <div
+          id="mobile-nav-drawer"
+          role="dialog"
+          aria-modal="true"
+          aria-label={
+            currentLang === "en" ? "Mobile navigation" : "Menu navigasi mobile"
+          }
+          className="lg:hidden bg-paper/95 backdrop-blur-xl border-b border-line px-5 py-4 flex flex-col divide-y divide-line"
+        >
+          {NAV_LINKS.map((item) => (
+            <a
+              key={item.key}
+              href={`/#${item.target}`}
+              onClick={(e) => handleSectionLink(e, item.target)}
+              className="min-h-[48px] py-3 text-base font-medium text-ink hover:text-accent flex items-center justify-between transition-colors"
+            >
+              <span>{t(`nav.${item.key}`)}</span>
+              <ArrowUpRight
+                size={17}
+                className="text-ink-muted"
+                aria-hidden="true"
+              />
+            </a>
+          ))}
 
-            <div className="pt-4 mt-1">
-              <a
-                href="/#contact"
-                onClick={(e) => handleSectionLink(e, "contact")}
-                className="w-full min-h-[48px] px-4 py-3 rounded-lg bg-ink text-on-ink font-medium text-base flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
-              >
-                <span>{t("nav.contact")}</span>
-                <ArrowUpRight size={17} aria-hidden="true" />
-              </a>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          <div className="pt-4 mt-1">
+            <a
+              href="/#contact"
+              onClick={(e) => handleSectionLink(e, "contact")}
+              className="w-full min-h-[48px] px-4 py-3 rounded-lg bg-ink text-on-ink font-medium text-base flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+            >
+              <span>{t("nav.contact")}</span>
+              <ArrowUpRight size={17} aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

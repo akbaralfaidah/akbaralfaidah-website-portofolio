@@ -479,14 +479,13 @@ export default function Contact() {
             <FadeUp delay={0.06}>
               <div className="rounded-2xl bg-surface border border-line p-6 sm:p-8 lg:p-10 shadow-[0_20px_50px_-18px_rgba(37,99,235,0.1)]">
               <div
-                role="tablist"
+                role="group"
                 aria-label="Contact channel"
                 className="flex border-b border-line gap-6 mb-8"
               >
                 <button
                   type="button"
-                  role="tab"
-                  aria-selected={mode === 'wa'}
+                  aria-pressed={mode === 'wa'}
                   onClick={() => {
                     setMode('wa');
                     setErrors({});
@@ -508,8 +507,7 @@ export default function Contact() {
 
                 <button
                   type="button"
-                  role="tab"
-                  aria-selected={mode === 'email'}
+                  aria-pressed={mode === 'email'}
                   onClick={() => {
                     setMode('email');
                     setErrors({});
@@ -530,7 +528,13 @@ export default function Contact() {
                 </button>
               </div>
 
-              <form onSubmit={handleSubmit} noValidate className="space-y-6">
+              <form
+                onSubmit={handleSubmit}
+                noValidate
+                toolname="send_project_inquiry"
+                tooldescription="Send a web, mobile app, or AI project inquiry to Akbar Alfaidah via WhatsApp or Email."
+                className="space-y-6"
+              >
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <label htmlFor="contact-name" className="text-base font-medium text-ink">
@@ -546,6 +550,7 @@ export default function Contact() {
                   </div>
                   <input
                     id="contact-name"
+                    name="name"
                     type="text"
                     autoComplete="name"
                     value={formData.name}
@@ -556,7 +561,7 @@ export default function Contact() {
                     aria-invalid={Boolean(errors.name)}
                     aria-describedby={errors.name ? 'contact-name-error' : undefined}
                     placeholder={t('contact.form_name_placeholder')}
-                    className={`w-full rounded-xl border bg-paper px-4 py-3.5 text-base text-ink placeholder:text-ink-muted/60 focus:border-accent outline-none transition-colors ${
+                    className={`w-full rounded-xl border bg-paper px-4 py-3.5 text-base text-ink placeholder:text-ink-muted focus:border-accent outline-none transition-colors ${
                       errors.name ? 'border-red-600 dark:border-red-400' : 'border-line'
                     }`}
                   />
@@ -594,6 +599,7 @@ export default function Contact() {
                       </div>
                       <input
                         id="contact-whatsapp"
+                        name="whatsapp"
                         type="tel"
                         autoComplete="tel"
                         value={formData.whatsapp}
@@ -604,7 +610,7 @@ export default function Contact() {
                         aria-invalid={Boolean(errors.whatsapp)}
                         aria-describedby={errors.whatsapp ? 'contact-whatsapp-error' : undefined}
                         placeholder={t('contact.form_whatsapp_placeholder')}
-                        className={`w-full rounded-xl border bg-paper px-4 py-3.5 text-base text-ink placeholder:text-ink-muted/60 focus:border-accent outline-none transition-colors ${
+                        className={`w-full rounded-xl border bg-paper px-4 py-3.5 text-base text-ink placeholder:text-ink-muted focus:border-accent outline-none transition-colors ${
                           errors.whatsapp ? 'border-red-600 dark:border-red-400' : 'border-line'
                         }`}
                       />
@@ -640,6 +646,7 @@ export default function Contact() {
                       </div>
                       <input
                         id="contact-email"
+                        name="email"
                         type="email"
                         autoComplete="email"
                         value={formData.email}
@@ -650,7 +657,7 @@ export default function Contact() {
                         aria-invalid={Boolean(errors.email)}
                         aria-describedby={errors.email ? 'contact-email-error' : undefined}
                         placeholder={t('contact.form_email_placeholder')}
-                        className={`w-full rounded-xl border bg-paper px-4 py-3.5 text-base text-ink placeholder:text-ink-muted/60 focus:border-accent outline-none transition-colors ${
+                        className={`w-full rounded-xl border bg-paper px-4 py-3.5 text-base text-ink placeholder:text-ink-muted focus:border-accent outline-none transition-colors ${
                           errors.email ? 'border-red-600 dark:border-red-400' : 'border-line'
                         }`}
                       />
@@ -708,7 +715,7 @@ export default function Contact() {
                         <span className="truncate">{selectedDeadline.label}</span>
                       </span>
                     ) : (
-                      <span className="text-base text-ink-muted/70">
+                      <span className="text-base text-ink-muted">
                         {t('contact.form_deadline_placeholder')}
                       </span>
                     )}
@@ -797,6 +804,7 @@ export default function Contact() {
                   </div>
                   <textarea
                     id="contact-message"
+                    name="message"
                     rows={4}
                     value={formData.message}
                     onChange={(e) => {
@@ -806,7 +814,7 @@ export default function Contact() {
                     aria-invalid={Boolean(errors.message)}
                     aria-describedby={errors.message ? 'contact-message-error' : undefined}
                     placeholder={t('contact.form_message_placeholder')}
-                    className={`w-full rounded-xl border bg-paper px-4 py-3.5 text-base text-ink placeholder:text-ink-muted/60 focus:border-accent outline-none transition-colors resize-y ${
+                    className={`w-full rounded-xl border bg-paper px-4 py-3.5 text-base text-ink placeholder:text-ink-muted focus:border-accent outline-none transition-colors resize-y ${
                       errors.message ? 'border-red-600 dark:border-red-400' : 'border-line'
                     }`}
                   />

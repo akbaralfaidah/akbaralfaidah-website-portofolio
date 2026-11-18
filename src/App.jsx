@@ -1,9 +1,6 @@
 import { Suspense, lazy, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, useParams } from 'react-router-dom';
-import { MotionConfig } from 'framer-motion';
 import HomePage from './pages/HomePage';
-import { fetchProjectBySlug } from './data/projects';
-import { supabase } from './lib/supabase';
 import { ThemeProvider } from './context/ThemeContext';
 
 const ProjectsPage = lazy(() => import('./pages/Projects'));
@@ -24,24 +21,26 @@ function ScrollToTop() {
 function PageTracker() {
   const { pathname } = useLocation();
   useEffect(() => {
-    if (!supabase || pathname.startsWith('/sandbox') || pathname.length > 100) return;
+    if (pathname.startsWith('/sandbox') || pathname.length > 100) return undefined;
 
     const ua = navigator.userAgent || '';
-    if (/bot|uptimerobot|lighthouse|spider|headless/i.test(ua)) return;
+    if (/bot|uptimerobot|lighthouse|spider|headless/i.test(ua)) return undefined;
 
-    const timer = window.setTimeout(() => {
-      supabase
-        .from('page_views')
-        .insert([
+    const timer = window.setTimeout(async () => {
+      try {
+        const { supabase } = await import('./lib/supabase');
+        if (!supabase) return;
+        await supabase.from('page_views').insert([
           {
             path: pathname,
             browser: ua.slice(0, 250),
             device_type: window.innerWidth < 768 ? 'Mobile' : 'Desktop'
           }
-        ])
-        .then(() => {})
-        .catch(() => {});
-    }, 1500);
+        ]);
+      } catch {
+        // Ignore telemetry error
+      }
+    }, 2500);
 
     return () => window.clearTimeout(timer);
   }, [pathname]);
@@ -97,14 +96,16 @@ function ProjectRoute() {
     }
 
     setResolution({ status: 'resolving', project: null });
-    fetchProjectBySlug(token).then((found) => {
-      if (!active) return;
-      if (found) {
-        setResolution({ status: 'public', project: found });
-      } else {
-        setResolution({ status: 'maybe_tracker', project: null });
-      }
-    });
+    import('./data/projects')
+      .then(({ fetchProjectBySlug }) => fetchProjectBySlug(token))
+      .then((found) => {
+        if (!active) return;
+        if (found) {
+          setResolution({ status: 'public', project: found });
+        } else {
+          setResolution({ status: 'maybe_tracker', project: null });
+        }
+      });
 
     return () => {
       active = false;
@@ -149,32 +150,30 @@ function ProjectRoute() {
 function App() {
   return (
     <ThemeProvider>
-      <MotionConfig reducedMotion="user">
-        <Router>
-          <ScrollToTop />
-          <PageTracker />
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route
-              path="/projects"
-              element={
-                <Suspense fallback={<PageLoader />}>
-                  <ProjectsPage />
-                </Suspense>
-              }
-            />
-            <Route path="/project/:token" element={<ProjectRoute />} />
-            <Route
-              path="*"
-              element={
-                <Suspense fallback={<PageLoader />}>
-                  <NotFound />
-                </Suspense>
-              }
-            />
-          </Routes>
-        </Router>
-      </MotionConfig>
+      <Router>
+        <ScrollToTop />
+        <PageTracker />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route
+            path="/projects"
+            element={
+              <Suspense fallback={<PageLoader />}>
+                <ProjectsPage />
+              </Suspense>
+            }
+          />
+          <Route path="/project/:token" element={<ProjectRoute />} />
+          <Route
+            path="*"
+            element={
+              <Suspense fallback={<PageLoader />}>
+                <NotFound />
+              </Suspense>
+            }
+          />
+        </Routes>
+      </Router>
     </ThemeProvider>
   );
 }

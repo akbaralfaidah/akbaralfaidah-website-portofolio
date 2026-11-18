@@ -8,7 +8,7 @@ const VARIANTS = {
     'bg-accent-solid text-on-accent hover:bg-accent-hover border border-transparent shadow-[0_8px_22px_-6px_rgba(37,99,235,0.45)]',
   outline: 'bg-surface/80 text-ink border border-line hover:border-accent/50 hover:bg-mist/70',
   ghost: 'bg-transparent text-ink hover:bg-mist/60 border border-transparent',
-  whatsapp: 'bg-emerald-600 text-white hover:bg-emerald-700 border border-transparent'
+  whatsapp: 'bg-emerald-700 text-white hover:bg-emerald-800 border border-transparent'
 };
 
 const SIZES = {

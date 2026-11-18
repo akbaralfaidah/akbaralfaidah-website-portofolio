@@ -145,12 +145,27 @@ export function ParallaxWatermark({ text, className = '', direction = 1 }) {
       aria-hidden="true"
       className={`pointer-events-none select-none overflow-hidden ${className}`}
     >
-      <motion.p
+      <motion.div
         style={prefersReduced ? undefined : { x }}
-        className="font-display font-bold uppercase tracking-[-0.04em] whitespace-nowrap leading-none text-[clamp(4.5rem,13vw,11rem)] text-ink/[0.035] dark:text-white/[0.04] will-change-transform"
+        className="w-full will-change-transform"
       >
-        {text}
-      </motion.p>
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 1200 130"
+          className="w-full h-14 sm:h-24 lg:h-28 text-ink/[0.045] dark:text-white/[0.045]"
+        >
+          <text
+            x="50%"
+            y="102"
+            textAnchor="middle"
+            fill="currentColor"
+            className="font-display font-bold uppercase tracking-[-0.04em]"
+            style={{ fontSize: '108px' }}
+          >
+            {text}
+          </text>
+        </svg>
+      </motion.div>
     </div>
   );
 }

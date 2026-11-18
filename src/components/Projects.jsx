@@ -249,7 +249,7 @@ export default function Projects() {
 
           {/* Hairline Category Filter Tabs */}
           <div className="flex flex-wrap items-center justify-between gap-4 mb-10 border-b border-line">
-            <div role="tablist" aria-label="Filter showcase by discipline" className="flex flex-wrap gap-6">
+            <div role="group" aria-label="Filter showcase by discipline" className="flex flex-wrap gap-6">
               {FILTER_CATEGORIES.map((category) => {
                 const active = selectedCategory === category;
                 const label = category === 'All' ? t('projects.filter_all') : category;
@@ -257,8 +257,7 @@ export default function Projects() {
                   <button
                     key={category}
                     type="button"
-                    role="tab"
-                    aria-selected={active}
+                    aria-pressed={active}
                     onClick={() => {
                       setSelectedCategory(category);
                       setActiveIndex(0);
