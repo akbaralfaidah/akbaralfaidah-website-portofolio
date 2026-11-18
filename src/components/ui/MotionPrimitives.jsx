@@ -26,7 +26,7 @@ export function ScrollProgressBar() {
  * Multi-axis GPU scroll parallax container supporting vertical/horizontal shift,
  * 3D perspective tilt (rotateX), zoom (scale), and fade without layout thrashing.
  */
-const SPRING_SCROLL_CONFIG = { stiffness: 120, damping: 24, restDelta: 0.0005 };
+const SPRING_SCROLL_CONFIG = { stiffness: 105, damping: 22, restDelta: 0.0005 };
 
 export function ParallaxLayer({
   children,
@@ -93,7 +93,7 @@ export function ParallaxRibbon({ items = [], direction = 1, className = '' }) {
   const x = useTransform(
     smoothProgress,
     [0, 1],
-    direction > 0 ? [-220, 220] : [220, -220]
+    direction > 0 ? [-420, 420] : [420, -420]
   );
 
   const repeated = [...items, ...items, ...items];
@@ -136,7 +136,7 @@ export function ParallaxWatermark({ text, className = '', direction = 1 }) {
   const x = useTransform(
     smoothProgress,
     [0, 1],
-    direction > 0 ? [-160, 160] : [160, -160]
+    direction > 0 ? [-320, 320] : [320, -320]
   );
 
   return (

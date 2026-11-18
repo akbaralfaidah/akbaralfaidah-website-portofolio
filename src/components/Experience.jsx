@@ -380,7 +380,7 @@ export default function Experience() {
                 {visibleExperiences.map((exp, idx) => {
                   const SectorIcon = exp.meta.icon;
                   const isFocused = idx === activeCardIdx;
-                  const parallaxY = idx % 2 === 0 ? [52, -52] : [92, -92];
+                  const parallaxY = idx % 2 === 0 ? [82, -82] : [130, -130];
 
                   return (
                     <motion.div
@@ -472,7 +472,7 @@ export default function Experience() {
         </div>
 
         {/* Interactive GitHub Telemetry Matrix wrapped in Parallax Depth */}
-        <ParallaxLayer yRange={[84, -74]} scaleRange={[0.94, 1.02]}>
+        <ParallaxLayer yRange={[120, -110]} scaleRange={[0.91, 1.03]} rotateXRange={[8, -3]}>
           <div className="relative overflow-hidden liquid-glass rounded-3xl p-6 sm:p-8 space-y-6">
             <div
               aria-hidden="true"

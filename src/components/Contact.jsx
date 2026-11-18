@@ -358,7 +358,7 @@ export default function Contact() {
 
         <div className="relative z-10 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           {/* Left Editorial Contact & Clean Map */}
-          <ParallaxLayer yRange={[48, -48]} className="lg:col-span-5">
+          <ParallaxLayer yRange={[86, -86]} className="lg:col-span-5">
             <FadeUp className="space-y-8">
             <div>
               <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent mb-3">
@@ -456,7 +456,7 @@ export default function Contact() {
               <p className="text-sm text-ink-muted leading-relaxed">{t('contact.map_desc')}</p>
 
               <div className="aspect-[16/9] rounded-xl overflow-hidden border border-line bg-mist shadow-sm">
-                <ParallaxLayer yRange={[-48, 48]} scaleRange={[1.14, 1.14]} className="w-full h-full">
+                <ParallaxLayer yRange={[-72, 72]} scaleRange={[1.22, 1.22]} className="w-full h-full">
                   <iframe
                     src={MAPS_EMBED_URL}
                     width="100%"
@@ -475,7 +475,7 @@ export default function Contact() {
           </ParallaxLayer>
 
           {/* Right Column: Clean Minimalist Inquiry Surface */}
-          <ParallaxLayer yRange={[-40, 40]} className="lg:col-span-7">
+          <ParallaxLayer yRange={[-76, 76]} rotateXRange={[6, -3]} className="lg:col-span-7">
             <FadeUp delay={0.06}>
               <div className="liquid-glass rounded-2xl p-6 sm:p-8 lg:p-10 shadow-[0_20px_50px_-18px_rgba(37,99,235,0.1)]">
               <div

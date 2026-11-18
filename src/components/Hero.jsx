@@ -162,15 +162,17 @@ export default function Hero() {
         const h = heroEl.offsetHeight || window.innerHeight || 900;
         const progress = Math.min(1, Math.max(0, window.scrollY / h));
         if (bgLayerRef.current) {
-          bgLayerRef.current.style.transform = `translate3d(0, ${(progress * 240).toFixed(1)}px, 0)`;
+          const bgScale = (1 + progress * 0.08).toFixed(3);
+          bgLayerRef.current.style.transform = `translate3d(0, ${(progress * 340).toFixed(1)}px, 0) scale(${bgScale})`;
         }
         if (textLayerRef.current) {
-          textLayerRef.current.style.transform = `translate3d(0, ${(-progress * 115).toFixed(1)}px, 0)`;
+          textLayerRef.current.style.transform = `translate3d(0, ${(-progress * 170).toFixed(1)}px, 0)`;
+          textLayerRef.current.style.opacity = `${Math.max(0.22, 1 - progress * 0.72).toFixed(3)}`;
         }
         if (stageLayerRef.current) {
-          const s = (1 - progress * 0.14).toFixed(3);
-          const tiltDeg = (-progress * 2.4).toFixed(2);
-          stageLayerRef.current.style.transform = `translate3d(0, ${(progress * 135).toFixed(1)}px, 0) scale(${s}) rotate(${tiltDeg}deg)`;
+          const s = (1 - progress * 0.17).toFixed(3);
+          const tiltDeg = (-progress * 3.2).toFixed(2);
+          stageLayerRef.current.style.transform = `translate3d(0, ${(progress * 195).toFixed(1)}px, 0) scale(${s}) rotate(${tiltDeg}deg)`;
         }
       });
     };
@@ -251,7 +253,7 @@ export default function Hero() {
           ref={textLayerRef}
           className="lg:col-span-6 flex flex-col items-start will-change-transform"
         >
-          <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 rounded-full bg-surface/90 border border-line shadow-sm font-mono text-[10px] sm:text-xs uppercase tracking-[0.06em] sm:tracking-[0.12em] whitespace-nowrap max-w-full text-ink-muted mb-6">
+          <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 rounded-full liquid-glass-pill font-mono text-[10px] sm:text-xs uppercase tracking-[0.06em] sm:tracking-[0.12em] whitespace-nowrap max-w-full text-ink-muted mb-6">
             <span className="relative flex h-2 w-2 shrink-0" aria-hidden="true">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
@@ -337,7 +339,7 @@ export default function Hero() {
         >
           {/* Floating Top Mode Switcher + Contextual Status Pill */}
           <div className="relative z-20 flex flex-wrap items-center justify-between gap-2">
-            <div className="flex items-center gap-1 p-1 rounded-full bg-white/95 dark:bg-[#0D1017]/95 border border-slate-200/90 dark:border-white/15 shadow-sm">
+            <div className="flex items-center gap-1 p-1 rounded-full liquid-glass-pill">
               <button
                 type="button"
                 onClick={() => {
@@ -418,7 +420,7 @@ export default function Hero() {
                   setMount3D(true);
                   setExploded((prev) => !prev);
                 }}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 dark:bg-[#0D1017]/95 border border-slate-200/90 dark:border-white/15 font-mono text-[11px] font-medium text-ink hover:border-accent/50 hover:text-accent transition-all shadow-sm"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full liquid-glass-pill font-mono text-[11px] font-medium text-ink hover:border-accent/50 hover:text-accent transition-all"
               >
                 {exploded ? (
                   <Minimize2 size={12} aria-hidden="true" />
@@ -451,7 +453,7 @@ export default function Hero() {
           </div>
 
           {/* Floating Bottom Control & Telemetry Dock */}
-          <div className="relative z-20 flex flex-wrap items-center justify-between gap-2 px-3.5 py-2.5 rounded-2xl bg-white/95 dark:bg-[#0D1017]/95 border border-slate-200/90 dark:border-white/15 shadow-[0_14px_35px_-12px_rgba(37,99,235,0.16)]">
+          <div className="relative z-20 flex flex-wrap items-center justify-between gap-2 px-3.5 py-2.5 rounded-2xl liquid-glass">
             {sceneMode === 'core' && (
               <div className="w-full flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-2 font-mono text-xs text-ink-muted">

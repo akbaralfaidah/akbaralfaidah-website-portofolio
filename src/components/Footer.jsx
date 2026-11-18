@@ -37,7 +37,7 @@ export default function Footer() {
   return (
     <footer className="bg-[#EEF2F9] dark:bg-[#080B12] text-ink border-t border-line pt-16 sm:pt-20 pb-8 px-5 sm:px-6 overflow-hidden transition-colors duration-300">
       <div className="max-w-6xl mx-auto">
-        <ParallaxLayer yRange={[44, -14]}>
+        <ParallaxLayer yRange={[74, -22]}>
           <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-line">
           <div className="md:col-span-5 flex flex-col gap-4">
             <Link
@@ -137,7 +137,7 @@ export default function Footer() {
           className="pt-6 border-t border-line select-none overflow-hidden"
           aria-hidden="true"
         >
-          <ParallaxLayer yRange={[110, -8]} scaleRange={[0.88, 1.02]}>
+          <ParallaxLayer yRange={[155, -12]} scaleRange={[0.84, 1.04]}>
             <p className="font-display font-semibold tracking-[-0.045em] leading-[0.86] text-[clamp(2.4rem,10.8vw,8.6rem)] text-ink/[0.045] dark:text-white/[0.06] whitespace-nowrap">
               AKBAR ALFAIDAH
             </p>

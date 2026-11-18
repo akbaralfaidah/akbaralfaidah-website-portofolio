@@ -15,8 +15,8 @@ export default function About() {
     target: photoRef,
     offset: ['start end', 'end start']
   });
-  const smoothScroll = useSpring(scrollYProgress, { stiffness: 120, damping: 24, restDelta: 0.0005 });
-  const photoY = useTransform(smoothScroll, [0, 1], [-56, 56]);
+  const smoothScroll = useSpring(scrollYProgress, { stiffness: 105, damping: 22, restDelta: 0.0005 });
+  const photoY = useTransform(smoothScroll, [0, 1], [-96, 96]);
 
   return (
     <section
@@ -31,7 +31,8 @@ export default function About() {
           <figure ref={photoRef} className="relative max-w-md mx-auto lg:max-w-none space-y-3">
             {/* Background floating parallax architectural plate */}
             <ParallaxLayer
-              yRange={[78, -78]}
+              yRange={[130, -130]}
+              rotateRange={[-3, 3]}
               className="pointer-events-none absolute -inset-3 rounded-2xl bg-gradient-to-br from-sky-100/75 via-transparent to-emerald-100/65 dark:from-blue-500/10 dark:to-emerald-500/10 border border-accent/20 -z-10"
             />
 
@@ -44,21 +45,23 @@ export default function About() {
                 height={800}
                 loading="lazy"
                 decoding="async"
-                className="w-full h-full object-cover object-[50%_10%] scale-[1.22]"
+                className="w-full h-full object-cover object-[50%_10%] scale-[1.28]"
               />
             </div>
 
             {/* Opposing floating parallax glass chips */}
             <ParallaxLayer
-              yRange={[64, -64]}
-              className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/95 dark:bg-[#0D1017]/95 backdrop-blur-md border border-line shadow-lg font-mono text-xs text-accent font-semibold absolute -left-5 top-10"
+              yRange={[115, -115]}
+              xRange={[-16, 16]}
+              className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl liquid-glass-pill font-mono text-xs text-accent font-semibold absolute -left-5 top-10"
             >
               <span>Web · Mobile · AI</span>
             </ParallaxLayer>
 
             <ParallaxLayer
-              yRange={[-52, 52]}
-              className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/95 dark:bg-[#0D1017]/95 backdrop-blur-md border border-line shadow-lg font-mono text-xs text-ink absolute -right-4 bottom-14"
+              yRange={[-95, 95]}
+              xRange={[16, -16]}
+              className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl liquid-glass-pill font-mono text-xs text-ink absolute -right-4 bottom-14"
             >
               <MapPin size={14} className="text-accent shrink-0" aria-hidden="true" />
               <span>Jambi · 1.61° S</span>
@@ -72,7 +75,7 @@ export default function About() {
         </FadeUp>
 
         {/* Bio & Hairline 2x2 Index gliding at distinct speed */}
-        <ParallaxLayer yRange={[78, -78]} className="lg:col-span-7 space-y-7">
+        <ParallaxLayer yRange={[105, -105]} className="lg:col-span-7 space-y-7">
           <FadeUp>
             <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent font-semibold mb-3">
               {isEn ? '03 / The Engineer' : '03 / Profil'}

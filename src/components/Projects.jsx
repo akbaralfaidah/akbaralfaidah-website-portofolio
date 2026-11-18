@@ -298,9 +298,9 @@ export default function Projects() {
             <div className="space-y-8">
               {/* Interactive 3D Spatial Coverflow Exhibition Stage with Deep Camera Unfold Parallax */}
               <ParallaxLayer
-                yRange={[98, -76]}
-                scaleRange={[0.84, 1.04]}
-                rotateXRange={[18, -6]}
+                yRange={[128, -98]}
+                scaleRange={[0.78, 1.06]}
+                rotateXRange={[22, -7]}
               >
                 <div
                   className="relative h-[240px] sm:h-[360px] lg:h-[430px] flex items-center justify-center"
@@ -393,7 +393,7 @@ export default function Projects() {
               </ParallaxLayer>
 
               {/* Integrated Live Active Project Spec Console */}
-              <ParallaxLayer yRange={[44, -44]} scaleRange={[0.97, 1.01]}>
+              <ParallaxLayer yRange={[68, -68]} scaleRange={[0.96, 1.01]}>
                 <div className="liquid-glass rounded-2xl p-6 sm:p-8">
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -482,18 +482,36 @@ export default function Projects() {
                 </div>
               </ParallaxLayer>
 
-              {/* Interactive Visual Miniature Switcher Dock (Staggered Depth Grid) */}
+              {/* Interactive Visual Miniature Switcher Dock (Balanced Symmetrical Parallax Bento Grid) */}
               {count > 1 && (
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 pt-2">
+                <div
+                  className={`grid gap-4 sm:gap-5 pt-4 ${
+                    count === 2
+                      ? 'grid-cols-2 max-w-2xl mx-auto'
+                      : count <= 4
+                        ? 'grid-cols-2 md:grid-cols-4'
+                        : 'grid-cols-2 md:grid-cols-3'
+                  }`}
+                >
                   {visibleProjects.map((proj, idx) => {
                     const isActive = idx === safeIndex;
+                    const useThreeCol = count > 4;
+                    const colY = useThreeCol
+                      ? idx % 3 === 0
+                        ? [34, -34]
+                        : idx % 3 === 1
+                          ? [-38, 38]
+                          : [58, -58]
+                      : idx % 2 === 0
+                        ? [28, -28]
+                        : [-32, 32];
                     return (
                       <ParallaxLayer
                         key={proj.id || proj.slug}
-                        yRange={idx % 2 === 0 ? [38, -38] : [82, -82]}
+                        yRange={colY}
                       >
                         <div
-                          className={`group relative rounded-xl liquid-glass p-2 transition-all duration-200 ${
+                          className={`group relative rounded-2xl liquid-glass p-2.5 transition-all duration-200 ${
                             isActive
                               ? 'border-accent ring-2 ring-accent/25 shadow-lg -translate-y-0.5'
                               : 'hover:border-accent/45 hover:-translate-y-0.5'

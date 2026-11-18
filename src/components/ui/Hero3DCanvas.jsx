@@ -337,11 +337,41 @@ export function Hero3DCanvas({
     radarGroup.add(radarHitPlane);
 
     // =========================================================================
-    // MODE 3: 3D Project Showcase Orbit Gallery (Lazy-loaded WebP Slabs)
+    // MODE 3: 3D Project Showcase Spatial Arc Gallery (Centered + Layered Glass)
     // =========================================================================
     const deckGroup = new THREE.Group();
+    deckGroup.position.set(0, 0.18, 0);
     deckGroup.visible = false;
     scene.add(deckGroup);
+
+    // Subtle spatial stage orbital ring grounding the gallery
+    const deckStageRingGeom = track(new THREE.RingGeometry(2.15, 2.19, 80));
+    const deckStageRingMat = track(
+      new THREE.MeshBasicMaterial({
+        color: 0x3b82f6,
+        transparent: true,
+        opacity: 0.32,
+        side: THREE.DoubleSide
+      })
+    );
+    const deckStageRing = new THREE.Mesh(deckStageRingGeom, deckStageRingMat);
+    deckStageRing.rotation.x = -Math.PI / 2;
+    deckStageRing.position.set(0, -1.25, 0);
+    deckGroup.add(deckStageRing);
+
+    const deckInnerRingGeom = track(new THREE.RingGeometry(1.42, 1.445, 64));
+    const deckInnerRingMat = track(
+      new THREE.MeshBasicMaterial({
+        color: 0x0ea5e9,
+        transparent: true,
+        opacity: 0.24,
+        side: THREE.DoubleSide
+      })
+    );
+    const deckInnerRing = new THREE.Mesh(deckInnerRingGeom, deckInnerRingMat);
+    deckInnerRing.rotation.x = -Math.PI / 2;
+    deckInnerRing.position.set(0, -1.25, 0);
+    deckGroup.add(deckInnerRing);
 
     const deckCards = [];
     let deckBuilt = false;
@@ -349,22 +379,51 @@ export function Hero3DCanvas({
       if (deckBuilt) return;
       deckBuilt = true;
       const texLoader = new THREE.TextureLoader();
-      const cardGeom = track(new THREE.PlaneGeometry(2.35, 1.32));
-      const bezelGeom = track(new THREE.BoxGeometry(2.47, 1.44, 0.07));
-      const bezelColor = stateRef.current.isDark ? 0x1e293b : 0xffffff;
+      const cardGeom = track(new THREE.PlaneGeometry(2.54, 1.43));
+      const bezelGeom = track(new THREE.BoxGeometry(2.66, 1.55, 0.07));
+      const bezelEdgeGeom = track(new THREE.EdgesGeometry(bezelGeom));
+      const glassPlateGeom = track(new THREE.PlaneGeometry(2.82, 1.7));
+      const isDarkNow = stateRef.current.isDark;
+      const bezelColor = isDarkNow ? 0x1e293b : 0xf8fafc;
 
       heroProjects.forEach((proj, idx) => {
         const cardContainer = new THREE.Group();
         const bezelMat = track(
           new THREE.MeshStandardMaterial({
             color: bezelColor,
-            roughness: 0.22,
-            metalness: 0.12
+            emissive: isDarkNow ? 0x0f172a : 0xe2e8f0,
+            emissiveIntensity: isDarkNow ? 0.25 : 0.42,
+            roughness: 0.16,
+            metalness: 0.08
           })
         );
         const bezel = new THREE.Mesh(bezelGeom, bezelMat);
-        bezel.position.z = -0.045;
+        bezel.position.z = -0.05;
         cardContainer.add(bezel);
+
+        const edgeMat = track(
+          new THREE.LineBasicMaterial({
+            color: idx === 0 ? 0x2563eb : 0x38bdf8,
+            transparent: true,
+            opacity: 0.45
+          })
+        );
+        const edgeWire = new THREE.LineSegments(bezelEdgeGeom, edgeMat);
+        edgeWire.position.z = -0.05;
+        cardContainer.add(edgeWire);
+
+        // Translucent frosted backing glass slab that separates in Explode/Urai mode
+        const glassMat = track(
+          new THREE.MeshBasicMaterial({
+            color: 0x60a5fa,
+            transparent: true,
+            opacity: 0.14,
+            side: THREE.DoubleSide
+          })
+        );
+        const glassPlate = new THREE.Mesh(glassPlateGeom, glassMat);
+        glassPlate.position.z = -0.18;
+        cardContainer.add(glassPlate);
 
         const tex = track(texLoader.load(proj.src));
         tex.colorSpace = THREE.SRGBColorSpace;
@@ -373,7 +432,13 @@ export function Hero3DCanvas({
         screen.userData = { projectIndex: idx };
         cardContainer.add(screen);
 
-        cardContainer.userData = { index: idx };
+        cardContainer.userData = {
+          index: idx,
+          bezelMat,
+          edgeMat,
+          glassMat,
+          glassPlate
+        };
         deckGroup.add(cardContainer);
         deckCards.push(cardContainer);
       });
@@ -387,6 +452,7 @@ export function Hero3DCanvas({
     const dragState = {
       active: false,
       moved: false,
+      startX: 0,
       lastX: 0,
       lastY: 0,
       rotY: 0.25,
@@ -451,6 +517,7 @@ export function Hero3DCanvas({
     const onPointerDown = (e) => {
       dragState.active = true;
       dragState.moved = false;
+      dragState.startX = e.clientX;
       dragState.lastX = e.clientX;
       dragState.lastY = e.clientY;
       updateNdc(e.clientX, e.clientY);
@@ -487,17 +554,31 @@ export function Hero3DCanvas({
     };
 
     const onPointerUp = (e) => {
-      if (dragState.active && !dragState.moved) {
-        updateNdc(e.clientX, e.clientY);
-        if (stateRef.current.mode === 'core' && stateRef.current.onToggleExplode) {
-          stateRef.current.onToggleExplode();
-        } else if (stateRef.current.mode === 'deck' && stateRef.current.onSelectProjectIndex) {
-          raycaster.setFromCamera(pointerNdc, camera);
-          const hits = raycaster.intersectObjects(deckCards, true);
-          const hitIndex = hits.find((h) => typeof h.object.userData?.projectIndex === 'number')
-            ?.object.userData.projectIndex;
-          if (typeof hitIndex === 'number') {
-            stateRef.current.onSelectProjectIndex(hitIndex);
+      if (dragState.active) {
+        const swipeDx = e.clientX - dragState.startX;
+        if (
+          dragState.moved &&
+          stateRef.current.mode === 'deck' &&
+          Math.abs(swipeDx) > 40 &&
+          stateRef.current.onSelectProjectIndex &&
+          deckCards.length > 1
+        ) {
+          const curIdx = stateRef.current.activeProjectIndex || 0;
+          const total = deckCards.length;
+          const nextIdx = swipeDx < 0 ? (curIdx + 1) % total : (curIdx - 1 + total) % total;
+          stateRef.current.onSelectProjectIndex(nextIdx);
+        } else if (!dragState.moved) {
+          updateNdc(e.clientX, e.clientY);
+          if (stateRef.current.mode === 'core' && stateRef.current.onToggleExplode) {
+            stateRef.current.onToggleExplode();
+          } else if (stateRef.current.mode === 'deck' && stateRef.current.onSelectProjectIndex) {
+            raycaster.setFromCamera(pointerNdc, camera);
+            const hits = raycaster.intersectObjects(deckCards, true);
+            const hitIndex = hits.find((h) => typeof h.object.userData?.projectIndex === 'number')
+              ?.object.userData.projectIndex;
+            if (typeof hitIndex === 'number') {
+              stateRef.current.onSelectProjectIndex(hitIndex);
+            }
           }
         }
       }
@@ -558,7 +639,11 @@ export function Hero3DCanvas({
         currentEnvDark = darkNow;
         dishMat.color.setHex(darkNow ? 0x0f172a : 0xf8fafc);
         deckCards.forEach((c) => {
-          c.children[0].material.color.setHex(darkNow ? 0x1e293b : 0xffffff);
+          if (c.userData?.bezelMat) {
+            c.userData.bezelMat.color.setHex(darkNow ? 0x1e293b : 0xf8fafc);
+            c.userData.bezelMat.emissive.setHex(darkNow ? 0x0f172a : 0xe2e8f0);
+            c.userData.bezelMat.emissiveIntensity = darkNow ? 0.25 : 0.42;
+          }
         });
       }
 
@@ -640,8 +725,18 @@ export function Hero3DCanvas({
 
       if (activeMode === 'deck') {
         ensureDeckBuilt();
-        deckGroup.rotation.y = dragState.hoverX * 0.14;
-        deckGroup.rotation.x = -dragState.hoverY * 0.08;
+        deckGroup.rotation.y = THREE.MathUtils.lerp(
+          deckGroup.rotation.y,
+          dragState.hoverX * 0.22 + dragState.velY * 2.5,
+          0.12
+        );
+        deckGroup.rotation.x = THREE.MathUtils.lerp(
+          deckGroup.rotation.x,
+          -dragState.hoverY * 0.14 + 0.04,
+          0.12
+        );
+        deckStageRing.rotation.z += prefersReduced ? 0 : 0.004;
+        deckInnerRing.rotation.z -= prefersReduced ? 0 : 0.006;
 
         const count = deckCards.length;
         deckCards.forEach((card, i) => {
@@ -649,17 +744,29 @@ export function Hero3DCanvas({
           if (diff > count / 2) diff -= count;
           if (diff < -count / 2) diff += count;
 
-          const targetX = diff * (1.38 + explodeLerp * 0.32);
-          const targetZ = -Math.abs(diff) * (1.35 + explodeLerp * 0.45) + (diff === 0 ? 0.45 : 0);
-          const targetY = Math.sin(clockTime * 1.3 + i) * 0.05;
-          const targetRotY = -diff * 0.52;
-          const targetScale = diff === 0 ? 0.98 : Math.max(0.58, 0.78 - Math.abs(diff) * 0.12);
+          const absD = Math.abs(diff);
+          const angle = diff * (0.48 + explodeLerp * 0.14);
+          const arcRadius = 3.25 + explodeLerp * 0.65;
+          const targetX = Math.sin(angle) * arcRadius;
+          const targetZ =
+            Math.cos(angle) * 0.9 - absD * (0.95 + explodeLerp * 0.45) + (diff === 0 ? 0.55 : -0.25);
+          const targetY =
+            (diff === 0 ? 0.12 : -absD * 0.08) + Math.sin(clockTime * 1.35 + i) * 0.04;
+          const targetRotY = -angle * 0.72;
+          const targetScale =
+            diff === 0 ? 1.0 : absD === 1 ? 0.72 : Math.max(0.5, 0.58 - absD * 0.08);
 
-          card.position.x = THREE.MathUtils.lerp(card.position.x, targetX, 0.1);
-          card.position.z = THREE.MathUtils.lerp(card.position.z, targetZ, 0.1);
-          card.position.y = THREE.MathUtils.lerp(card.position.y, targetY, 0.1);
-          card.rotation.y = THREE.MathUtils.lerp(card.rotation.y, targetRotY, 0.1);
-          card.scale.setScalar(THREE.MathUtils.lerp(card.scale.x, targetScale, 0.1));
+          card.position.x = THREE.MathUtils.lerp(card.position.x, targetX, 0.11);
+          card.position.z = THREE.MathUtils.lerp(card.position.z, targetZ, 0.11);
+          card.position.y = THREE.MathUtils.lerp(card.position.y, targetY, 0.11);
+          card.rotation.y = THREE.MathUtils.lerp(card.rotation.y, targetRotY, 0.11);
+          card.scale.setScalar(THREE.MathUtils.lerp(card.scale.x, targetScale, 0.11));
+
+          if (card.userData?.edgeMat && card.userData?.glassPlate) {
+            card.userData.edgeMat.color.setHex(diff === 0 ? 0x2563eb : 0x38bdf8);
+            card.userData.edgeMat.opacity = diff === 0 ? 0.85 : 0.28;
+            card.userData.glassPlate.position.z = -0.14 - explodeLerp * 0.38;
+          }
         });
       }
 

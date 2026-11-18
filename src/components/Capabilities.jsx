@@ -188,7 +188,7 @@ function AppleHighlightsBand({ isEn, prefersReduced }) {
       </div>
 
       {/* Carousel Container aligned to max-w-6xl so adjacent card peeks cleanly right */}
-      <div className="max-w-6xl mx-auto px-5 sm:px-6">
+      <ParallaxLayer yRange={[56, -56]} className="max-w-6xl mx-auto px-5 sm:px-6">
         <motion.div
           animate={{ x: -(activeSlide * stepPx) }}
           transition={
@@ -210,14 +210,14 @@ function AppleHighlightsBand({ isEn, prefersReduced }) {
                     setIsPlaying(false);
                   }
                 }}
-                className={`w-[88vw] sm:w-[82vw] md:w-[86%] max-w-[980px] shrink-0 rounded-[28px] sm:rounded-[34px] bg-white dark:bg-[#111522] border shadow-[0_24px_60px_-24px_rgba(15,23,42,0.08)] overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-center transition-all duration-300 ${
+                className={`w-[88vw] sm:w-[82vw] md:w-[86%] max-w-[980px] shrink-0 rounded-[28px] sm:rounded-[34px] liquid-glass overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-center transition-all duration-300 ${
                   isCurrent
                     ? "border-black/[0.08] dark:border-white/15"
                     : "border-black/[0.04] dark:border-white/[0.06] hover:border-black/15 cursor-pointer"
                 }`}
               >
                 <div className="lg:col-span-5 p-7 sm:p-11 flex flex-col justify-between gap-6">
-                  <span className="inline-flex w-fit px-3 py-1 rounded-full bg-[#F5F5F7] dark:bg-white/[0.08] font-mono text-[11px] font-semibold text-ink-muted uppercase tracking-[0.08em]">
+                  <span className="inline-flex w-fit px-3 py-1 rounded-full liquid-glass-pill font-mono text-[11px] font-semibold text-ink-muted uppercase tracking-[0.08em]">
                     {isEn ? slide.tagEn : slide.tagId}
                   </span>
                   <p className="font-display text-xl sm:text-2xl lg:text-[1.7rem] font-semibold tracking-[-0.025em] leading-[1.22] text-ink">
@@ -244,7 +244,7 @@ function AppleHighlightsBand({ isEn, prefersReduced }) {
             );
           })}
         </motion.div>
-      </div>
+      </ParallaxLayer>
 
       {/* Apple Floating Control Pill Bar */}
       <div className="mt-8 flex items-center justify-center gap-3 px-5">
@@ -254,7 +254,7 @@ function AppleHighlightsBand({ isEn, prefersReduced }) {
           aria-label={
             isPlaying ? "Pause highlight slides" : "Play highlight slides"
           }
-          className="w-11 h-11 rounded-full bg-white dark:bg-[#161B26] border border-black/[0.08] dark:border-white/15 shadow-sm flex items-center justify-center text-ink hover:scale-105 transition-transform"
+          className="w-11 h-11 rounded-full liquid-glass-pill flex items-center justify-center text-ink hover:scale-105 transition-transform"
         >
           {isPlaying ? (
             <Pause size={15} aria-hidden="true" />
@@ -266,7 +266,7 @@ function AppleHighlightsBand({ isEn, prefersReduced }) {
         <div
           role="group"
           aria-label="Highlight slides"
-          className="rounded-full bg-white dark:bg-[#161B26] border border-black/[0.08] dark:border-white/15 shadow-sm px-4 py-3.5 flex items-center gap-2.5"
+          className="rounded-full liquid-glass-pill px-4 py-3.5 flex items-center gap-2.5"
         >
           {HIGHLIGHT_SLIDES.map((slide, idx) => {
             const active = idx === activeSlide;
@@ -309,10 +309,10 @@ function PinnedZoomStage({ isEn, prefersReduced }) {
   const stageScale = useTransform(
     smoothProgress,
     [0, 0.48, 1],
-    [0.8, 1.03, 0.94],
+    [0.72, 1.06, 0.92],
   );
-  const stageY = useTransform(smoothProgress, [0, 0.48, 1], [64, 0, -38]);
-  const headingY = useTransform(smoothProgress, [0, 0.48], [42, -24]);
+  const stageY = useTransform(smoothProgress, [0, 0.48, 1], [92, 0, -52]);
+  const headingY = useTransform(smoothProgress, [0, 0.48], [68, -38]);
   const captionsOpacity = useTransform(
     smoothProgress,
     [0.08, 0.3, 1],
@@ -448,7 +448,11 @@ export default function Capabilities() {
         </div>
 
         {/* Single Unified Rounded Cinema Viewer Canvas (matching Apple Product Viewer) */}
-        <ParallaxLayer yRange={[54, -54]} scaleRange={[0.95, 1.02]}>
+        <ParallaxLayer
+          yRange={[86, -86]}
+          scaleRange={[0.92, 1.03]}
+          rotateXRange={[9, -3]}
+        >
           <div className="relative rounded-[28px] sm:rounded-[36px] liquid-glass overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-center min-h-[500px] lg:min-h-[580px]">
             <div
               aria-hidden="true"
@@ -591,11 +595,11 @@ export default function Capabilities() {
               <ParallaxLayer
                 key={imgSrc}
                 yRange={
-                  idx === 1 ? [76, -76] : idx === 0 ? [36, -36] : [56, -18]
+                  idx === 1 ? [105, -105] : idx === 0 ? [-48, 48] : [76, -42]
                 }
-                scaleRange={[0.95, 1.03]}
+                scaleRange={[0.92, 1.05]}
                 rotateRange={
-                  idx === 0 ? [-1.5, 0.5] : idx === 2 ? [1.5, -0.5] : [0, 0]
+                  idx === 0 ? [-2.5, 1] : idx === 2 ? [2.5, -1] : [0, 0]
                 }
                 className="rounded-[24px] liquid-glass p-2"
               >
@@ -621,7 +625,7 @@ export default function Capabilities() {
               return (
                 <ParallaxLayer
                   key={svc.title}
-                  yRange={idx === 1 ? [44, -44] : [18, -18]}
+                  yRange={idx === 1 ? [76, -76] : [-32, 32]}
                   className="liquid-glass rounded-3xl p-6 sm:p-7 flex flex-col"
                 >
                   <div className="flex items-center justify-between gap-3 mb-5">
