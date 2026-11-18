@@ -52,7 +52,7 @@ export function SpotlightCard({
       whileHover={hoverLift ? { y: -2 } : undefined}
       transition={{ duration: 0.2, ease: STUDIO_EASE }}
       className={cn(
-        'spotlight-surface rounded-xl bg-surface border border-line hover:border-ink/25 transition-[border-color,box-shadow] duration-200',
+        'spotlight-surface liquid-glass rounded-xl hover:border-accent/40 transition-[border-color,box-shadow] duration-200',
         className
       )}
       {...props}

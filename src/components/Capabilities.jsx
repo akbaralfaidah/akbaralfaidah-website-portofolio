@@ -309,10 +309,10 @@ function PinnedZoomStage({ isEn, prefersReduced }) {
   const stageScale = useTransform(
     smoothProgress,
     [0, 0.48, 1],
-    [0.88, 1.01, 0.96],
+    [0.8, 1.03, 0.94],
   );
-  const stageY = useTransform(smoothProgress, [0, 0.48, 1], [36, 0, -20]);
-  const headingY = useTransform(smoothProgress, [0, 0.48], [20, -8]);
+  const stageY = useTransform(smoothProgress, [0, 0.48, 1], [64, 0, -38]);
+  const headingY = useTransform(smoothProgress, [0, 0.48], [42, -24]);
   const captionsOpacity = useTransform(
     smoothProgress,
     [0.08, 0.3, 1],
@@ -344,7 +344,7 @@ function PinnedZoomStage({ isEn, prefersReduced }) {
             style={
               prefersReduced ? undefined : { scale: stageScale, y: stageY }
             }
-            className="w-full max-w-[780px] aspect-video rounded-[24px] sm:rounded-[30px] p-2 sm:p-2.5 bg-white dark:bg-[#0D1017] border border-black/[0.07] dark:border-white/15 shadow-[0_32px_80px_-24px_rgba(15,23,42,0.14)] overflow-hidden will-change-transform"
+            className="w-full max-w-[780px] aspect-video rounded-[24px] sm:rounded-[30px] p-2 sm:p-2.5 liquid-glass overflow-hidden will-change-transform"
           >
             <img
               src="/img/banners/bosdepot.webp"
@@ -448,16 +448,25 @@ export default function Capabilities() {
         </div>
 
         {/* Single Unified Rounded Cinema Viewer Canvas (matching Apple Product Viewer) */}
-        <div className="rounded-[28px] sm:rounded-[36px] bg-white dark:bg-[#0D1017] border border-black/[0.06] dark:border-white/10 shadow-[0_24px_70px_-24px_rgba(15,23,42,0.08)] overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-center min-h-[500px] lg:min-h-[580px]">
-          {/* Left Compact Apple Capsule (+) Pills + Up/Down Steppers */}
-          <div className="lg:col-span-5 p-6 sm:p-10 lg:pl-11 flex items-center gap-3.5 sm:gap-5 relative z-20">
-            <div className="hidden sm:flex flex-col items-center gap-2.5 shrink-0">
-              <button
-                type="button"
-                onClick={handlePrevStep}
-                aria-label={isEn ? "Previous capability" : "Detail sebelumnya"}
-                className="w-9 h-9 rounded-full bg-[#F5F5F7] dark:bg-white/[0.08] hover:bg-[#E8E8ED] dark:hover:bg-white/[0.15] text-ink flex items-center justify-center transition-colors"
-              >
+        <ParallaxLayer yRange={[54, -54]} scaleRange={[0.95, 1.02]}>
+          <div className="relative rounded-[28px] sm:rounded-[36px] liquid-glass overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-center min-h-[500px] lg:min-h-[580px]">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -top-28 -right-24 w-96 h-96 rounded-full bg-[radial-gradient(circle,rgba(37,99,235,0.12),transparent_68%)]"
+            />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -bottom-24 left-12 w-72 h-72 rounded-full bg-[radial-gradient(circle,rgba(14,165,233,0.1),transparent_68%)]"
+            />
+            {/* Left Compact Apple Capsule (+) Pills + Up/Down Steppers */}
+            <div className="lg:col-span-5 p-6 sm:p-10 lg:pl-11 flex items-center gap-3.5 sm:gap-5 relative z-20">
+              <div className="hidden sm:flex flex-col items-center gap-2.5 shrink-0">
+                <button
+                  type="button"
+                  onClick={handlePrevStep}
+                  aria-label={isEn ? "Previous capability" : "Detail sebelumnya"}
+                  className="w-9 h-9 rounded-full liquid-glass-pill hover:border-accent/45 text-ink flex items-center justify-center transition-all"
+                >
                 <ChevronUp size={16} aria-hidden="true" />
               </button>
               <button
@@ -545,11 +554,12 @@ export default function Capabilities() {
               </AnimatePresence>
             </div>
 
-            <div className="absolute bottom-4 right-5 px-3 py-1 rounded-full bg-white/90 dark:bg-black/60 border border-black/[0.06] dark:border-white/10 font-mono text-[11px] font-medium text-ink">
+            <div className="absolute bottom-4 right-5 px-3 py-1 rounded-full liquid-glass-pill font-mono text-[11px] font-medium text-ink">
               0{activeStep + 1} / 0{pillars.length || 4} · {currentBanner.tag}
             </div>
           </div>
-        </div>
+          </div>
+        </ParallaxLayer>
       </div>
 
       {/* Band 3A: Sticky Spring Scroll Zoom Stage */}
@@ -580,8 +590,14 @@ export default function Capabilities() {
             {SERVICE_BANNERS.map((imgSrc, idx) => (
               <ParallaxLayer
                 key={imgSrc}
-                yRange={idx === 1 ? [32, -32] : [14, -14]}
-                className="rounded-[24px] bg-white dark:bg-[#0D1017] p-2 border border-black/[0.06] dark:border-white/15 shadow-[0_18px_45px_-18px_rgba(15,23,42,0.1)]"
+                yRange={
+                  idx === 1 ? [76, -76] : idx === 0 ? [36, -36] : [56, -18]
+                }
+                scaleRange={[0.95, 1.03]}
+                rotateRange={
+                  idx === 0 ? [-1.5, 0.5] : idx === 2 ? [1.5, -0.5] : [0, 0]
+                }
+                className="rounded-[24px] liquid-glass p-2"
               >
                 <div className="aspect-video rounded-[18px] overflow-hidden bg-slate-100 dark:bg-slate-900">
                   <img
@@ -599,13 +615,17 @@ export default function Capabilities() {
           </div>
 
           {/* Open Architectural 3-Column Spec Pillars */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-12 pt-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 pt-4">
             {serviceItems.map((svc, idx) => {
               const Icon = SERVICE_ICONS[idx % SERVICE_ICONS.length];
               return (
-                <div key={svc.title} className="flex flex-col">
+                <ParallaxLayer
+                  key={svc.title}
+                  yRange={idx === 1 ? [44, -44] : [18, -18]}
+                  className="liquid-glass rounded-3xl p-6 sm:p-7 flex flex-col"
+                >
                   <div className="flex items-center justify-between gap-3 mb-5">
-                    <div className="w-11 h-11 rounded-xl bg-white dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/15 text-ink flex items-center justify-center">
+                    <div className="w-11 h-11 rounded-xl liquid-glass-pill text-ink flex items-center justify-center">
                       <Icon size={20} strokeWidth={1.75} aria-hidden="true" />
                     </div>
                     <span className="inline-flex items-center gap-1.5 font-mono text-xs text-ink-muted">
@@ -652,7 +672,7 @@ export default function Capabilities() {
                       <ArrowRight size={15} aria-hidden="true" />
                     </button>
                   </div>
-                </div>
+                </ParallaxLayer>
               );
             })}
           </div>

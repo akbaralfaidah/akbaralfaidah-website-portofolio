@@ -375,7 +375,7 @@ export default function Contact() {
               </p>
             </div>
 
-            <dl className="divide-y divide-line border-y border-line">
+            <dl className="liquid-glass rounded-2xl px-5 divide-y divide-line">
               <div className="py-4 flex items-center justify-between gap-4">
                 <dt className="font-mono text-xs text-ink-muted flex items-center gap-2 shrink-0">
                   <Mail size={14} aria-hidden="true" />
@@ -455,8 +455,8 @@ export default function Contact() {
 
               <p className="text-sm text-ink-muted leading-relaxed">{t('contact.map_desc')}</p>
 
-              <div className="aspect-[16/9] rounded-xl overflow-hidden border border-line bg-mist">
-                <ParallaxLayer yRange={[-24, 24]} scaleRange={[1.08, 1.08]} className="w-full h-full">
+              <div className="aspect-[16/9] rounded-xl overflow-hidden border border-line bg-mist shadow-sm">
+                <ParallaxLayer yRange={[-48, 48]} scaleRange={[1.14, 1.14]} className="w-full h-full">
                   <iframe
                     src={MAPS_EMBED_URL}
                     width="100%"
@@ -477,7 +477,7 @@ export default function Contact() {
           {/* Right Column: Clean Minimalist Inquiry Surface */}
           <ParallaxLayer yRange={[-40, 40]} className="lg:col-span-7">
             <FadeUp delay={0.06}>
-              <div className="rounded-2xl bg-surface border border-line p-6 sm:p-8 lg:p-10 shadow-[0_20px_50px_-18px_rgba(37,99,235,0.1)]">
+              <div className="liquid-glass rounded-2xl p-6 sm:p-8 lg:p-10 shadow-[0_20px_50px_-18px_rgba(37,99,235,0.1)]">
               <div
                 role="group"
                 aria-label="Contact channel"

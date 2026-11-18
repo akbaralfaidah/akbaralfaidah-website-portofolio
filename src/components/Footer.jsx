@@ -37,7 +37,8 @@ export default function Footer() {
   return (
     <footer className="bg-[#EEF2F9] dark:bg-[#080B12] text-ink border-t border-line pt-16 sm:pt-20 pb-8 px-5 sm:px-6 overflow-hidden transition-colors duration-300">
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-line">
+        <ParallaxLayer yRange={[44, -14]}>
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-line">
           <div className="md:col-span-5 flex flex-col gap-4">
             <Link
               to="/"
@@ -114,6 +115,7 @@ export default function Footer() {
             </ul>
           </div>
         </div>
+        </ParallaxLayer>
 
         <div className="py-7 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-sm text-ink-muted">
           <p>
@@ -123,7 +125,7 @@ export default function Footer() {
           <button
             type="button"
             onClick={scrollToTop}
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-ink hover:text-accent transition-colors"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full liquid-glass-pill text-sm font-medium text-ink hover:text-accent transition-colors"
           >
             <span>{isEn ? "Back to top" : "Kembali ke atas"}</span>
             <ArrowUp size={14} aria-hidden="true" />
@@ -135,7 +137,7 @@ export default function Footer() {
           className="pt-6 border-t border-line select-none overflow-hidden"
           aria-hidden="true"
         >
-          <ParallaxLayer yRange={[78, -6]} scaleRange={[0.92, 1]}>
+          <ParallaxLayer yRange={[110, -8]} scaleRange={[0.88, 1.02]}>
             <p className="font-display font-semibold tracking-[-0.045em] leading-[0.86] text-[clamp(2.4rem,10.8vw,8.6rem)] text-ink/[0.045] dark:text-white/[0.06] whitespace-nowrap">
               AKBAR ALFAIDAH
             </p>

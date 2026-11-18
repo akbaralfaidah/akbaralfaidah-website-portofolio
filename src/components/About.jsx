@@ -72,7 +72,7 @@ export default function About() {
         </FadeUp>
 
         {/* Bio & Hairline 2x2 Index gliding at distinct speed */}
-        <ParallaxLayer yRange={[44, -44]} className="lg:col-span-7 space-y-7">
+        <ParallaxLayer yRange={[78, -78]} className="lg:col-span-7 space-y-7">
           <FadeUp>
             <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent font-semibold mb-3">
               {isEn ? '03 / The Engineer' : '03 / Profil'}
@@ -109,12 +109,12 @@ export default function About() {
             <p>{t('about.desc_3')}</p>
           </FadeUp>
 
-          <dl className="grid grid-cols-1 sm:grid-cols-2 border-t border-line pt-6 gap-x-8 gap-y-6">
+          <dl className="grid grid-cols-1 sm:grid-cols-2 border-t border-line pt-6 gap-4 sm:gap-5">
             {Array.isArray(facts) &&
               facts.map((fact) => (
                 <div
                   key={fact.label}
-                  className="border-t border-line pt-3 first:border-t-0 sm:first:border-t sm:pt-3"
+                  className="liquid-glass rounded-2xl p-4 sm:p-5"
                 >
                   <dt className="font-mono text-xs text-ink-muted mb-1">{fact.label}</dt>
                   <dd className="font-display text-base sm:text-lg font-semibold text-ink">

@@ -77,7 +77,7 @@ function TiltCenterCard({ project, isEn, ctaLabel, onDragPrev, onDragNext }) {
       whileHover={{ scale: 1.018 }}
       transition={{ duration: 0.25, ease: STUDIO_EASE }}
       data-cursor={isEn ? 'Open Case ↗' : `${ctaLabel} ↗`}
-      className="group relative w-full aspect-video rounded-2xl p-1.5 sm:p-2 bg-white/95 dark:bg-slate-900 ring-1 ring-slate-200/90 dark:ring-white/15 shadow-[0_32px_70px_-16px_rgba(37,99,235,0.22),0_16px_36px_-14px_rgba(15,23,42,0.14)] cursor-pointer select-none overflow-hidden"
+      className="group relative w-full aspect-video rounded-2xl p-1.5 sm:p-2 liquid-glass shadow-[0_32px_70px_-16px_rgba(37,99,235,0.22),0_16px_36px_-14px_rgba(15,23,42,0.14)] cursor-pointer select-none overflow-hidden"
     >
       <div className="relative w-full h-full rounded-xl overflow-hidden bg-white dark:bg-slate-950">
         <img
@@ -99,7 +99,7 @@ function TiltCenterCard({ project, isEn, ctaLabel, onDragPrev, onDragNext }) {
         />
 
         {/* Subtle interactive corner prompt */}
-        <div className="pointer-events-none absolute top-3.5 right-3.5 px-3 py-1.5 rounded-full bg-white/90 text-slate-900 font-mono text-[11px] font-semibold shadow-md backdrop-blur-md opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 inline-flex items-center gap-1">
+        <div className="pointer-events-none absolute top-3.5 right-3.5 px-3 py-1.5 rounded-full liquid-glass-pill text-ink font-mono text-[11px] font-semibold opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 inline-flex items-center gap-1">
           <span>{isEn ? 'Explore 3D Case' : 'Buka Detail'}</span>
           <ArrowUpRight size={13} aria-hidden="true" />
         </div>
@@ -298,9 +298,9 @@ export default function Projects() {
             <div className="space-y-8">
               {/* Interactive 3D Spatial Coverflow Exhibition Stage with Deep Camera Unfold Parallax */}
               <ParallaxLayer
-                yRange={[75, -55]}
-                scaleRange={[0.88, 1.03]}
-                rotateXRange={[14, -4]}
+                yRange={[98, -76]}
+                scaleRange={[0.84, 1.04]}
+                rotateXRange={[18, -6]}
               >
                 <div
                   className="relative h-[240px] sm:h-[360px] lg:h-[430px] flex items-center justify-center"
@@ -352,7 +352,7 @@ export default function Projects() {
                           onDragNext={goNext}
                         />
                       ) : (
-                        <div className="aspect-video rounded-2xl p-1.5 bg-white/90 dark:bg-slate-900 ring-1 ring-slate-200/85 dark:ring-white/15 shadow-xl overflow-hidden hover:ring-accent/60 transition-all">
+                        <div className="aspect-video rounded-2xl p-1.5 liquid-glass shadow-xl overflow-hidden hover:border-accent/60 transition-all">
                           <img
                             src={project.src}
                             alt={`${project.name} preview`}
@@ -393,8 +393,8 @@ export default function Projects() {
               </ParallaxLayer>
 
               {/* Integrated Live Active Project Spec Console */}
-              <ParallaxLayer yRange={[14, -14]}>
-                <div className="rounded-2xl bg-surface/95 border border-line p-6 sm:p-8 shadow-[0_18px_50px_-18px_rgba(37,99,235,0.12),0_8px_24px_-12px_rgba(15,23,42,0.06)]">
+              <ParallaxLayer yRange={[44, -44]} scaleRange={[0.97, 1.01]}>
+                <div className="liquid-glass rounded-2xl p-6 sm:p-8">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={focusedProject.slug}
@@ -457,7 +457,7 @@ export default function Projects() {
                         <button
                           type="button"
                           onClick={() => setQuickProject(focusedProject)}
-                          className="flex-1 min-h-[42px] px-4 py-2 rounded-lg border border-line bg-paper/60 hover:border-accent/50 hover:text-accent text-sm font-medium text-ink inline-flex items-center justify-center gap-1.5 transition-colors"
+                          className="flex-1 min-h-[42px] px-4 py-2 rounded-lg liquid-glass-pill hover:border-accent/50 hover:text-accent text-sm font-medium text-ink inline-flex items-center justify-center gap-1.5 transition-colors"
                         >
                           <Eye size={15} aria-hidden="true" />
                           <span>{isEn ? 'Quick View' : 'Ringkasan'}</span>
@@ -468,7 +468,7 @@ export default function Projects() {
                             href={focusedProject.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="min-h-[42px] px-4 py-2 rounded-lg border border-line bg-paper/60 hover:border-accent/50 hover:text-accent text-sm font-medium text-ink inline-flex items-center justify-center gap-1.5 transition-colors"
+                            className="min-h-[42px] px-4 py-2 rounded-lg liquid-glass-pill hover:border-accent/50 hover:text-accent text-sm font-medium text-ink inline-flex items-center justify-center gap-1.5 transition-colors"
                             aria-label={`Open live ${focusedProject.name}`}
                           >
                             <span>Live</span>
@@ -490,13 +490,13 @@ export default function Projects() {
                     return (
                       <ParallaxLayer
                         key={proj.id || proj.slug}
-                        yRange={idx % 2 === 0 ? [24, -24] : [52, -52]}
+                        yRange={idx % 2 === 0 ? [38, -38] : [82, -82]}
                       >
                         <div
-                          className={`group relative rounded-xl border p-2 transition-all duration-200 ${
+                          className={`group relative rounded-xl liquid-glass p-2 transition-all duration-200 ${
                             isActive
-                              ? 'bg-white dark:bg-surface border-accent ring-2 ring-accent/20 shadow-md -translate-y-0.5'
-                              : 'bg-surface/70 border-line hover:border-accent/45 hover:bg-surface hover:-translate-y-0.5'
+                              ? 'border-accent ring-2 ring-accent/25 shadow-lg -translate-y-0.5'
+                              : 'hover:border-accent/45 hover:-translate-y-0.5'
                           }`}
                         >
                         <button

@@ -32,15 +32,15 @@ const GITHUB_API_URL = `https://github-contributions-api.jogruber.de/v4/${GITHUB
 function getCellColorClass(level) {
   switch (level) {
     case 1:
-      return "bg-blue-200 dark:bg-blue-950/85";
+      return "bg-[#6ee7b7] dark:bg-[#0e4429] border border-[#34d399]/70 dark:border-[#006d32]/60 shadow-[0_0_5px_rgba(52,211,153,0.28)]";
     case 2:
-      return "bg-blue-400 dark:bg-blue-700";
+      return "bg-[#10b981] dark:bg-[#006d32] shadow-[0_0_8px_rgba(16,185,129,0.5)]";
     case 3:
-      return "bg-blue-600 dark:bg-blue-500";
+      return "bg-[#00d959] dark:bg-[#26a641] shadow-[0_0_11px_rgba(0,217,89,0.72)]";
     case 4:
-      return "bg-blue-800 dark:bg-blue-400";
+      return "bg-[#00c853] dark:bg-[#39d353] ring-1 ring-[#69f0ae]/85 dark:ring-[#56d364]/80 shadow-[0_0_16px_rgba(0,200,83,0.88)]";
     default:
-      return "bg-mist border border-line/60";
+      return "bg-slate-200/75 dark:bg-white/[0.07] border border-slate-300/60 dark:border-white/10";
   }
 }
 
@@ -348,7 +348,7 @@ export default function Experience() {
             </div>
 
             {/* Compact Sector Coverage Snapshot */}
-            <div className="rounded-2xl bg-white/90 dark:bg-surface border border-line p-4 space-y-2.5 shadow-sm">
+            <div className="liquid-glass rounded-2xl p-4 space-y-2.5">
               <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-accent font-semibold">
                 <Sparkles size={13} aria-hidden="true" />
                 <span>{isEn ? "Sector Coverage" : "Lintas Sektor"}</span>
@@ -380,7 +380,7 @@ export default function Experience() {
                 {visibleExperiences.map((exp, idx) => {
                   const SectorIcon = exp.meta.icon;
                   const isFocused = idx === activeCardIdx;
-                  const parallaxY = idx % 2 === 0 ? [34, -34] : [64, -64];
+                  const parallaxY = idx % 2 === 0 ? [52, -52] : [92, -92];
 
                   return (
                     <motion.div
@@ -472,8 +472,16 @@ export default function Experience() {
         </div>
 
         {/* Interactive GitHub Telemetry Matrix wrapped in Parallax Depth */}
-        <ParallaxLayer yRange={[56, -48]} scaleRange={[0.96, 1.01]}>
-          <div className="rounded-2xl bg-white/95 dark:bg-surface border border-line p-6 sm:p-8 space-y-6 shadow-[0_22px_55px_-18px_rgba(37,99,235,0.12)]">
+        <ParallaxLayer yRange={[84, -74]} scaleRange={[0.94, 1.02]}>
+          <div className="relative overflow-hidden liquid-glass rounded-3xl p-6 sm:p-8 space-y-6">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[radial-gradient(circle,rgba(16,185,129,0.16),transparent_68%)]"
+            />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-[radial-gradient(circle,rgba(37,99,235,0.12),transparent_68%)]"
+            />
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-line">
               <div className="flex items-center gap-3">
                 <GitCommitHorizontal
@@ -611,7 +619,7 @@ export default function Experience() {
             ) : (
               <div className="overflow-x-auto">
                 <img
-                  src={`https://ghchart.rshah.org/2563EB/${GITHUB_USER}`}
+                  src={`https://ghchart.rshah.org/00C853/${GITHUB_USER}`}
                   alt={`GitHub commit activity chart for ${GITHUB_USER}`}
                   width={892}
                   height={112}

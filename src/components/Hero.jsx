@@ -162,14 +162,15 @@ export default function Hero() {
         const h = heroEl.offsetHeight || window.innerHeight || 900;
         const progress = Math.min(1, Math.max(0, window.scrollY / h));
         if (bgLayerRef.current) {
-          bgLayerRef.current.style.transform = `translate3d(0, ${(progress * 180).toFixed(1)}px, 0)`;
+          bgLayerRef.current.style.transform = `translate3d(0, ${(progress * 240).toFixed(1)}px, 0)`;
         }
         if (textLayerRef.current) {
-          textLayerRef.current.style.transform = `translate3d(0, ${(-progress * 90).toFixed(1)}px, 0)`;
+          textLayerRef.current.style.transform = `translate3d(0, ${(-progress * 115).toFixed(1)}px, 0)`;
         }
         if (stageLayerRef.current) {
-          const s = (1 - progress * 0.1).toFixed(3);
-          stageLayerRef.current.style.transform = `translate3d(0, ${(progress * 105).toFixed(1)}px, 0) scale(${s})`;
+          const s = (1 - progress * 0.14).toFixed(3);
+          const tiltDeg = (-progress * 2.4).toFixed(2);
+          stageLayerRef.current.style.transform = `translate3d(0, ${(progress * 135).toFixed(1)}px, 0) scale(${s}) rotate(${tiltDeg}deg)`;
         }
       });
     };
