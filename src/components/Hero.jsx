@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   ArrowRight,
   ArrowUpRight,
+  ArrowDown,
   Cat,
   Radar,
   Layers,
@@ -101,22 +102,39 @@ export default function Hero() {
   const [mount3D, setMount3D] = useState(false);
 
   const heroRef = useRef(null);
+  const hero2Ref = useRef(null);
   const bgLayerRef = useRef(null);
   const titleTopRef = useRef(null);
   const titleBotRef = useRef(null);
+  const heroCueRef = useRef(null);
   const textLayerRef = useRef(null);
   const stageLayerRef = useRef(null);
 
   useEffect(() => {
-    const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 1024;
-    if (!isDesktop) return undefined;
-
     const activate = () => setMount3D(true);
-    window.addEventListener('pointermove', activate, { once: true, passive: true });
-    const timer = window.setTimeout(activate, 3600);
+    const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 1024;
+    if (isDesktop) {
+      window.addEventListener('pointermove', activate, { once: true, passive: true });
+    }
+    const timer = window.setTimeout(activate, isDesktop ? 2200 : 3200);
+
+    let io;
+    if (hero2Ref.current && typeof IntersectionObserver !== 'undefined') {
+      io = new IntersectionObserver(
+        ([entry]) => {
+          if (entry?.isIntersecting) {
+            activate();
+          }
+        },
+        { rootMargin: '120px 0px', threshold: 0.02 }
+      );
+      io.observe(hero2Ref.current);
+    }
+
     return () => {
       window.removeEventListener('pointermove', activate);
       window.clearTimeout(timer);
+      if (io) io.disconnect();
     };
   }, []);
 
@@ -131,33 +149,47 @@ export default function Hero() {
       raf = window.requestAnimationFrame(() => {
         raf = 0;
         const heroEl = heroRef.current;
-        if (!heroEl) return;
-        const h = heroEl.offsetHeight || window.innerHeight || 900;
-        const progress = Math.min(1, Math.max(0, window.scrollY / h));
-        if (bgLayerRef.current) {
-          const bgScale = (1 + progress * 0.1).toFixed(3);
-          bgLayerRef.current.style.transform = `translate3d(0, ${(progress * 360).toFixed(1)}px, 0) scale(${bgScale})`;
+        if (heroEl) {
+          const h = heroEl.offsetHeight || window.innerHeight || 900;
+          const progress = Math.min(1, Math.max(0, window.scrollY / h));
+          if (bgLayerRef.current) {
+            const bgScale = (1 + progress * 0.1).toFixed(3);
+            bgLayerRef.current.style.transform = `translate3d(0, ${(progress * 340).toFixed(1)}px, 0) scale(${bgScale})`;
+          }
+          if (titleTopRef.current) {
+            const scale = (1 + progress * 0.06).toFixed(3);
+            titleTopRef.current.style.transform = `translate3d(${(-progress * 185).toFixed(1)}px, ${(-progress * 85).toFixed(1)}px, 0) scale(${scale})`;
+            titleTopRef.current.style.opacity = `${Math.max(0.12, 1 - progress * 0.85).toFixed(3)}`;
+          }
+          if (titleBotRef.current) {
+            const scale = (1 + progress * 0.06).toFixed(3);
+            titleBotRef.current.style.transform = `translate3d(${(progress * 185).toFixed(1)}px, ${(-progress * 85).toFixed(1)}px, 0) scale(${scale})`;
+            titleBotRef.current.style.opacity = `${Math.max(0.15, 1 - progress * 0.8).toFixed(3)}`;
+          }
+          if (heroCueRef.current) {
+            heroCueRef.current.style.transform = `translate3d(0, ${(-progress * 70).toFixed(1)}px, 0)`;
+            heroCueRef.current.style.opacity = `${Math.max(0, 1 - progress * 1.15).toFixed(3)}`;
+          }
         }
-        if (titleTopRef.current) {
-          titleTopRef.current.style.transform = `translate3d(${(-progress * 145).toFixed(1)}px, ${(-progress * 75).toFixed(1)}px, 0)`;
-          titleTopRef.current.style.opacity = `${Math.max(0.18, 1 - progress * 0.78).toFixed(3)}`;
-        }
-        if (titleBotRef.current) {
-          titleBotRef.current.style.transform = `translate3d(${(progress * 145).toFixed(1)}px, ${(-progress * 75).toFixed(1)}px, 0)`;
-          titleBotRef.current.style.opacity = `${Math.max(0.24, 1 - progress * 0.72).toFixed(3)}`;
-        }
-        if (textLayerRef.current) {
-          textLayerRef.current.style.transform = `translate3d(0, ${(-progress * 135).toFixed(1)}px, 0)`;
-          textLayerRef.current.style.opacity = `${Math.max(0.25, 1 - progress * 0.68).toFixed(3)}`;
-        }
-        if (stageLayerRef.current) {
-          const s = (1 - progress * 0.16).toFixed(3);
-          const tiltDeg = (-progress * 3.0).toFixed(2);
-          stageLayerRef.current.style.transform = `translate3d(0, ${(progress * 185).toFixed(1)}px, 0) scale(${s}) rotate(${tiltDeg}deg)`;
+
+        const hero2El = hero2Ref.current;
+        if (hero2El) {
+          const r2 = hero2El.getBoundingClientRect();
+          const vh = window.innerHeight || 900;
+          const norm = Math.max(-1, Math.min(1, (r2.top + r2.height / 2 - vh / 2) / vh));
+          if (textLayerRef.current) {
+            textLayerRef.current.style.transform = `translate3d(0, ${(norm * 72).toFixed(1)}px, 0)`;
+          }
+          if (stageLayerRef.current) {
+            const s = (1 - Math.abs(norm) * 0.08).toFixed(3);
+            const tiltDeg = (norm * -2.6).toFixed(2);
+            stageLayerRef.current.style.transform = `translate3d(0, ${(-norm * 85).toFixed(1)}px, 0) scale(${s}) rotate(${tiltDeg}deg)`;
+          }
         }
       });
     };
 
+    onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', onScroll);
@@ -169,6 +201,17 @@ export default function Hero() {
   const isDark = theme === 'dark';
   const facts = t('hero.facts', { returnObjects: true }) || [];
   const activeProject = heroProjects[activeSlide] || heroProjects[0];
+
+  const scrollToStage = () => {
+    setMount3D(true);
+    const targetEl = hero2Ref.current || document.getElementById('hero-stage');
+    if (!targetEl) return;
+    if (window.__lenis) {
+      window.__lenis.scrollTo(targetEl, { offset: 0, duration: 1.1 });
+    } else {
+      targetEl.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const scrollToContact = () => {
     window.dispatchEvent(new CustomEvent('app:preload-sections'));
@@ -198,41 +241,41 @@ export default function Hero() {
   };
 
   return (
-    <section
-      ref={heroRef}
-      id="hero"
-      className="relative min-h-[100svh] flex items-center bg-paper text-ink pt-20 pb-10 sm:pt-24 sm:pb-12 border-b border-line overflow-hidden"
-    >
-      {/* Parallax Depth Layer 1: Luminous Daylight Radial Atmosphere + Vector Ribbons */}
-      <div
-        ref={bgLayerRef}
-        className="pointer-events-none absolute inset-0 will-change-transform"
+    <>
+      {/* HERO 1: Full-Viewport Architectural SOFTWARE ENGINEER. Statement + Curtain Split Parallax */}
+      <section
+        ref={heroRef}
+        id="hero"
+        className="relative min-h-[100svh] flex flex-col justify-center bg-paper text-ink pt-20 pb-14 px-5 sm:px-6 border-b border-line overflow-hidden"
       >
-        <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
-          <div
-            className="absolute -top-32 right-[-8%] w-[700px] h-[700px] rounded-full opacity-95 dark:opacity-35"
-            style={{
-              background:
-                'radial-gradient(circle, rgba(56,189,248,0.20) 0%, rgba(37,99,235,0.08) 45%, transparent 72%)'
-            }}
-          />
-          <div
-            className="absolute -bottom-36 left-[-8%] w-[580px] h-[580px] rounded-full opacity-90 dark:opacity-30"
-            style={{
-              background:
-                'radial-gradient(circle, rgba(16,185,129,0.14) 0%, rgba(14,165,233,0.06) 48%, transparent 74%)'
-            }}
-          />
+        {/* Parallax Depth Layer 1: Luminous Daylight Radial Atmosphere + Vector Ribbons */}
+        <div
+          ref={bgLayerRef}
+          className="pointer-events-none absolute inset-0 will-change-transform"
+        >
+          <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
+            <div
+              className="absolute -top-32 right-[-8%] w-[700px] h-[700px] rounded-full opacity-95 dark:opacity-35"
+              style={{
+                background:
+                  'radial-gradient(circle, rgba(56,189,248,0.22) 0%, rgba(37,99,235,0.08) 45%, transparent 72%)'
+              }}
+            />
+            <div
+              className="absolute -bottom-36 left-[-8%] w-[580px] h-[580px] rounded-full opacity-90 dark:opacity-30"
+              style={{
+                background:
+                  'radial-gradient(circle, rgba(16,185,129,0.14) 0%, rgba(14,165,233,0.06) 48%, transparent 74%)'
+              }}
+            />
+          </div>
+
+          <HeroCanvas />
         </div>
 
-        <HeroCanvas />
-      </div>
-
-      <div className="relative z-10 max-w-6xl w-full mx-auto px-5 sm:px-6 flex flex-col gap-6 lg:gap-9">
-        {/* Top Monumental Single-Line Centered Parallax Display Header */}
-        <div className="w-full text-center flex flex-col items-center">
-          <div className="flex flex-wrap items-center justify-center gap-2.5 mb-4">
-            <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 rounded-full liquid-glass-pill font-mono text-[10px] sm:text-xs uppercase tracking-[0.06em] sm:tracking-[0.12em] whitespace-nowrap max-w-full text-ink-muted">
+        <div className="relative z-10 max-w-6xl w-full mx-auto text-center flex flex-col items-center">
+          <div className="flex flex-wrap items-center justify-center gap-2.5 mb-6 sm:mb-8">
+            <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3.5 py-1.5 rounded-full liquid-glass-pill font-mono text-[10px] sm:text-xs uppercase tracking-[0.06em] sm:tracking-[0.12em] whitespace-nowrap max-w-full text-ink-muted">
               <span className="relative flex h-2 w-2 shrink-0" aria-hidden="true">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
@@ -245,91 +288,147 @@ export default function Hero() {
             </span>
           </div>
 
-          <h1 className="w-full flex items-baseline justify-center gap-x-[0.22em] whitespace-nowrap font-display font-bold uppercase tracking-[-0.045em] leading-[0.95] select-none">
+          <h1 className="w-full flex items-baseline justify-center gap-x-[0.22em] whitespace-nowrap font-display font-bold uppercase tracking-[-0.045em] leading-[0.95] select-none mb-7 sm:mb-9">
             <span
               ref={titleTopRef}
-              className="inline-block text-[clamp(1.7rem,6.75vw,6.05rem)] text-ink will-change-transform"
+              className="inline-block text-[clamp(1.75rem,7.15vw,6.65rem)] text-ink will-change-transform"
             >
               SOFTWARE
             </span>
             <span
               ref={titleBotRef}
-              className="inline-block text-[clamp(1.75rem,6.9vw,6.2rem)] font-serif italic font-normal text-accent will-change-transform"
+              className="inline-block text-[clamp(1.8rem,7.3vw,6.85rem)] font-serif italic font-normal text-accent will-change-transform"
             >
               ENGINEER.
             </span>
           </h1>
-        </div>
 
-        {/* Lower Split Deck: Editorial Pitch + Interactive 3D Cat Stage */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
-          {/* Parallax Depth Layer 2: Editorial Pitch & CTA */}
-          <div
-            ref={textLayerRef}
-            className="lg:col-span-5 flex flex-col items-start will-change-transform"
-          >
-            <h2 className="font-display text-xl sm:text-2xl lg:text-[1.7rem] font-semibold tracking-[-0.025em] leading-[1.2] text-ink mb-3">
+          <div ref={heroCueRef} className="max-w-2xl mx-auto space-y-6 will-change-transform">
+            <p className="font-mono text-xs sm:text-sm uppercase tracking-[0.16em] text-ink-muted">
+              Akbar Alfaidah · Tech Agency
+            </p>
+            <p className="text-base sm:text-xl text-ink-muted leading-relaxed">
               {isEn
-                ? 'Websites, Mobile Apps & AI Systems Ready to Ship.'
-                : 'Website, Aplikasi Mobile & Sistem AI yang Siap Pakai.'}
-            </h2>
-
-            <p className="text-sm sm:text-base text-ink-muted leading-relaxed max-w-lg mb-6">
-              {t('hero.subtitle')}
+                ? 'Designing and shipping fast websites, field-ready mobile apps, and applied AI systems from scratch.'
+                : 'Merancang website, aplikasi mobile lapangan, dan integrasi AI dari nol hingga berjalan stabil di server produksi.'}
             </p>
 
-            <div className="flex flex-wrap items-center gap-3 mb-7 w-full sm:w-auto">
-              <Magnetic strength={0.25} className="w-full sm:w-auto">
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-3.5">
+              <button
+                type="button"
+                onClick={scrollToStage}
+                className="group inline-flex items-center gap-2 px-5 py-3 rounded-full liquid-glass-pill text-sm font-medium text-ink hover:border-accent/50 hover:text-accent transition-all"
+              >
+                <span>{isEn ? 'Explore 3D Studio & Cat' : 'Masuk Studio 3D & Kucing'}</span>
+                <ArrowDown
+                  size={16}
+                  className="transition-transform duration-300 group-hover:translate-y-0.5"
+                  aria-hidden="true"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* HERO 2: Interactive 3D Cat Stage & Engineering Pitch (Second Full-Screen Section) */}
+      <section
+        ref={hero2Ref}
+        id="hero-stage"
+        className="relative min-h-[100svh] flex items-center bg-[#F6F8FE] dark:bg-[#0A0E18] text-ink py-20 sm:py-24 px-5 sm:px-6 border-b border-line overflow-hidden"
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-24 right-[-10%] w-[560px] h-[560px] rounded-full bg-[radial-gradient(circle,rgba(37,99,235,0.09),transparent_68%)]"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-24 left-[-10%] w-[520px] h-[520px] rounded-full bg-[radial-gradient(circle,rgba(16,185,129,0.09),transparent_68%)]"
+        />
+
+        <div className="relative z-10 max-w-6xl w-full mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+            {/* Parallax Depth Layer 2: Editorial Pitch & CTA */}
+            <div
+              ref={textLayerRef}
+              className="lg:col-span-5 flex flex-col items-start will-change-transform"
+            >
+              <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent font-semibold mb-3">
+                {isEn ? 'Interactive Studio' : 'Studio Interaktif'}
+              </p>
+
+              <h2 className="font-display text-2xl sm:text-4xl lg:text-[2.65rem] font-semibold tracking-[-0.03em] leading-[1.08] text-ink mb-4">
+                {isEn ? (
+                  <>
+                    Websites, Mobile Apps &amp;{' '}
+                    <span className="font-serif italic font-normal text-accent">Applied AI</span>{' '}
+                    Built to Ship.
+                  </>
+                ) : (
+                  <>
+                    Website, Aplikasi Mobile &amp;{' '}
+                    <span className="font-serif italic font-normal text-accent">Sistem AI</span>{' '}
+                    yang Siap Pakai.
+                  </>
+                )}
+              </h2>
+
+              <p className="text-sm sm:text-base text-ink-muted leading-relaxed max-w-lg mb-7">
+                {t('hero.subtitle')}
+              </p>
+
+              <div className="flex flex-wrap items-center gap-3 mb-8 w-full sm:w-auto">
+                <Magnetic strength={0.25} className="w-full sm:w-auto">
+                  <Button
+                    variant="accent"
+                    size="lg"
+                    onClick={scrollToContact}
+                    className="w-full sm:w-auto"
+                  >
+                    <span>{t('hero.cta_primary')}</span>
+                    <ArrowRight
+                      size={17}
+                      className="transition-transform duration-200 group-hover:translate-x-1"
+                      aria-hidden="true"
+                    />
+                  </Button>
+                </Magnetic>
+
                 <Button
-                  variant="accent"
+                  as={Link}
+                  to="/projects"
+                  variant="outline"
                   size="lg"
-                  onClick={scrollToContact}
                   className="w-full sm:w-auto"
                 >
-                  <span>{t('hero.cta_primary')}</span>
-                  <ArrowRight
+                  <span>{t('hero.cta_secondary')}</span>
+                  <ArrowUpRight
                     size={17}
-                    className="transition-transform duration-200 group-hover:translate-x-1"
+                    className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                     aria-hidden="true"
                   />
                 </Button>
-              </Magnetic>
+              </div>
 
-              <Button
-                as={Link}
-                to="/projects"
-                variant="outline"
-                size="lg"
-                className="w-full sm:w-auto"
-              >
-                <span>{t('hero.cta_secondary')}</span>
-                <ArrowUpRight
-                  size={17}
-                  className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                  aria-hidden="true"
-                />
-              </Button>
+              <dl className="w-full grid grid-cols-3 gap-3 sm:gap-4 pt-5 border-t border-line">
+                {Array.isArray(facts) &&
+                  facts.map((fact) => (
+                    <div key={fact.label}>
+                      <dt className="font-mono text-[10px] sm:text-[11px] uppercase tracking-wider text-ink-muted mb-1">
+                        {fact.label}
+                      </dt>
+                      <dd className="text-xs sm:text-sm font-semibold text-ink">{fact.value}</dd>
+                    </div>
+                  ))}
+              </dl>
             </div>
 
-            <dl className="w-full grid grid-cols-3 gap-3 sm:gap-4 pt-5 border-t border-line">
-              {Array.isArray(facts) &&
-                facts.map((fact) => (
-                  <div key={fact.label}>
-                    <dt className="font-mono text-[10px] sm:text-[11px] uppercase tracking-wider text-ink-muted mb-1">
-                      {fact.label}
-                    </dt>
-                    <dd className="text-xs sm:text-sm font-semibold text-ink">{fact.value}</dd>
-                  </div>
-                ))}
-            </dl>
-          </div>
-
-          {/* Parallax Depth Layer 3: Interactive 3D Cat, Radar & Spatial Gallery Stage */}
-          <div
-            ref={stageLayerRef}
-            onPointerEnter={() => setMount3D(true)}
-            className="lg:col-span-7 relative h-[350px] sm:h-[430px] lg:h-[470px] flex flex-col justify-between will-change-transform"
-          >
+            {/* Parallax Depth Layer 3: Full-Space Interactive 3D Cat Stage */}
+            <div
+              ref={stageLayerRef}
+              onPointerEnter={() => setMount3D(true)}
+              className="lg:col-span-7 relative h-[380px] sm:h-[460px] lg:h-[530px] flex flex-col justify-between will-change-transform"
+            >
             {/* Floating Top Mode Switcher + Contextual Status Pill */}
             <div className="relative z-20 flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-1 p-1 rounded-full liquid-glass-pill">
@@ -552,8 +651,9 @@ export default function Hero() {
             )}
             </div>
           </div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
