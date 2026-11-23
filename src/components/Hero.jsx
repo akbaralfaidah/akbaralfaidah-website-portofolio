@@ -139,12 +139,12 @@ export default function Hero() {
           bgLayerRef.current.style.transform = `translate3d(0, ${(progress * 360).toFixed(1)}px, 0) scale(${bgScale})`;
         }
         if (titleTopRef.current) {
-          titleTopRef.current.style.transform = `translate3d(${(progress * 155).toFixed(1)}px, ${(-progress * 95).toFixed(1)}px, 0)`;
+          titleTopRef.current.style.transform = `translate3d(${(-progress * 145).toFixed(1)}px, ${(-progress * 75).toFixed(1)}px, 0)`;
           titleTopRef.current.style.opacity = `${Math.max(0.18, 1 - progress * 0.78).toFixed(3)}`;
         }
         if (titleBotRef.current) {
-          titleBotRef.current.style.transform = `translate3d(${(-progress * 155).toFixed(1)}px, ${(-progress * 55).toFixed(1)}px, 0)`;
-          titleBotRef.current.style.opacity = `${Math.max(0.24, 1 - progress * 0.68).toFixed(3)}`;
+          titleBotRef.current.style.transform = `translate3d(${(progress * 145).toFixed(1)}px, ${(-progress * 75).toFixed(1)}px, 0)`;
+          titleBotRef.current.style.opacity = `${Math.max(0.24, 1 - progress * 0.72).toFixed(3)}`;
         }
         if (textLayerRef.current) {
           textLayerRef.current.style.transform = `translate3d(0, ${(-progress * 135).toFixed(1)}px, 0)`;
@@ -228,10 +228,10 @@ export default function Hero() {
         <HeroCanvas />
       </div>
 
-      <div className="relative z-10 max-w-6xl w-full mx-auto px-5 sm:px-6 flex flex-col gap-6 lg:gap-8">
-        {/* Top Monumental Parallax Display Header */}
-        <div className="w-full">
-          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+      <div className="relative z-10 max-w-6xl w-full mx-auto px-5 sm:px-6 flex flex-col gap-6 lg:gap-9">
+        {/* Top Monumental Single-Line Centered Parallax Display Header */}
+        <div className="w-full text-center flex flex-col items-center">
+          <div className="flex flex-wrap items-center justify-center gap-2.5 mb-4">
             <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 rounded-full liquid-glass-pill font-mono text-[10px] sm:text-xs uppercase tracking-[0.06em] sm:tracking-[0.12em] whitespace-nowrap max-w-full text-ink-muted">
               <span className="relative flex h-2 w-2 shrink-0" aria-hidden="true">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
@@ -245,16 +245,16 @@ export default function Hero() {
             </span>
           </div>
 
-          <h1 className="font-display font-bold uppercase tracking-[-0.045em] leading-[0.96] select-none">
+          <h1 className="w-full flex items-baseline justify-center gap-x-[0.22em] whitespace-nowrap font-display font-bold uppercase tracking-[-0.045em] leading-[0.95] select-none">
             <span
               ref={titleTopRef}
-              className="block text-[clamp(2.65rem,9.2vw,7.25rem)] text-ink will-change-transform"
+              className="inline-block text-[clamp(1.7rem,6.75vw,6.05rem)] text-ink will-change-transform"
             >
               SOFTWARE
             </span>
             <span
               ref={titleBotRef}
-              className="block text-[clamp(2.7rem,9.5vw,7.45rem)] font-serif italic font-normal text-accent will-change-transform"
+              className="inline-block text-[clamp(1.75rem,6.9vw,6.2rem)] font-serif italic font-normal text-accent will-change-transform"
             >
               ENGINEER.
             </span>
@@ -328,7 +328,7 @@ export default function Hero() {
           <div
             ref={stageLayerRef}
             onPointerEnter={() => setMount3D(true)}
-            className="lg:col-span-7 relative h-[325px] sm:h-[400px] lg:h-[420px] flex flex-col justify-between will-change-transform"
+            className="lg:col-span-7 relative h-[350px] sm:h-[430px] lg:h-[470px] flex flex-col justify-between will-change-transform"
           >
             {/* Floating Top Mode Switcher + Contextual Status Pill */}
             <div className="relative z-20 flex flex-wrap items-center justify-between gap-2">
