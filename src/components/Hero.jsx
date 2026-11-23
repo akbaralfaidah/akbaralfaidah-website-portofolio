@@ -3,15 +3,15 @@ import { Link } from 'react-router-dom';
 import {
   ArrowRight,
   ArrowUpRight,
-  Box,
+  Cat,
   Radar,
   Layers,
   CheckCircle2,
   XCircle,
   ChevronLeft,
   ChevronRight,
-  Maximize2,
-  Minimize2,
+  Sparkles,
+  Pause,
   Rotate3d
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -28,88 +28,59 @@ function Hero3DStaticPreview({ isEn, onActivate }) {
     <button
       type="button"
       onClick={onActivate}
-      aria-label={isEn ? 'Activate interactive 3D model' : 'Aktifkan tampilan 3D interaktif'}
+      aria-label={isEn ? 'Activate interactive 3D cat' : 'Aktifkan kucing 3D interaktif'}
       className="group relative w-full h-full flex items-center justify-center rounded-3xl focus-visible:outline-accent"
     >
       <svg
-        width="340"
-        height="340"
-        viewBox="0 0 340 340"
+        width="320"
+        height="320"
+        viewBox="0 0 320 320"
         fill="none"
         aria-hidden="true"
-        className="w-[240px] sm:w-[300px] lg:w-[340px] h-auto transition-transform duration-500 group-hover:scale-105"
+        className="w-[210px] sm:w-[260px] lg:w-[290px] h-auto transition-transform duration-500 group-hover:scale-105"
       >
         <defs>
-          <radialGradient id="coreGlowPreview" cx="50%" cy="45%" r="50%">
-            <stop offset="0%" stopColor="#60A5FA" stopOpacity="0.4" />
-            <stop offset="60%" stopColor="#2563EB" stopOpacity="0.16" />
+          <radialGradient id="kittyStageGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#60A5FA" stopOpacity="0.28" />
+            <stop offset="65%" stopColor="#F59E42" stopOpacity="0.12" />
             <stop offset="100%" stopColor="#38BDF8" stopOpacity="0" />
           </radialGradient>
-          <linearGradient id="coreGemPreview" x1="110" y1="100" x2="230" y2="240" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#60A5FA" />
-            <stop offset="55%" stopColor="#2563EB" />
-            <stop offset="100%" stopColor="#1D4ED8" />
-          </linearGradient>
         </defs>
-        <circle cx="170" cy="170" r="145" fill="url(#coreGlowPreview)" />
-        <ellipse
-          cx="170"
-          cy="170"
-          rx="128"
-          ry="48"
-          transform="rotate(-24 170 170)"
-          stroke="#10B981"
-          strokeOpacity="0.6"
-          strokeWidth="3.2"
-        />
-        <ellipse
-          cx="170"
-          cy="170"
-          rx="114"
-          ry="44"
-          transform="rotate(34 170 170)"
-          stroke="#0EA5E9"
-          strokeOpacity="0.7"
-          strokeWidth="3.5"
-        />
-        <ellipse
-          cx="170"
-          cy="170"
-          rx="96"
-          ry="38"
-          transform="rotate(-68 170 170)"
-          stroke="#2563EB"
-          strokeOpacity="0.78"
-          strokeWidth="3.8"
-        />
-        <polygon
-          points="170,112 220,141 220,199 170,228 120,199 120,141"
-          fill="url(#coreGemPreview)"
-          fillOpacity="0.92"
-        />
-        <polygon
-          points="170,98 232,134 232,206 170,242 108,206 108,134"
-          stroke="#38BDF8"
-          strokeOpacity="0.75"
-          strokeWidth="1.5"
-        />
-        <line x1="170" y1="98" x2="170" y2="242" stroke="#93C5FD" strokeOpacity="0.45" strokeWidth="1" />
-        <line x1="108" y1="134" x2="232" y2="206" stroke="#93C5FD" strokeOpacity="0.45" strokeWidth="1" />
-        <line x1="232" y1="134" x2="108" y2="206" stroke="#93C5FD" strokeOpacity="0.45" strokeWidth="1" />
-        <rect x="242" y="92" width="46" height="30" rx="6" fill="#FFFFFF" stroke="#2563EB" strokeOpacity="0.55" strokeWidth="1.5" />
-        <rect x="249" y="100" width="24" height="4" rx="2" fill="#2563EB" />
-        <rect x="54" y="210" width="46" height="30" rx="6" fill="#E0F2FE" stroke="#0EA5E9" strokeOpacity="0.55" strokeWidth="1.5" />
-        <rect x="61" y="218" width="24" height="4" rx="2" fill="#0EA5E9" />
+        <circle cx="160" cy="160" r="136" fill="url(#kittyStageGlow)" />
+        <ellipse cx="160" cy="248" rx="92" ry="18" fill="#E2E8F0" fillOpacity="0.55" stroke="#2563EB" strokeOpacity="0.38" strokeWidth="1.5" />
+        {/* Cat ears */}
+        <polygon points="104,116 118,62 146,98" fill="#F59E42" />
+        <polygon points="113,108 122,74 139,98" fill="#FDA4AF" />
+        <polygon points="216,116 202,62 174,98" fill="#F59E42" />
+        <polygon points="207,108 198,74 181,98" fill="#FDA4AF" />
+        {/* Tail curl */}
+        <path d="M204 218 C242 214, 246 172, 224 164" stroke="#F59E42" strokeWidth="16" strokeLinecap="round" />
+        <circle cx="222" cy="164" r="9" fill="#FFFDF7" />
+        {/* Body */}
+        <ellipse cx="160" cy="204" rx="50" ry="44" fill="#F59E42" />
+        <ellipse cx="160" cy="210" rx="28" ry="30" fill="#FFFDF7" />
+        {/* Cobalt collar + bell */}
+        <path d="M124 176 Q160 190 196 176" stroke="#2563EB" strokeWidth="10" strokeLinecap="round" />
+        <circle cx="160" cy="187" r="7" fill="#FBBF24" />
+        {/* Head */}
+        <ellipse cx="160" cy="134" rx="54" ry="45" fill="#F59E42" />
+        {/* Muzzle */}
+        <ellipse cx="149" cy="147" rx="14" ry="11" fill="#FFFDF7" />
+        <ellipse cx="171" cy="147" rx="14" ry="11" fill="#FFFDF7" />
+        {/* Eyes + sparkles */}
+        <circle cx="137" cy="128" r="7.5" fill="#0F172A" />
+        <circle cx="134.5" cy="125.5" r="2.8" fill="#FFFFFF" />
+        <circle cx="183" cy="128" r="7.5" fill="#0F172A" />
+        <circle cx="180.5" cy="125.5" r="2.8" fill="#FFFFFF" />
+        {/* Cheeks & pink nose */}
+        <ellipse cx="122" cy="142" rx="7" ry="4" fill="#FDA4AF" fillOpacity="0.85" />
+        <ellipse cx="198" cy="142" rx="7" ry="4" fill="#FDA4AF" fillOpacity="0.85" />
+        <polygon points="155,139 165,139 160,145" fill="#F472B6" />
+        {/* Orbit sparkles */}
+        <circle cx="72" cy="112" r="5" fill="#2563EB" fillOpacity="0.7" />
+        <circle cx="252" cy="96" r="4" fill="#10B981" fillOpacity="0.7" />
       </svg>
     </button>
-  );
-}
-
-function MaskedLine({ children, className = '' }) {
-  return (
-    <span className="block pb-1 -mb-1">
-      <span className={`block ${className}`}>{children}</span>
-    </span>
   );
 }
 
@@ -131,6 +102,8 @@ export default function Hero() {
 
   const heroRef = useRef(null);
   const bgLayerRef = useRef(null);
+  const titleTopRef = useRef(null);
+  const titleBotRef = useRef(null);
   const textLayerRef = useRef(null);
   const stageLayerRef = useRef(null);
 
@@ -162,17 +135,25 @@ export default function Hero() {
         const h = heroEl.offsetHeight || window.innerHeight || 900;
         const progress = Math.min(1, Math.max(0, window.scrollY / h));
         if (bgLayerRef.current) {
-          const bgScale = (1 + progress * 0.08).toFixed(3);
-          bgLayerRef.current.style.transform = `translate3d(0, ${(progress * 340).toFixed(1)}px, 0) scale(${bgScale})`;
+          const bgScale = (1 + progress * 0.1).toFixed(3);
+          bgLayerRef.current.style.transform = `translate3d(0, ${(progress * 360).toFixed(1)}px, 0) scale(${bgScale})`;
+        }
+        if (titleTopRef.current) {
+          titleTopRef.current.style.transform = `translate3d(${(progress * 155).toFixed(1)}px, ${(-progress * 95).toFixed(1)}px, 0)`;
+          titleTopRef.current.style.opacity = `${Math.max(0.18, 1 - progress * 0.78).toFixed(3)}`;
+        }
+        if (titleBotRef.current) {
+          titleBotRef.current.style.transform = `translate3d(${(-progress * 155).toFixed(1)}px, ${(-progress * 55).toFixed(1)}px, 0)`;
+          titleBotRef.current.style.opacity = `${Math.max(0.24, 1 - progress * 0.68).toFixed(3)}`;
         }
         if (textLayerRef.current) {
-          textLayerRef.current.style.transform = `translate3d(0, ${(-progress * 170).toFixed(1)}px, 0)`;
-          textLayerRef.current.style.opacity = `${Math.max(0.22, 1 - progress * 0.72).toFixed(3)}`;
+          textLayerRef.current.style.transform = `translate3d(0, ${(-progress * 135).toFixed(1)}px, 0)`;
+          textLayerRef.current.style.opacity = `${Math.max(0.25, 1 - progress * 0.68).toFixed(3)}`;
         }
         if (stageLayerRef.current) {
-          const s = (1 - progress * 0.17).toFixed(3);
-          const tiltDeg = (-progress * 3.2).toFixed(2);
-          stageLayerRef.current.style.transform = `translate3d(0, ${(progress * 195).toFixed(1)}px, 0) scale(${s}) rotate(${tiltDeg}deg)`;
+          const s = (1 - progress * 0.16).toFixed(3);
+          const tiltDeg = (-progress * 3.0).toFixed(2);
+          stageLayerRef.current.style.transform = `translate3d(0, ${(progress * 185).toFixed(1)}px, 0) scale(${s}) rotate(${tiltDeg}deg)`;
         }
       });
     };
@@ -220,7 +201,7 @@ export default function Hero() {
     <section
       ref={heroRef}
       id="hero"
-      className="relative min-h-[100svh] flex items-center bg-paper text-ink pt-24 pb-12 sm:pt-28 sm:pb-14 border-b border-line overflow-hidden"
+      className="relative min-h-[100svh] flex items-center bg-paper text-ink pt-20 pb-10 sm:pt-24 sm:pb-12 border-b border-line overflow-hidden"
     >
       {/* Parallax Depth Layer 1: Luminous Daylight Radial Atmosphere + Vector Ribbons */}
       <div
@@ -247,228 +228,256 @@ export default function Hero() {
         <HeroCanvas />
       </div>
 
-      <div className="relative z-10 max-w-6xl w-full mx-auto px-5 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
-        {/* Parallax Depth Layer 2: Sculptural Editorial Claim */}
-        <div
-          ref={textLayerRef}
-          className="lg:col-span-6 flex flex-col items-start will-change-transform"
-        >
-          <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 rounded-full liquid-glass-pill font-mono text-[10px] sm:text-xs uppercase tracking-[0.06em] sm:tracking-[0.12em] whitespace-nowrap max-w-full text-ink-muted mb-6">
-            <span className="relative flex h-2 w-2 shrink-0" aria-hidden="true">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+      <div className="relative z-10 max-w-6xl w-full mx-auto px-5 sm:px-6 flex flex-col gap-6 lg:gap-8">
+        {/* Top Monumental Parallax Display Header */}
+        <div className="w-full">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 rounded-full liquid-glass-pill font-mono text-[10px] sm:text-xs uppercase tracking-[0.06em] sm:tracking-[0.12em] whitespace-nowrap max-w-full text-ink-muted">
+              <span className="relative flex h-2 w-2 shrink-0" aria-hidden="true">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
+              <span>{t('hero.badge')} · Jambi / Remote</span>
+            </div>
+
+            <span className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full liquid-glass-pill font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+              Web · Mobile · Applied AI
             </span>
-            <span>{t('hero.badge')} · Jambi / Remote</span>
           </div>
 
-          <h1 className="font-display text-[2.45rem] sm:text-[3.5rem] lg:text-[4.1rem] font-semibold tracking-[-0.035em] leading-[1.03] text-ink mb-6">
-            {isEn ? (
-              <>
-                <MaskedLine>Engineering Web,</MaskedLine>
-                <MaskedLine>
-                  Mobile <span className="font-serif italic font-normal text-accent">&amp; Applied AI</span>
-                </MaskedLine>
-                <MaskedLine>Built to Ship.</MaskedLine>
-              </>
-            ) : (
-              <>
-                <MaskedLine>Website, Aplikasi</MaskedLine>
-                <MaskedLine>
-                  <span className="font-serif italic font-normal text-accent">&amp; Sistem AI</span> yang
-                </MaskedLine>
-                <MaskedLine>Siap Pakai.</MaskedLine>
-              </>
-            )}
+          <h1 className="font-display font-bold uppercase tracking-[-0.045em] leading-[0.96] select-none">
+            <span
+              ref={titleTopRef}
+              className="block text-[clamp(2.65rem,9.2vw,7.25rem)] text-ink will-change-transform"
+            >
+              SOFTWARE
+            </span>
+            <span
+              ref={titleBotRef}
+              className="block text-[clamp(2.7rem,9.5vw,7.45rem)] font-serif italic font-normal text-accent will-change-transform"
+            >
+              ENGINEER.
+            </span>
           </h1>
+        </div>
 
-          <p className="text-base sm:text-lg text-ink-muted leading-relaxed max-w-xl mb-8">
-            {t('hero.subtitle')}
-          </p>
+        {/* Lower Split Deck: Editorial Pitch + Interactive 3D Cat Stage */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          {/* Parallax Depth Layer 2: Editorial Pitch & CTA */}
+          <div
+            ref={textLayerRef}
+            className="lg:col-span-5 flex flex-col items-start will-change-transform"
+          >
+            <h2 className="font-display text-xl sm:text-2xl lg:text-[1.7rem] font-semibold tracking-[-0.025em] leading-[1.2] text-ink mb-3">
+              {isEn
+                ? 'Websites, Mobile Apps & AI Systems Ready to Ship.'
+                : 'Website, Aplikasi Mobile & Sistem AI yang Siap Pakai.'}
+            </h2>
 
-          <div className="flex flex-wrap items-center gap-3.5 mb-10 w-full sm:w-auto">
-            <Magnetic strength={0.25} className="w-full sm:w-auto">
+            <p className="text-sm sm:text-base text-ink-muted leading-relaxed max-w-lg mb-6">
+              {t('hero.subtitle')}
+            </p>
+
+            <div className="flex flex-wrap items-center gap-3 mb-7 w-full sm:w-auto">
+              <Magnetic strength={0.25} className="w-full sm:w-auto">
+                <Button
+                  variant="accent"
+                  size="lg"
+                  onClick={scrollToContact}
+                  className="w-full sm:w-auto"
+                >
+                  <span>{t('hero.cta_primary')}</span>
+                  <ArrowRight
+                    size={17}
+                    className="transition-transform duration-200 group-hover:translate-x-1"
+                    aria-hidden="true"
+                  />
+                </Button>
+              </Magnetic>
+
               <Button
-                variant="accent"
+                as={Link}
+                to="/projects"
+                variant="outline"
                 size="lg"
-                onClick={scrollToContact}
                 className="w-full sm:w-auto"
               >
-                <span>{t('hero.cta_primary')}</span>
-                <ArrowRight
+                <span>{t('hero.cta_secondary')}</span>
+                <ArrowUpRight
                   size={17}
-                  className="transition-transform duration-200 group-hover:translate-x-1"
+                  className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                   aria-hidden="true"
                 />
               </Button>
-            </Magnetic>
-
-            <Button
-              as={Link}
-              to="/projects"
-              variant="outline"
-              size="lg"
-              className="w-full sm:w-auto"
-            >
-              <span>{t('hero.cta_secondary')}</span>
-              <ArrowUpRight
-                size={17}
-                className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                aria-hidden="true"
-              />
-            </Button>
-          </div>
-
-          <dl className="w-full grid grid-cols-3 gap-4 pt-6 border-t border-line">
-            {Array.isArray(facts) &&
-              facts.map((fact) => (
-                <div key={fact.label}>
-                  <dt className="font-mono text-[11px] uppercase tracking-wider text-ink-muted mb-1">
-                    {fact.label}
-                  </dt>
-                  <dd className="text-sm sm:text-base font-semibold text-ink">{fact.value}</dd>
-                </div>
-              ))}
-          </dl>
-        </div>
-
-        {/* Parallax Depth Layer 3: Open Floating Interactive 3D Engineering Stage (Three.js) */}
-        <div
-          ref={stageLayerRef}
-          onPointerEnter={() => setMount3D(true)}
-          className="lg:col-span-6 relative h-[410px] sm:h-[480px] lg:h-[520px] flex flex-col justify-between will-change-transform"
-        >
-          {/* Floating Top Mode Switcher + Contextual Status Pill */}
-          <div className="relative z-20 flex flex-wrap items-center justify-between gap-2">
-            <div className="flex items-center gap-1 p-1 rounded-full liquid-glass-pill">
-              <button
-                type="button"
-                onClick={() => {
-                  setMount3D(true);
-                  setSceneMode('core');
-                }}
-                className={`min-h-[32px] px-2.5 sm:px-3.5 rounded-full text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 inline-flex items-center gap-1.5 transition-all ${
-                  sceneMode === 'core'
-                    ? 'bg-accent text-white shadow-sm shadow-blue-600/25'
-                    : 'text-slate-700 dark:text-slate-300 hover:text-ink'
-                }`}
-              >
-                <Box size={13} aria-hidden="true" />
-                <span>Core 3D</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setMount3D(true);
-                  setSceneMode('radar');
-                }}
-                className={`min-h-[32px] px-2.5 sm:px-3.5 rounded-full text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 inline-flex items-center gap-1.5 transition-all ${
-                  sceneMode === 'radar'
-                    ? 'bg-accent text-white shadow-sm shadow-blue-600/25'
-                    : 'text-slate-700 dark:text-slate-300 hover:text-ink'
-                }`}
-              >
-                <Radar size={13} aria-hidden="true" />
-                <span>Radar 3D</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setMount3D(true);
-                  setSceneMode('deck');
-                }}
-                className={`min-h-[32px] px-2.5 sm:px-3.5 rounded-full text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 inline-flex items-center gap-1.5 transition-all ${
-                  sceneMode === 'deck'
-                    ? 'bg-accent text-white shadow-sm shadow-blue-600/25'
-                    : 'text-slate-700 dark:text-slate-300 hover:text-ink'
-                }`}
-              >
-                <Layers size={13} aria-hidden="true" />
-                <span>{isEn ? '3D Gallery' : 'Galeri 3D'}</span>
-              </button>
             </div>
 
-            {sceneMode === 'radar' ? (
-              <span
-                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-mono text-xs font-semibold border shadow-sm ${
-                  radarMetrics.inside
-                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/30'
-                    : 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-500/20 dark:text-rose-300 dark:border-rose-500/30'
-                }`}
-              >
-                {radarMetrics.inside ? (
-                  <CheckCircle2 size={13} aria-hidden="true" />
-                ) : (
-                  <XCircle size={13} aria-hidden="true" />
-                )}
-                <span>
-                  {radarMetrics.meters.toFixed(1)}m ·{' '}
-                  {radarMetrics.inside
-                    ? isEn
-                      ? 'VALID'
-                      : 'SAH'
-                    : isEn
-                    ? 'OUT 50m'
-                    : 'LUAR 50m'}
-                </span>
-              </span>
-            ) : (
-              <button
-                type="button"
-                onClick={() => {
-                  setMount3D(true);
-                  setExploded((prev) => !prev);
-                }}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full liquid-glass-pill font-mono text-[11px] font-medium text-ink hover:border-accent/50 hover:text-accent transition-all"
-              >
-                {exploded ? (
-                  <Minimize2 size={12} aria-hidden="true" />
-                ) : (
-                  <Maximize2 size={12} aria-hidden="true" />
-                )}
-                <span>{exploded ? (isEn ? 'Assemble' : 'Rapatkan') : isEn ? 'Explode' : 'Urai 3D'}</span>
-              </button>
-            )}
+            <dl className="w-full grid grid-cols-3 gap-3 sm:gap-4 pt-5 border-t border-line">
+              {Array.isArray(facts) &&
+                facts.map((fact) => (
+                  <div key={fact.label}>
+                    <dt className="font-mono text-[10px] sm:text-[11px] uppercase tracking-wider text-ink-muted mb-1">
+                      {fact.label}
+                    </dt>
+                    <dd className="text-xs sm:text-sm font-semibold text-ink">{fact.value}</dd>
+                  </div>
+                ))}
+            </dl>
           </div>
 
-          {/* Open Daylight 3D Viewport */}
-          <div className="relative flex-1 w-full min-h-[280px]">
-            {mount3D ? (
-              <Suspense fallback={<Hero3DStaticPreview isEn={isEn} onActivate={() => setMount3D(true)} />}>
-                <Hero3DCanvas
-                  mode={sceneMode}
-                  exploded={exploded}
-                  isDark={isDark}
-                  activeProjectIndex={activeSlide}
-                  radarTarget={radarTarget}
-                  onRadarMetrics={setRadarMetrics}
-                  onToggleExplode={() => setExploded((prev) => !prev)}
-                  onSelectProjectIndex={setActiveSlide}
-                />
-              </Suspense>
-            ) : (
-              <Hero3DStaticPreview isEn={isEn} onActivate={() => setMount3D(true)} />
-            )}
-          </div>
+          {/* Parallax Depth Layer 3: Interactive 3D Cat, Radar & Spatial Gallery Stage */}
+          <div
+            ref={stageLayerRef}
+            onPointerEnter={() => setMount3D(true)}
+            className="lg:col-span-7 relative h-[325px] sm:h-[400px] lg:h-[420px] flex flex-col justify-between will-change-transform"
+          >
+            {/* Floating Top Mode Switcher + Contextual Status Pill */}
+            <div className="relative z-20 flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-1 p-1 rounded-full liquid-glass-pill">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMount3D(true);
+                    setSceneMode('core');
+                  }}
+                  className={`min-h-[32px] px-2.5 sm:px-3.5 rounded-full text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 inline-flex items-center gap-1.5 transition-all ${
+                    sceneMode === 'core'
+                      ? 'bg-accent text-white shadow-sm shadow-blue-600/25'
+                      : 'text-slate-700 dark:text-slate-300 hover:text-ink'
+                  }`}
+                >
+                  <Cat size={13} aria-hidden="true" />
+                  <span>{isEn ? '3D Cat' : 'Kucing 3D'}</span>
+                </button>
 
-          {/* Floating Bottom Control & Telemetry Dock */}
-          <div className="relative z-20 flex flex-wrap items-center justify-between gap-2 px-3.5 py-2.5 rounded-2xl liquid-glass">
-            {sceneMode === 'core' && (
-              <div className="w-full flex flex-wrap items-center justify-between gap-2">
-                <div className="flex items-center gap-2 font-mono text-xs text-ink-muted">
-                  <Rotate3d size={14} className="text-accent shrink-0" aria-hidden="true" />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMount3D(true);
+                    setSceneMode('radar');
+                  }}
+                  className={`min-h-[32px] px-2.5 sm:px-3.5 rounded-full text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 inline-flex items-center gap-1.5 transition-all ${
+                    sceneMode === 'radar'
+                      ? 'bg-accent text-white shadow-sm shadow-blue-600/25'
+                      : 'text-slate-700 dark:text-slate-300 hover:text-ink'
+                  }`}
+                >
+                  <Radar size={13} aria-hidden="true" />
+                  <span>Radar 3D</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMount3D(true);
+                    setSceneMode('deck');
+                  }}
+                  className={`min-h-[32px] px-2.5 sm:px-3.5 rounded-full text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 inline-flex items-center gap-1.5 transition-all ${
+                    sceneMode === 'deck'
+                      ? 'bg-accent text-white shadow-sm shadow-blue-600/25'
+                      : 'text-slate-700 dark:text-slate-300 hover:text-ink'
+                  }`}
+                >
+                  <Layers size={13} aria-hidden="true" />
+                  <span>{isEn ? '3D Gallery' : 'Galeri 3D'}</span>
+                </button>
+              </div>
+
+              {sceneMode === 'radar' ? (
+                <span
+                  className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-mono text-xs font-semibold border shadow-sm ${
+                    radarMetrics.inside
+                      ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/30'
+                      : 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-500/20 dark:text-rose-300 dark:border-rose-500/30'
+                  }`}
+                >
+                  {radarMetrics.inside ? (
+                    <CheckCircle2 size={13} aria-hidden="true" />
+                  ) : (
+                    <XCircle size={13} aria-hidden="true" />
+                  )}
                   <span>
-                    {isEn
-                      ? 'Drag 360° · Click core to explode'
-                      : 'Seret 360° · Klik objek untuk urai'}
+                    {radarMetrics.meters.toFixed(1)}m ·{' '}
+                    {radarMetrics.inside
+                      ? isEn
+                        ? 'VALID'
+                        : 'SAH'
+                      : isEn
+                      ? 'OUT 50m'
+                      : 'LUAR 50m'}
+                  </span>
+                </span>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMount3D(true);
+                    setExploded((prev) => !prev);
+                  }}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full liquid-glass-pill font-mono text-[11px] font-medium text-ink hover:border-accent/50 hover:text-accent transition-all"
+                >
+                  {exploded ? (
+                    <Pause size={12} aria-hidden="true" />
+                  ) : (
+                    <Sparkles size={12} aria-hidden="true" />
+                  )}
+                  <span>
+                    {sceneMode === 'core'
+                      ? exploded
+                        ? isEn
+                          ? 'Chill'
+                          : 'Istirahat'
+                        : isEn
+                        ? 'Play!'
+                        : 'Main!'
+                      : exploded
+                      ? isEn
+                        ? 'Assemble'
+                        : 'Rapatkan'
+                      : isEn
+                      ? 'Spread'
+                      : 'Lebarkan'}
+                  </span>
+                </button>
+              )}
+            </div>
+
+            {/* Open Daylight 3D Viewport */}
+            <div className="relative flex-1 w-full min-h-[240px]">
+              {mount3D ? (
+                <Suspense fallback={<Hero3DStaticPreview isEn={isEn} onActivate={() => setMount3D(true)} />}>
+                  <Hero3DCanvas
+                    mode={sceneMode}
+                    exploded={exploded}
+                    isDark={isDark}
+                    activeProjectIndex={activeSlide}
+                    radarTarget={radarTarget}
+                    onRadarMetrics={setRadarMetrics}
+                    onToggleExplode={() => setExploded((prev) => !prev)}
+                    onSelectProjectIndex={setActiveSlide}
+                  />
+                </Suspense>
+              ) : (
+                <Hero3DStaticPreview isEn={isEn} onActivate={() => setMount3D(true)} />
+              )}
+            </div>
+
+            {/* Floating Bottom Control & Telemetry Dock */}
+            <div className="relative z-20 flex flex-wrap items-center justify-between gap-2 px-3.5 py-2.5 rounded-2xl liquid-glass">
+              {sceneMode === 'core' && (
+                <div className="w-full flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 font-mono text-xs text-ink-muted">
+                    <Rotate3d size={14} className="text-accent shrink-0" aria-hidden="true" />
+                    <span>
+                      {isEn
+                        ? 'Drag 360° · Click kitty to play!'
+                        : 'Seret 360° · Klik kucing untuk main!'}
+                    </span>
+                  </div>
+                  <span className="font-mono text-[11px] font-semibold text-accent shrink-0">
+                    Kucing 3D · WebGL
                   </span>
                 </div>
-                <span className="font-mono text-[11px] font-semibold text-accent shrink-0">
-                  WebGL 3D
-                </span>
-              </div>
-            )}
+              )}
 
             {sceneMode === 'radar' && (
               <div className="w-full flex flex-wrap items-center justify-between gap-2">
@@ -541,6 +550,7 @@ export default function Hero() {
                 </div>
               </div>
             )}
+            </div>
           </div>
         </div>
       </div>

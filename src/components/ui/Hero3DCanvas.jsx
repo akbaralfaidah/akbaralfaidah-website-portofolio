@@ -91,121 +91,331 @@ export function Hero3DCanvas({
     };
 
     // =========================================================================
-    // MODE 1: Interactive 3D Engineering Architecture Core
+    // MODE 1: Interactive 3D Stylized Developer Cat (Kucing 3D)
     // =========================================================================
     const coreGroup = new THREE.Group();
     scene.add(coreGroup);
 
-    const coreGeom = track(new THREE.IcosahedronGeometry(0.95, 1));
-    const coreMat = track(
-      new THREE.MeshStandardMaterial({
-        color: 0x2563eb,
-        emissive: 0x1d4ed8,
-        emissiveIntensity: 0.2,
-        roughness: 0.22,
-        metalness: 0.28,
-        flatShading: true
+    // Subtle studio turntable base & sapphire ring anchored beneath the cat
+    const catBaseGeom = track(new THREE.CylinderGeometry(1.36, 1.44, 0.08, 48));
+    const catBaseMat = track(
+      new THREE.MeshBasicMaterial({
+        color: currentEnvDark ? 0x162033 : 0xdbeafe,
+        transparent: true,
+        opacity: currentEnvDark ? 0.88 : 0.76
       })
     );
-    const crystalCore = new THREE.Mesh(coreGeom, coreMat);
-    coreGroup.add(crystalCore);
+    const catBaseMesh = new THREE.Mesh(catBaseGeom, catBaseMat);
+    catBaseMesh.position.y = -1.26;
+    coreGroup.add(catBaseMesh);
 
-    const innerWireGeom = track(new THREE.EdgesGeometry(track(new THREE.IcosahedronGeometry(1.18, 0))));
-    const innerWireMat = track(
-      new THREE.LineBasicMaterial({ color: 0x0ea5e9, transparent: true, opacity: 0.72 })
+    const catStageRingGeom = track(new THREE.RingGeometry(1.48, 1.54, 64));
+    const catStageRingMat = track(
+      new THREE.MeshBasicMaterial({
+        color: 0x2563eb,
+        transparent: true,
+        opacity: 0.45,
+        side: THREE.DoubleSide
+      })
     );
-    const crystalCage = new THREE.LineSegments(innerWireGeom, innerWireMat);
-    coreGroup.add(crystalCage);
+    const catStageRing = new THREE.Mesh(catStageRingGeom, catStageRingMat);
+    catStageRing.rotation.x = -Math.PI / 2;
+    catStageRing.position.y = -1.21;
+    coreGroup.add(catStageRing);
 
-    // Multi-axis metallic orbital gyros
-    const gyroConfigs = [
-      { radius: 1.48, tube: 0.036, color: 0x2563eb, rx: 0.85, ry: 0.25 },
-      { radius: 1.76, tube: 0.032, color: 0x0ea5e9, rx: -0.6, ry: 0.95 },
-      { radius: 2.02, tube: 0.028, color: 0x10b981, rx: 1.15, ry: -0.4 }
-    ];
-    const gyros = gyroConfigs.map((cfg) => {
-      const gGeom = track(new THREE.TorusGeometry(cfg.radius, cfg.tube, 14, 60));
-      const gMat = track(
-        new THREE.MeshStandardMaterial({
-          color: cfg.color,
-          roughness: 0.24,
-          metalness: 0.48
-        })
-      );
-      const mesh = new THREE.Mesh(gGeom, gMat);
-      mesh.rotation.set(cfg.rx, cfg.ry, 0);
-      mesh.userData = { baseScale: 1, explodedScale: 1.24, baseRot: { x: cfg.rx, y: cfg.ry } };
-      coreGroup.add(mesh);
-      return mesh;
+    const catRoot = new THREE.Group();
+    catRoot.position.set(0, -0.08, 0);
+    coreGroup.add(catRoot);
+
+    const furMainMat = track(
+      new THREE.MeshStandardMaterial({
+        color: 0xf59e42,
+        roughness: 0.5,
+        metalness: 0.03
+      })
+    );
+    const furDarkMat = track(
+      new THREE.MeshStandardMaterial({
+        color: 0xd97706,
+        roughness: 0.52,
+        metalness: 0.03
+      })
+    );
+    const creamMat = track(
+      new THREE.MeshStandardMaterial({
+        color: 0xfffdf7,
+        roughness: 0.48,
+        metalness: 0.02
+      })
+    );
+    const pinkMat = track(
+      new THREE.MeshStandardMaterial({
+        color: 0xfda4af,
+        roughness: 0.38,
+        metalness: 0.04
+      })
+    );
+    const noseMat = track(
+      new THREE.MeshStandardMaterial({
+        color: 0xf472b6,
+        roughness: 0.25,
+        metalness: 0.08
+      })
+    );
+    const collarMat = track(
+      new THREE.MeshStandardMaterial({
+        color: 0x2563eb,
+        roughness: 0.24,
+        metalness: 0.18
+      })
+    );
+    const bellMat = track(
+      new THREE.MeshStandardMaterial({
+        color: 0xfbbf24,
+        roughness: 0.18,
+        metalness: 0.78
+      })
+    );
+    const eyeMat = track(
+      new THREE.MeshStandardMaterial({
+        color: 0x0f172a,
+        roughness: 0.06,
+        metalness: 0.18
+      })
+    );
+    const sparkleWhiteMat = track(new THREE.MeshBasicMaterial({ color: 0xffffff }));
+    const whiskerMat = track(new THREE.MeshBasicMaterial({ color: 0x334155 }));
+
+    // Plump sitting cat torso
+    const torsoGeom = track(new THREE.SphereGeometry(0.72, 32, 24));
+    const torsoMesh = new THREE.Mesh(torsoGeom, furMainMat);
+    torsoMesh.position.set(0, -0.45, -0.02);
+    torsoMesh.scale.set(0.98, 1.15, 0.94);
+    catRoot.add(torsoMesh);
+
+    // Cozy cream chest bib
+    const chestGeom = track(new THREE.SphereGeometry(0.48, 24, 18));
+    const chestMesh = new THREE.Mesh(chestGeom, creamMat);
+    chestMesh.position.set(0, -0.34, 0.39);
+    chestMesh.scale.set(0.86, 1.02, 0.62);
+    catRoot.add(chestMesh);
+
+    // Back curled haunches + rear paws
+    const haunchGeom = track(new THREE.SphereGeometry(0.36, 22, 16));
+    [-1, 1].forEach((side) => {
+      const haunch = new THREE.Mesh(haunchGeom, furMainMat);
+      haunch.position.set(side * 0.54, -0.82, -0.06);
+      haunch.scale.set(0.82, 0.88, 1.12);
+      catRoot.add(haunch);
+
+      const rearPaw = new THREE.Mesh(track(new THREE.SphereGeometry(0.18, 16, 14)), creamMat);
+      rearPaw.position.set(side * 0.56, -1.06, 0.24);
+      rearPaw.scale.set(0.95, 0.65, 1.25);
+      catRoot.add(rearPaw);
     });
 
-    // Orbiting module satellites + glass UI shards
-    const satColors = [0x2563eb, 0x0ea5e9, 0x10b981, 0xf59e0b, 0x3b82f6, 0x06b6d4];
-    const satellites = [];
-    const satGeomCube = track(new THREE.BoxGeometry(0.24, 0.24, 0.24));
-    const satGeomOct = track(new THREE.OctahedronGeometry(0.19, 0));
+    // Articulated front legs & waving right paw
+    const legGeom = track(new THREE.CapsuleGeometry(0.145, 0.42, 10, 18));
+    const pawTipGeom = track(new THREE.SphereGeometry(0.17, 18, 14));
+    const frontPaws = [];
+    [-1, 1].forEach((side) => {
+      const pawPivot = new THREE.Group();
+      pawPivot.position.set(side * 0.26, -0.38, 0.44);
 
-    for (let i = 0; i < 6; i++) {
-      const mat = track(
-        new THREE.MeshStandardMaterial({
-          color: satColors[i],
-          roughness: 0.24,
-          metalness: 0.28
-        })
-      );
-      const mesh = new THREE.Mesh(i % 2 === 0 ? satGeomCube : satGeomOct, mat);
-      const angle = (i / 6) * Math.PI * 2;
-      const radius = i % 2 === 0 ? 1.85 : 2.15;
-      const yOff = Math.sin(angle * 2) * 0.55;
-      mesh.userData = {
-        angle,
-        baseRadius: radius,
-        yOff,
-        speed: 0.35 + (i % 3) * 0.12
-      };
-      coreGroup.add(mesh);
-      satellites.push(mesh);
+      const leg = new THREE.Mesh(legGeom, furMainMat);
+      leg.position.set(0, -0.26, 0.06);
+      leg.rotation.x = -0.18;
+      pawPivot.add(leg);
+
+      const tip = new THREE.Mesh(pawTipGeom, creamMat);
+      tip.position.set(0, -0.58, 0.18);
+      tip.scale.set(1.02, 0.72, 1.24);
+      pawPivot.add(tip);
+
+      catRoot.add(pawPivot);
+      frontPaws.push(pawPivot);
+    });
+
+    // Signature cobalt developer collar & golden bell
+    const collarGeom = track(new THREE.TorusGeometry(0.47, 0.072, 14, 36));
+    const collarMesh = new THREE.Mesh(collarGeom, collarMat);
+    collarMesh.position.set(0, 0.16, 0.08);
+    collarMesh.rotation.x = Math.PI / 2 + 0.22;
+    catRoot.add(collarMesh);
+
+    const bellGeom = track(new THREE.SphereGeometry(0.115, 20, 16));
+    const bellMesh = new THREE.Mesh(bellGeom, bellMat);
+    bellMesh.position.set(0, 0.05, 0.57);
+    catRoot.add(bellMesh);
+
+    // Articulated head assembly for cursor gaze tracking & blinking
+    const catHeadGroup = new THREE.Group();
+    catHeadGroup.position.set(0, 0.62, 0.12);
+    catRoot.add(catHeadGroup);
+
+    const headGeom = track(new THREE.SphereGeometry(0.68, 32, 24));
+    const headMesh = new THREE.Mesh(headGeom, furMainMat);
+    headMesh.scale.set(1.16, 0.96, 1.02);
+    catHeadGroup.add(headMesh);
+
+    // Cheek fur tufts
+    const tuftGeom = track(new THREE.ConeGeometry(0.14, 0.26, 4));
+    [-1, 1].forEach((side) => {
+      const tuft = new THREE.Mesh(tuftGeom, furMainMat);
+      tuft.position.set(side * 0.76, -0.06, 0.08);
+      tuft.rotation.z = -side * 1.32;
+      catHeadGroup.add(tuft);
+    });
+
+    // Fluffy white muzzle pads & chin
+    const muzzleGeom = track(new THREE.SphereGeometry(0.18, 18, 16));
+    [-1, 1].forEach((side) => {
+      const muzzle = new THREE.Mesh(muzzleGeom, creamMat);
+      muzzle.position.set(side * 0.145, -0.14, 0.62);
+      muzzle.scale.set(1.06, 0.84, 0.8);
+      catHeadGroup.add(muzzle);
+    });
+
+    // Nose & smiling omega mouth
+    const noseGeom = track(new THREE.ConeGeometry(0.072, 0.07, 3));
+    const noseMesh = new THREE.Mesh(noseGeom, noseMat);
+    noseMesh.position.set(0, -0.04, 0.74);
+    noseMesh.rotation.set(Math.PI / 2, 0, Math.PI);
+    catHeadGroup.add(noseMesh);
+
+    const mouthArcGeom = track(new THREE.TorusGeometry(0.068, 0.016, 8, 18, Math.PI));
+    const mouthMat = track(new THREE.MeshBasicMaterial({ color: 0x451a03 }));
+    [-1, 1].forEach((side) => {
+      const arc = new THREE.Mesh(mouthArcGeom, mouthMat);
+      arc.position.set(side * 0.065, -0.15, 0.745);
+      arc.rotation.z = Math.PI;
+      catHeadGroup.add(arc);
+    });
+
+    // Forehead tabby stripes
+    const stripeGeom = track(new THREE.CapsuleGeometry(0.032, 0.18, 6, 10));
+    [-0.14, 0, 0.14].forEach((xOff, sIdx) => {
+      const stripe = new THREE.Mesh(stripeGeom, furDarkMat);
+      stripe.position.set(xOff, 0.56 - Math.abs(xOff) * 0.25, 0.36);
+      stripe.rotation.set(-0.68, 0, sIdx === 0 ? 0.18 : sIdx === 2 ? -0.18 : 0);
+      catHeadGroup.add(stripe);
+    });
+
+    // Rosy cheeks + expressive blinking eyes with dual specular highlights
+    const blushGeom = track(new THREE.SphereGeometry(0.09, 14, 12));
+    const eyeSphereGeom = track(new THREE.SphereGeometry(0.118, 20, 16));
+    const glintMainGeom = track(new THREE.SphereGeometry(0.042, 12, 10));
+    const glintSubGeom = track(new THREE.SphereGeometry(0.02, 10, 8));
+    const catEyes = [];
+
+    [-1, 1].forEach((side) => {
+      const blush = new THREE.Mesh(blushGeom, pinkMat);
+      blush.position.set(side * 0.44, -0.15, 0.54);
+      blush.scale.set(1.28, 0.72, 0.42);
+      catHeadGroup.add(blush);
+
+      const eyeGroup = new THREE.Group();
+      eyeGroup.position.set(side * 0.29, 0.08, 0.62);
+
+      const eyeball = new THREE.Mesh(eyeSphereGeom, eyeMat);
+      eyeGroup.add(eyeball);
+
+      const glint1 = new THREE.Mesh(glintMainGeom, sparkleWhiteMat);
+      glint1.position.set(-0.035, 0.045, 0.095);
+      eyeGroup.add(glint1);
+
+      const glint2 = new THREE.Mesh(glintSubGeom, sparkleWhiteMat);
+      glint2.position.set(0.035, -0.025, 0.105);
+      eyeGroup.add(glint2);
+
+      catHeadGroup.add(eyeGroup);
+      catEyes.push(eyeGroup);
+    });
+
+    // Crisp 3D whiskers (3 per cheek)
+    const whiskerGeom = track(new THREE.CylinderGeometry(0.008, 0.005, 0.44, 6));
+    [-1, 1].forEach((side) => {
+      [-0.08, -0.15, -0.22].forEach((yPos, wIdx) => {
+        const w = new THREE.Mesh(whiskerGeom, whiskerMat);
+        w.position.set(side * 0.48, yPos, 0.56);
+        w.rotation.z = side * (1.42 + wIdx * 0.14);
+        w.rotation.y = -side * 0.24;
+        catHeadGroup.add(w);
+      });
+    });
+
+    // Articulated perky ears with coral-pink inner cones
+    const outerEarGeom = track(new THREE.ConeGeometry(0.26, 0.54, 4));
+    const innerEarGeom = track(new THREE.ConeGeometry(0.15, 0.34, 4));
+    const catEars = [];
+    [-1, 1].forEach((side) => {
+      const earPivot = new THREE.Group();
+      earPivot.position.set(side * 0.46, 0.48, 0.04);
+      const baseZRot = -side * 0.36;
+      earPivot.rotation.set(0.14, side * 0.16, baseZRot);
+      earPivot.userData = { side, baseZRot };
+
+      const outerEar = new THREE.Mesh(outerEarGeom, furMainMat);
+      outerEar.position.y = 0.22;
+      outerEar.rotation.y = Math.PI / 4;
+      outerEar.scale.set(1, 1, 0.56);
+      earPivot.add(outerEar);
+
+      const innerEar = new THREE.Mesh(innerEarGeom, pinkMat);
+      innerEar.position.set(0, 0.19, 0.075);
+      innerEar.rotation.y = Math.PI / 4;
+      innerEar.scale.set(1, 1, 0.48);
+      earPivot.add(innerEar);
+
+      catHeadGroup.add(earPivot);
+      catEars.push(earPivot);
+    });
+
+    // Multi-segment expressive curved cat tail ending in cream tip
+    const tailSegGeom = track(new THREE.CapsuleGeometry(0.095, 0.24, 8, 14));
+    const tailTipGeom = track(new THREE.SphereGeometry(0.115, 16, 14));
+    const tailPivots = [];
+    let parentTailNode = catRoot;
+    for (let tIdx = 0; tIdx < 5; tIdx++) {
+      const segPivot = new THREE.Group();
+      if (tIdx === 0) {
+        segPivot.position.set(0, -0.78, -0.58);
+        segPivot.rotation.x = -0.78;
+      } else {
+        segPivot.position.set(0, 0.28, 0);
+        segPivot.rotation.x = tIdx < 3 ? 0.34 : 0.22;
+      }
+      const isLast = tIdx === 4;
+      const segMesh = new THREE.Mesh(isLast ? tailTipGeom : tailSegGeom, isLast ? creamMat : furMainMat);
+      segMesh.position.y = isLast ? 0.1 : 0.14;
+      segPivot.add(segMesh);
+      parentTailNode.add(segPivot);
+      tailPivots.push(segPivot);
+      parentTailNode = segPivot;
     }
 
-    // Floating frosted architectural UI plates orbiting the core
-    const plateGeom = track(new THREE.BoxGeometry(0.82, 0.52, 0.04));
-    const plateEdgeGeom = track(new THREE.EdgesGeometry(plateGeom));
-    const plates = [
-      { pos: [1.55, 0.85, 0.55], rot: [0.15, -0.45, 0.08], color: 0xffffff, accent: 0x2563eb },
-      { pos: [-1.62, -0.55, 0.7], rot: [-0.1, 0.45, -0.06], color: 0xe0f2fe, accent: 0x0ea5e9 },
-      { pos: [0.35, -1.45, 0.9], rot: [-0.35, 0.15, 0.05], color: 0xecfdf5, accent: 0x10b981 }
-    ].map((cfg) => {
-      const group = new THREE.Group();
-      const mat = track(
+    // Playful floating dev sparkles orbiting cleanly behind & around the kitty
+    const catSparkConfigs = [
+      { radius: 1.92, yOff: 0.82, speed: 0.65, color: 0x2563eb, angle: 0.5 },
+      { radius: 2.08, yOff: -0.25, speed: -0.52, color: 0x0ea5e9, angle: 2.1 },
+      { radius: 1.85, yOff: 1.05, speed: 0.58, color: 0x10b981, angle: 3.9 },
+      { radius: 2.0, yOff: -0.35, speed: -0.62, color: 0xf472b6, angle: 5.2 }
+    ];
+    const sparkOctGeom = track(new THREE.OctahedronGeometry(0.11, 0));
+    const catSparks = catSparkConfigs.map((cfg) => {
+      const sMat = track(
         new THREE.MeshStandardMaterial({
           color: cfg.color,
-          roughness: 0.18,
-          metalness: 0.1,
-          transparent: true,
-          opacity: 0.86
+          emissive: cfg.color,
+          emissiveIntensity: 0.28,
+          roughness: 0.2,
+          metalness: 0.35
         })
       );
-      const card = new THREE.Mesh(plateGeom, mat);
-      group.add(card);
-
-      const lineMat = track(
-        new THREE.LineBasicMaterial({ color: cfg.accent, transparent: true, opacity: 0.85 })
-      );
-      group.add(new THREE.LineSegments(plateEdgeGeom, lineMat));
-
-      // Header pill bar on glass card
-      const barGeom = track(new THREE.BoxGeometry(0.45, 0.065, 0.05));
-      const barMat = track(new THREE.MeshBasicMaterial({ color: cfg.accent }));
-      const bar = new THREE.Mesh(barGeom, barMat);
-      bar.position.set(-0.1, 0.12, 0.01);
-      group.add(bar);
-
-      const basePos = new THREE.Vector3(...cfg.pos);
-      group.position.copy(basePos);
-      group.rotation.set(...cfg.rot);
-      group.userData = { basePos, dir: basePos.clone().normalize() };
-      coreGroup.add(group);
-      return group;
+      const sMesh = new THREE.Mesh(sparkOctGeom, sMat);
+      sMesh.userData = cfg;
+      coreGroup.add(sMesh);
+      return sMesh;
     });
 
     // =========================================================================
@@ -638,6 +848,8 @@ export function Hero3DCanvas({
       if (darkNow !== currentEnvDark) {
         currentEnvDark = darkNow;
         dishMat.color.setHex(darkNow ? 0x0f172a : 0xf8fafc);
+        catBaseMat.color.setHex(darkNow ? 0x162033 : 0xdbeafe);
+        catBaseMat.opacity = darkNow ? 0.88 : 0.76;
         deckCards.forEach((c) => {
           if (c.userData?.bezelMat) {
             c.userData.bezelMat.color.setHex(darkNow ? 0x1e293b : 0xf8fafc);
@@ -658,15 +870,15 @@ export function Hero3DCanvas({
         clockTime += 0.016;
       }
 
-      // Apply inertial damping
+      // Apply inertial damping (cat faces viewer on idle rather than spinning backwards continuously)
       if (!dragState.active) {
-        dragState.rotY += dragState.velY + (prefersReduced ? 0 : 0.0028);
+        dragState.rotY += dragState.velY;
         dragState.rotX += dragState.velX;
         dragState.velY *= 0.92;
         dragState.velX *= 0.92;
       }
 
-      explodeLerp = THREE.MathUtils.lerp(explodeLerp, isExploded ? 1 : 0, 0.09);
+      explodeLerp = THREE.MathUtils.lerp(explodeLerp, isExploded ? 1 : 0, 0.11);
 
       // Update group visibility cleanly
       coreGroup.visible = activeMode === 'core';
@@ -674,34 +886,70 @@ export function Hero3DCanvas({
       deckGroup.visible = activeMode === 'deck';
 
       if (activeMode === 'core') {
-        coreGroup.rotation.y = dragState.rotY + dragState.hoverX * 0.22;
-        coreGroup.rotation.x = dragState.rotX - dragState.hoverY * 0.18;
-        coreGroup.position.y = Math.sin(clockTime * 1.4) * 0.08;
+        const idleSway = prefersReduced ? 0 : Math.sin(clockTime * 0.85) * 0.12;
+        coreGroup.rotation.y = (dragState.rotY - 0.38) + idleSway + dragState.hoverX * 0.14;
+        coreGroup.rotation.x = THREE.MathUtils.clamp((dragState.rotX - 0.14) - dragState.hoverY * 0.08, -0.4, 0.45);
+        catStageRing.rotation.z += prefersReduced ? 0 : 0.005 + explodeLerp * 0.012;
 
-        crystalCore.rotation.y += prefersReduced ? 0 : 0.006;
-        crystalCore.rotation.x += prefersReduced ? 0 : 0.003;
-        crystalCage.rotation.y -= prefersReduced ? 0 : 0.004;
-        const cageScale = 1 + explodeLerp * 0.34;
-        crystalCage.scale.setScalar(cageScale);
+        // Playful hop & tail speed-up when clicked / "Main!" is active
+        const playHop = prefersReduced ? 0 : Math.abs(Math.sin(clockTime * 6.2)) * 0.34 * explodeLerp;
+        const breathe = prefersReduced ? 0 : Math.sin(clockTime * 2.1) * 0.025;
+        catRoot.position.y = -0.08 + playHop + breathe;
+        catRoot.scale.set(1 + breathe * 0.35, 1 + breathe * 0.5, 1 + breathe * 0.35);
 
-        gyros.forEach((gyro, idx) => {
-          gyro.rotation.x = gyro.userData.baseRot.x + clockTime * (0.28 + idx * 0.14);
-          gyro.rotation.y = gyro.userData.baseRot.y + clockTime * (0.22 - idx * 0.11);
-          const s = 1 + explodeLerp * (0.18 + idx * 0.06);
-          gyro.scale.setScalar(s);
+        // Curious head look-tracking toward pointer + joyful tilt in play mode
+        const targetHeadY = dragState.hoverX * 0.42;
+        const targetHeadX = -dragState.hoverY * 0.25 - explodeLerp * 0.08;
+        const targetHeadZ = explodeLerp * Math.sin(clockTime * 4.5) * 0.14;
+        catHeadGroup.rotation.y = THREE.MathUtils.lerp(catHeadGroup.rotation.y, targetHeadY, 0.12);
+        catHeadGroup.rotation.x = THREE.MathUtils.lerp(catHeadGroup.rotation.x, targetHeadX, 0.12);
+        catHeadGroup.rotation.z = THREE.MathUtils.lerp(catHeadGroup.rotation.z, targetHeadZ, 0.14);
+
+        // Natural periodic kitty eye blink every ~3.4 seconds
+        const blinkCycle = clockTime % 3.4;
+        const blinkScaleY = !prefersReduced && blinkCycle > 3.24 ? 0.08 : 1;
+        catEyes.forEach((eyeGrp) => {
+          eyeGrp.scale.y = THREE.MathUtils.lerp(eyeGrp.scale.y, blinkScaleY, 0.42);
         });
 
-        satellites.forEach((sat, idx) => {
-          const a = sat.userData.angle + clockTime * sat.userData.speed;
-          const r = sat.userData.baseRadius + explodeLerp * 0.62;
-          sat.position.set(Math.cos(a) * r, sat.userData.yOff + Math.sin(clockTime + idx) * 0.12, Math.sin(a) * r);
-          sat.rotation.x += 0.02;
-          sat.rotation.y += 0.025;
+        // Subtle ear twitch & joyful perk
+        catEars.forEach((ear, eIdx) => {
+          const twitchPhase = Math.sin(clockTime * (eIdx === 0 ? 3.1 : 2.5));
+          const twitch = !prefersReduced && twitchPhase > 0.94 ? ear.userData.side * 0.18 : 0;
+          const playWiggle = prefersReduced ? 0 : Math.sin(clockTime * 8 + eIdx) * 0.1 * explodeLerp;
+          ear.rotation.z = THREE.MathUtils.lerp(
+            ear.rotation.z,
+            ear.userData.baseZRot + twitch + playWiggle,
+            0.22
+          );
         });
 
-        plates.forEach((plate) => {
-          plate.position.copy(plate.userData.basePos).addScaledVector(plate.userData.dir, explodeLerp * 0.72);
-          plate.position.y += Math.sin(clockTime * 1.6 + plate.userData.basePos.x) * 0.05;
+        // Cheerful waving right front paw during Play mode
+        if (frontPaws[1]) {
+          const wave = prefersReduced ? 0 : (-1.15 + Math.sin(clockTime * 11) * 0.42) * explodeLerp;
+          frontPaws[1].rotation.x = THREE.MathUtils.lerp(frontPaws[1].rotation.x, wave, 0.18);
+          frontPaws[1].rotation.z = THREE.MathUtils.lerp(frontPaws[1].rotation.z, -0.25 * explodeLerp, 0.18);
+        }
+
+        // Smooth multi-segment S-curve tail wagging
+        tailPivots.forEach((seg, sIdx) => {
+          const waveSpeed = 2.6 + explodeLerp * 4.8;
+          const wag = prefersReduced ? 0 : Math.sin(clockTime * waveSpeed - sIdx * 0.55) * (0.2 + explodeLerp * 0.16);
+          seg.rotation.z = wag;
+        });
+
+        // Orbiting Dev Sparkle Companions (sweeping wide & rearward so eyes stay unobstructed)
+        catSparks.forEach((spark, sIdx) => {
+          const ud = spark.userData;
+          const ang = ud.angle + clockTime * (ud.speed * (1 + explodeLerp * 1.4));
+          const rad = ud.radius + explodeLerp * 0.45;
+          spark.position.set(
+            Math.cos(ang) * rad,
+            ud.yOff + Math.sin(clockTime * 2.2 + sIdx) * 0.16,
+            Math.sin(ang) * (rad * 0.55) - 0.65
+          );
+          spark.rotation.x += 0.03;
+          spark.rotation.y += 0.035;
         });
       }
 
