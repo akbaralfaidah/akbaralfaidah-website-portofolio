@@ -123,7 +123,7 @@ export function HeroCanvas({ className = '' }) {
         ctx.clearRect(0, 0, width, height);
 
         if (!prefersReduced) {
-          time += 1;
+          time += 1.45;
         }
 
         // Architectural fine blueprint crosshairs
@@ -159,7 +159,7 @@ export function HeroCanvas({ className = '' }) {
         const segmentStep = width < 640 ? 22 : 18;
         for (const rib of RIBBON_CONFIGS) {
           const [r, g, b] = palette[rib.colorIdx];
-          const alpha = dark ? 0.22 : 0.24;
+          const alpha = dark ? 0.28 : 0.34;
           const grad = ctx.createLinearGradient(0, 0, width, 0);
           grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, 0.02)`);
           grad.addColorStop(0.5, `rgba(${r}, ${g}, ${b}, ${alpha})`);
@@ -221,8 +221,8 @@ export function HeroCanvas({ className = '' }) {
           for (let j = i + 1; j < particles.length; j++) {
             const q = particles[j];
             const dist = Math.hypot(p.x - q.x, p.y - q.y);
-            if (dist < 130) {
-              const alpha = (1 - dist / 130) * (dark ? 0.2 : 0.16);
+            if (dist < 145) {
+              const alpha = (1 - dist / 145) * (dark ? 0.26 : 0.22);
               ctx.strokeStyle = `rgba(${pr}, ${pg}, ${pb}, ${alpha.toFixed(3)})`;
               ctx.lineWidth = 0.9;
               ctx.beginPath();

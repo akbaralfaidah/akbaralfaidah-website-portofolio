@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import {
   ArrowRight,
   ArrowUpRight,
-  ArrowDown,
   Cat,
   Radar,
   Layers,
@@ -91,6 +90,20 @@ const RADAR_PRESETS = [
   { id: 'outside', x: 1.55, z: -0.95, labelId: 'Luar (67m)', labelEn: 'Outside (67m)' }
 ];
 
+const ROLE_CYCLE_ID = [
+  'FULL-STACK WEB ARCHITECTURE',
+  'ANDROID POS & GPS FLUTTER',
+  'GEMINI AI & COMPUTER VISION',
+  'DOCKER & SERVER PRODUKSI'
+];
+
+const ROLE_CYCLE_EN = [
+  'FULL-STACK WEB ARCHITECTURE',
+  'ANDROID POS & GPS FLUTTER',
+  'GEMINI AI & COMPUTER VISION',
+  'CLOUD & PRODUCTION DEPLOY'
+];
+
 export default function Hero() {
   const { t, i18n } = useTranslation();
   const { theme } = useTheme();
@@ -100,15 +113,29 @@ export default function Hero() {
   const [radarMetrics, setRadarMetrics] = useState({ meters: 22.5, inside: true });
   const [radarTarget, setRadarTarget] = useState(null);
   const [mount3D, setMount3D] = useState(false);
+  const [roleIndex, setRoleIndex] = useState(0);
 
   const heroRef = useRef(null);
   const hero2Ref = useRef(null);
   const bgLayerRef = useRef(null);
+  const centerTiltRef = useRef(null);
   const titleTopRef = useRef(null);
   const titleBotRef = useRef(null);
   const heroCueRef = useRef(null);
+  const scrollDropRef = useRef(null);
+  const satTLRef = useRef(null);
+  const satTRRef = useRef(null);
+  const satBLRef = useRef(null);
+  const satBRRef = useRef(null);
   const textLayerRef = useRef(null);
   const stageLayerRef = useRef(null);
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setRoleIndex((prev) => (prev + 1) % ROLE_CYCLE_ID.length);
+    }, 2600);
+    return () => window.clearInterval(id);
+  }, []);
 
   useEffect(() => {
     const activate = () => setMount3D(true);
@@ -143,57 +170,106 @@ export default function Hero() {
       typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduced) return undefined;
 
-    let raf = 0;
-    const onScroll = () => {
-      if (raf) return;
-      raf = window.requestAnimationFrame(() => {
-        raf = 0;
-        const heroEl = heroRef.current;
-        if (heroEl) {
-          const h = heroEl.offsetHeight || window.innerHeight || 900;
-          const progress = Math.min(1, Math.max(0, window.scrollY / h));
-          if (bgLayerRef.current) {
-            const bgScale = (1 + progress * 0.1).toFixed(3);
-            bgLayerRef.current.style.transform = `translate3d(0, ${(progress * 340).toFixed(1)}px, 0) scale(${bgScale})`;
-          }
-          if (titleTopRef.current) {
-            const scale = (1 + progress * 0.06).toFixed(3);
-            titleTopRef.current.style.transform = `translate3d(${(-progress * 185).toFixed(1)}px, ${(-progress * 85).toFixed(1)}px, 0) scale(${scale})`;
-            titleTopRef.current.style.opacity = `${Math.max(0.12, 1 - progress * 0.85).toFixed(3)}`;
-          }
-          if (titleBotRef.current) {
-            const scale = (1 + progress * 0.06).toFixed(3);
-            titleBotRef.current.style.transform = `translate3d(${(progress * 185).toFixed(1)}px, ${(-progress * 85).toFixed(1)}px, 0) scale(${scale})`;
-            titleBotRef.current.style.opacity = `${Math.max(0.15, 1 - progress * 0.8).toFixed(3)}`;
-          }
-          if (heroCueRef.current) {
-            heroCueRef.current.style.transform = `translate3d(0, ${(-progress * 70).toFixed(1)}px, 0)`;
-            heroCueRef.current.style.opacity = `${Math.max(0, 1 - progress * 1.15).toFixed(3)}`;
-          }
-        }
+    const pointer = { tx: 0, ty: 0, cx: 0, cy: 0 };
+    let rafId = 0;
 
-        const hero2El = hero2Ref.current;
-        if (hero2El) {
-          const r2 = hero2El.getBoundingClientRect();
-          const vh = window.innerHeight || 900;
-          const norm = Math.max(-1, Math.min(1, (r2.top + r2.height / 2 - vh / 2) / vh));
-          if (textLayerRef.current) {
-            textLayerRef.current.style.transform = `translate3d(0, ${(norm * 72).toFixed(1)}px, 0)`;
-          }
-          if (stageLayerRef.current) {
-            const s = (1 - Math.abs(norm) * 0.08).toFixed(3);
-            const tiltDeg = (norm * -2.6).toFixed(2);
-            stageLayerRef.current.style.transform = `translate3d(0, ${(-norm * 85).toFixed(1)}px, 0) scale(${s}) rotate(${tiltDeg}deg)`;
-          }
-        }
-      });
+    const onPointerMove = (e) => {
+      const vw = window.innerWidth || 1440;
+      const vh = window.innerHeight || 900;
+      pointer.tx = (e.clientX / vw - 0.5) * 2;
+      pointer.ty = (e.clientY / vh - 0.5) * 2;
     };
 
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
+    const tick = () => {
+      rafId = window.requestAnimationFrame(tick);
+
+      pointer.cx += (pointer.tx - pointer.cx) * 0.08;
+      pointer.cy += (pointer.ty - pointer.cy) * 0.08;
+
+      const heroEl = heroRef.current;
+      if (heroEl) {
+        const runway = Math.max(1, heroEl.offsetHeight - (window.innerHeight || 900));
+        const progress = Math.min(1, Math.max(0, window.scrollY / runway));
+
+        if (bgLayerRef.current) {
+          const bgScale = (1 + progress * 0.24).toFixed(3);
+          bgLayerRef.current.style.transform = `translate3d(${(-pointer.cx * 18).toFixed(1)}px, ${(
+            -pointer.cy * 14 +
+            progress * 60
+          ).toFixed(1)}px, 0) scale(${bgScale})`;
+        }
+
+        if (centerTiltRef.current) {
+          const rx = (-pointer.cy * 3.6).toFixed(2);
+          const ry = (pointer.cx * 4.4).toFixed(2);
+          centerTiltRef.current.style.transform = `perspective(1200px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+        }
+
+        if (titleTopRef.current) {
+          const s = (1 + progress * 0.44).toFixed(3);
+          const tx = (-progress * 38).toFixed(2);
+          const ty = (-progress * 10).toFixed(2);
+          const rot = (-progress * 5).toFixed(2);
+          titleTopRef.current.style.transform = `translate3d(${tx}vw, ${ty}vh, 0) scale(${s}) rotate(${rot}deg)`;
+          titleTopRef.current.style.opacity = `${Math.max(0, 1 - progress * 1.15).toFixed(3)}`;
+        }
+
+        if (titleBotRef.current) {
+          const s = (1 + progress * 0.44).toFixed(3);
+          const tx = (progress * 38).toFixed(2);
+          const ty = (-progress * 10).toFixed(2);
+          const rot = (progress * 5).toFixed(2);
+          titleBotRef.current.style.transform = `translate3d(${tx}vw, ${ty}vh, 0) scale(${s}) rotate(${rot}deg)`;
+          titleBotRef.current.style.opacity = `${Math.max(0, 1 - progress * 1.12).toFixed(3)}`;
+        }
+
+        if (heroCueRef.current) {
+          const s = (1 - progress * 0.16).toFixed(3);
+          heroCueRef.current.style.transform = `translate3d(0, ${(-progress * 36).toFixed(1)}px, 0) scale(${s})`;
+          heroCueRef.current.style.opacity = `${Math.max(0, 1 - progress * 1.45).toFixed(3)}`;
+        }
+
+        if (scrollDropRef.current) {
+          scrollDropRef.current.style.opacity = `${Math.max(0, 1 - progress * 2.5).toFixed(3)}`;
+        }
+
+        const scatter = (el, sx, sy, multX, multY) => {
+          if (!el) return;
+          const x = (-pointer.cx * multX + progress * sx).toFixed(1);
+          const y = (-pointer.cy * multY + progress * sy).toFixed(1);
+          const s = (1 + progress * 0.28).toFixed(3);
+          el.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${s})`;
+          el.style.opacity = `${Math.max(0, 1 - progress * 1.35).toFixed(3)}`;
+        };
+
+        scatter(satTLRef.current, -260, -170, 26, 22);
+        scatter(satTRRef.current, 260, -170, -22, 24);
+        scatter(satBLRef.current, -260, 170, 20, -24);
+        scatter(satBRRef.current, 260, 170, -28, -20);
+      }
+
+      const hero2El = hero2Ref.current;
+      if (hero2El) {
+        const r2 = hero2El.getBoundingClientRect();
+        const vh = window.innerHeight || 900;
+        const norm = Math.max(-1, Math.min(1, (r2.top + r2.height / 2 - vh / 2) / vh));
+        if (textLayerRef.current) {
+          textLayerRef.current.style.transform = `translate3d(${(norm * -42).toFixed(1)}px, ${(norm * 82).toFixed(1)}px, 0)`;
+        }
+        if (stageLayerRef.current) {
+          const s = (1 - Math.abs(norm) * 0.12).toFixed(3);
+          const tiltDeg = (norm * -3.5).toFixed(2);
+          stageLayerRef.current.style.transform = `translate3d(${(norm * 52).toFixed(1)}px, ${(-norm * 92).toFixed(1)}px, 0) scale(${s}) rotate(${tiltDeg}deg)`;
+        }
+      }
+    };
+
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    tick();
+
     return () => {
-      window.removeEventListener('scroll', onScroll);
-      if (raf) window.cancelAnimationFrame(raf);
+      window.removeEventListener('pointermove', onPointerMove);
+      if (rafId) window.cancelAnimationFrame(rafId);
     };
   }, []);
 
@@ -201,6 +277,7 @@ export default function Hero() {
   const isDark = theme === 'dark';
   const facts = t('hero.facts', { returnObjects: true }) || [];
   const activeProject = heroProjects[activeSlide] || heroProjects[0];
+  const currentRole = (isEn ? ROLE_CYCLE_EN : ROLE_CYCLE_ID)[roleIndex];
 
   const scrollToStage = () => {
     setMount3D(true);
@@ -242,91 +319,174 @@ export default function Hero() {
 
   return (
     <>
-      {/* HERO 1: Full-Viewport Architectural SOFTWARE ENGINEER. Statement + Curtain Split Parallax */}
+      {/* HERO 1: Pinned Sticky Spatial Portal — SOFTWARE ENGINEER. */}
       <section
         ref={heroRef}
         id="hero"
-        className="relative min-h-[100svh] flex flex-col justify-center bg-paper text-ink pt-20 pb-14 px-5 sm:px-6 border-b border-line overflow-hidden"
+        className="relative h-[160vh] md:h-[185vh] bg-paper text-ink border-b border-line overflow-x-clip"
       >
-        {/* Parallax Depth Layer 1: Luminous Daylight Radial Atmosphere + Vector Ribbons */}
-        <div
-          ref={bgLayerRef}
-          className="pointer-events-none absolute inset-0 will-change-transform"
-        >
-          <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
+        <div className="sticky top-0 h-[100svh] flex flex-col justify-center pt-16 pb-10 px-5 sm:px-6 overflow-hidden">
+          {/* Parallax Depth Layer 1: Luminous Daylight Radial Atmosphere + Vector Ribbons */}
+          <div
+            ref={bgLayerRef}
+            className="pointer-events-none absolute -inset-6 will-change-transform"
+          >
+            <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
+              <div
+                className="animate-aurora absolute -top-28 right-[-6%] w-[720px] h-[720px] rounded-full opacity-95 dark:opacity-35"
+                style={{
+                  background:
+                    'radial-gradient(circle, rgba(56,189,248,0.24) 0%, rgba(37,99,235,0.09) 45%, transparent 72%)'
+                }}
+              />
+              <div
+                className="animate-aurora absolute -bottom-32 left-[-6%] w-[600px] h-[600px] rounded-full opacity-90 dark:opacity-30"
+                style={{
+                  background:
+                    'radial-gradient(circle, rgba(16,185,129,0.16) 0%, rgba(14,165,233,0.07) 48%, transparent 74%)'
+                }}
+              />
+            </div>
+
+            {/* Dual Opposing Continuous Ambient Typography Ribbons (alive while idle) */}
             <div
-              className="absolute -top-32 right-[-8%] w-[700px] h-[700px] rounded-full opacity-95 dark:opacity-35"
-              style={{
-                background:
-                  'radial-gradient(circle, rgba(56,189,248,0.22) 0%, rgba(37,99,235,0.08) 45%, transparent 72%)'
-              }}
-            />
+              aria-hidden="true"
+              className="pointer-events-none select-none absolute top-[18%] left-0 right-0 overflow-hidden opacity-[0.045] dark:opacity-[0.06]"
+            >
+              <div className="animate-marquee-ltr flex w-max whitespace-nowrap font-display font-bold uppercase tracking-[0.14em] text-2xl sm:text-4xl text-ink">
+                <span className="pr-12">
+                  SYSTEM ARCHITECTURE · FULL-STACK WEB · ANDROID POS · COMPUTER VISION · APPLIED AI ·
+                </span>
+                <span className="pr-12">
+                  SYSTEM ARCHITECTURE · FULL-STACK WEB · ANDROID POS · COMPUTER VISION · APPLIED AI ·
+                </span>
+              </div>
+            </div>
+
             <div
-              className="absolute -bottom-36 left-[-8%] w-[580px] h-[580px] rounded-full opacity-90 dark:opacity-30"
-              style={{
-                background:
-                  'radial-gradient(circle, rgba(16,185,129,0.14) 0%, rgba(14,165,233,0.06) 48%, transparent 74%)'
-              }}
-            />
+              aria-hidden="true"
+              className="pointer-events-none select-none absolute bottom-[14%] left-0 right-0 overflow-hidden opacity-[0.045] dark:opacity-[0.06]"
+            >
+              <div className="animate-marquee-rtl flex w-max whitespace-nowrap font-display font-bold uppercase tracking-[0.14em] text-2xl sm:text-4xl text-accent">
+                <span className="pr-12">
+                  NEXT.JS · FLUTTER · LARAVEL · GEMINI AI · DOCKER · NGINX · ZERO DOWNTIME ·
+                </span>
+                <span className="pr-12">
+                  NEXT.JS · FLUTTER · LARAVEL · GEMINI AI · DOCKER · NGINX · ZERO DOWNTIME ·
+                </span>
+              </div>
+            </div>
+
+            <HeroCanvas />
           </div>
 
-          <HeroCanvas />
-        </div>
+          {/* 4 Orbiting Levitating Liquid Glass Satellites (idle motion + mouse + radial scatter parallax) */}
+          <div
+            ref={satTLRef}
+            aria-hidden="true"
+            className="hidden md:flex pointer-events-none absolute left-[6%] lg:left-[8%] top-[21%] z-20 will-change-transform"
+          >
+            <div className="animate-float-a liquid-glass-pill rounded-2xl px-4 py-2.5 font-mono text-[11px] font-semibold text-ink flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+              <span>Next.js · React · Laravel</span>
+            </div>
+          </div>
 
-        <div className="relative z-10 max-w-6xl w-full mx-auto text-center flex flex-col items-center">
-          <div className="flex flex-wrap items-center justify-center gap-2.5 mb-6 sm:mb-8">
-            <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3.5 py-1.5 rounded-full liquid-glass-pill font-mono text-[10px] sm:text-xs uppercase tracking-[0.06em] sm:tracking-[0.12em] whitespace-nowrap max-w-full text-ink-muted">
-              <span className="relative flex h-2 w-2 shrink-0" aria-hidden="true">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+          <div
+            ref={satTRRef}
+            aria-hidden="true"
+            className="hidden md:flex pointer-events-none absolute right-[6%] lg:right-[8%] top-[23%] z-20 will-change-transform"
+          >
+            <div className="animate-float-b liquid-glass-pill rounded-2xl px-4 py-2.5 font-mono text-[11px] font-semibold text-ink flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Flutter · Android POS</span>
+            </div>
+          </div>
+
+          <div
+            ref={satBLRef}
+            aria-hidden="true"
+            className="hidden md:flex pointer-events-none absolute left-[7%] lg:left-[9%] bottom-[17%] z-20 will-change-transform"
+          >
+            <div className="animate-float-b liquid-glass-pill rounded-2xl px-4 py-2.5 font-mono text-[11px] font-semibold text-ink flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" />
+              <span>Gemini AI · OpenCV Vision</span>
+            </div>
+          </div>
+
+          <div
+            ref={satBRRef}
+            aria-hidden="true"
+            className="hidden md:flex pointer-events-none absolute right-[7%] lg:right-[9%] bottom-[19%] z-20 will-change-transform"
+          >
+            <div className="animate-float-a liquid-glass-pill rounded-2xl px-4 py-2.5 font-mono text-[11px] font-semibold text-ink flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+              <span>10+ Live Systems Shipped</span>
+            </div>
+          </div>
+
+          {/* Center Spatial Tilt Monolith */}
+          <div
+            ref={centerTiltRef}
+            className="relative z-10 max-w-6xl w-full mx-auto text-center flex flex-col items-center will-change-transform"
+          >
+            <div className="flex flex-wrap items-center justify-center gap-2.5 mb-5 sm:mb-7">
+              <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3.5 py-1.5 rounded-full liquid-glass-pill font-mono text-[10px] sm:text-xs uppercase tracking-[0.06em] sm:tracking-[0.12em] whitespace-nowrap max-w-full text-ink-muted">
+                <span className="relative flex h-2 w-2 shrink-0" aria-hidden="true">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                </span>
+                <span>{t('hero.badge')} · Jambi / Remote</span>
+              </div>
+
+              <span className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full liquid-glass-pill font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+                Web · Mobile · Applied AI
               </span>
-              <span>{t('hero.badge')} · Jambi / Remote</span>
             </div>
 
-            <span className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full liquid-glass-pill font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
-              Web · Mobile · Applied AI
-            </span>
+            <h1 className="w-full flex items-baseline justify-center gap-x-[0.22em] whitespace-nowrap font-display font-bold uppercase tracking-[-0.045em] leading-[0.95] select-none mb-6 sm:mb-8">
+              <span
+                ref={titleTopRef}
+                className="inline-block text-[clamp(1.75rem,7.15vw,6.65rem)] text-ink will-change-transform"
+              >
+                SOFTWARE
+              </span>
+              <span
+                ref={titleBotRef}
+                className="inline-block text-[clamp(1.8rem,7.3vw,6.85rem)] font-serif italic font-normal hero-shimmer-text pr-[0.06em] will-change-transform"
+              >
+                ENGINEER.
+              </span>
+            </h1>
+
+            <div ref={heroCueRef} className="max-w-2xl mx-auto space-y-4 will-change-transform">
+              {/* Live Cycling Role Micro-Ticker */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full liquid-glass-pill font-mono text-[11px] uppercase tracking-[0.14em] text-accent font-semibold">
+                <span className="w-1.5 h-1.5 rounded-full bg-accent animate-ping" aria-hidden="true" />
+                <span>{currentRole}</span>
+              </div>
+
+              <p className="font-sans text-base sm:text-lg text-ink-muted leading-relaxed">
+                {isEn
+                  ? 'Designing and shipping fast websites, field-ready mobile apps, and applied AI systems from scratch.'
+                  : 'Merancang website, aplikasi mobile lapangan, dan integrasi AI dari nol hingga berjalan stabil di server produksi.'}
+              </p>
+            </div>
           </div>
 
-          <h1 className="w-full flex items-baseline justify-center gap-x-[0.22em] whitespace-nowrap font-display font-bold uppercase tracking-[-0.045em] leading-[0.95] select-none mb-7 sm:mb-9">
-            <span
-              ref={titleTopRef}
-              className="inline-block text-[clamp(1.75rem,7.15vw,6.65rem)] text-ink will-change-transform"
+          {/* Minimal Animated Scroll Mouse Capsule (zero text clutter) */}
+          <div
+            ref={scrollDropRef}
+            className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 will-change-transform"
+          >
+            <button
+              type="button"
+              onClick={scrollToStage}
+              aria-label={isEn ? 'Scroll down to Studio 3D' : 'Gulir ke bawah ke Studio 3D'}
+              className="w-7 h-11 rounded-full liquid-glass-pill flex items-start justify-center p-2 hover:border-accent/60 transition-colors"
             >
-              SOFTWARE
-            </span>
-            <span
-              ref={titleBotRef}
-              className="inline-block text-[clamp(1.8rem,7.3vw,6.85rem)] font-serif italic font-normal text-accent will-change-transform"
-            >
-              ENGINEER.
-            </span>
-          </h1>
-
-          <div ref={heroCueRef} className="max-w-2xl mx-auto space-y-6 will-change-transform">
-            <p className="font-mono text-xs sm:text-sm uppercase tracking-[0.16em] text-ink-muted">
-              Akbar Alfaidah · Tech Agency
-            </p>
-            <p className="text-base sm:text-xl text-ink-muted leading-relaxed">
-              {isEn
-                ? 'Designing and shipping fast websites, field-ready mobile apps, and applied AI systems from scratch.'
-                : 'Merancang website, aplikasi mobile lapangan, dan integrasi AI dari nol hingga berjalan stabil di server produksi.'}
-            </p>
-
-            <div className="pt-2 flex flex-wrap items-center justify-center gap-3.5">
-              <button
-                type="button"
-                onClick={scrollToStage}
-                className="group inline-flex items-center gap-2 px-5 py-3 rounded-full liquid-glass-pill text-sm font-medium text-ink hover:border-accent/50 hover:text-accent transition-all"
-              >
-                <span>{isEn ? 'Explore 3D Studio & Cat' : 'Masuk Studio 3D & Kucing'}</span>
-                <ArrowDown
-                  size={16}
-                  className="transition-transform duration-300 group-hover:translate-y-0.5"
-                  aria-hidden="true"
-                />
-              </button>
-            </div>
+              <span className="w-1.5 h-2.5 rounded-full bg-accent animate-scroll-drop" />
+            </button>
           </div>
         </div>
       </section>
