@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring, useReducedMotion } from 'framer-motion';
 import { STUDIO_EASE } from '../../lib/motion';
+import { useIsDesktop } from '../../hooks/useIsDesktop';
 
 export function ScrollProgressBar() {
   const prefersReduced = useReducedMotion();
@@ -25,6 +26,7 @@ export function ScrollProgressBar() {
 /**
  * Multi-axis GPU scroll parallax container supporting vertical/horizontal shift,
  * 3D perspective tilt (rotateX), zoom (scale), and fade without layout thrashing.
+ * Automatically disables heavy transforms on mobile/tablet single-column layouts.
  */
 const SPRING_SCROLL_CONFIG = { stiffness: 105, damping: 22, restDelta: 0.0005 };
 
@@ -41,6 +43,7 @@ export function ParallaxLayer({
 }) {
   const ref = useRef(null);
   const prefersReduced = useReducedMotion();
+  const isDesktop = useIsDesktop(1024);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset
@@ -54,9 +57,10 @@ export function ParallaxLayer({
   const rotateX = useTransform(smoothProgress, [0, 1], rotateXRange || [0, 0]);
 
   const Component = motion[as] || motion.div;
+  const StaticTag = as || 'div';
 
-  if (prefersReduced) {
-    return <div className={className}>{children}</div>;
+  if (prefersReduced || !isDesktop) {
+    return <StaticTag className={className}>{children}</StaticTag>;
   }
 
   return (
@@ -84,16 +88,18 @@ export function ParallaxLayer({
 export function ParallaxRibbon({ items = [], direction = 1, className = '' }) {
   const ref = useRef(null);
   const prefersReduced = useReducedMotion();
+  const isDesktop = useIsDesktop(768);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start end', 'end start']
   });
   const smoothProgress = useSpring(scrollYProgress, SPRING_SCROLL_CONFIG);
 
+  const delta = isDesktop ? 420 : 120;
   const x = useTransform(
     smoothProgress,
     [0, 1],
-    direction > 0 ? [-420, 420] : [420, -420]
+    direction > 0 ? [-delta, delta] : [delta, -delta]
   );
 
   const repeated = [...items, ...items, ...items];
@@ -102,18 +108,18 @@ export function ParallaxRibbon({ items = [], direction = 1, className = '' }) {
     <div
       ref={ref}
       aria-hidden="true"
-      className={`relative py-4 sm:py-5 border-b border-line bg-surface/95 overflow-hidden select-none ${className}`}
+      className={`relative py-3 sm:py-5 border-b border-line bg-surface/95 overflow-hidden select-none ${className}`}
     >
       <motion.div
         style={prefersReduced ? undefined : { x }}
-        className="flex items-center gap-6 sm:gap-10 w-max will-change-transform"
+        className="flex items-center gap-5 sm:gap-10 w-max will-change-transform"
       >
         {repeated.map((label, idx) => (
-          <div key={`${label}-${idx}`} className="inline-flex items-center gap-6 sm:gap-10 shrink-0">
-            <span className="font-display text-sm sm:text-base font-semibold tracking-tight text-ink">
+          <div key={`${label}-${idx}`} className="inline-flex items-center gap-5 sm:gap-10 shrink-0">
+            <span className="font-display text-xs sm:text-base font-semibold tracking-tight text-ink">
               {label}
             </span>
-            <span className="w-2 h-2 rounded-full bg-accent/60" />
+            <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-accent/60" />
           </div>
         ))}
       </motion.div>
@@ -123,6 +129,7 @@ export function ParallaxRibbon({ items = [], direction = 1, className = '' }) {
 
 /**
  * Ambient ghost typography drifting strongly horizontally across scroll.
+ * Hidden on narrow phone screens where oversized letters clip and waste vertical space.
  */
 export function ParallaxWatermark({ text, className = '', direction = 1 }) {
   const ref = useRef(null);
@@ -143,7 +150,7 @@ export function ParallaxWatermark({ text, className = '', direction = 1 }) {
     <div
       ref={ref}
       aria-hidden="true"
-      className={`pointer-events-none select-none overflow-hidden ${className}`}
+      className={`hidden sm:block pointer-events-none select-none overflow-hidden ${className}`}
     >
       <motion.div
         style={prefersReduced ? undefined : { x }}
@@ -152,7 +159,7 @@ export function ParallaxWatermark({ text, className = '', direction = 1 }) {
         <svg
           aria-hidden="true"
           viewBox="0 0 1200 130"
-          className="w-full h-14 sm:h-24 lg:h-28 text-ink/[0.045] dark:text-white/[0.045]"
+          className="w-full h-20 sm:h-24 lg:h-28 text-ink/[0.045] dark:text-white/[0.045]"
         >
           <text
             x="50%"

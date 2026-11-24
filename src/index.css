@@ -147,6 +147,15 @@
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
 }
 
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 .spotlight-surface {
   position: relative;
 }
@@ -304,16 +313,22 @@ html.lenis body {
 }
 
 .hero-shimmer-text {
-  background-image: linear-gradient(110deg, #1d4ed8 0%, #0284c7 35%, #059669 65%, #2563eb 100%);
-  background-size: 260% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: heroGradientFlow 5.5s ease-in-out infinite;
+  color: var(--color-accent);
 }
 
-.dark .hero-shimmer-text {
-  background-image: linear-gradient(110deg, #60a5fa 0%, #38bdf8 35%, #34d399 65%, #818cf8 100%);
+@media (min-width: 768px) {
+  .hero-shimmer-text {
+    background-image: linear-gradient(110deg, #1d4ed8 0%, #0284c7 35%, #059669 65%, #2563eb 100%);
+    background-size: 260% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: heroGradientFlow 5.5s ease-in-out infinite;
+  }
+
+  .dark .hero-shimmer-text {
+    background-image: linear-gradient(110deg, #60a5fa 0%, #38bdf8 35%, #34d399 65%, #818cf8 100%);
+  }
 }
 
 .animate-scroll-drop {

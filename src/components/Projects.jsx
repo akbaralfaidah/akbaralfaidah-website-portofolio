@@ -187,7 +187,7 @@ export default function Projects() {
     <>
       <section
         id="projects"
-        className="relative py-20 sm:py-28 px-5 sm:px-6 bg-paper text-ink border-b border-line overflow-hidden"
+        className="relative py-14 sm:py-28 px-4 sm:px-6 bg-paper text-ink border-b border-line overflow-hidden"
       >
         <div
           aria-hidden="true"
@@ -195,7 +195,7 @@ export default function Projects() {
         >
           <ParallaxLayer
             yRange={[-45, 45]}
-            className="w-full h-full rounded-full opacity-75 dark:opacity-25"
+            className="w-full h-full rounded-full opacity-55 sm:opacity-75 dark:opacity-25"
           >
             <div
               className="w-full h-full rounded-full"
@@ -209,12 +209,12 @@ export default function Projects() {
         <ParallaxWatermark text="SELECTED WORKS" direction={-1} className="mb-2" />
 
         <div className="relative z-10 max-w-6xl mx-auto">
-          <FadeUp className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+          <FadeUp className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-6 sm:mb-10">
             <div className="max-w-2xl">
-              <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent font-semibold mb-3">
+              <p className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.14em] text-accent font-semibold mb-2 sm:mb-3">
                 {isEn ? '01 / Selected Works' : '01 / Karya Pilihan'}
               </p>
-              <h2 className="font-display text-3xl sm:text-5xl font-semibold tracking-[-0.035em] leading-[1.06] text-ink mb-3">
+              <h2 className="font-display text-[1.8rem] sm:text-5xl font-semibold tracking-[-0.035em] leading-[1.08] text-ink mb-2.5 sm:mb-3">
                 {isEn ? (
                   <>
                     Shipped Products{' '}
@@ -227,14 +227,14 @@ export default function Projects() {
                   </>
                 )}
               </h2>
-              <p className="text-base sm:text-lg text-ink-muted leading-relaxed">
+              <p className="text-[15px] sm:text-lg text-ink-muted leading-relaxed">
                 {t('projects.subheading')}
               </p>
             </div>
 
             <Link
               to="/projects"
-              className="group self-start md:self-auto inline-flex items-center gap-2 min-h-[44px] text-[15px] font-medium text-ink hover:text-accent transition-colors border-b border-line pb-1"
+              className="group self-start md:self-auto inline-flex items-center gap-2 min-h-[40px] sm:min-h-[44px] text-sm sm:text-[15px] font-medium text-ink hover:text-accent transition-colors border-b border-line pb-1"
             >
               <span>
                 {t('projects.bottom_cta')} ({projects.length})
@@ -247,9 +247,13 @@ export default function Projects() {
             </Link>
           </FadeUp>
 
-          {/* Hairline Category Filter Tabs */}
-          <div className="flex flex-wrap items-center justify-between gap-4 mb-10 border-b border-line">
-            <div role="group" aria-label="Filter showcase by discipline" className="flex flex-wrap gap-6">
+          {/* Swipeable Mobile Pill Tabs / Hairline Desktop Filter Tabs */}
+          <div className="-mx-4 sm:mx-0 flex items-center justify-between gap-4 mb-6 sm:mb-10 sm:border-b sm:border-line">
+            <div
+              role="group"
+              aria-label="Filter showcase by discipline"
+              className="flex items-center gap-2 sm:gap-6 overflow-x-auto no-scrollbar px-4 sm:px-0 py-1 sm:py-0 w-full sm:w-auto"
+            >
               {FILTER_CATEGORIES.map((category) => {
                 const active = selectedCategory === category;
                 const label = category === 'All' ? t('projects.filter_all') : category;
@@ -262,8 +266,10 @@ export default function Projects() {
                       setSelectedCategory(category);
                       setActiveIndex(0);
                     }}
-                    className={`relative min-h-[44px] pb-3 text-[15px] font-medium transition-colors ${
-                      active ? 'text-ink' : 'text-ink-muted hover:text-ink'
+                    className={`relative min-h-[38px] sm:min-h-[44px] px-3.5 py-1.5 sm:px-0 sm:py-0 sm:pb-3 rounded-full sm:rounded-none text-xs sm:text-[15px] font-medium whitespace-nowrap shrink-0 border sm:border-0 transition-colors ${
+                      active
+                        ? 'bg-ink text-on-ink border-ink sm:bg-transparent sm:text-ink'
+                        : 'bg-surface/85 text-ink-muted border-line sm:bg-transparent hover:text-ink'
                     }`}
                   >
                     <span>{label}</span>
@@ -271,7 +277,7 @@ export default function Projects() {
                       <motion.span
                         layoutId="home-projects-underline"
                         transition={{ type: 'spring', stiffness: 440, damping: 34 }}
-                        className="absolute left-0 right-0 -bottom-[1px] h-[2px] bg-accent"
+                        className="hidden sm:block absolute left-0 right-0 -bottom-[1px] h-[2px] bg-accent"
                       />
                     )}
                   </button>
@@ -279,7 +285,7 @@ export default function Projects() {
               })}
             </div>
 
-            <span className="hidden sm:inline-flex items-center gap-1.5 font-mono text-xs text-ink-muted pb-3">
+            <span className="hidden sm:inline-flex items-center gap-1.5 font-mono text-xs text-ink-muted pb-3 shrink-0">
               <Sparkles size={13} className="text-accent" aria-hidden="true" />
               <span>
                 {isEn
@@ -290,12 +296,12 @@ export default function Projects() {
           </div>
 
           {loading || !focusedProject ? (
-            <div className="space-y-8 animate-pulse">
+            <div className="space-y-6 sm:space-y-8 animate-pulse">
               <div className="aspect-video max-w-3xl mx-auto rounded-2xl bg-mist" />
               <div className="h-32 rounded-2xl bg-mist" />
             </div>
           ) : (
-            <div className="space-y-8">
+            <div className="space-y-5 sm:space-y-8">
               {/* Interactive 3D Spatial Coverflow Exhibition Stage with Deep Camera Unfold Parallax */}
               <ParallaxLayer
                 yRange={[128, -98]}
@@ -303,7 +309,7 @@ export default function Projects() {
                 rotateXRange={[22, -7]}
               >
                 <div
-                  className="relative h-[240px] sm:h-[360px] lg:h-[430px] flex items-center justify-center"
+                  className="relative sm:h-[360px] lg:h-[430px] flex items-center justify-center"
                   style={{ perspective: '1500px', transformStyle: 'preserve-3d' }}
                 >
                 {visibleProjects.map((project, idx) => {
@@ -338,8 +344,10 @@ export default function Projects() {
                         zIndex: zIndexVal,
                         transformStyle: 'preserve-3d'
                       }}
-                      className={`absolute w-[92%] sm:w-[70%] lg:w-[62%] max-w-[700px] ${
-                        isCenter ? 'block' : 'hidden sm:block cursor-pointer'
+                      className={`${
+                        isCenter
+                          ? 'relative sm:absolute block w-full sm:w-[70%] lg:w-[62%] max-w-[700px]'
+                          : 'hidden sm:block sm:absolute sm:w-[70%] lg:w-[62%] max-w-[700px] cursor-pointer'
                       }`}
                       onClick={!isCenter ? () => setActiveIndex(idx) : undefined}
                     >
@@ -368,14 +376,14 @@ export default function Projects() {
                   );
                 })}
 
-                {/* Stage Prev / Next Spherical Controls */}
+                {/* Stage Prev / Next Spherical Controls (desktop/tablet; mobile uses inline console controls) */}
                 {count > 1 && (
                   <>
                     <button
                       type="button"
                       onClick={goPrev}
                       aria-label={isEn ? 'Previous project' : 'Proyek sebelumnya'}
-                      className="absolute left-0 sm:left-2 top-1/2 -translate-y-1/2 z-40 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/95 dark:bg-[#0D1017]/95 text-ink border border-line hover:border-accent hover:text-accent shadow-lg backdrop-blur-md flex items-center justify-center transition-all hover:scale-105"
+                      className="hidden sm:flex absolute left-2 top-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-full bg-white/95 dark:bg-[#0D1017]/95 text-ink border border-line hover:border-accent hover:text-accent shadow-lg backdrop-blur-md items-center justify-center transition-all hover:scale-105"
                     >
                       <ChevronLeft size={19} aria-hidden="true" />
                     </button>
@@ -383,7 +391,7 @@ export default function Projects() {
                       type="button"
                       onClick={goNext}
                       aria-label={isEn ? 'Next project' : 'Proyek berikutnya'}
-                      className="absolute right-0 sm:right-2 top-1/2 -translate-y-1/2 z-40 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/95 dark:bg-[#0D1017]/95 text-ink border border-line hover:border-accent hover:text-accent shadow-lg backdrop-blur-md flex items-center justify-center transition-all hover:scale-105"
+                      className="hidden sm:flex absolute right-2 top-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-full bg-white/95 dark:bg-[#0D1017]/95 text-ink border border-line hover:border-accent hover:text-accent shadow-lg backdrop-blur-md items-center justify-center transition-all hover:scale-105"
                     >
                       <ChevronRight size={19} aria-hidden="true" />
                     </button>
@@ -394,7 +402,7 @@ export default function Projects() {
 
               {/* Integrated Live Active Project Spec Console */}
               <ParallaxLayer yRange={[68, -68]} scaleRange={[0.96, 1.01]}>
-                <div className="liquid-glass rounded-2xl p-6 sm:p-8">
+                <div className="liquid-glass rounded-2xl p-4 sm:p-8">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={focusedProject.slug}
@@ -402,21 +410,45 @@ export default function Projects() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
                     transition={{ duration: 0.2, ease: STUDIO_EASE }}
-                    className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center"
+                    className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-10 items-center"
                   >
-                    <div className="lg:col-span-8 space-y-3">
-                      <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-ink-muted">
-                        <span className="px-2.5 py-0.5 rounded-full bg-accent/10 text-accent font-semibold">
-                          {String(safeIndex + 1).padStart(2, '0')} / {String(count).padStart(2, '0')}
-                        </span>
-                        <span>{(focusedProject.categories || []).join(' · ')}</span>
-                        <span>·</span>
-                        <span>{focusedProject.client}</span>
-                        <span>·</span>
-                        <span className="tabular-nums">{focusedProject.year}</span>
+                    <div className="lg:col-span-8 space-y-2.5 sm:space-y-3">
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[11px] sm:text-xs text-ink-muted">
+                          <span className="px-2.5 py-0.5 rounded-full bg-accent/10 text-accent font-semibold">
+                            {String(safeIndex + 1).padStart(2, '0')} / {String(count).padStart(2, '0')}
+                          </span>
+                          <span>{(focusedProject.categories || [])[0]}</span>
+                          <span aria-hidden="true">·</span>
+                          <span className="tabular-nums">{focusedProject.year}</span>
+                          <span className="hidden sm:inline" aria-hidden="true">·</span>
+                          <span className="hidden sm:inline">{focusedProject.client}</span>
+                        </div>
+
+                        {/* Mobile compact Prev / Next buttons right in header row */}
+                        {count > 1 && (
+                          <div className="flex sm:hidden items-center gap-1.5 shrink-0">
+                            <button
+                              type="button"
+                              onClick={goPrev}
+                              aria-label={isEn ? 'Previous project' : 'Proyek sebelumnya'}
+                              className="w-8 h-8 rounded-full border border-line bg-surface text-ink flex items-center justify-center active:scale-95 transition-transform"
+                            >
+                              <ChevronLeft size={16} aria-hidden="true" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={goNext}
+                              aria-label={isEn ? 'Next project' : 'Proyek berikutnya'}
+                              className="w-8 h-8 rounded-full border border-line bg-surface text-ink flex items-center justify-center active:scale-95 transition-transform"
+                            >
+                              <ChevronRight size={16} aria-hidden="true" />
+                            </button>
+                          </div>
+                        )}
                       </div>
 
-                      <h3 className="font-display text-2xl sm:text-4xl font-semibold tracking-[-0.025em] text-ink">
+                      <h3 className="font-display text-xl sm:text-4xl font-semibold tracking-[-0.025em] text-ink">
                         <Link
                           to={`/project/${focusedProject.slug}`}
                           className="hover:text-accent transition-colors"
@@ -425,15 +457,15 @@ export default function Projects() {
                         </Link>
                       </h3>
 
-                      <p className="text-base sm:text-lg text-ink-muted leading-relaxed">
+                      <p className="text-sm sm:text-lg text-ink-muted leading-relaxed">
                         {getLocalizedDesc(focusedProject)}
                       </p>
 
-                      <div className="flex flex-wrap gap-2 pt-1">
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-1">
                         {(focusedProject.techStack || []).slice(0, 5).map((tech) => (
                           <span
                             key={tech}
-                            className="px-2.5 py-1 rounded-md font-mono text-xs bg-mist border border-line text-ink-muted"
+                            className="px-2.5 py-1 rounded-md font-mono text-[11px] sm:text-xs bg-mist border border-line text-ink-muted"
                           >
                             {tech}
                           </span>
@@ -441,23 +473,23 @@ export default function Projects() {
                       </div>
                     </div>
 
-                    <div className="lg:col-span-4 flex flex-wrap lg:flex-col lg:items-end justify-start gap-3">
+                    <div className="lg:col-span-4 flex flex-col lg:items-end justify-start gap-2.5 sm:gap-3">
                       <Button
                         as={Link}
                         to={`/project/${focusedProject.slug}`}
                         variant="accent"
                         size="lg"
-                        className="w-full sm:w-auto lg:w-full"
+                        className="w-full rounded-xl"
                       >
                         <span>{t('projects.cta')}</span>
                         <ArrowRight size={16} aria-hidden="true" />
                       </Button>
 
-                      <div className="flex items-center gap-2.5 w-full sm:w-auto lg:w-full">
+                      <div className="flex items-center gap-2.5 w-full">
                         <button
                           type="button"
                           onClick={() => setQuickProject(focusedProject)}
-                          className="flex-1 min-h-[42px] px-4 py-2 rounded-lg liquid-glass-pill hover:border-accent/50 hover:text-accent text-sm font-medium text-ink inline-flex items-center justify-center gap-1.5 transition-colors"
+                          className="flex-1 min-h-[42px] px-4 py-2 rounded-xl liquid-glass-pill hover:border-accent/50 hover:text-accent text-sm font-medium text-ink inline-flex items-center justify-center gap-1.5 transition-colors"
                         >
                           <Eye size={15} aria-hidden="true" />
                           <span>{isEn ? 'Quick View' : 'Ringkasan'}</span>
@@ -468,7 +500,7 @@ export default function Projects() {
                             href={focusedProject.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="min-h-[42px] px-4 py-2 rounded-lg liquid-glass-pill hover:border-accent/50 hover:text-accent text-sm font-medium text-ink inline-flex items-center justify-center gap-1.5 transition-colors"
+                            className="min-h-[42px] px-4 py-2 rounded-xl liquid-glass-pill hover:border-accent/50 hover:text-accent text-sm font-medium text-ink inline-flex items-center justify-center gap-1.5 transition-colors"
                             aria-label={`Open live ${focusedProject.name}`}
                           >
                             <span>Live</span>
@@ -485,7 +517,7 @@ export default function Projects() {
               {/* Interactive Visual Miniature Switcher Dock (Balanced Symmetrical Parallax Bento Grid) */}
               {count > 1 && (
                 <div
-                  className={`grid gap-4 sm:gap-5 pt-4 ${
+                  className={`grid gap-3 sm:gap-5 pt-1 sm:pt-4 ${
                     count === 2
                       ? 'grid-cols-2 max-w-2xl mx-auto'
                       : count <= 4
@@ -511,9 +543,9 @@ export default function Projects() {
                         yRange={colY}
                       >
                         <div
-                          className={`group relative rounded-2xl liquid-glass p-2.5 transition-all duration-200 ${
+                          className={`group relative rounded-xl sm:rounded-2xl liquid-glass p-2 sm:p-2.5 transition-all duration-200 ${
                             isActive
-                              ? 'border-accent ring-2 ring-accent/25 shadow-lg -translate-y-0.5'
+                              ? 'border-accent ring-2 ring-accent/25 shadow-md sm:shadow-lg'
                               : 'hover:border-accent/45 hover:-translate-y-0.5'
                           }`}
                         >
@@ -535,16 +567,16 @@ export default function Projects() {
                               className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
                             />
                           </div>
-                          <div className="flex items-center justify-between gap-2 px-0.5">
+                          <div className="flex items-center justify-between gap-1.5 px-0.5">
                             <div className="min-w-0">
                               <p
-                                className={`font-display text-sm font-semibold truncate ${
+                                className={`font-display text-xs sm:text-sm font-semibold truncate ${
                                   isActive ? 'text-accent' : 'text-ink'
                                 }`}
                               >
                                 {proj.name}
                               </p>
-                              <p className="font-mono text-[11px] text-ink-muted truncate">
+                              <p className="font-mono text-[10px] sm:text-[11px] text-ink-muted truncate">
                                 {(proj.categories || [])[0] || 'System'}
                               </p>
                             </div>
@@ -557,7 +589,7 @@ export default function Projects() {
                         <Link
                           to={`/project/${proj.slug}`}
                           aria-label={`Open ${proj.name} detail`}
-                          className="absolute top-3.5 right-3.5 w-7 h-7 rounded-full bg-white/95 text-slate-900 shadow-sm opacity-0 group-hover:opacity-100 hover:bg-accent hover:text-white flex items-center justify-center transition-all"
+                          className="hidden sm:flex absolute top-3.5 right-3.5 w-7 h-7 rounded-full bg-white/95 text-slate-900 shadow-sm opacity-0 group-hover:opacity-100 hover:bg-accent hover:text-white items-center justify-center transition-all"
                         >
                           <ArrowUpRight size={13} aria-hidden="true" />
                         </Link>

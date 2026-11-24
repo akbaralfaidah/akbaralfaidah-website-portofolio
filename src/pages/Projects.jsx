@@ -93,7 +93,7 @@ export default function ProjectsPage() {
           <div
             role="group"
             aria-label="Filter projects by category"
-            className="flex flex-wrap gap-6 mb-10 border-b border-line"
+            className="flex items-center gap-2 sm:gap-6 overflow-x-auto no-scrollbar -mx-5 px-5 sm:mx-0 sm:px-0 py-1 sm:py-0 mb-8 sm:mb-10 sm:border-b sm:border-line"
           >
             {CATEGORIES.map((category) => {
               const active = selectedCategory === category;
@@ -105,8 +105,10 @@ export default function ProjectsPage() {
                   type="button"
                   aria-pressed={active}
                   onClick={() => setSelectedCategory(category)}
-                  className={`relative min-h-[44px] pb-3 text-[15px] font-medium transition-colors ${
-                    active ? "text-ink" : "text-ink-muted hover:text-ink"
+                  className={`relative min-h-[38px] sm:min-h-[44px] px-3.5 py-1.5 sm:px-0 sm:py-0 sm:pb-3 rounded-full sm:rounded-none text-xs sm:text-[15px] font-medium whitespace-nowrap shrink-0 border sm:border-0 transition-colors ${
+                    active
+                      ? "bg-ink text-on-ink border-ink sm:bg-transparent sm:text-ink"
+                      : "bg-surface/85 text-ink-muted border-line sm:bg-transparent hover:text-ink"
                   }`}
                 >
                   <span>{label}</span>
@@ -118,7 +120,7 @@ export default function ProjectsPage() {
                         stiffness: 440,
                         damping: 34,
                       }}
-                      className="absolute left-0 right-0 -bottom-[1px] h-[2px] bg-ink"
+                      className="hidden sm:block absolute left-0 right-0 -bottom-[1px] h-[2px] bg-ink"
                     />
                   )}
                 </button>

@@ -1,6 +1,6 @@
 export function BrandLogo({ className = 'h-9 w-auto', showWordmark = false, inverted = false }) {
   return (
-    <span className="inline-flex items-center gap-3 select-none">
+    <span className="inline-flex items-center gap-2.5 sm:gap-3 select-none">
       <svg
         width={44}
         height={36}
@@ -26,10 +26,10 @@ export function BrandLogo({ className = 'h-9 w-auto', showWordmark = false, inve
       </svg>
       {showWordmark && (
         <span className="flex flex-col leading-tight">
-          <span className="font-display text-base sm:text-lg font-semibold tracking-tight text-current">
+          <span className="font-display text-[15px] sm:text-lg font-semibold tracking-tight text-current">
             Akbar Alfaidah
           </span>
-          <span className="text-xs font-medium text-current opacity-65">
+          <span className="text-[11px] sm:text-xs font-medium text-current opacity-65">
             Tech Agency
           </span>
         </span>

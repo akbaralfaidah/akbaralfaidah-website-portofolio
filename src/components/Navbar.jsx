@@ -73,13 +73,18 @@ export default function Navbar() {
 
   useEffect(() => {
     if (!mobileMenuOpen) return undefined;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     const onKeyDown = (e) => {
       if (e.key === "Escape") {
         setMobileMenuOpen(false);
       }
     };
     document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      document.removeEventListener("keydown", onKeyDown);
+    };
   }, [mobileMenuOpen]);
 
   useEffect(() => {
@@ -141,167 +146,198 @@ export default function Navbar() {
   );
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-40 h-[72px] transition-all duration-300 ${
-        scrolled
-          ? "liquid-glass border-x-0 border-t-0 border-b border-line/80"
-          : "bg-transparent border-b border-transparent"
-      }`}
-    >
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-6 focus:z-50 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-ink focus:text-on-ink focus:text-sm focus:font-medium"
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-40 h-[64px] sm:h-[72px] transition-all duration-300 ${
+          mobileMenuOpen
+            ? "bg-surface dark:bg-[#0B0F1A] border-b border-line/80"
+            : scrolled
+              ? "liquid-glass border-x-0 border-t-0 border-b border-line/80"
+              : "bg-paper/80 sm:bg-transparent backdrop-blur-md sm:backdrop-blur-none border-b border-line/40 sm:border-transparent"
+        }`}
       >
-        {currentLang === "en"
-          ? "Skip to main content"
-          : "Langsung ke konten utama"}
-      </a>
-
-      <nav
-        aria-label={
-          currentLang === "en" ? "Primary navigation" : "Navigasi utama"
-        }
-        className="h-full max-w-6xl mx-auto px-5 sm:px-6 flex items-center justify-between gap-4"
-      >
-        <Link
-          to="/"
-          onClick={(e) => {
-            if (location.pathname === "/") {
-              handleSectionLink(e, "top");
-            }
-          }}
-          className="flex items-center min-h-[44px] pr-1 text-ink hover:opacity-80 transition-opacity shrink-0"
-          aria-label="Akbar Alfaidah - Home"
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-6 focus:z-50 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-ink focus:text-on-ink focus:text-sm focus:font-medium"
         >
-          <BrandLogo className="h-7 sm:h-8 w-auto text-ink" showWordmark />
-        </Link>
+          {currentLang === "en"
+            ? "Skip to main content"
+            : "Langsung ke konten utama"}
+        </a>
 
-        {/* Desktop Links */}
-        <div className="hidden lg:flex items-center gap-1">
-          {NAV_LINKS.map((item) => {
-            const isActive = activeSection === item.target;
-            return (
-              <a
-                key={item.key}
-                href={`/#${item.target}`}
-                onClick={(e) => handleSectionLink(e, item.target)}
-                aria-current={isActive ? "location" : undefined}
-                className={`relative px-4 py-2 min-h-[44px] inline-flex items-center text-[15px] font-medium transition-colors whitespace-nowrap ${
-                  isActive ? "text-ink" : "text-ink-muted hover:text-ink"
-                }`}
-              >
-                <span>{t(`nav.${item.key}`)}</span>
-                {isActive && (
-                  <span className="absolute left-4 right-4 bottom-1.5 h-[1.5px] bg-accent transition-all duration-200" />
-                )}
-              </a>
-            );
-          })}
-        </div>
-
-        {/* Right Controls */}
-        <div className="flex items-center gap-2 shrink-0">
-          <button
-            type="button"
-            onClick={toggleLanguage}
-            className="min-h-[38px] min-w-[38px] px-2.5 rounded-lg font-mono text-xs font-semibold uppercase text-ink border border-line bg-paper/40 backdrop-blur-sm hover:border-ink/40 transition-colors whitespace-nowrap"
-            aria-label={
-              currentLang === "id"
-                ? "Switch language to English"
-                : "Ganti bahasa ke Indonesia"
-            }
-          >
-            {currentLang === "id" ? "ID" : "EN"}
-          </button>
-
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="min-h-[38px] min-w-[38px] flex items-center justify-center rounded-lg text-ink border border-line bg-paper/40 backdrop-blur-sm hover:border-ink/40 transition-colors overflow-hidden"
-            aria-label={
-              theme === "dark"
-                ? "Switch to light theme"
-                : "Switch to dark theme"
-            }
-          >
-            <span className="transition-transform duration-200">
-              {theme === "dark" ? (
-                <Sun size={16} aria-hidden="true" />
-              ) : (
-                <Moon size={16} aria-hidden="true" />
-              )}
-            </span>
-          </button>
-
-          <Magnetic strength={0.22} className="hidden sm:inline-block">
-            <a
-              href="/#contact"
-              onClick={(e) => handleSectionLink(e, "contact")}
-              className="inline-flex items-center gap-1.5 min-h-[38px] px-4 py-2 rounded-lg text-sm font-medium bg-ink text-on-ink hover:opacity-90 transition-opacity whitespace-nowrap"
-            >
-              <span>{t("nav.contact")}</span>
-              <ArrowUpRight size={15} aria-hidden="true" />
-            </a>
-          </Magnetic>
-
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen((open) => !open)}
-            className="lg:hidden min-h-[38px] min-w-[38px] flex items-center justify-center rounded-lg text-ink border border-line bg-paper/40 backdrop-blur-sm hover:border-ink/40 transition-colors"
-            aria-expanded={mobileMenuOpen}
-            aria-controls="mobile-nav-drawer"
-            aria-label={
-              mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"
-            }
-          >
-            {mobileMenuOpen ? (
-              <X size={18} aria-hidden="true" />
-            ) : (
-              <Menu size={18} aria-hidden="true" />
-            )}
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div
-          id="mobile-nav-drawer"
-          role="dialog"
-          aria-modal="true"
+        <nav
           aria-label={
-            currentLang === "en" ? "Mobile navigation" : "Menu navigasi mobile"
+            currentLang === "en" ? "Primary navigation" : "Navigasi utama"
           }
-          className="lg:hidden bg-paper/95 backdrop-blur-xl border-b border-line px-5 py-4 flex flex-col divide-y divide-line"
+          className="h-full max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-3"
         >
-          {NAV_LINKS.map((item) => (
-            <a
-              key={item.key}
-              href={`/#${item.target}`}
-              onClick={(e) => handleSectionLink(e, item.target)}
-              className="min-h-[48px] py-3 text-base font-medium text-ink hover:text-accent flex items-center justify-between transition-colors"
-            >
-              <span>{t(`nav.${item.key}`)}</span>
-              <ArrowUpRight
-                size={17}
-                className="text-ink-muted"
-                aria-hidden="true"
-              />
-            </a>
-          ))}
+          <Link
+            to="/"
+            onClick={(e) => {
+              if (location.pathname === "/") {
+                handleSectionLink(e, "top");
+              }
+            }}
+            className="flex items-center min-h-[44px] pr-1 text-ink hover:opacity-80 transition-opacity shrink-0"
+            aria-label="Akbar Alfaidah - Home"
+          >
+            <BrandLogo className="h-6 sm:h-8 w-auto text-ink" showWordmark />
+          </Link>
 
-          <div className="pt-4 mt-1">
-            <a
-              href="/#contact"
-              onClick={(e) => handleSectionLink(e, "contact")}
-              className="w-full min-h-[48px] px-4 py-3 rounded-lg bg-ink text-on-ink font-medium text-base flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
-            >
-              <span>{t("nav.contact")}</span>
-              <ArrowUpRight size={17} aria-hidden="true" />
-            </a>
+          {/* Desktop Links */}
+          <div className="hidden lg:flex items-center gap-1">
+            {NAV_LINKS.map((item) => {
+              const isActive = activeSection === item.target;
+              return (
+                <a
+                  key={item.key}
+                  href={`/#${item.target}`}
+                  onClick={(e) => handleSectionLink(e, item.target)}
+                  aria-current={isActive ? "location" : undefined}
+                  className={`relative px-4 py-2 min-h-[44px] inline-flex items-center text-[15px] font-medium transition-colors whitespace-nowrap ${
+                    isActive ? "text-ink" : "text-ink-muted hover:text-ink"
+                  }`}
+                >
+                  <span>{t(`nav.${item.key}`)}</span>
+                  {isActive && (
+                    <span className="absolute left-4 right-4 bottom-1.5 h-[1.5px] bg-accent transition-all duration-200" />
+                  )}
+                </a>
+              );
+            })}
           </div>
-        </div>
+
+          {/* Right Controls */}
+          <div className="flex items-center gap-2 shrink-0">
+            {/* Sleek unified language + theme pill on mobile, clean bordered controls on desktop */}
+            <div className="inline-flex items-center rounded-full sm:rounded-lg border border-line/90 bg-surface/80 sm:bg-paper/40 backdrop-blur-md p-0.5 sm:p-0 sm:border-0 sm:bg-transparent sm:backdrop-blur-none sm:gap-2">
+              <button
+                type="button"
+                onClick={toggleLanguage}
+                className="min-h-[34px] min-w-[36px] sm:min-h-[38px] sm:min-w-[38px] px-2 sm:px-2.5 rounded-full sm:rounded-lg font-mono text-[11px] sm:text-xs font-semibold uppercase text-ink sm:border sm:border-line sm:bg-paper/40 sm:backdrop-blur-sm hover:bg-mist/80 sm:hover:bg-paper/60 sm:hover:border-ink/40 transition-colors whitespace-nowrap"
+                aria-label={
+                  currentLang === "id"
+                    ? "Switch language to English"
+                    : "Ganti bahasa ke Indonesia"
+                }
+              >
+                {currentLang === "id" ? "ID" : "EN"}
+              </button>
+
+              <span
+                aria-hidden="true"
+                className="sm:hidden w-px h-4 bg-line/80"
+              />
+
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="min-h-[34px] min-w-[34px] sm:min-h-[38px] sm:min-w-[38px] flex items-center justify-center rounded-full sm:rounded-lg text-ink sm:border sm:border-line sm:bg-paper/40 sm:backdrop-blur-sm hover:bg-mist/80 sm:hover:bg-paper/60 sm:hover:border-ink/40 transition-colors overflow-hidden"
+                aria-label={
+                  theme === "dark"
+                    ? "Switch to light theme"
+                    : "Switch to dark theme"
+                }
+              >
+                <span className="transition-transform duration-200">
+                  {theme === "dark" ? (
+                    <Sun size={15} aria-hidden="true" />
+                  ) : (
+                    <Moon size={15} aria-hidden="true" />
+                  )}
+                </span>
+              </button>
+            </div>
+
+            <Magnetic strength={0.22} className="hidden sm:inline-block">
+              <a
+                href="/#contact"
+                onClick={(e) => handleSectionLink(e, "contact")}
+                className="inline-flex items-center gap-1.5 min-h-[38px] px-4 py-2 rounded-lg text-sm font-medium bg-ink text-on-ink hover:opacity-90 transition-opacity whitespace-nowrap"
+              >
+                <span>{t("nav.contact")}</span>
+                <ArrowUpRight size={15} aria-hidden="true" />
+              </a>
+            </Magnetic>
+
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen((open) => !open)}
+              className="lg:hidden min-h-[38px] min-w-[38px] flex items-center justify-center rounded-full text-ink border border-line/90 bg-surface/85 backdrop-blur-md hover:border-accent/50 transition-colors shadow-sm"
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-nav-drawer"
+              aria-label={
+                mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"
+              }
+            >
+              {mobileMenuOpen ? (
+                <X size={18} aria-hidden="true" />
+              ) : (
+                <Menu size={18} aria-hidden="true" />
+              )}
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      {/* Mobile Drawer + Full-Viewport Dismiss Backdrop */}
+      {mobileMenuOpen && (
+        <>
+          <div
+            aria-hidden="true"
+            onClick={() => setMobileMenuOpen(false)}
+            className="lg:hidden fixed inset-0 top-[64px] sm:top-[72px] bg-slate-950/45 backdrop-blur-sm z-30"
+          />
+          <div
+            id="mobile-nav-drawer"
+            role="dialog"
+            aria-modal="true"
+            aria-label={
+              currentLang === "en" ? "Mobile navigation" : "Menu navigasi mobile"
+            }
+            className="lg:hidden fixed top-[64px] sm:top-[72px] left-0 right-0 z-40 bg-surface dark:bg-[#0B0F1A] border-b border-line rounded-b-2xl shadow-2xl px-4 py-3 flex flex-col"
+          >
+            <div className="divide-y divide-line/70">
+              {NAV_LINKS.map((item) => {
+                const isActive = activeSection === item.target;
+                return (
+                  <a
+                    key={item.key}
+                    href={`/#${item.target}`}
+                    onClick={(e) => handleSectionLink(e, item.target)}
+                    className={`min-h-[48px] px-2 py-3 text-[15px] font-medium flex items-center justify-between transition-colors ${
+                      isActive ? "text-accent" : "text-ink hover:text-accent"
+                    }`}
+                  >
+                    <span className="inline-flex items-center gap-2.5">
+                      {isActive && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-accent" aria-hidden="true" />
+                      )}
+                      <span>{t(`nav.${item.key}`)}</span>
+                    </span>
+                    <ArrowUpRight
+                      size={16}
+                      className={isActive ? "text-accent" : "text-ink-muted"}
+                      aria-hidden="true"
+                    />
+                  </a>
+                );
+              })}
+            </div>
+
+            <div className="pt-3 mt-1 pb-1">
+              <a
+                href="/#contact"
+                onClick={(e) => handleSectionLink(e, "contact")}
+                className="w-full min-h-[48px] px-4 py-3 rounded-xl bg-accent-solid text-white font-medium text-[15px] flex items-center justify-center gap-2 hover:bg-accent-hover transition-colors shadow-sm"
+              >
+                <span>{t("nav.contact")}</span>
+                <ArrowUpRight size={17} aria-hidden="true" />
+              </a>
+            </div>
+          </div>
+        </>
       )}
-    </header>
+    </>
   );
 }

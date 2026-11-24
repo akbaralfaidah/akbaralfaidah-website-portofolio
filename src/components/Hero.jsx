@@ -10,6 +10,7 @@ import {
   XCircle,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Sparkles,
   Pause,
   Rotate3d
@@ -172,8 +173,33 @@ export default function Hero() {
 
     const pointer = { tx: 0, ty: 0, cx: 0, cy: 0 };
     let rafId = 0;
+    let isDesktop = typeof window !== 'undefined' && window.innerWidth >= 1024;
+
+    const resetInlineStyles = () => {
+      const refs = [
+        bgLayerRef,
+        centerTiltRef,
+        titleTopRef,
+        titleBotRef,
+        heroCueRef,
+        scrollDropRef,
+        satTLRef,
+        satTRRef,
+        satBLRef,
+        satBRRef,
+        textLayerRef,
+        stageLayerRef
+      ];
+      refs.forEach((r) => {
+        if (r.current) {
+          r.current.style.transform = '';
+          r.current.style.opacity = '';
+        }
+      });
+    };
 
     const onPointerMove = (e) => {
+      if (!isDesktop) return;
       const vw = window.innerWidth || 1440;
       const vh = window.innerHeight || 900;
       pointer.tx = (e.clientX / vw - 0.5) * 2;
@@ -181,6 +207,10 @@ export default function Hero() {
     };
 
     const tick = () => {
+      if (!isDesktop) {
+        rafId = 0;
+        return;
+      }
       rafId = window.requestAnimationFrame(tick);
 
       pointer.cx += (pointer.tx - pointer.cx) * 0.08;
@@ -264,11 +294,33 @@ export default function Hero() {
       }
     };
 
+    const onResize = () => {
+      const nextDesktop = window.innerWidth >= 1024;
+      if (nextDesktop !== isDesktop) {
+        isDesktop = nextDesktop;
+        if (!isDesktop) {
+          if (rafId) {
+            window.cancelAnimationFrame(rafId);
+            rafId = 0;
+          }
+          resetInlineStyles();
+        } else if (!rafId) {
+          tick();
+        }
+      }
+    };
+
     window.addEventListener('pointermove', onPointerMove, { passive: true });
-    tick();
+    window.addEventListener('resize', onResize, { passive: true });
+    if (isDesktop) {
+      tick();
+    } else {
+      resetInlineStyles();
+    }
 
     return () => {
       window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('resize', onResize);
       if (rafId) window.cancelAnimationFrame(rafId);
     };
   }, []);
@@ -319,28 +371,28 @@ export default function Hero() {
 
   return (
     <>
-      {/* HERO 1: Pinned Sticky Spatial Portal — SOFTWARE ENGINEER. */}
+      {/* HERO 1: Editorial Mobile First Fold & Desktop Pinned Spatial Portal */}
       <section
         ref={heroRef}
         id="hero"
-        className="relative h-[160vh] md:h-[185vh] bg-paper text-ink border-b border-line overflow-x-clip"
+        className="relative md:h-[185vh] bg-paper text-ink border-b border-line overflow-x-clip"
       >
-        <div className="sticky top-0 h-[100svh] flex flex-col justify-center pt-16 pb-10 px-5 sm:px-6 overflow-hidden">
-          {/* Parallax Depth Layer 1: Luminous Daylight Radial Atmosphere + Vector Ribbons */}
+        <div className="md:sticky md:top-0 min-h-[100svh] md:h-[100svh] flex flex-col justify-between md:justify-center pt-[82px] pb-6 md:pt-16 md:pb-10 px-5 sm:px-6 overflow-hidden">
+          {/* Parallax Depth Layer 1: Luminous Daylight Radial Atmosphere + Desktop Vector Ribbons */}
           <div
             ref={bgLayerRef}
             className="pointer-events-none absolute -inset-6 will-change-transform"
           >
             <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
               <div
-                className="animate-aurora absolute -top-28 right-[-6%] w-[720px] h-[720px] rounded-full opacity-95 dark:opacity-35"
+                className="animate-aurora absolute -top-24 right-[-12%] md:-top-28 md:right-[-6%] w-[360px] h-[360px] md:w-[720px] md:h-[720px] rounded-full opacity-55 md:opacity-95 dark:opacity-25 dark:md:opacity-35"
                 style={{
                   background:
-                    'radial-gradient(circle, rgba(56,189,248,0.24) 0%, rgba(37,99,235,0.09) 45%, transparent 72%)'
+                    'radial-gradient(circle, rgba(56,189,248,0.22) 0%, rgba(37,99,235,0.08) 45%, transparent 72%)'
                 }}
               />
               <div
-                className="animate-aurora absolute -bottom-32 left-[-6%] w-[600px] h-[600px] rounded-full opacity-90 dark:opacity-30"
+                className="hidden md:block animate-aurora absolute -bottom-32 left-[-6%] w-[600px] h-[600px] rounded-full opacity-90 dark:opacity-30"
                 style={{
                   background:
                     'radial-gradient(circle, rgba(16,185,129,0.16) 0%, rgba(14,165,233,0.07) 48%, transparent 74%)'
@@ -348,10 +400,10 @@ export default function Hero() {
               />
             </div>
 
-            {/* Dual Opposing Continuous Ambient Typography Ribbons (alive while idle) */}
+            {/* Dual Opposing Continuous Ambient Typography Ribbons (desktop/tablet only) */}
             <div
               aria-hidden="true"
-              className="pointer-events-none select-none absolute top-[18%] left-0 right-0 overflow-hidden opacity-[0.045] dark:opacity-[0.06]"
+              className="hidden md:block pointer-events-none select-none absolute top-[18%] left-0 right-0 overflow-hidden opacity-[0.045] dark:opacity-[0.06]"
             >
               <div className="animate-marquee-ltr flex w-max whitespace-nowrap font-display font-bold uppercase tracking-[0.14em] text-2xl sm:text-4xl text-ink">
                 <span className="pr-12">
@@ -365,7 +417,7 @@ export default function Hero() {
 
             <div
               aria-hidden="true"
-              className="pointer-events-none select-none absolute bottom-[14%] left-0 right-0 overflow-hidden opacity-[0.045] dark:opacity-[0.06]"
+              className="hidden md:block pointer-events-none select-none absolute bottom-[14%] left-0 right-0 overflow-hidden opacity-[0.045] dark:opacity-[0.06]"
             >
               <div className="animate-marquee-rtl flex w-max whitespace-nowrap font-display font-bold uppercase tracking-[0.14em] text-2xl sm:text-4xl text-accent">
                 <span className="pr-12">
@@ -377,10 +429,10 @@ export default function Hero() {
               </div>
             </div>
 
-            <HeroCanvas />
+            <HeroCanvas className="hidden md:block" />
           </div>
 
-          {/* 4 Orbiting Levitating Liquid Glass Satellites (idle motion + mouse + radial scatter parallax) */}
+          {/* 4 Orbiting Levitating Liquid Glass Satellites (desktop/tablet only) */}
           <div
             ref={satTLRef}
             aria-hidden="true"
@@ -425,13 +477,13 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Center Spatial Tilt Monolith */}
+          {/* Center Spatial Tilt Monolith (left-aligned editorial stack on mobile, centered monolith on md+) */}
           <div
             ref={centerTiltRef}
-            className="relative z-10 max-w-6xl w-full mx-auto text-center flex flex-col items-center will-change-transform"
+            className="relative z-10 flex-1 md:flex-none max-w-6xl w-full mx-auto flex flex-col justify-center items-start text-left md:items-center md:text-center py-3 md:py-0 will-change-transform"
           >
-            <div className="flex flex-wrap items-center justify-center gap-2.5 mb-5 sm:mb-7">
-              <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3.5 py-1.5 rounded-full liquid-glass-pill font-mono text-[10px] sm:text-xs uppercase tracking-[0.06em] sm:tracking-[0.12em] whitespace-nowrap max-w-full text-ink-muted">
+            <div className="flex flex-wrap items-center justify-start md:justify-center gap-2.5 mb-4 md:mb-7">
+              <div className="inline-flex items-center gap-2 sm:gap-2.5 md:px-3.5 md:py-1.5 md:rounded-full md:liquid-glass-pill font-mono text-[10.5px] sm:text-xs uppercase tracking-[0.09em] sm:tracking-[0.12em] text-ink-muted">
                 <span className="relative flex h-2 w-2 shrink-0" aria-hidden="true">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
@@ -439,45 +491,98 @@ export default function Hero() {
                 <span>{t('hero.badge')} · Jambi / Remote</span>
               </div>
 
-              <span className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full liquid-glass-pill font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+              <span className="hidden md:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full liquid-glass-pill font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
                 Web · Mobile · Applied AI
               </span>
             </div>
 
-            <h1 className="w-full flex items-baseline justify-center gap-x-[0.22em] whitespace-nowrap font-display font-bold uppercase tracking-[-0.045em] leading-[0.95] select-none mb-6 sm:mb-8">
+            <h1 className="w-full flex flex-col items-start md:flex-row md:items-baseline md:justify-center md:gap-x-[0.22em] md:whitespace-nowrap font-display font-bold uppercase tracking-[-0.045em] leading-[0.9] md:leading-[0.95] select-none mb-5 md:mb-8">
               <span
                 ref={titleTopRef}
-                className="inline-block text-[clamp(1.75rem,7.15vw,6.65rem)] text-ink will-change-transform"
+                className="inline-block text-[clamp(3.15rem,15.5vw,4.6rem)] md:text-[clamp(2.5rem,7.15vw,6.65rem)] text-ink will-change-transform"
               >
                 AKBAR
               </span>
               <span
                 ref={titleBotRef}
-                className="inline-block text-[clamp(1.8rem,7.3vw,6.85rem)] font-serif italic font-normal hero-shimmer-text pr-[0.06em] will-change-transform"
+                className="inline-block text-[clamp(3.3rem,16.2vw,4.8rem)] md:text-[clamp(2.6rem,7.3vw,6.85rem)] font-serif italic font-normal hero-shimmer-text pr-[0.06em] will-change-transform"
               >
                 ALFAIDAH.
               </span>
             </h1>
 
-            <div ref={heroCueRef} className="max-w-2xl mx-auto space-y-4 will-change-transform">
-              {/* Live Cycling Role Micro-Ticker */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full liquid-glass-pill font-mono text-[11px] uppercase tracking-[0.14em] text-accent font-semibold">
-                <span className="w-1.5 h-1.5 rounded-full bg-accent animate-ping" aria-hidden="true" />
+            <div ref={heroCueRef} className="w-full max-w-2xl md:mx-auto space-y-4 will-change-transform">
+              {/* Live Cycling Role Specialty Line */}
+              <div className="inline-flex items-center gap-2 border-l-2 border-accent pl-3 py-0.5 md:border-l-0 md:px-3.5 md:py-1 md:rounded-full md:liquid-glass-pill font-mono text-[11px] uppercase tracking-[0.11em] md:tracking-[0.14em] text-accent font-semibold">
+                <span className="hidden md:inline-block w-1.5 h-1.5 rounded-full bg-accent animate-ping" aria-hidden="true" />
                 <span>{currentRole}</span>
               </div>
 
-              <p className="font-sans text-base sm:text-lg text-ink-muted leading-relaxed">
+              <p className="font-sans text-[15px] sm:text-lg text-ink-muted leading-[1.65] max-w-[38ch] md:max-w-2xl">
                 {isEn
                   ? 'Designing and shipping fast websites, field-ready mobile apps, and applied AI systems from scratch.'
                   : 'Merancang website, aplikasi mobile lapangan, dan integrasi AI dari nol hingga berjalan stabil di server produksi.'}
               </p>
+
+              {/* Mobile Above-the-Fold Primary & Secondary CTAs */}
+              <div className="flex flex-col sm:flex-row md:hidden gap-2.5 pt-2 w-full">
+                <Button
+                  variant="accent"
+                  size="lg"
+                  onClick={scrollToContact}
+                  className="w-full sm:flex-1 rounded-xl"
+                >
+                  <span>{t('hero.cta_primary')}</span>
+                  <ArrowRight size={17} aria-hidden="true" />
+                </Button>
+
+                <Button
+                  as={Link}
+                  to="/projects"
+                  variant="outline"
+                  size="lg"
+                  className="w-full sm:flex-1 rounded-xl bg-surface/95"
+                >
+                  <span>{t('hero.cta_secondary')}</span>
+                  <ArrowUpRight size={17} aria-hidden="true" />
+                </Button>
+              </div>
             </div>
           </div>
 
-          {/* Minimal Animated Scroll Mouse Capsule (zero text clutter) */}
+          {/* Mobile Bottom Proof Strip & Studio 3D Jump Trigger */}
+          <div className="relative z-10 md:hidden w-full space-y-2.5 pt-4">
+            <dl className="w-full grid grid-cols-3 divide-x divide-line/80 rounded-2xl bg-surface/90 dark:bg-surface/80 border border-line/90 shadow-sm px-2 py-3">
+              {Array.isArray(facts) &&
+                facts.map((fact) => (
+                  <div key={fact.label} className="px-2.5 first:pl-2 last:pr-2">
+                    <dt className="font-mono text-[9.5px] uppercase tracking-wider text-ink-muted mb-0.5 truncate">
+                      {fact.label}
+                    </dt>
+                    <dd className="text-[11.5px] font-semibold text-ink leading-tight">
+                      {fact.value}
+                    </dd>
+                  </div>
+                ))}
+            </dl>
+
+            <button
+              type="button"
+              onClick={scrollToStage}
+              className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-mist/70 dark:bg-white/[0.04] border border-line/80 flex items-center justify-between text-xs font-mono text-ink-muted hover:text-ink transition-colors"
+            >
+              <span className="inline-flex items-center gap-2">
+                <Cat size={14} className="text-accent shrink-0" aria-hidden="true" />
+                <span>{isEn ? 'Explore 3D Interactive Studio' : 'Jelajahi Studio 3D Interaktif'}</span>
+              </span>
+              <ChevronDown size={15} className="text-accent shrink-0" aria-hidden="true" />
+            </button>
+          </div>
+
+          {/* Desktop Minimal Animated Scroll Mouse Capsule */}
           <div
             ref={scrollDropRef}
-            className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 will-change-transform"
+            className="hidden md:block absolute bottom-6 left-1/2 -translate-x-1/2 z-20 will-change-transform"
           >
             <button
               type="button"
@@ -491,11 +596,11 @@ export default function Hero() {
         </div>
       </section>
 
-      {/* HERO 2: Interactive 3D Cat Stage & Engineering Pitch (Second Full-Screen Section) */}
+      {/* HERO 2: Interactive 3D Cat Stage & Engineering Pitch */}
       <section
         ref={hero2Ref}
         id="hero-stage"
-        className="relative min-h-[100svh] flex items-center bg-[#F6F8FE] dark:bg-[#0A0E18] text-ink py-20 sm:py-24 px-5 sm:px-6 border-b border-line overflow-hidden"
+        className="relative md:min-h-[100svh] flex items-center bg-[#F6F8FE] dark:bg-[#0A0E18] text-ink py-14 sm:py-24 px-4 sm:px-6 border-b border-line overflow-hidden"
       >
         <div
           aria-hidden="true"
@@ -507,17 +612,17 @@ export default function Hero() {
         />
 
         <div className="relative z-10 max-w-6xl w-full mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
-            {/* Parallax Depth Layer 2: Editorial Pitch & CTA */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-10 items-center">
+            {/* Parallax Depth Layer 2: Editorial Pitch & Desktop CTA */}
             <div
               ref={textLayerRef}
               className="lg:col-span-5 flex flex-col items-start will-change-transform"
             >
-              <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent font-semibold mb-3">
+              <p className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.14em] text-accent font-semibold mb-2 sm:mb-3">
                 {isEn ? 'Interactive Studio' : 'Studio Interaktif'}
               </p>
 
-              <h2 className="font-display text-2xl sm:text-4xl lg:text-[2.65rem] font-semibold tracking-[-0.03em] leading-[1.08] text-ink mb-4">
+              <h2 className="font-display text-[1.65rem] sm:text-4xl lg:text-[2.65rem] font-semibold tracking-[-0.03em] leading-[1.1] text-ink mb-3 sm:mb-4">
                 {isEn ? (
                   <>
                     Websites, Mobile Apps &amp;{' '}
@@ -533,11 +638,12 @@ export default function Hero() {
                 )}
               </h2>
 
-              <p className="text-sm sm:text-base text-ink-muted leading-relaxed max-w-lg mb-7">
+              <p className="text-sm sm:text-base text-ink-muted leading-relaxed max-w-lg mb-2 md:mb-7">
                 {t('hero.subtitle')}
               </p>
 
-              <div className="flex flex-wrap items-center gap-3 mb-8 w-full sm:w-auto">
+              {/* Desktop CTAs & Facts (already shown above-the-fold in Hero 1 on mobile) */}
+              <div className="hidden md:flex flex-wrap items-center gap-3 mb-8 w-full sm:w-auto">
                 <Magnetic strength={0.25} className="w-full sm:w-auto">
                   <Button
                     variant="accent"
@@ -570,7 +676,7 @@ export default function Hero() {
                 </Button>
               </div>
 
-              <dl className="w-full grid grid-cols-3 gap-3 sm:gap-4 pt-5 border-t border-line">
+              <dl className="hidden md:grid w-full grid-cols-3 gap-3 sm:gap-4 pt-5 border-t border-line">
                 {Array.isArray(facts) &&
                   facts.map((fact) => (
                     <div key={fact.label}>
@@ -583,234 +689,271 @@ export default function Hero() {
               </dl>
             </div>
 
-            {/* Parallax Depth Layer 3: Full-Space Interactive 3D Cat Stage */}
+            {/* Parallax Depth Layer 3: Interactive 3D Cat Stage (framed cleanly on mobile) */}
             <div
               ref={stageLayerRef}
               onPointerEnter={() => setMount3D(true)}
-              className="lg:col-span-7 relative h-[380px] sm:h-[460px] lg:h-[530px] flex flex-col justify-between will-change-transform"
+              className="lg:col-span-7 relative h-[410px] sm:h-[460px] lg:h-[530px] rounded-3xl bg-surface/85 dark:bg-surface/70 border border-line shadow-sm p-3 sm:p-0 sm:bg-transparent sm:border-0 sm:shadow-none sm:rounded-none flex flex-col justify-between will-change-transform"
             >
-            {/* Floating Top Mode Switcher + Contextual Status Pill */}
-            <div className="relative z-20 flex flex-wrap items-center justify-between gap-2">
-              <div className="flex items-center gap-1 p-1 rounded-full liquid-glass-pill">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMount3D(true);
-                    setSceneMode('core');
-                  }}
-                  className={`min-h-[32px] px-2.5 sm:px-3.5 rounded-full text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 inline-flex items-center gap-1.5 transition-all ${
-                    sceneMode === 'core'
-                      ? 'bg-accent text-white shadow-sm shadow-blue-600/25'
-                      : 'text-slate-700 dark:text-slate-300 hover:text-ink'
-                  }`}
-                >
-                  <Cat size={13} aria-hidden="true" />
-                  <span>{isEn ? '3D Cat' : 'Kucing 3D'}</span>
-                </button>
+              {/* Floating Top Mode Switcher + Desktop Contextual Status Pill */}
+              <div className="relative z-20 flex flex-wrap items-center justify-between gap-2">
+                <div className="grid grid-cols-3 sm:flex items-center gap-1 p-1 rounded-full liquid-glass-pill w-full sm:w-auto">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMount3D(true);
+                      setSceneMode('core');
+                    }}
+                    className={`min-h-[34px] sm:min-h-[32px] px-2 sm:px-3.5 rounded-full text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 inline-flex items-center justify-center gap-1.5 transition-all ${
+                      sceneMode === 'core'
+                        ? 'bg-accent text-white shadow-sm shadow-blue-600/25'
+                        : 'text-slate-700 dark:text-slate-300 hover:text-ink'
+                    }`}
+                  >
+                    <Cat size={13} aria-hidden="true" />
+                    <span>{isEn ? '3D Cat' : 'Kucing 3D'}</span>
+                  </button>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMount3D(true);
-                    setSceneMode('radar');
-                  }}
-                  className={`min-h-[32px] px-2.5 sm:px-3.5 rounded-full text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 inline-flex items-center gap-1.5 transition-all ${
-                    sceneMode === 'radar'
-                      ? 'bg-accent text-white shadow-sm shadow-blue-600/25'
-                      : 'text-slate-700 dark:text-slate-300 hover:text-ink'
-                  }`}
-                >
-                  <Radar size={13} aria-hidden="true" />
-                  <span>Radar 3D</span>
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMount3D(true);
+                      setSceneMode('radar');
+                    }}
+                    className={`min-h-[34px] sm:min-h-[32px] px-2 sm:px-3.5 rounded-full text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 inline-flex items-center justify-center gap-1.5 transition-all ${
+                      sceneMode === 'radar'
+                        ? 'bg-accent text-white shadow-sm shadow-blue-600/25'
+                        : 'text-slate-700 dark:text-slate-300 hover:text-ink'
+                    }`}
+                  >
+                    <Radar size={13} aria-hidden="true" />
+                    <span>Radar 3D</span>
+                  </button>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMount3D(true);
-                    setSceneMode('deck');
-                  }}
-                  className={`min-h-[32px] px-2.5 sm:px-3.5 rounded-full text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 inline-flex items-center gap-1.5 transition-all ${
-                    sceneMode === 'deck'
-                      ? 'bg-accent text-white shadow-sm shadow-blue-600/25'
-                      : 'text-slate-700 dark:text-slate-300 hover:text-ink'
-                  }`}
-                >
-                  <Layers size={13} aria-hidden="true" />
-                  <span>{isEn ? '3D Gallery' : 'Galeri 3D'}</span>
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMount3D(true);
+                      setSceneMode('deck');
+                    }}
+                    className={`min-h-[34px] sm:min-h-[32px] px-2 sm:px-3.5 rounded-full text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 inline-flex items-center justify-center gap-1.5 transition-all ${
+                      sceneMode === 'deck'
+                        ? 'bg-accent text-white shadow-sm shadow-blue-600/25'
+                        : 'text-slate-700 dark:text-slate-300 hover:text-ink'
+                    }`}
+                  >
+                    <Layers size={13} aria-hidden="true" />
+                    <span>{isEn ? '3D Gallery' : 'Galeri 3D'}</span>
+                  </button>
+                </div>
+
+                {sceneMode === 'radar' ? (
+                  <span
+                    className={`hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-mono text-xs font-semibold border shadow-sm ${
+                      radarMetrics.inside
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/30'
+                        : 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-500/20 dark:text-rose-300 dark:border-rose-500/30'
+                    }`}
+                  >
+                    {radarMetrics.inside ? (
+                      <CheckCircle2 size={13} aria-hidden="true" />
+                    ) : (
+                      <XCircle size={13} aria-hidden="true" />
+                    )}
+                    <span>
+                      {radarMetrics.meters.toFixed(1)}m ·{' '}
+                      {radarMetrics.inside
+                        ? isEn
+                          ? 'VALID'
+                          : 'SAH'
+                        : isEn
+                        ? 'OUT 50m'
+                        : 'LUAR 50m'}
+                    </span>
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMount3D(true);
+                      setExploded((prev) => !prev);
+                    }}
+                    className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full liquid-glass-pill font-mono text-[11px] font-medium text-ink hover:border-accent/50 hover:text-accent transition-all"
+                  >
+                    {exploded ? (
+                      <Pause size={12} aria-hidden="true" />
+                    ) : (
+                      <Sparkles size={12} aria-hidden="true" />
+                    )}
+                    <span>
+                      {sceneMode === 'core'
+                        ? exploded
+                          ? isEn
+                            ? 'Chill'
+                            : 'Istirahat'
+                          : isEn
+                          ? 'Play!'
+                          : 'Main!'
+                        : exploded
+                        ? isEn
+                          ? 'Assemble'
+                          : 'Rapatkan'
+                        : isEn
+                        ? 'Spread'
+                        : 'Lebarkan'}
+                    </span>
+                  </button>
+                )}
               </div>
 
-              {sceneMode === 'radar' ? (
-                <span
-                  className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-mono text-xs font-semibold border shadow-sm ${
-                    radarMetrics.inside
-                      ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/30'
-                      : 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-500/20 dark:text-rose-300 dark:border-rose-500/30'
-                  }`}
-                >
-                  {radarMetrics.inside ? (
-                    <CheckCircle2 size={13} aria-hidden="true" />
-                  ) : (
-                    <XCircle size={13} aria-hidden="true" />
-                  )}
-                  <span>
-                    {radarMetrics.meters.toFixed(1)}m ·{' '}
-                    {radarMetrics.inside
-                      ? isEn
-                        ? 'VALID'
-                        : 'SAH'
-                      : isEn
-                      ? 'OUT 50m'
-                      : 'LUAR 50m'}
-                  </span>
-                </span>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMount3D(true);
-                    setExploded((prev) => !prev);
-                  }}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full liquid-glass-pill font-mono text-[11px] font-medium text-ink hover:border-accent/50 hover:text-accent transition-all"
-                >
-                  {exploded ? (
-                    <Pause size={12} aria-hidden="true" />
-                  ) : (
-                    <Sparkles size={12} aria-hidden="true" />
-                  )}
-                  <span>
-                    {sceneMode === 'core'
-                      ? exploded
-                        ? isEn
-                          ? 'Chill'
-                          : 'Istirahat'
-                        : isEn
-                        ? 'Play!'
-                        : 'Main!'
-                      : exploded
-                      ? isEn
-                        ? 'Assemble'
-                        : 'Rapatkan'
-                      : isEn
-                      ? 'Spread'
-                      : 'Lebarkan'}
-                  </span>
-                </button>
-              )}
-            </div>
-
-            {/* Open Daylight 3D Viewport */}
-            <div className="relative flex-1 w-full min-h-[240px]">
-              {mount3D ? (
-                <Suspense fallback={<Hero3DStaticPreview isEn={isEn} onActivate={() => setMount3D(true)} />}>
-                  <Hero3DCanvas
-                    mode={sceneMode}
-                    exploded={exploded}
-                    isDark={isDark}
-                    activeProjectIndex={activeSlide}
-                    radarTarget={radarTarget}
-                    onRadarMetrics={setRadarMetrics}
-                    onToggleExplode={() => setExploded((prev) => !prev)}
-                    onSelectProjectIndex={setActiveSlide}
-                  />
-                </Suspense>
-              ) : (
-                <Hero3DStaticPreview isEn={isEn} onActivate={() => setMount3D(true)} />
-              )}
-            </div>
-
-            {/* Floating Bottom Control & Telemetry Dock */}
-            <div className="relative z-20 flex flex-wrap items-center justify-between gap-2 px-3.5 py-2.5 rounded-2xl liquid-glass">
-              {sceneMode === 'core' && (
-                <div className="w-full flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 font-mono text-xs text-ink-muted">
-                    <Rotate3d size={14} className="text-accent shrink-0" aria-hidden="true" />
+              {/* Open Daylight 3D Viewport */}
+              <div className="relative flex-1 w-full min-h-[240px]">
+                {/* Mobile radar status overlay badge */}
+                {sceneMode === 'radar' && (
+                  <span
+                    className={`sm:hidden absolute top-2 right-1 z-20 inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-mono text-[10.5px] font-semibold border shadow-sm ${
+                      radarMetrics.inside
+                        ? 'bg-emerald-50/95 text-emerald-700 border-emerald-200 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/30'
+                        : 'bg-rose-50/95 text-rose-700 border-rose-200 dark:bg-rose-500/20 dark:text-rose-300 dark:border-rose-500/30'
+                    }`}
+                  >
+                    {radarMetrics.inside ? (
+                      <CheckCircle2 size={12} aria-hidden="true" />
+                    ) : (
+                      <XCircle size={12} aria-hidden="true" />
+                    )}
                     <span>
-                      {isEn
-                        ? 'Drag 360° · Click kitty to play!'
-                        : 'Seret 360° · Klik kucing untuk main!'}
+                      {radarMetrics.meters.toFixed(1)}m ·{' '}
+                      {radarMetrics.inside ? (isEn ? 'VALID' : 'SAH') : 'OUT'}
                     </span>
-                  </div>
-                  <span className="font-mono text-[11px] font-semibold text-accent shrink-0">
-                    Kucing 3D · WebGL
                   </span>
-                </div>
-              )}
+                )}
 
-            {sceneMode === 'radar' && (
-              <div className="w-full flex flex-wrap items-center justify-between gap-2">
-                <div className="flex flex-wrap items-center gap-1.5">
-                  {RADAR_PRESETS.map((preset) => (
+                {mount3D ? (
+                  <Suspense fallback={<Hero3DStaticPreview isEn={isEn} onActivate={() => setMount3D(true)} />}>
+                    <Hero3DCanvas
+                      mode={sceneMode}
+                      exploded={exploded}
+                      isDark={isDark}
+                      activeProjectIndex={activeSlide}
+                      radarTarget={radarTarget}
+                      onRadarMetrics={setRadarMetrics}
+                      onToggleExplode={() => setExploded((prev) => !prev)}
+                      onSelectProjectIndex={setActiveSlide}
+                    />
+                  </Suspense>
+                ) : (
+                  <Hero3DStaticPreview isEn={isEn} onActivate={() => setMount3D(true)} />
+                )}
+              </div>
+
+              {/* Floating Bottom Control & Telemetry Dock */}
+              <div className="relative z-20 flex flex-wrap items-center justify-between gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-2xl liquid-glass">
+                {sceneMode === 'core' && (
+                  <div className="w-full flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5 sm:gap-2 font-mono text-[11px] sm:text-xs text-ink-muted min-w-0">
+                      <Rotate3d size={14} className="text-accent shrink-0" aria-hidden="true" />
+                      <span className="truncate sm:hidden">
+                        {isEn ? 'Drag 360° · Tap kitty' : 'Seret 360° · Ketuk kucing'}
+                      </span>
+                      <span className="hidden sm:inline">
+                        {isEn
+                          ? 'Drag 360° · Click kitty to play!'
+                          : 'Seret 360° · Klik kucing untuk main!'}
+                      </span>
+                    </div>
+
                     <button
-                      key={preset.id}
                       type="button"
                       onClick={() => {
                         setMount3D(true);
-                        setRadarTarget({ x: preset.x, z: preset.z });
+                        setExploded((prev) => !prev);
                       }}
-                      className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-accent border border-slate-200/80 dark:bg-white/[0.06] dark:hover:bg-white/15 dark:text-slate-300 dark:border-white/10 font-mono text-[11px] font-medium transition-colors"
+                      className="sm:hidden inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-accent/10 text-accent font-mono text-[11px] font-semibold shrink-0"
                     >
-                      {isEn ? preset.labelEn : preset.labelId}
+                      {exploded ? <Pause size={11} aria-hidden="true" /> : <Sparkles size={11} aria-hidden="true" />}
+                      <span>{exploded ? (isEn ? 'Chill' : 'Istirahat') : isEn ? 'Play!' : 'Main!'}</span>
                     </button>
-                  ))}
-                </div>
-                <Link
-                  to="/project/siabsen"
-                  className="inline-flex items-center gap-1 font-mono text-xs font-semibold text-accent hover:underline ml-auto"
-                >
-                  <span>SiAbsen</span>
-                  <ArrowUpRight size={13} aria-hidden="true" />
-                </Link>
-              </div>
-            )}
 
-            {sceneMode === 'deck' && (
-              <div className="w-full flex items-center justify-between gap-3">
-                <div className="min-w-0">
-                  <p className="font-display text-sm font-semibold text-ink truncate">
-                    {activeProject.name}{' '}
-                    <span className="font-mono text-[11px] font-normal text-accent">
-                      · {activeProject.category}
+                    <span className="hidden sm:inline font-mono text-[11px] font-semibold text-accent shrink-0">
+                      Kucing 3D · WebGL
                     </span>
-                  </p>
-                </div>
+                  </div>
+                )}
 
-                <div className="flex items-center gap-1 shrink-0">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMount3D(true);
-                      setActiveSlide((prev) => (prev - 1 + heroProjects.length) % heroProjects.length);
-                    }}
-                    className="w-7 h-7 rounded-md bg-slate-100 hover:bg-slate-200 border border-slate-200 dark:bg-white/[0.06] dark:hover:bg-white/15 dark:border-white/10 flex items-center justify-center text-ink transition-colors"
-                    aria-label="Previous 3D card"
-                  >
-                    <ChevronLeft size={14} aria-hidden="true" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMount3D(true);
-                      setActiveSlide((prev) => (prev + 1) % heroProjects.length);
-                    }}
-                    className="w-7 h-7 rounded-md bg-slate-100 hover:bg-slate-200 border border-slate-200 dark:bg-white/[0.06] dark:hover:bg-white/15 dark:border-white/10 flex items-center justify-center text-ink transition-colors"
-                    aria-label="Next 3D card"
-                  >
-                    <ChevronRight size={14} aria-hidden="true" />
-                  </button>
-                  <Link
-                    to={`/project/${activeProject.slug}`}
-                    className="ml-1 px-2.5 py-1 rounded-md bg-accent hover:bg-accent-hover text-white text-xs font-semibold inline-flex items-center gap-1 transition-colors"
-                  >
-                    <span>{t('hero.stage_action')}</span>
-                    <ArrowUpRight size={12} aria-hidden="true" />
-                  </Link>
-                </div>
+                {sceneMode === 'radar' && (
+                  <div className="w-full flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      {RADAR_PRESETS.map((preset) => (
+                        <button
+                          key={preset.id}
+                          type="button"
+                          onClick={() => {
+                            setMount3D(true);
+                            setRadarTarget({ x: preset.x, z: preset.z });
+                          }}
+                          className="px-2 sm:px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-accent border border-slate-200/80 dark:bg-white/[0.06] dark:hover:bg-white/15 dark:text-slate-300 dark:border-white/10 font-mono text-[10.5px] sm:text-[11px] font-medium transition-colors"
+                        >
+                          {isEn ? preset.labelEn : preset.labelId}
+                        </button>
+                      ))}
+                    </div>
+                    <Link
+                      to="/project/siabsen"
+                      className="inline-flex items-center gap-1 font-mono text-xs font-semibold text-accent hover:underline ml-auto"
+                    >
+                      <span>SiAbsen</span>
+                      <ArrowUpRight size={13} aria-hidden="true" />
+                    </Link>
+                  </div>
+                )}
+
+                {sceneMode === 'deck' && (
+                  <div className="w-full flex items-center justify-between gap-2.5">
+                    <div className="min-w-0">
+                      <p className="font-display text-xs sm:text-sm font-semibold text-ink truncate">
+                        {activeProject.name}{' '}
+                        <span className="font-mono text-[10.5px] sm:text-[11px] font-normal text-accent">
+                          · {activeProject.category}
+                        </span>
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-1 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setMount3D(true);
+                          setActiveSlide((prev) => (prev - 1 + heroProjects.length) % heroProjects.length);
+                        }}
+                        className="w-7 h-7 rounded-md bg-slate-100 hover:bg-slate-200 border border-slate-200 dark:bg-white/[0.06] dark:hover:bg-white/15 dark:border-white/10 flex items-center justify-center text-ink transition-colors"
+                        aria-label="Previous 3D card"
+                      >
+                        <ChevronLeft size={14} aria-hidden="true" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setMount3D(true);
+                          setActiveSlide((prev) => (prev + 1) % heroProjects.length);
+                        }}
+                        className="w-7 h-7 rounded-md bg-slate-100 hover:bg-slate-200 border border-slate-200 dark:bg-white/[0.06] dark:hover:bg-white/15 dark:border-white/10 flex items-center justify-center text-ink transition-colors"
+                        aria-label="Next 3D card"
+                      >
+                        <ChevronRight size={14} aria-hidden="true" />
+                      </button>
+                      <Link
+                        to={`/project/${activeProject.slug}`}
+                        className="ml-1 px-2.5 py-1 rounded-md bg-accent hover:bg-accent-hover text-white text-xs font-semibold inline-flex items-center gap-1 transition-colors"
+                      >
+                        <span>{t('hero.stage_action')}</span>
+                        <ArrowUpRight size={12} aria-hidden="true" />
+                      </Link>
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
             </div>
-          </div>
           </div>
         </div>
       </section>

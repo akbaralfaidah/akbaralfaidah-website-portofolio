@@ -35,89 +35,105 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-[#EEF2F9] dark:bg-[#080B12] text-ink border-t border-line pt-16 sm:pt-20 pb-8 px-5 sm:px-6 overflow-hidden transition-colors duration-300">
+    <footer className="bg-[#EEF2F9] dark:bg-[#080B12] text-ink border-t border-line pt-12 sm:pt-20 pb-8 px-4 sm:px-6 overflow-hidden transition-colors duration-300">
       <div className="max-w-6xl mx-auto">
         <ParallaxLayer yRange={[74, -22]}>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-line">
-          <div className="md:col-span-5 flex flex-col gap-4">
-            <Link
-              to="/"
-              className="inline-flex items-center min-h-[44px] self-start text-ink hover:opacity-85 transition-opacity"
-            >
-              <BrandLogo
-                className="h-8 w-auto text-ink"
-                showWordmark
-                inverted={isDark}
-              />
-            </Link>
-            <p className="text-base text-ink-muted max-w-sm leading-relaxed">
-              {t("footer.tagline")}
-            </p>
-            <p className="inline-flex items-center gap-2 font-mono text-xs text-ink-muted pt-1">
-              <MapPin
-                size={14}
-                className="text-accent shrink-0"
-                aria-hidden="true"
-              />
-              <span>{t("footer.location")}</span>
-            </p>
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 pb-10 sm:pb-12 border-b border-line">
+            <div className="md:col-span-5 flex flex-col gap-3.5 sm:gap-4">
+              <Link
+                to="/"
+                className="inline-flex items-center min-h-[44px] self-start text-ink hover:opacity-85 transition-opacity"
+              >
+                <BrandLogo
+                  className="h-7 sm:h-8 w-auto text-ink"
+                  showWordmark
+                  inverted={isDark}
+                />
+              </Link>
+              <p className="text-sm sm:text-base text-ink-muted max-w-sm leading-relaxed">
+                {t("footer.tagline")}
+              </p>
+              <p className="inline-flex items-center gap-2 font-mono text-xs text-ink-muted pt-0.5">
+                <MapPin
+                  size={14}
+                  className="text-accent shrink-0"
+                  aria-hidden="true"
+                />
+                <span>{t("footer.location")}</span>
+              </p>
+              <a
+                href={`mailto:${CONTACT_EMAIL}`}
+                className="md:hidden inline-flex items-center font-mono text-xs font-medium text-ink hover:text-accent transition-colors self-start"
+              >
+                {CONTACT_EMAIL}
+              </a>
+            </div>
 
-          <div className="md:col-span-3">
-            <h3 className="font-mono text-xs font-semibold uppercase tracking-wider text-ink-muted mb-3">
-              {t("footer.nav_title")}
-            </h3>
-            <ul className="space-y-1">
-              {FOOTER_SECTIONS.map((item) => (
-                <li key={item.key}>
-                  <a
-                    href={item.href}
-                    className="inline-flex items-center min-h-[38px] text-sm sm:text-base text-ink-muted hover:text-accent transition-colors"
-                  >
-                    {t(`nav.${item.key}`)}
-                  </a>
-                </li>
-              ))}
-              <li>
-                <Link
-                  to="/projects"
-                  className="inline-flex items-center min-h-[38px] text-sm sm:text-base text-ink-muted hover:text-accent transition-colors"
-                >
-                  {t("projects.back_projects")}
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div className="md:col-span-4">
-            <h3 className="font-mono text-xs font-semibold uppercase tracking-wider text-ink-muted mb-3">
-              {t("footer.connect_title")}
-            </h3>
-            <ul className="space-y-1">
-              {EXTERNAL_LINKS.map((item) => {
-                const isExternal = item.href.startsWith("http");
-                return (
-                  <li key={item.label}>
-                    <a
-                      href={item.href}
-                      target={isExternal ? "_blank" : undefined}
-                      rel={isExternal ? "noopener noreferrer" : undefined}
-                      className="inline-flex items-center gap-1.5 min-h-[38px] text-sm sm:text-base text-ink-muted hover:text-accent transition-colors break-all"
+            <div className="grid grid-cols-2 gap-6 md:contents">
+              <div className="md:col-span-3">
+                <h3 className="font-mono text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-ink-muted mb-2.5 sm:mb-3">
+                  {t("footer.nav_title")}
+                </h3>
+                <ul className="space-y-0.5 sm:space-y-1">
+                  {FOOTER_SECTIONS.map((item) => (
+                    <li key={item.key}>
+                      <a
+                        href={item.href}
+                        className="inline-flex items-center min-h-[36px] text-sm sm:text-base text-ink-muted hover:text-accent transition-colors"
+                      >
+                        {t(`nav.${item.key}`)}
+                      </a>
+                    </li>
+                  ))}
+                  <li>
+                    <Link
+                      to="/projects"
+                      className="inline-flex items-center min-h-[36px] text-sm sm:text-base text-ink-muted hover:text-accent transition-colors"
                     >
-                      <span>{item.label}</span>
-                      {isExternal && (
-                        <ArrowUpRight size={14} aria-hidden="true" />
-                      )}
-                    </a>
+                      {t("projects.back_projects")}
+                    </Link>
                   </li>
-                );
-              })}
-            </ul>
+                </ul>
+              </div>
+
+              <div className="md:col-span-4">
+                <h3 className="font-mono text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-ink-muted mb-2.5 sm:mb-3">
+                  {t("footer.connect_title")}
+                </h3>
+                <ul className="space-y-0.5 sm:space-y-1">
+                  {EXTERNAL_LINKS.map((item) => {
+                    const isExternal = item.href.startsWith("http");
+                    const isEmail = item.href.startsWith("mailto:");
+                    return (
+                      <li key={item.label}>
+                        <a
+                          href={item.href}
+                          target={isExternal ? "_blank" : undefined}
+                          rel={isExternal ? "noopener noreferrer" : undefined}
+                          className="inline-flex items-center gap-1.5 min-h-[36px] text-sm sm:text-base text-ink-muted hover:text-accent transition-colors break-words"
+                        >
+                          {isEmail ? (
+                            <>
+                              <span className="md:hidden">Email</span>
+                              <span className="hidden md:inline">{item.label}</span>
+                            </>
+                          ) : (
+                            <span>{item.label}</span>
+                          )}
+                          {isExternal && (
+                            <ArrowUpRight size={13} className="shrink-0" aria-hidden="true" />
+                          )}
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </div>
           </div>
-        </div>
         </ParallaxLayer>
 
-        <div className="py-7 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-sm text-ink-muted">
+        <div className="py-6 sm:py-7 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs sm:text-sm text-ink-muted">
           <p>
             © {year} Akbar Alfaidah - {t("footer.role")}.
           </p>
@@ -125,7 +141,7 @@ export default function Footer() {
           <button
             type="button"
             onClick={scrollToTop}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full liquid-glass-pill text-sm font-medium text-ink hover:text-accent transition-colors"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full liquid-glass-pill text-xs sm:text-sm font-medium text-ink hover:text-accent transition-colors"
           >
             <span>{isEn ? "Back to top" : "Kembali ke atas"}</span>
             <ArrowUp size={14} aria-hidden="true" />
@@ -134,11 +150,11 @@ export default function Footer() {
 
         {/* Monumental Architectural Wordmark Floor with Curtain Parallax Rise */}
         <div
-          className="pt-6 border-t border-line select-none overflow-hidden"
+          className="pt-5 sm:pt-6 border-t border-line select-none overflow-hidden text-center md:text-left"
           aria-hidden="true"
         >
           <ParallaxLayer yRange={[155, -12]} scaleRange={[0.84, 1.04]}>
-            <p className="font-display font-semibold tracking-[-0.045em] leading-[0.86] text-[clamp(2.4rem,10.8vw,8.6rem)] text-ink/[0.045] dark:text-white/[0.06] whitespace-nowrap">
+            <p className="font-display font-semibold tracking-[-0.045em] leading-[0.88] text-[clamp(2.1rem,10.2vw,8.6rem)] text-ink/[0.06] dark:text-white/[0.07] whitespace-nowrap">
               AKBAR ALFAIDAH
             </p>
           </ParallaxLayer>

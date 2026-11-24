@@ -263,12 +263,12 @@ export default function Experience() {
   return (
     <section
       id="experience"
-      className="relative py-20 sm:py-28 px-5 sm:px-6 bg-gradient-to-b from-paper via-[#F3F7FD]/75 to-paper dark:from-paper dark:via-[#0B0F1A]/65 dark:to-paper text-ink border-b border-line overflow-x-clip"
+      className="relative py-14 sm:py-28 px-4 sm:px-6 bg-gradient-to-b from-paper via-[#F3F7FD]/75 to-paper dark:from-paper dark:via-[#0B0F1A]/65 dark:to-paper text-ink border-b border-line overflow-x-clip"
     >
       {/* Parallax Ambient Glow & Watermark */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-24 left-[-10%] w-[640px] h-[640px] rounded-full opacity-80 dark:opacity-25"
+        className="pointer-events-none absolute top-24 left-[-10%] w-[640px] h-[640px] rounded-full opacity-55 sm:opacity-80 dark:opacity-25"
         style={{
           background:
             "radial-gradient(circle, rgba(37,99,235,0.12) 0%, rgba(16,185,129,0.06) 50%, transparent 74%)",
@@ -276,17 +276,17 @@ export default function Experience() {
       />
       <ParallaxWatermark text="CAREER & CODE" direction={1} className="mb-4" />
 
-      <div className="relative z-10 max-w-6xl mx-auto space-y-20">
+      <div className="relative z-10 max-w-6xl mx-auto space-y-12 sm:space-y-20">
         {/* Interactive Split Sticky Career Track + Glowing Parallax Spine */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           {/* Sticky Left Control Column */}
-          <div className="lg:col-span-4 lg:sticky lg:top-24 space-y-6">
+          <div className="lg:col-span-4 lg:sticky lg:top-24 space-y-5 sm:space-y-6">
             <ParallaxLayer yRange={[16, -16]}>
-              <FadeUp className="space-y-4">
-                <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent font-semibold">
+              <FadeUp className="space-y-2.5 sm:space-y-4">
+                <p className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.14em] text-accent font-semibold">
                   {isEn ? "04 / Experience" : "04 / Rekam Jejak"}
                 </p>
-                <h2 className="font-display text-3xl sm:text-5xl font-semibold tracking-[-0.035em] leading-[1.06] text-ink">
+                <h2 className="font-display text-[1.75rem] sm:text-5xl font-semibold tracking-[-0.035em] leading-[1.08] text-ink">
                   {isEn ? (
                     <>
                       Hands-On{" "}
@@ -303,7 +303,7 @@ export default function Experience() {
                     </>
                   )}
                 </h2>
-                <p className="text-base text-ink-muted leading-relaxed">
+                <p className="text-[15px] sm:text-base text-ink-muted leading-relaxed">
                   {t("experience.subheading")}
                 </p>
               </FadeUp>
@@ -313,7 +313,7 @@ export default function Experience() {
             <div
               role="group"
               aria-label="Filter career sectors"
-              className="flex flex-wrap gap-2"
+              className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap py-0.5"
             >
               {filterTabs.map((tab) => {
                 const isSelected = sectorFilter === tab.id;
@@ -326,7 +326,7 @@ export default function Experience() {
                       setSectorFilter(tab.id);
                       setActiveCardIdx(0);
                     }}
-                    className={`min-h-[38px] px-3.5 py-1.5 rounded-full text-xs font-medium inline-flex items-center gap-1.5 border transition-all ${
+                    className={`min-h-[36px] sm:min-h-[38px] px-2.5 sm:px-3.5 py-1.5 rounded-full text-[11.5px] sm:text-xs font-medium whitespace-nowrap shrink-0 inline-flex items-center gap-1.5 border transition-all ${
                       isSelected
                         ? "bg-accent text-white border-accent shadow-sm shadow-blue-600/25"
                         : "bg-surface/90 text-ink-muted border-line hover:border-accent/50 hover:text-ink"
@@ -334,7 +334,7 @@ export default function Experience() {
                   >
                     <span>{tab.label}</span>
                     <span
-                      className={`font-mono text-[11px] px-1.5 rounded-full ${
+                      className={`font-mono text-[10.5px] sm:text-[11px] px-1.5 rounded-full ${
                         isSelected
                           ? "bg-white/20 text-white"
                           : "bg-mist text-ink-muted"
@@ -348,7 +348,7 @@ export default function Experience() {
             </div>
 
             {/* Compact Sector Coverage Snapshot */}
-            <div className="liquid-glass rounded-2xl p-4 space-y-2.5">
+            <div className="liquid-glass rounded-2xl p-4 space-y-2">
               <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-accent font-semibold">
                 <Sparkles size={13} aria-hidden="true" />
                 <span>{isEn ? "Sector Coverage" : "Lintas Sektor"}</span>
@@ -375,7 +375,7 @@ export default function Experience() {
               className="absolute left-[7px] sm:left-[11px] top-3 bottom-3 w-[2px] origin-top rounded-full bg-gradient-to-b from-sky-400 via-accent to-emerald-500"
             />
 
-            <div className="space-y-5">
+            <div className="space-y-4 sm:space-y-5">
               <AnimatePresence mode="popLayout">
                 {visibleExperiences.map((exp, idx) => {
                   const SectorIcon = exp.meta.icon;
@@ -399,7 +399,7 @@ export default function Experience() {
                       {/* Animated spine milestone node dot */}
                       <span
                         aria-hidden="true"
-                        className={`absolute -left-[22px] sm:-left-[30px] top-7 w-3.5 h-3.5 rounded-full border-2 transition-all duration-300 ${
+                        className={`absolute -left-[23px] sm:-left-[30px] top-6 sm:top-7 w-3.5 h-3.5 rounded-full border-2 transition-all duration-300 ${
                           exp.meta.isCurrent
                             ? "bg-emerald-500 border-white dark:border-[#0B0F1A] ring-4 ring-emerald-500/20"
                             : isFocused
@@ -412,21 +412,21 @@ export default function Experience() {
                         <SpotlightCard
                           onClick={() => setActiveCardIdx(idx)}
                           onMouseEnter={() => setActiveCardIdx(idx)}
-                          className={`p-5 sm:p-6 cursor-pointer transition-all ${
+                          className={`p-4 sm:p-6 cursor-pointer transition-all ${
                             isFocused
-                              ? "border-accent/60 shadow-[0_20px_48px_-16px_rgba(37,99,235,0.14)]"
+                              ? "border-accent/60 shadow-[0_16px_40px_-16px_rgba(37,99,235,0.14)]"
                               : "hover:border-accent/40 shadow-sm"
                           }`}
                         >
-                          <div className="flex flex-wrap items-center justify-between gap-2.5 mb-3">
+                          <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                             <span
-                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-mono text-[11px] font-semibold border ${exp.meta.badgeClass}`}
+                              className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:py-1 rounded-full font-mono text-[10.5px] sm:text-[11px] font-semibold border ${exp.meta.badgeClass}`}
                             >
                               <SectorIcon size={12} aria-hidden="true" />
                               <span>{exp.meta.sectorLabel}</span>
                             </span>
 
-                            <span className="inline-flex items-center gap-1.5 font-mono text-xs text-ink-muted">
+                            <span className="inline-flex items-center gap-1.5 font-mono text-[11px] sm:text-xs text-ink-muted">
                               {exp.meta.isCurrent && (
                                 <span
                                   className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"
@@ -438,16 +438,16 @@ export default function Experience() {
                             </span>
                           </div>
 
-                          <div className="space-y-1.5 mb-4">
-                            <h3 className="font-display text-lg sm:text-xl font-semibold text-ink">
+                          <div className="space-y-1 mb-3 sm:mb-4">
+                            <h3 className="font-display text-base sm:text-xl font-semibold text-ink leading-snug">
                               {exp.role}
                             </h3>
-                            <p className="text-sm sm:text-base font-semibold text-accent">
+                            <p className="text-sm sm:text-base font-semibold text-accent leading-snug">
                               {exp.company}
                             </p>
                           </div>
 
-                          <p className="text-sm sm:text-base text-ink-muted leading-relaxed mb-4">
+                          <p className="text-sm sm:text-base text-ink-muted leading-relaxed mb-3.5 sm:mb-4">
                             {exp.description}
                           </p>
 
@@ -473,7 +473,7 @@ export default function Experience() {
 
         {/* Interactive GitHub Telemetry Matrix wrapped in Parallax Depth */}
         <ParallaxLayer yRange={[120, -110]} scaleRange={[0.91, 1.03]} rotateXRange={[8, -3]}>
-          <div className="relative overflow-hidden liquid-glass rounded-3xl p-6 sm:p-8 space-y-6">
+          <div className="relative overflow-hidden liquid-glass rounded-2xl sm:rounded-3xl p-4 sm:p-8 space-y-5 sm:space-y-6">
             <div
               aria-hidden="true"
               className="pointer-events-none absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[radial-gradient(circle,rgba(16,185,129,0.16),transparent_68%)]"
@@ -482,7 +482,7 @@ export default function Experience() {
               aria-hidden="true"
               className="pointer-events-none absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-[radial-gradient(circle,rgba(37,99,235,0.12),transparent_68%)]"
             />
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-line">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 sm:gap-4 pb-4 sm:pb-5 border-b border-line">
               <div className="flex items-center gap-3">
                 <GitCommitHorizontal
                   size={20}
@@ -490,10 +490,10 @@ export default function Experience() {
                   aria-hidden="true"
                 />
                 <div>
-                  <h3 className="font-display text-xl font-semibold text-ink">
+                  <h3 className="font-display text-lg sm:text-xl font-semibold text-ink">
                     {t("experience.github_title")}
                   </h3>
-                  <p className="font-mono text-xs text-ink-muted">
+                  <p className="font-mono text-[11px] sm:text-xs text-ink-muted">
                     {t("experience.github_subtitle")}
                   </p>
                 </div>
@@ -503,7 +503,7 @@ export default function Experience() {
                 href={`https://github.com/${GITHUB_USER}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="self-start sm:self-auto min-h-[40px] px-4 py-2 rounded-lg border border-line bg-paper/70 hover:border-accent/60 hover:text-accent text-sm font-medium text-ink inline-flex items-center gap-1.5 transition-colors"
+                className="self-start sm:self-auto min-h-[38px] sm:min-h-[40px] px-3.5 sm:px-4 py-2 rounded-lg border border-line bg-paper/70 hover:border-accent/60 hover:text-accent text-xs sm:text-sm font-medium text-ink inline-flex items-center gap-1.5 transition-colors"
               >
                 <span>{t("experience.github_cta")}</span>
                 <ArrowUpRight size={15} aria-hidden="true" />
@@ -511,36 +511,36 @@ export default function Experience() {
             </div>
 
             {stats ? (
-              <div className="space-y-6">
-                <dl className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 pb-5 border-b border-line">
+              <div className="space-y-5 sm:space-y-6">
+                <dl className="grid grid-cols-3 gap-2.5 sm:gap-8 pb-4 sm:pb-5 border-b border-line">
                   <div>
-                    <dt className="font-mono text-xs text-ink-muted mb-1">
+                    <dt className="font-mono text-[10px] sm:text-xs text-ink-muted mb-1 leading-tight">
                       {t("experience.github_total_all")}
                     </dt>
-                    <dd className="font-display text-3xl sm:text-4xl font-semibold text-ink tabular-nums">
+                    <dd className="font-display text-xl sm:text-4xl font-semibold text-ink tabular-nums">
                       <CountUp value={stats.allTimeTotal} locale={locale} />
                     </dd>
                   </div>
 
                   <div>
-                    <dt className="font-mono text-xs text-ink-muted mb-1">
+                    <dt className="font-mono text-[10px] sm:text-xs text-ink-muted mb-1 leading-tight">
                       {t("experience.github_last_year")}
                     </dt>
-                    <dd className="font-display text-3xl sm:text-4xl font-semibold text-accent tabular-nums">
+                    <dd className="font-display text-xl sm:text-4xl font-semibold text-accent tabular-nums">
                       <CountUp value={stats.lastYearTotal} locale={locale} />
                     </dd>
                   </div>
 
                   <div>
-                    <dt className="font-mono text-xs text-ink-muted mb-1">
+                    <dt className="font-mono text-[10px] sm:text-xs text-ink-muted mb-1 leading-tight">
                       {t("experience.github_active_days")}
                     </dt>
-                    <dd className="font-display text-3xl sm:text-4xl font-semibold text-ink tabular-nums">
+                    <dd className="font-display text-xl sm:text-4xl font-semibold text-ink tabular-nums">
                       <CountUp
                         value={stats.activeDaysCurrentYear}
                         locale={locale}
                       />{" "}
-                      <span className="text-sm font-normal text-ink-muted">
+                      <span className="text-[11px] sm:text-sm font-normal text-ink-muted">
                         {isEn ? "days" : "hari"}
                       </span>
                     </dd>
@@ -573,6 +573,7 @@ export default function Experience() {
                             <span
                               key={day.date}
                               onMouseEnter={() => setHoveredDay(day)}
+                              onClick={() => setHoveredDay(day)}
                               title={`${day.date}: ${day.count} ${t("experience.github_contributions_unit")}`}
                               className={`w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-[2px] transition-transform hover:scale-125 cursor-crosshair ${getCellColorClass(
                                 day.level,
@@ -590,13 +591,24 @@ export default function Experience() {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-xs text-ink-muted">
-                  <span className="min-h-[20px]">
-                    {hoveredDay
-                      ? `${hoveredDay.date} - ${hoveredDay.count} ${t("experience.github_contributions_unit")}`
-                      : isEn
-                        ? "Hover any square to inspect daily commit activity"
-                        : "Arahkan kursor ke kotak untuk melihat aktivitas harian"}
+                <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 font-mono text-[11px] sm:text-xs text-ink-muted">
+                  <span className="min-h-[18px]">
+                    {hoveredDay ? (
+                      `${hoveredDay.date} - ${hoveredDay.count} ${t("experience.github_contributions_unit")}`
+                    ) : (
+                      <>
+                        <span className="sm:hidden">
+                          {isEn
+                            ? "Swipe & tap any square for daily activity"
+                            : "Geser & ketuk kotak untuk detail aktivitas"}
+                        </span>
+                        <span className="hidden sm:inline">
+                          {isEn
+                            ? "Hover any square to inspect daily commit activity"
+                            : "Arahkan kursor ke kotak untuk melihat aktivitas harian"}
+                        </span>
+                      </>
+                    )}
                   </span>
 
                   <div className="flex items-center gap-1.5">
@@ -604,7 +616,7 @@ export default function Experience() {
                     {[0, 1, 2, 3, 4].map((lvl) => (
                       <span
                         key={lvl}
-                        className={`w-3 h-3 rounded-[2px] ${getCellColorClass(lvl)}`}
+                        className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-[2px] ${getCellColorClass(lvl)}`}
                         aria-hidden="true"
                       />
                     ))}
