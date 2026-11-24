@@ -449,13 +449,13 @@ export default function Hero() {
                 ref={titleTopRef}
                 className="inline-block text-[clamp(1.75rem,7.15vw,6.65rem)] text-ink will-change-transform"
               >
-                SOFTWARE
+                AKBAR
               </span>
               <span
                 ref={titleBotRef}
                 className="inline-block text-[clamp(1.8rem,7.3vw,6.85rem)] font-serif italic font-normal hero-shimmer-text pr-[0.06em] will-change-transform"
               >
-                ENGINEER.
+                ALFAIDAH.
               </span>
             </h1>
 
